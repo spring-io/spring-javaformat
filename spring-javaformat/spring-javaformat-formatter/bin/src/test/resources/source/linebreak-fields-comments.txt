@@ -1,0 +1,9 @@
+package demo;
+
+public class Fields {
+
+	private int a; // a
+	private int b; /* hello */
+	private String x; // x
+
+}

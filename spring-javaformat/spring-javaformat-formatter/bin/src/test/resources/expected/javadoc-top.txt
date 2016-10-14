@@ -1,0 +1,13 @@
+package demo;
+
+/**
+ * Whitespace test.
+ *
+ * @param T test
+ * @author Phillip Webb
+ * @since 1.4.0
+ * @deprecated
+ */
+public interface Whitespace<T> {
+
+}

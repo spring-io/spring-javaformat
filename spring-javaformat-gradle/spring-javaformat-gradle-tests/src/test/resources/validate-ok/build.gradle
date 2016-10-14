@@ -1,0 +1,17 @@
+buildscript {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+	}
+	dependencies {
+		classpath("io.spring.format:spring-format-gradle-plugin:${project.formatVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'io.spring.format'
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+}

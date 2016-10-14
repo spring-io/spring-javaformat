@@ -1,0 +1,9 @@
+package demo;
+
+/**
+ * Whitespace test.
+ * @author Phillip Webb
+ */
+public interface Whitespace<T> {
+
+}

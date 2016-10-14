@@ -1,0 +1,31 @@
+package demo;
+
+public interface Whitespace {
+
+	/**
+	 * There should be no whitespace.
+	 * @return the classes to exclude
+	 */
+	String[] whitespace1();
+
+	/**
+	 * There should be no whitespace.
+	 * @return the classes to exclude
+	 */
+	String[] whitespace2();
+
+	/**
+	 * There should be no whitespace.
+	 * @return the classes to exclude
+	 */
+	String[] whitespace3();
+
+	/**
+	 * There should be no whitespace.
+	 * @param a the classes to exclude
+	 * @param b the classes to exclude
+	 * @return the classes to exclude
+	 */
+	String[] whitespace4(String a, String b);
+
+}

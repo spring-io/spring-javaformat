@@ -1,0 +1,12 @@
+package demo;
+
+public class Fields {
+
+	private int x;
+
+	// This is an a
+	private int a;
+
+	private int b;
+
+}

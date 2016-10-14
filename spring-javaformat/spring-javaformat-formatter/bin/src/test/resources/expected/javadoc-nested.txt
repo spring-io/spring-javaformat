@@ -1,0 +1,8 @@
+package demo;
+
+/**
+ * Hello {@link String}.
+ */
+public class ClassBraces {
+
+}

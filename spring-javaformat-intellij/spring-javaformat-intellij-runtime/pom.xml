@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.spring.javaformat</groupId>
+		<artifactId>spring-javaformat-intellij</artifactId>
+		<version>${revision}</version>
+	</parent>
+	<artifactId>spring-javaformat-intellij-runtime</artifactId>
+	<packaging>pom</packaging>
+	<properties>
+		<main.basedir>${basedir}/../..</main.basedir>
+		<intellij.binary>http://download.jetbrains.com/idea/ideaIC-2017.1.4.tar.gz</intellij.binary>
+		<intellij.binary.sha1>ca8aeaca072566f4e2d02df3c0ebf5e6782f61e3</intellij.binary.sha1>
+		<intellij.source>https://github.com/JetBrains/intellij-community/archive/171.4694.zip</intellij.source>
+		<intellij.source.sha1>6234ddd813aad0eb062fc440ee6ab3425f01bd16</intellij.source.sha1>
+		<intellij.source.root>intellij-community-171.4694</intellij.source.root>
+	</properties>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.googlecode.maven-download-plugin</groupId>
+				<artifactId>download-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>download-intellij-binary</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+						<configuration>
+							<url>${intellij.binary}</url>
+							<sha1>${intellij.binary.sha1}</sha1>
+							<outputFileName>intellij.tgz</outputFileName>
+						</configuration>
+					</execution>
+					<execution>
+						<id>download-intellij-source</id>
+						<phase>install</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+						<configuration>
+							<url>${intellij.source}</url>
+							<sha1>${intellij.source.sha1}</sha1>
+							<outputFileName>intellij-source.zip</outputFileName>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>prepare-intellij</id>
+						<phase>install</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<untar src="${project.build.directory}/intellij.tgz"
+									compression="gzip" dest="${project.build.directory}/intellij">
+									<patternset>
+										<include name="*/lib/*.jar" />
+										<include name="*/plugins/maven/lib/maven.jar" />
+									</patternset>
+									<mapper type="flatten" />
+								</untar>
+								<unzip src="${project.build.directory}/intellij-source.zip"
+									dest="${project.build.directory}/intellij-source">
+									<patternset>
+										<include name="${intellij.source.root}/platform/core-api/src/**" />
+										<include name="${intellij.source.root}/platform/util/src/**" />
+										<include name="${intellij.source.root}/platform/extensions/src/**" />
+										<include name="${intellij.source.root}/platform/annotations/common/src/**" />
+										<include name="${intellij.source.root}/plugins/maven/src/**" />
+									</patternset>
+								</unzip>
+								<zip
+									destfile="${project.build.directory}/intellij-source/openapi-sources.zip"
+									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/platform/core-api/src" />
+								<zip
+									destfile="${project.build.directory}/intellij-source/util-sources.zip"
+									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/platform/util/src" />
+								<zip
+									destfile="${project.build.directory}/intellij-source/extensions-sources.zip"
+									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/platform/extensions/src" />
+								<zip
+									destfile="${project.build.directory}/intellij-source/annotations-sources.zip"
+									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/platform/annotations/common/src" />
+								<zip
+									destfile="${project.build.directory}/intellij-source/maven-sources.zip"
+									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/plugins/maven/src" />
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>install-intellij-openapi</id>
+						<phase>install</phase>
+						<inherited>false</inherited>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.build.directory}/intellij/openapi.jar</file>
+							<sources>${project.build.directory}/intellij-source/openapi-sources.zip</sources>
+							<groupId>io.spring.javaformat.intellij</groupId>
+							<artifactId>openapi</artifactId>
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+					<execution>
+						<id>install-intellij-util</id>
+						<phase>install</phase>
+						<inherited>false</inherited>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.build.directory}/intellij/util.jar</file>
+							<sources>${project.build.directory}/intellij-source/util-sources.zip</sources>
+							<groupId>io.spring.javaformat.intellij</groupId>
+							<artifactId>util</artifactId>
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+					<execution>
+						<id>install-intellij-extensions</id>
+						<phase>install</phase>
+						<inherited>false</inherited>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.build.directory}/intellij/extensions.jar</file>
+							<sources>${project.build.directory}/intellij-source/extensions-sources.zip</sources>
+							<groupId>io.spring.javaformat.intellij</groupId>
+							<artifactId>extensions</artifactId>
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+					<execution>
+						<id>install-intellij-annotations</id>
+						<phase>install</phase>
+						<inherited>false</inherited>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.build.directory}/intellij/annotations.jar</file>
+							<sources>${project.build.directory}/intellij-source/annotations-sources.zip</sources>
+							<groupId>io.spring.javaformat.intellij</groupId>
+							<artifactId>annotations</artifactId>
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+					<execution>
+						<id>install-intellij-maven</id>
+						<phase>install</phase>
+						<inherited>false</inherited>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.build.directory}/intellij/maven.jar</file>
+							<sources>${project.build.directory}/intellij-source/maven-sources.zip</sources>
+							<groupId>io.spring.javaformat.intellij</groupId>
+							<artifactId>maven</artifactId>
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

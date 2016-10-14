@@ -1,0 +1,15 @@
+package demo;
+
+public class ClassBraces {
+
+	public void hello() {
+	}
+
+	public static class Hello {
+
+		public void hello() {
+		}
+
+	}
+
+}

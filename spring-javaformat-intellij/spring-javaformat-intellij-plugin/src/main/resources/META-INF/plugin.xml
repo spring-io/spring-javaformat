@@ -1,0 +1,15 @@
+<idea-plugin version="2">
+	<id>spring-format</id>
+	<name>spring-format</name>
+	<version>1.0</version>
+	<vendor url="https://github.com/philwebb/spring-format">Pivotal</vendor>
+	<description><![CDATA[Code formatter for Spring.]]></description>
+	<idea-version since-build="162.0"/>
+	<depends>org.jetbrains.idea.maven</depends>
+	<project-components>
+		<component>
+			<implementation-class>io.spring.format.formatter.intellij.SpringFormatComponent</implementation-class>
+			<loadForDefaultProject/>
+		</component>
+	</project-components>
+</idea-plugin>

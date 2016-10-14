@@ -1,0 +1,16 @@
+package sample;
+
+public enum ExampleEnum {
+
+	ONE("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen"),
+
+	/**
+	 * Two
+	 */
+	TWO("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen");
+
+	private ExampleEnum(String... args) {
+
+	}
+
+}
