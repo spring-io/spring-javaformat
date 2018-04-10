@@ -1,0 +1,1 @@
++Lambda block is unnecessary

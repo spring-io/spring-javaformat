@@ -13,6 +13,7 @@
 		<main.basedir>${basedir}/..</main.basedir>
 	</properties>
 	<modules>
+		<module>spring-javaformat-checkstyle</module>
 		<module>spring-javaformat-eclipse-rewriter</module>
 		<module>spring-javaformat-eclipse-runtime</module>
 		<module>spring-javaformat-eclipse-formatter</module>
