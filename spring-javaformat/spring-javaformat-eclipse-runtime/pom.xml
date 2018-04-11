@@ -16,6 +16,96 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<dependencies>
+					<dependency>
+						<groupId>io.spring.javaformat</groupId>
+						<artifactId>spring-javaformat-eclipse-rewriter</artifactId>
+						<version>${project.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>ant-contrib</groupId>
+						<artifactId>ant-contrib</artifactId>
+						<version>${ant-contrib.version}</version>
+						<exclusions>
+							<exclusion>
+								<groupId>ant</groupId>
+								<artifactId>ant</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.ant</groupId>
+						<artifactId>ant-nodeps</artifactId>
+						<version>${ant.version}</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>generate-manifest</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+								<propertyregex property="base-revision" input="${revision}"
+									regexp="([\d\.]+).*" replace="\1" />
+								<copy file="${basedir}/META-INF.template/MANIFEST.MF"
+									todir="${basedir}/META-INF" overwrite="true">
+									<filterset>
+										<filter token="revision" value="${base-revision}" />
+									</filterset>
+								</copy>
+							</target>
+						</configuration>
+					</execution>
+					<execution>
+						<id>rewrite-bytecode</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<java
+									classname="io.spring.javaformat.formatter.eclipse.rewrite.EclipseRewriter"
+									failonerror="true">
+									<arg
+										value="${project.build.directory}/${project.artifactId}-${project.version}.jar" />
+								</java>
+							</target>
+						</configuration>
+					</execution>
+					<execution>
+						<id>repackage-source</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<zip
+									destfile="${project.build.directory}/${project.build.finalName}-sources.jar"
+									basedir="${project.build.directory}/sources" />
+								<attachartifact
+									file="${project.build.directory}/${project.build.finalName}-sources.jar"
+									classifier="sources" type="jar" />
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-packaging-plugin</artifactId>
+				<configuration>
+					<strictVersions>false</strictVersions>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
 			</plugin>
@@ -85,52 +175,6 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>rewrite-bytecode</id>
-						<phase>package</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<java classname="io.spring.javaformat.formatter.eclipse.rewrite.EclipseRewriter"
-									failonerror="true">
-									<arg
-										value="${project.build.directory}/${project.artifactId}-${project.version}.jar" />
-								</java>
-							</target>
-						</configuration>
-					</execution>
-					<execution>
-						<id>repackage-source</id>
-						<phase>package</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<zip
-									destfile="${project.build.directory}/${project.build.finalName}-sources.jar"
-									basedir="${project.build.directory}/sources" />
-								<attachartifact
-									file="${project.build.directory}/${project.build.finalName}-sources.jar"
-									classifier="sources" type="jar" />
-							</target>
-						</configuration>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>io.spring.javaformat</groupId>
-						<artifactId>spring-javaformat-eclipse-rewriter</artifactId>
-						<version>${project.version}</version>
-					</dependency>
-				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
