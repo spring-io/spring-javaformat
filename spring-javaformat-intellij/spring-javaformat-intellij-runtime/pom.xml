@@ -14,7 +14,7 @@
 		<intellij.binary>http://download.jetbrains.com/idea/ideaIC-2017.1.4.tar.gz</intellij.binary>
 		<intellij.binary.sha1>ca8aeaca072566f4e2d02df3c0ebf5e6782f61e3</intellij.binary.sha1>
 		<intellij.source>https://github.com/JetBrains/intellij-community/archive/171.4694.zip</intellij.source>
-		<intellij.source.sha1>6234ddd813aad0eb062fc440ee6ab3425f01bd16</intellij.source.sha1>
+		<intellij.source.sha1>81de91ae300d24d9690659349100ed6bc530cfcd</intellij.source.sha1>
 		<intellij.source.root>intellij-community-171.4694</intellij.source.root>
 	</properties>
 	<build>
