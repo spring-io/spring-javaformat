@@ -1,1 +1,1 @@
-+Lambda argument missing parentheses [LambdaParentheses]
++Lambda argument missing parentheses [Lambda]

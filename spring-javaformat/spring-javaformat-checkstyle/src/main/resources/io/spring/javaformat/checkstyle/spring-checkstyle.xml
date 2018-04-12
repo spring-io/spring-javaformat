@@ -165,7 +165,7 @@
 		</module>
 		<module name="com.puppycrawl.tools.checkstyle.checks.whitespace.NoWhitespaceBeforeCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.whitespace.ParenPadCheck" />
-		<module name="io.spring.javaformat.checkstyle.check.LambdaParenthesesCheck" />
+		<module name="io.spring.javaformat.checkstyle.check.LambdaCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.whitespace.TypecastParenPadCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck" />

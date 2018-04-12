@@ -28,7 +28,7 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  *
  * @author Phillip Webb
  */
-public class LambdaParenthesesCheck extends AbstractCheck {
+public class LambdaCheck extends AbstractCheck {
 
 	@Override
 	public int[] getDefaultTokens() {
@@ -58,10 +58,29 @@ public class LambdaParenthesesCheck extends AbstractCheck {
 			log(lambda.getLineNo(), lambda.getColumnNo(), "lambda.missingParen");
 		}
 		DetailAST block = lambda.getLastChild();
-		if (block.getType() == TokenTypes.SLIST
-				&& block.getChildCount(TokenTypes.SEMI) == 0) {
+		if (isStatementList(block) && block.getChildCount(TokenTypes.SEMI) == 0
+				&& !isFirstChildStatementContainer(block)) {
 			log(block.getLineNo(), block.getColumnNo(), "lambda.unnecessaryBlock");
 		}
+	}
+
+	private boolean isFirstChildStatementContainer(DetailAST block) {
+		DetailAST firstChild = block.getFirstChild();
+		if (firstChild == null) {
+			return false;
+		}
+		DetailAST candidate = firstChild.getFirstChild();
+		while (candidate != null) {
+			if (isStatementList(candidate)) {
+				return true;
+			}
+			candidate = candidate.getNextSibling();
+		}
+		return false;
+	}
+
+	private boolean isStatementList(DetailAST ast) {
+		return ast != null && ast.getType() == TokenTypes.SLIST;
 	}
 
 	private boolean hasToken(DetailAST ast, int type) {
