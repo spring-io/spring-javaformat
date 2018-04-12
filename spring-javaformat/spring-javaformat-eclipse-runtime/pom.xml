@@ -53,12 +53,9 @@
 								<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
 								<propertyregex property="base-revision" input="${revision}"
 									regexp="([\d\.]+).*" replace="\1" />
-								<copy file="${basedir}/META-INF.template/MANIFEST.MF"
-									todir="${basedir}/META-INF" overwrite="true">
-									<filterset>
-										<filter token="revision" value="${base-revision}" />
-									</filterset>
-								</copy>
+								<replaceregexp file="${basedir}/META-INF/MANIFEST.MF"
+									match="Bundle-Version:(.*).qualifier" byline="true"
+									replace="Bundle-Version: ${base-revision}.qualifier"/>
 							</target>
 						</configuration>
 					</execution>
