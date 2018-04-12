@@ -29,7 +29,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
 /**
- * FIXME.
+ * Validates that source formatting matches the required style.
  *
  * @author Phillip Webb
  */
