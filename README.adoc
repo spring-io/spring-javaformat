@@ -1,3 +1,162 @@
 ## Spring Java Format
 
-Work in progress
+### What is this?
+A set of plugins that can be applied to any Java project to provide a consistent "`Spring`" style.
+The set currently consists of:
+
+* A source formatter that applies wrapping and whitespace conventions
+* A checkstyle plugin that enforces consistency across a codebase
+
+Since the aim of this project is to provide consistency, each plugins not generally configurable.
+You need to change your code to match the required conventions.
+You can't configure the plugin conventions to match your style!
+
+### Quick Start
+
+#### Maven
+For source formatting, add the `spring-javaformat-maven-plugin` to your `build` plugins as follows:
+
+[source,xml,indent=0]
+----
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>io.spring.javaformat</groupId>
+				<artifactId>spring-javaformat-maven-plugin</artifactId>
+				<version>${version}</version>
+			</plugin>
+		</plugins>
+	</build>
+----
+
+You can now run `./mvnw spring-javaformat:apply` to reformat code.
+
+If you want to enforce that all code matches the required style, add the following:
+
+[source,xml,indent=0]
+----
+	<plugin>
+		<groupId>io.spring.javaformat</groupId>
+		<artifactId>spring-javaformat-maven-plugin</artifactId>
+		<version>${version}</version>
+		<executions>
+			<execution>
+				<goals>
+					<goal>validate</goal>
+				</goals>
+			</execution>
+		</executions>
+	</plugin>
+----
+
+To enforce checksyle conventions add the checkstyle plugin and include a dependency on `spring-javaformat-checkstyle`:
+
+[source,xml,indent=0]
+----
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.0.0</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.puppycrawl.tools</groupId>
+						<artifactId>checkstyle</artifactId>
+						<version>8.8</version>
+					</dependency>
+					<dependency>
+						<groupId>io.spring.javaformat</groupId>
+						<artifactId>spring-javaformat-checkstyle</artifactId>
+						<version>${version}</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<configLocation>src/checkstyle/checkstyle.xml</configLocation>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+----
+
+Your checkstyle file should look then like this:
+
+[source,xml,indent=0]
+----
+	<?xml version="1.0"?>
+	<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.3//EN" "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+	<module name="com.puppycrawl.tools.checkstyle.Checker">
+		<module name="io.spring.javaformat.checkstyle.SpringChecks" />
+	</module>
+----
+
+#### Gradle
+
+_The Gradle plugin is work in progress_
+
+#### Eclipse
+
+_The Eclipse plugin is work in progress_
+
+#### IntelliJ IDEA
+
+_The IntelliJ plugin is work in progress_
+
+
+### About the conventions
+Most of the coding conventions and style comes from the Spring Framework and Spring Boot projects.
+Spring Framework manually formats code, where as Spring Boot uses automatic formatting.
+
+### Tips
+Formatting and Checkstyle alone are not enough to produce truly consistent code.
+Here are some tips that we've found useful when developing Spring Boot.
+
+#### Wrapping
+The source formatter intentionally uses a low character count of 90 chars for wrapping.
+If you're used to longer lines, this can take some getting used to.
+Specifically, if you have many nesting levels things can start to look quite bad.
+
+Generally, if you see code bunched up to the right of your screen you should take that as a signal to use the "`extract method`" refactor.
+Extracting small private methods will improve formatting and it helps when reading the code and debugging.
+
+#### Whitespace
+Keeping whitespace lines out method bodies can help make the code easier to scan.
+If blank lines are only included between methods it becomes easier to see the overall structure of the class.
+If you find you need whitespace inside your method, consider if extracting a private method might give a better result.
+
+#### Comments
+Try to add javadoc for each public method and constant.
+Private methods shouldn't generally need javadoc, unless it provides a natural place to document unusual behavior.
+
+The checkstyle rules will enforce that all public classes have javadoc.
+They will also ensure that `@author` tags are well formed.
+
+#### Final
+Private members should be `final` whenever possible.
+Local variable and parameters should generally not be explicitly declared as final since it adds so much noise.
+
+#### Read-down methods, fields and parameters
+Methods don't need to be organized by scope.
+There's no need to group all `private`, `protected` and `public` methods together.
+Instead try to make your code easy to read when scanning the file from top to bottom.
+In other words, try to have methods only reference method further down in the file.
+Keep private methods as close to the thing that calls them as possible.
+
+It's also recommend that you try to keep consistent ordering with fields and constructor parameters.
+For example:
+
+[source,java,indent=0]
+----
+class Name {
+
+	private final String first;
+
+	private final String last;
+
+	public Name(String first, String last) {
+		this.first = first;
+		this.last = last;
+	}
+
+}
+----
