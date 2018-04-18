@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lifecycleMappingMetadata>
+	<pluginExecutions>
+		<pluginExecution>
+			<pluginExecutionFilter>
+				<groupId>io.spring.javaformat</groupId>
+				<artifactId>spring-javaformat-maven-plugin</artifactId>
+				<versionRange>[0.0,)</versionRange>
+				<goals>
+					<goal>validate</goal>
+					<goal>apply</goal>
+				</goals>
+			</pluginExecutionFilter>
+			<action>
+				<configurator>
+					<id>io.spring.javaformat.eclipse.m2e.configurator</id>
+				</configurator>
+			</action>
+		</pluginExecution>
+	</pluginExecutions>
+</lifecycleMappingMetadata>

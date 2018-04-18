@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.5"?>
+
+<product uid="io.spring.javaformat.eclipse.site" version="0.0.1.qualifier" useFeatures="true" includeLaunchers="false">
+
+   <configIni use="">
+   </configIni>
+
+   <plugins>
+   </plugins>
+
+   <features>
+      <feature id="io.spring.javaformat.eclipse.feature"/>
+   </features>
+
+
+</product>

@@ -175,8 +175,12 @@
 					<configuration>
 						<useUIHarness>true</useUIHarness>
 						<includes>
+							<include>**/*Tests.java</include>
 							<include>**/*Test.java</include>
 						</includes>
+						<excludes>
+							<exclude>**/Abstract*.java</exclude>
+						</excludes>
 						<argLine>${ui.test.vmargs}</argLine>
 						<forkedProcessTimeoutInSeconds>7200</forkedProcessTimeoutInSeconds>
 					</configuration>
@@ -249,6 +253,19 @@
 					<configuration>
 						<lifecycleMappingMetadata>
 							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-dependency-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
+										<goals>
+											<goal>copy-dependencies</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>
@@ -514,6 +531,32 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	<profiles>
+		<profile>
+			<id>macosx</id>
+			<activation>
+				<os>
+					<name>mac os x</name>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+				<ui.test.vmargs>-Xmx512m -XX:MaxPermSize=256m -XstartOnFirstThread</ui.test.vmargs>
+			</properties>
+		</profile>
+		<profile>
+			<id>other-os</id>
+			<activation>
+				<os>
+					<name>not-mac</name>
+					<family>!mac</family>
+				</os>
+			</activation>
+			<properties>
+				<ui.test.vmargs>-Xmx512m -XX:MaxPermSize=256m</ui.test.vmargs>
+			</properties>
+		</profile>
+	</profiles>
 	<repositories>
 		<repository>
 			<id>eclipse</id>

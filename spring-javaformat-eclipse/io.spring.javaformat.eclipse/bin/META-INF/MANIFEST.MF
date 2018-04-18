@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Spring Javaformat
+Bundle-SymbolicName: io.spring.javaformat.eclipse.plugin;singleton:=true
+Bundle-Version: 0.0.1.qualifier
+Automatic-Module-Name: test
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

@@ -16,14 +16,58 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<includeScope>runtime</includeScope>
+							<stripVersion>true</stripVersion>
+							<outputDirectory>lib</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-packaging-plugin</artifactId>
 				<configuration>
-					<skip>true</skip>
+					<strictVersions>false</strictVersions>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-versions-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>update-eclipse-version</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>update-eclipse-metadata</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 	<modules>
+		<module>io.spring.javaformat.eclipse</module>
+		<module>io.spring.javaformat.eclipse.tests</module>
+		<module>io.spring.javaformat.eclipse.feature</module>
+		<module>io.spring.javaformat.eclipse.site</module>
 	</modules>
 </project>
