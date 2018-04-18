@@ -14,9 +14,9 @@
 	</properties>
 	<modules>
 		<module>spring-javaformat-checkstyle</module>
-		<module>spring-javaformat-eclipse-rewriter</module>
-		<module>spring-javaformat-eclipse-runtime</module>
-		<module>spring-javaformat-eclipse-formatter</module>
+		<module>spring-javaformat-formatter-eclipse-rewriter</module>
+		<module>spring-javaformat-formatter-eclipse-runtime</module>
+		<module>spring-javaformat-formatter-eclipse</module>
 		<module>spring-javaformat-formatter</module>
 	</modules>
 </project>

@@ -7,7 +7,7 @@
 		<artifactId>spring-javaformat</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>spring-javaformat-eclipse-rewriter</artifactId>
+	<artifactId>spring-javaformat-formatter-eclipse-rewriter</artifactId>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
 	</properties>

@@ -26,8 +26,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import io.spring.javaformat.eclipse.formatter.ExtendedCodeFormatter;
-import io.spring.javaformat.eclipse.formatter.Preparator;
+import io.spring.javaformat.formatter.eclipse.ExtendedCodeFormatter;
+import io.spring.javaformat.formatter.eclipse.Preparator;
 import io.spring.javaformat.formatter.preparator.Preparators;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jface.text.IRegion;

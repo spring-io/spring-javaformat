@@ -20,7 +20,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.spring.javaformat</groupId>
-			<artifactId>spring-javaformat-eclipse-runtime</artifactId>
+			<artifactId>spring-javaformat-formatter-eclipse-runtime</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- Provided -->

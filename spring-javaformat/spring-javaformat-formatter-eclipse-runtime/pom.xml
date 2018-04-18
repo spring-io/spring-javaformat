@@ -8,7 +8,7 @@
 		<artifactId>spring-javaformat</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>spring-javaformat-eclipse-runtime</artifactId>
+	<artifactId>spring-javaformat-formatter-eclipse-runtime</artifactId>
 	<packaging>eclipse-plugin</packaging>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
@@ -22,7 +22,7 @@
 				<dependencies>
 					<dependency>
 						<groupId>io.spring.javaformat</groupId>
-						<artifactId>spring-javaformat-eclipse-rewriter</artifactId>
+						<artifactId>spring-javaformat-formatter-eclipse-rewriter</artifactId>
 						<version>${project.version}</version>
 					</dependency>
 					<dependency>
@@ -175,7 +175,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>io.spring.javaformat</groupId>
-			<artifactId>spring-javaformat-eclipse-rewriter</artifactId>
+			<artifactId>spring-javaformat-formatter-eclipse-rewriter</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>

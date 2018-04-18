@@ -8,15 +8,15 @@
 		<artifactId>spring-javaformat</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>spring-javaformat-eclipse-formatter</artifactId>
+	<artifactId>spring-javaformat-formatter-eclipse</artifactId>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>io.spring.javaformat</groupId>
-			<artifactId>spring-javaformat-eclipse-runtime</artifactId>
-			<version>${project.version}</version>
+			<artifactId>spring-javaformat-formatter-eclipse-runtime</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 			<optional>true</optional>
 		</dependency>
 	</dependencies>
@@ -47,7 +47,7 @@
 						<configuration>
 							<filters>
 								<filter>
-									<artifact>io.spring.javaformat:spring-javaformat-eclipse-runtime</artifact>
+									<artifact>io.spring.javaformat:spring-javaformat-formatter-eclipse-runtime</artifact>
 									<includes>
 										<include>org/eclipse/jdt/internal/formatter/**</include>
 									</includes>
@@ -56,7 +56,7 @@
 							<relocations>
 								<relocation>
 									<pattern>org.eclipse.jdt.internal.formatter</pattern>
-									<shadedPattern>io.spring.javaformat.eclipse.formatter</shadedPattern>
+									<shadedPattern>io.spring.javaformat.formatter.eclipse</shadedPattern>
 								</relocation>
 							</relocations>
 							<createDependencyReducedPom>false</createDependencyReducedPom>

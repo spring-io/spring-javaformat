@@ -18,7 +18,7 @@ package io.spring.javaformat.formatter.preparator;
 
 import java.util.function.Consumer;
 
-import io.spring.javaformat.eclipse.formatter.Preparator;
+import io.spring.javaformat.formatter.eclipse.Preparator;
 
 /**
  * {@link Preparator} instances that can be added.

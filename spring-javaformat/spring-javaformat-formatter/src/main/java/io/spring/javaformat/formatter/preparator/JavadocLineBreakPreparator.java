@@ -20,9 +20,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import io.spring.javaformat.eclipse.formatter.Preparator;
-import io.spring.javaformat.eclipse.formatter.Token;
-import io.spring.javaformat.eclipse.formatter.TokenManager;
+import io.spring.javaformat.formatter.eclipse.Preparator;
+import io.spring.javaformat.formatter.eclipse.Token;
+import io.spring.javaformat.formatter.eclipse.TokenManager;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Comment;
