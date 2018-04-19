@@ -183,6 +183,7 @@
 						</excludes>
 						<argLine>${ui.test.vmargs}</argLine>
 						<forkedProcessTimeoutInSeconds>7200</forkedProcessTimeoutInSeconds>
+						<useUIHarness>false</useUIHarness>
 					</configuration>
 				</plugin>
 				<plugin>
