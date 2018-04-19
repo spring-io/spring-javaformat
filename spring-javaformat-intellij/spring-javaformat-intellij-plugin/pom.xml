@@ -45,7 +45,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.spring.javaformat.intellij</groupId>
-			<artifactId>openapi</artifactId>
+			<artifactId>platform-api</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
