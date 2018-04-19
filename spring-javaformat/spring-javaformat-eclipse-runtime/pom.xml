@@ -44,23 +44,6 @@
 				</dependencies>
 				<executions>
 					<execution>
-						<id>generate-manifest</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
-								<propertyregex property="base-revision" input="${revision}"
-									regexp="([\d\.]+).*" replace="\1" />
-								<replaceregexp file="${basedir}/META-INF/MANIFEST.MF"
-									match="Bundle-Version:(.*).qualifier" byline="true"
-									replace="Bundle-Version: ${base-revision}.qualifier"/>
-							</target>
-						</configuration>
-					</execution>
-					<execution>
 						<id>rewrite-bytecode</id>
 						<phase>package</phase>
 						<goals>
@@ -110,6 +93,19 @@
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-versions-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>update-eclipse-version</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>update-eclipse-metadata</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
