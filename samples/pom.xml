@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>io.spring.javaformat</groupId>
 		<artifactId>spring-javaformat-build</artifactId>
-		<version>${revision}</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>io.spring.javaformat.sample</groupId>
 	<artifactId>spring-javaformat-samples</artifactId>

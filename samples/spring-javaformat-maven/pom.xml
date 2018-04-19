@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>io.spring.javaformat.sample</groupId>
 		<artifactId>spring-javaformat-samples</artifactId>
-		<version>${revision}</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>spring-javaformat-maven-sample</artifactId>
 	<properties>
@@ -17,7 +17,7 @@
 			<plugin>
 				<groupId>io.spring.javaformat</groupId>
 				<artifactId>spring-javaformat-maven-plugin</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>0.0.1-SNAPSHOT</version>
 				<executions>
 					<execution>
 						<goals>

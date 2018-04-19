@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>io.spring.javaformat</groupId>
 		<artifactId>spring-javaformat-maven</artifactId>
-		<version>${revision}</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>spring-javaformat-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
@@ -77,12 +77,12 @@
 		<dependency>
 			<groupId>io.spring.javaformat</groupId>
 			<artifactId>spring-javaformat-formatter</artifactId>
-			<version>${revision}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.spring.javaformat</groupId>
 			<artifactId>spring-javaformat-eclipse-runtime</artifactId>
-			<version>${revision}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
