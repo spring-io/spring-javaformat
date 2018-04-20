@@ -57,13 +57,14 @@ public class Monitor {
 	/**
 	 * Factory used to create a {@link Monitor}.
 	 */
+	@FunctionalInterface
 	public interface Factory {
 
 		/**
 		 * Create a new {@link Monitor}.
 		 * @param project the source project
 		 * @param trigger the trigger used to update
-		 * @return the monitor
+		 * @return the monitor or {@code null}
 		 */
 		Monitor createMonitor(Project project, Trigger trigger);
 

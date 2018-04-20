@@ -18,7 +18,6 @@ package io.spring.format.formatter.intellij.codestyle.monitor;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileAdapter;
 import com.intellij.openapi.vfs.VirtualFileEvent;
 import com.intellij.openapi.vfs.VirtualFileListener;
 import com.intellij.openapi.vfs.VirtualFileManager;
@@ -73,7 +72,7 @@ public class FileMonitor extends Monitor {
 	/**
 	 * Lister used to check for trigger file updates.
 	 */
-	private class Listener extends VirtualFileAdapter {
+	private class Listener implements VirtualFileListener {
 
 		@Override
 		public void fileCreated(VirtualFileEvent event) {

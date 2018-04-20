@@ -38,8 +38,8 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.text.edits.TextEdit;
 
 /**
- * Reformatter used {@link SpringCodeStyleManager} to determine when formatting can apply
- * and to perform the actual formatting.
+ * Reformatter used by {@link SpringCodeStyleManager} to determine when formatting can
+ * apply and to perform the actual formatting.
  *
  * @author Phillip Webb
  */

@@ -28,6 +28,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.ChangedRangesInfo;
 import com.intellij.psi.codeStyle.CodeStyleManager;
+import com.intellij.psi.codeStyle.DocCommentSettings;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ThrowableRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -47,6 +48,26 @@ public class DelegatingCodeStyleManager extends CodeStyleManager {
 
 	public CodeStyleManager getDelegate() {
 		return this.delegate;
+	}
+
+	@Override
+	public int getSpacing(PsiFile file, int offset) {
+		return this.delegate.getSpacing(file, offset);
+	}
+
+	@Override
+	public int getMinLineFeeds(PsiFile file, int offset) {
+		return this.delegate.getMinLineFeeds(file, offset);
+	}
+
+	@Override
+	public void runWithDocCommentFormattingDisabled(PsiFile file, Runnable runnable) {
+		this.delegate.runWithDocCommentFormattingDisabled(file, runnable);
+	}
+
+	@Override
+	public DocCommentSettings getDocCommentSettings(PsiFile file) {
+		return this.delegate.getDocCommentSettings(file);
 	}
 
 	@Override

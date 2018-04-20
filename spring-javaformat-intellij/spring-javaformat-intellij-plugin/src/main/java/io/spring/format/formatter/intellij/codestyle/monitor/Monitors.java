@@ -48,7 +48,10 @@ public class Monitors {
 		this.stateConsumer = stateConsumer;
 		List<Monitor> monitors = new ArrayList<>(monitorFactories.size());
 		for (Monitor.Factory factory : monitorFactories) {
-			monitors.add(factory.createMonitor(project, addTrigger()));
+			Monitor monitor = factory.createMonitor(project, addTrigger());
+			if (monitor != null) {
+				monitors.add(monitor);
+			}
 		}
 		this.monitors = Collections.unmodifiableList(monitors);
 	}

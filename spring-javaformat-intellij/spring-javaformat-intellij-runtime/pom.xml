@@ -67,6 +67,7 @@
 									<patternset>
 										<include name="*/lib/*.jar" />
 										<include name="*/plugins/maven/lib/maven.jar" />
+										<include name="*/plugins/maven/lib/maven-server-api.jar" />
 									</patternset>
 									<mapper type="flatten" />
 								</untar>
@@ -190,6 +191,22 @@
 							<sources>${project.build.directory}/intellij-source/maven-sources.zip</sources>
 							<groupId>io.spring.javaformat.intellij</groupId>
 							<artifactId>maven</artifactId>
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+										<execution>
+						<id>install-intellij-maven-server-api</id>
+						<phase>install</phase>
+						<inherited>false</inherited>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.build.directory}/intellij/maven-server-api.jar</file>
+							<groupId>io.spring.javaformat.intellij</groupId>
+							<artifactId>maven-server-api</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
 							<generatePom>true</generatePom>
