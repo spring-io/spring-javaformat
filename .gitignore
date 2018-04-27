@@ -11,3 +11,5 @@ spring-javaformat-eclipse/io.spring.javaformat.eclipse.tests/lib
 spring-javaformat-gradle/spring-javaformat-gradle-plugin/bin
 spring-javaformat-gradle/spring-javaformat-gradle-plugin/build
 .gradletasknamecache
+samples/spring-javaformat-gradle-sample/bin
+samples/spring-javaformat-gradle-sample/build
