@@ -83,6 +83,12 @@
 			<groupId>io.spring.javaformat</groupId>
 			<artifactId>spring-javaformat-formatter-eclipse-runtime</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
