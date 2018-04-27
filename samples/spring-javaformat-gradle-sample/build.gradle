@@ -1,6 +1,6 @@
 buildscript {
 	repositories {
-		mavenLocal();
+		mavenLocal()
 		mavenCentral()
 	}
 	dependencies {
@@ -16,7 +16,7 @@ apply plugin: 'io.spring.javaformat'
 sourceCompatibility = 1.8
 
 repositories {
-	mavenLocal();
+	mavenLocal()
 	mavenCentral()
 }
 
