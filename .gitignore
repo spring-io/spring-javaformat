@@ -7,3 +7,7 @@ target
 .flattened-pom.xml
 spring-javaformat-eclipse/io.spring.javaformat.eclipse/lib
 spring-javaformat-eclipse/io.spring.javaformat.eclipse.tests/lib
+.gradle
+spring-javaformat-gradle/spring-javaformat-gradle-plugin/bin
+spring-javaformat-gradle/spring-javaformat-gradle-plugin/build
+.gradletasknamecache

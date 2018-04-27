@@ -1,0 +1,10 @@
+buildscript {
+	dependencies {
+		classpath files(pluginClasspath.split(','))
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'io.spring.javaformat'
+
+sourceCompatibility = 1.8

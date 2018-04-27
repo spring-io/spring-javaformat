@@ -14,38 +14,43 @@
  * limitations under the License.
  */
 
-package io.spring.format.gradle;
+package io.spring.javaformat.gradle;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import io.spring.javaformat.formatter.FileEdit;
-import io.spring.javaformat.formatter.FileFormatter;
 import org.gradle.api.GradleException;
+import org.gradle.api.tasks.TaskAction;
 
 /**
- * {@link FormatterTask} to validate formatting.
+ * {@link FormatterTask} to check formatting.
  *
  * @author Phillip Webb
  */
-public class ValidateTask extends FormatterTask {
+public class CheckTask extends FormatterTask {
 
-	static final String NAME = "springFormatValidate";
+	/**
+	 * The name of the task.
+	 */
+	public static final String NAME = "formatcheck";
 
-	static final String DESCRIPTION = "Validates Java source code formatting against Spring conventions";
+	/**
+	 * The description of the task.
+	 */
+	public static final String DESCRIPTION = "Run spring java formatting checks";
 
-	@Override
-	public void run() throws Exception {
-		FileFormatter formatter = new FileFormatter();
-		List<File> problems = formatter.formatFiles(this.files, this.encoding)
-				.filter(FileEdit::hasEdits).map(FileEdit::getFile)
-				.collect(Collectors.toList());
+	@TaskAction
+	public void checkFormatting() throws IOException, InterruptedException {
+		List<File> problems = formatFiles().filter(FileEdit::hasEdits)
+				.map(FileEdit::getFile).collect(Collectors.toList());
 		if (!problems.isEmpty()) {
 			StringBuilder message = new StringBuilder(
 					"Formatting violations found in the following files:\n");
 			problems.stream().forEach((f) -> message.append(" * " + f + "\n"));
-			message.append("\nRun `springFormatApply` to fix.");
+			message.append("\nRun `format` to fix.");
 			throw new GradleException(message.toString());
 		}
 	}

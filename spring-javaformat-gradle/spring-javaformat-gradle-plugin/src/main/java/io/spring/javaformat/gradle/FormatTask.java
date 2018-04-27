@@ -14,30 +14,36 @@
  * limitations under the License.
  */
 
-package io.spring.format.gradle;
+package io.spring.javaformat.gradle;
+
+import java.io.IOException;
 
 import io.spring.javaformat.formatter.FileEdit;
-import io.spring.javaformat.formatter.FileFormatter;
 import io.spring.javaformat.formatter.FileFormatterException;
 import org.gradle.api.GradleException;
+import org.gradle.api.tasks.TaskAction;
 
 /**
  * {@link FormatterTask} to apply formatting.
  *
  * @author Phillip Webb
  */
-public class ApplyTask extends FormatterTask {
+public class FormatTask extends FormatterTask {
 
-	static final String NAME = "springFormatApply";
+	/**
+	 * The name of the task.
+	 */
+	public static final String NAME = "format";
 
-	static final String DESCRIPTION = "Formats Java source code using Spring conventions";
+	/**
+	 * The description of the task.
+	 */
+	public static final String DESCRIPTION = "Apply spring java formatting";
 
-	@Override
-	public void run() throws Exception {
+	@TaskAction
+	public void format() throws IOException, InterruptedException {
 		try {
-			FileFormatter formatter = new FileFormatter();
-			formatter.formatFiles(this.files, this.encoding).filter(FileEdit::hasEdits)
-					.forEach(FileEdit::save);
+			formatFiles().forEach(FileEdit::save);
 		}
 		catch (FileFormatterException ex) {
 			throw new GradleException("Unable to format file " + ex.getFile(), ex);
