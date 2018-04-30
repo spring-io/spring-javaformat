@@ -20,8 +20,6 @@ repositories {
 	mavenCentral()
 }
 
-
-
 checkstyle {
 	toolVersion = "8.9"
 }
