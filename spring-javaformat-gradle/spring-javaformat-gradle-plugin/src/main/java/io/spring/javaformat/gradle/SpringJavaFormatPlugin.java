@@ -99,7 +99,7 @@ public class SpringJavaFormatPlugin implements Plugin<Project> {
 
 	private void configureCheckDependents() {
 		this.project.getPlugins().withType(JavaBasePlugin.class, (plugin) -> {
-			this.project.getTasks().getByName("check")
+			this.project.getTasks().getByName(JavaBasePlugin.CHECK_TASK_NAME)
 					.dependsOn(getDependsOnSourcesTask(CheckTask.NAME));
 		});
 	}

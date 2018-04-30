@@ -13,3 +13,5 @@ spring-javaformat-gradle/spring-javaformat-gradle-plugin/build
 .gradletasknamecache
 samples/spring-javaformat-gradle-sample/bin
 samples/spring-javaformat-gradle-sample/build
+spring-javaformat/spring-javaformat-checkstyle/bin
+spring-javaformat/spring-javaformat-formatter-eclipse-rewriter/bin
