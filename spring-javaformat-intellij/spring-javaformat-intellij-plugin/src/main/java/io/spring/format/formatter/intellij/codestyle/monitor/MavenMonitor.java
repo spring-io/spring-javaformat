@@ -29,7 +29,7 @@ import org.jetbrains.idea.maven.server.NativeMavenProjectHolder;
 
 /**
  * {@link Monitor} that looks for a {@code spring-javaformat-maven-plugin} declaration in
- * the POM.xml.
+ * the POM.xml file.
  *
  * @author Phillip Webb
  */

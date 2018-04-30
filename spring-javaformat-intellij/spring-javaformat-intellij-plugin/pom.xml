@@ -63,6 +63,12 @@
 		</dependency>
 		<dependency>
 			<groupId>io.spring.javaformat.intellij</groupId>
+			<artifactId>idea</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.spring.javaformat.intellij</groupId>
 			<artifactId>maven</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
@@ -70,6 +76,24 @@
 		<dependency>
 			<groupId>io.spring.javaformat.intellij</groupId>
 			<artifactId>maven-server-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.spring.javaformat.intellij</groupId>
+			<artifactId>gradle</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.spring.javaformat.intellij</groupId>
+			<artifactId>gradle-tooling-extension-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.spring.javaformat.intellij</groupId>
+			<artifactId>gradle-tooling-extension-impl</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>

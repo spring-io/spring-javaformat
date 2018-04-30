@@ -25,6 +25,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import io.spring.format.formatter.intellij.codestyle.SpringCodeStyleManager;
 import io.spring.format.formatter.intellij.codestyle.monitor.FileMonitor;
+import io.spring.format.formatter.intellij.codestyle.monitor.GradleMonitor;
 import io.spring.format.formatter.intellij.codestyle.monitor.MavenMonitor;
 import io.spring.format.formatter.intellij.codestyle.monitor.Monitors;
 import io.spring.format.formatter.intellij.codestyle.monitor.Trigger.State;
@@ -52,7 +53,7 @@ public class SpringFormatComponent extends AbstractProjectComponent {
 	@Override
 	public void initComponent() {
 		this.monitors = new Monitors(this.myProject, this::update, FileMonitor.factory(),
-				MavenMonitor.factory());
+				MavenMonitor.factory(), GradleMonitor.factory());
 	}
 
 	@Override

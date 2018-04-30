@@ -6,6 +6,7 @@
 	<description><![CDATA[Code formatter for Spring.]]></description>
 	<idea-version since-build="162.0"/>
 	<depends>org.jetbrains.idea.maven</depends>
+	<depends>org.jetbrains.plugins.gradle</depends>
 	<project-components>
 		<component>
 			<implementation-class>io.spring.format.formatter.intellij.SpringFormatComponent</implementation-class>

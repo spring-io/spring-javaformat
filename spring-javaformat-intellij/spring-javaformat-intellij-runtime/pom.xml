@@ -66,8 +66,8 @@
 									compression="gzip" dest="${project.build.directory}/intellij">
 									<patternset>
 										<include name="*/lib/*.jar" />
-										<include name="*/plugins/maven/lib/maven.jar" />
-										<include name="*/plugins/maven/lib/maven-server-api.jar" />
+										<include name="*/plugins/maven/lib/*.jar" />
+										<include name="*/plugins/gradle/lib/*.jar" />
 									</patternset>
 									<mapper type="flatten" />
 								</untar>
@@ -85,6 +85,12 @@
 											name="${intellij.source.root}/platform/annotations/common/src/**" />
 										<include
 											name="${intellij.source.root}/plugins/maven/src/**" />
+										<include
+											name="${intellij.source.root}/plugins/gradle/src/**" />
+										<include
+											name="${intellij.source.root}/plugins/gradle/tooling-extension-api/src/**" />
+										<include
+											name="${intellij.source.root}/plugins/gradle/tooling-extension-impl/src/**" />
 									</patternset>
 								</unzip>
 								<zip
@@ -102,6 +108,15 @@
 								<zip
 									destfile="${project.build.directory}/intellij-source/maven-sources.zip"
 									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/plugins/maven/src" />
+								<zip
+									destfile="${project.build.directory}/intellij-source/gradle-sources.zip"
+									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/plugins/gradle/src" />
+								<zip
+									destfile="${project.build.directory}/intellij-source/gradle-tooling-extension-api-sources.zip"
+									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/plugins/gradle/tooling-extension-api/src" />
+								<zip
+									destfile="${project.build.directory}/intellij-source/gradle-tooling-extension-impl-sources.zip"
+									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/plugins/gradle/tooling-extension-impl/src" />
 							</target>
 						</configuration>
 					</execution>
@@ -163,6 +178,22 @@
 						</configuration>
 					</execution>
 					<execution>
+						<id>install-intellij-idea</id>
+						<phase>install</phase>
+						<inherited>false</inherited>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.build.directory}/intellij/idea.jar</file>
+							<groupId>io.spring.javaformat.intellij</groupId>
+							<artifactId>idea</artifactId>
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+					<execution>
 						<id>install-intellij-annotations</id>
 						<phase>install</phase>
 						<inherited>false</inherited>
@@ -196,7 +227,7 @@
 							<generatePom>true</generatePom>
 						</configuration>
 					</execution>
-										<execution>
+					<execution>
 						<id>install-intellij-maven-server-api</id>
 						<phase>install</phase>
 						<inherited>false</inherited>
@@ -207,6 +238,57 @@
 							<file>${project.build.directory}/intellij/maven-server-api.jar</file>
 							<groupId>io.spring.javaformat.intellij</groupId>
 							<artifactId>maven-server-api</artifactId>
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+					<execution>
+						<id>install-intellij-gradle</id>
+						<phase>install</phase>
+						<inherited>false</inherited>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.build.directory}/intellij/gradle.jar</file>
+							<sources>${project.build.directory}/intellij-source/gradle-sources.zip</sources>
+							<groupId>io.spring.javaformat.intellij</groupId>
+							<artifactId>gradle</artifactId>
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+					<execution>
+						<id>install-intellij-gradle-tooling-extension-api</id>
+						<phase>install</phase>
+						<inherited>false</inherited>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.build.directory}/intellij/gradle-tooling-extension-api.jar</file>
+							<sources>${project.build.directory}/intellij-source/gradle-tooling-extension-api-sources.zip</sources>
+							<groupId>io.spring.javaformat.intellij</groupId>
+							<artifactId>gradle-tooling-extension-api</artifactId>
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+					<execution>
+						<id>install-intellij-gradle-tooling-extension-impl</id>
+						<phase>install</phase>
+						<inherited>false</inherited>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.build.directory}/intellij/gradle-tooling-extension-impl.jar</file>
+							<sources>${project.build.directory}/intellij-source/gradle-tooling-extension-impl-sources.zip</sources>
+							<groupId>io.spring.javaformat.intellij</groupId>
+							<artifactId>gradle-tooling-extension-impl</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
 							<generatePom>true</generatePom>
