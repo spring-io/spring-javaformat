@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 the original author or authors.
+ * Copyright 2012-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,18 @@
 
 package io.spring.javaformat.eclipse;
 
+import org.eclipse.ui.IStartup;
+
 /**
- * Details for the plugin.
+ * Startup class used to initialize the plugin and attach listeners.
  *
  * @author Phillip Webb
  */
-public final class Plugin {
+public class Startup implements IStartup {
 
-	/**
-	 * The ID of the plugin.
-	 */
-	public static final String ID = "io.spring.javaformat.eclipse"; //$NON-NLS-1$
-
-	private Plugin() {
+	@Override
+	public void earlyStartup() {
+		Activator.getDefault();
 	}
 
 }
