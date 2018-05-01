@@ -10,4 +10,7 @@
 	</parent>
 	<artifactId>io.spring.javaformat.eclipse.feature</artifactId>
 	<packaging>eclipse-feature</packaging>
+	<properties>
+		<main.basedir>${basedir}/../..</main.basedir>
+	</properties>
 </project>

@@ -371,23 +371,6 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<configuration>
-					<useProjectReferences>false</useProjectReferences>
-					<additionalConfig>
-						<file>
-							<name>.settings/org.eclipse.jdt.ui.prefs</name>
-							<location>${main.basedir}/eclipse/org.eclipse.jdt.ui.prefs</location>
-						</file>
-						<file>
-							<name>.settings/org.eclipse.jdt.core.prefs</name>
-							<location>${main.basedir}/eclipse/org.eclipse.jdt.core.prefs</location>
-						</file>
-					</additionalConfig>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>flatten-maven-plugin</artifactId>
 				<version>1.0.0</version>
@@ -560,6 +543,20 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<repositories>
+		<repository>
+			<id>eclipse</id>
+			<layout>p2</layout>
+			<url>${eclipse.repository}</url>
+		</repository>
+	</repositories>
+	<modules>
+		<module>spring-javaformat</module>
+		<module>spring-javaformat-maven</module>
+		<module>spring-javaformat-gradle</module>
+		<module>spring-javaformat-eclipse</module>
+		<module>spring-javaformat-intellij</module>
+	</modules>
 	<profiles>
 		<profile>
 			<id>macosx</id>
@@ -585,19 +582,36 @@
 				<ui.test.vmargs>-Xmx512m -XX:MaxPermSize=256m</ui.test.vmargs>
 			</properties>
 		</profile>
-	</profiles>
-	<repositories>
-		<repository>
+		<profile>
 			<id>eclipse</id>
-			<layout>p2</layout>
-			<url>${eclipse.repository}</url>
-		</repository>
-	</repositories>
-	<modules>
-		<module>spring-javaformat</module>
-		<module>spring-javaformat-maven</module>
-		<module>spring-javaformat-gradle</module>
-		<module>spring-javaformat-eclipse</module>
-		<module>spring-javaformat-intellij</module>
-	</modules>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-eclipse-settings</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<inherited>true</inherited>
+								<configuration>
+									<target>
+										<copy
+											file="${main.basedir}/.eclipse/org.eclipse.jdt.core.prefs"
+											todir="${basedir}/.settings" force="true" />
+										<copy
+											file="${main.basedir}/.eclipse/org.eclipse.jdt.ui.prefs"
+											todir="${basedir}/.settings" force="true" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

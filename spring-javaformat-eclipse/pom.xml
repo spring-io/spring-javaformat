@@ -11,7 +11,7 @@
 	<artifactId>spring-javaformat-eclipse</artifactId>
 	<packaging>pom</packaging>
 	<properties>
-		<main.basedir>${basedir}/../..</main.basedir>
+		<main.basedir>${basedir}/..</main.basedir>
 	</properties>
 	<build>
 		<plugins>
