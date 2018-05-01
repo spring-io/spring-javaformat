@@ -11,9 +11,10 @@ Since the aim of this project is to provide consistency, each plugins not genera
 You need to change your code to match the required conventions.
 You can't configure the plugin conventions to match your style!
 
-### Quick Start
+### Maven
 
-#### Maven
+#### Source Formatting
+
 For source formatting, add the `spring-javaformat-maven-plugin` to your `build` plugins as follows:
 
 [source,xml,indent=0]
@@ -35,19 +36,27 @@ If you want to enforce that all code matches the required style, add the followi
 
 [source,xml,indent=0]
 ----
-	<plugin>
-		<groupId>io.spring.javaformat</groupId>
-		<artifactId>spring-javaformat-maven-plugin</artifactId>
-		<version>${version}</version>
-		<executions>
-			<execution>
-				<goals>
-					<goal>validate</goal>
-				</goals>
-			</execution>
-		</executions>
-	</plugin>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>io.spring.javaformat</groupId>
+				<artifactId>spring-javaformat-maven-plugin</artifactId>
+				<version>${version}</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<inherited>true</inherited>
+						<goals>
+							<goal>validate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 ----
+
+#### Checkstyle
 
 To enforce checksyle conventions add the checkstyle plugin and include a dependency on `spring-javaformat-checkstyle`:
 
@@ -71,15 +80,67 @@ To enforce checksyle conventions add the checkstyle plugin and include a depende
 						<version>${version}</version>
 					</dependency>
 				</dependencies>
-				<configuration>
-					<configLocation>src/checkstyle/checkstyle.xml</configLocation>
-				</configuration>
+				<executions>
+					<execution>
+						<id>checkstyle-validation</id>
+						<phase>validate</phase>
+						<inherited>true</inherited>
+						<configuration>
+							<configLocation>io/spring/javaformat/checkstyle/checkstyle.xml</configLocation>
+							<consoleOutput>true</consoleOutput>
+							<includeTestSourceDirectory>true</includeTestSourceDirectory>
+						</configuration>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
 ----
 
-Your checkstyle file should look then like this:
+### Gradle
+
+#### Source Formatting
+For source formatting, add the `spring-javaformat-gradle-plugin` to your `build` plugins as follows:
+
+[source,groovy,indent=0]
+----
+	buildscript {
+		repositories {
+			mavenCentral()
+		}
+		dependencies {
+			classpath("io.spring.javaformat:spring-javaformat-gradle-plugin:${version}")
+		}
+	}
+
+	apply plugin: 'io.spring.javaformat'
+----
+
+The plugin adds `format` and `formatcheck` tasks to your project.
+The `formatcheck` task is automatically applied when running the standard gradle `check` task.
+
+If you need to change the source encoding or the source sets that the plugin uses you can use the `springJavaFormat` DSL extension.
+
+#### Checkstyle
+To enforce checksyle conventions add the checkstyle plugin and include a dependency on `spring-javaformat-checkstyle`:
+
+[source,groovy,indent=0]
+----
+apply plugin: 'checkstyle'
+
+checkstyle {
+	toolVersion = "8.9"
+}
+
+dependencies {
+	checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.1-SNAPSHOT")
+}
+----
+
+Your `src/checkstyle/checkstyle.xml` file should look then like this:
 
 [source,xml,indent=0]
 ----
@@ -90,17 +151,22 @@ Your checkstyle file should look then like this:
 	</module>
 ----
 
-#### Gradle
 
-_The Gradle plugin is work in progress_
+### Eclipse
+The Eclipse plugin provides a custom formatter implementation and automatically applies project specific settings.
+The plugin is automatically activated whenever the Maven or Gradle plugins are discovered in a project build script.
 
-#### Eclipse
+If you need to customize the project specific settings that the plugin applies you should add a `.eclipse` folder in the root of your project.
+All `.prefs` files from this folder will be copied to the project `.settings` folders.
+Usually you'll provide your own `org.eclipse.jdt.core.prefs` and `org.eclipse.jdt.ui.prefs` files.
 
-_The Eclipse plugin is work in progress_
+To install the plugin use the `io.spring.javaformat.eclipse.site` zip file.
 
-#### IntelliJ IDEA
+### IntelliJ IDEA
+The IntelliJ plugin provides custom formatter support for IDEA.
+The plugin is automatically activated whenever the Maven or Gradle plugins are discovered in a project build script.
 
-_The IntelliJ plugin is work in progress_
+To install the plugin use the `spring-javaformat-intellij-plugin` zip file.
 
 
 ### About the conventions
