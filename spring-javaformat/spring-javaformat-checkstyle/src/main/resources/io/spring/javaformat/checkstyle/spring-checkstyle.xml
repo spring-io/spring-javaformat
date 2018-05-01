@@ -128,7 +128,6 @@
 		<module name="com.puppycrawl.tools.checkstyle.checks.modifier.RedundantModifierCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
 
-
 		<!-- Regexp -->
  		<module name="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpSinglelineJavaCheck">
 			<property name="format" value="^\t* +\t*\S" />
@@ -167,7 +166,10 @@
 		<module name="com.puppycrawl.tools.checkstyle.checks.whitespace.TypecastParenPadCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck" />
+
+		<!-- Spring Conventions -->
 		<module name="io.spring.javaformat.checkstyle.check.LambdaCheck" />
 		<module name="io.spring.javaformat.checkstyle.check.TernaryCheck" />
+		<module name="io.spring.javaformat.checkstyle.check.CatchCheck" />
  	</module>
 </module>
