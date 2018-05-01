@@ -1,0 +1,68 @@
+= Contributing to Spring Java Format
+
+Spring Java Format is released under the Apache 2.0 license.
+If you would like to contribute something, or simply want to hack on the code this document should help you get started.
+
+== Code of Conduct
+This project adheres to the Contributor Covenant link:CODE_OF_CONDUCT.adoc[code of conduct].
+By participating, you are expected to uphold this code.
+Please report unacceptable behavior to spring-code-of-conduct@pivotal.io.
+
+== Sign the Contributor License Agreement
+Before we accept a non-trivial patch or pull request we will need you to https://cla.pivotal.io/sign/spring[sign the Contributor License Agreement].
+Signing the contributor's agreement does not grant anyone commit rights to the main repository, but it does mean that we can accept your contributions, and you will get an author credit if we do.
+Active contributors might be asked to join the core team, and given the ability to merge pull requests.
+
+== Working with the code
+If you don't have an IDE preference we would recommend that you use
+https://spring.io/tools/sts[Spring Tools Suite] or
+http://eclipse.org[Eclipse] when working with the code. We use the
+http://eclipse.org/m2e/[M2Eclipse] eclipse plugin for maven support. Other IDEs and tools
+should also work without issue.
+
+=== Building from source
+To build the source you will need to install JDK 1.8.
+
+==== Default build
+The project can be built from the root directory using the standard maven command:
+
+[indent=0]
+----
+	$ ./mvnw clean install
+----
+
+NOTE: You may need to increase the amount of memory available to Maven by setting a `MAVEN_OPTS` environment variable with the value `-Xmx512m`
+
+=== Importing into eclipse
+You can import the code into any Eclipse based distribution as long as it had the http://eclipse.org/m2e/[M2Eclipse] eclipse plugin.
+If you don't already have m2eclipse installed it is available from the "Eclipse marketplace".
+
+NOTE: You'll need to close the `spring-javaformat-formatter-eclipse` and `spring-javaformat-formatter-eclipse-runtime` projects following import since they contain rewritten packages that aren't supported by the IDE
+
+=== Importing into other IDEs
+Maven is well supported by most Java IDEs. Refer to your vendor documentation.
+
+== Understanding the code
+There are quite a few moving parts to this project and the build is quite complex.
+At the top level there are 5 projects:
+
+* `spring-javaformat` - The main formatter project
+* `spring-javaformat-eclipse` - The Eclipse plugin
+* `spring-javaformat-gradle` - The Gradle plugin
+* `spring-javaformat-intellij` - The IntelliJ IDEA plugin
+* `spring-javaformat-maven` - The Maven plugin
+
+Under `spring-javaformat` the following projects are defined:
+
+* `spring-javaformat-checkstyle` - The checkstyle plugin
+* `spring-javaformat-formatter` - The main formatter code
+* `spring-javaformat-formatter-eclipse` - The eclipse formatter (repackaged and slightly adapted)
+* `spring-javaformat-formatter-eclipse-rewriter` - Internal utility used to modify eclipse code
+* `spring-javaformat-formatter-eclipse-runtime` - Eclipse runtime JAR for use when running outside of Eclipse
+
+The main formatter is based on the formatter included with Eclipse.
+The shade plugin is used to repackage the formatter code to ensure that it doesn't clash with the real one when used in the Eclipse plugin.
+A small amount of bytecode modification is also applied that increase the visibility of a few methods.
+
+When the formatter runs outside of Eclispe some eclipse runtime files are also needed.
+The `spring-javaformat-formatter-eclipse-runtime` project uses proguard to build a minimal eclipse runime jar.
