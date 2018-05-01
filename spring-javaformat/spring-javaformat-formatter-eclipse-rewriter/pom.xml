@@ -23,6 +23,7 @@
 		</plugins>
 	</build>
 	<dependencies>
+		<!-- Compile -->
 		<dependency>
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
