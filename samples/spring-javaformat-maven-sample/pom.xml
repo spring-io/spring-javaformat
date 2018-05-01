@@ -36,9 +36,21 @@
 						<version>${project.version}</version>
 					</dependency>
 				</dependencies>
-				<configuration>
-					<configLocation>src/checkstyle/checkstyle.xml</configLocation>
-				</configuration>
+				<executions>
+					<execution>
+						<id>checkstyle-validation</id>
+						<phase>validate</phase>
+						<inherited>true</inherited>
+						<configuration>
+							<configLocation>io/spring/javaformat/checkstyle/checkstyle.xml</configLocation>
+							<consoleOutput>true</consoleOutput>
+							<includeTestSourceDirectory>true</includeTestSourceDirectory>
+						</configuration>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
