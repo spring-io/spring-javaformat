@@ -16,22 +16,12 @@
 
 package io.spring.javaformat.gradle;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.stream.Collectors;
-
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
-import org.gradle.api.internal.ConventionMapping;
-import org.gradle.api.internal.IConventionAware;
 import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.tasks.SourceSet;
-import org.gradle.api.tasks.SourceTask;
-import org.gradle.api.tasks.compile.CompileOptions;
-import org.gradle.api.tasks.compile.JavaCompile;
 
 /**
  * Spring Format Gradle Plugin.
@@ -42,82 +32,40 @@ public class SpringJavaFormatPlugin implements Plugin<Project> {
 
 	private Project project;
 
-	private SpringJavaFormatExtension extension;
-
 	@Override
 	public void apply(Project project) {
 		this.project = project;
-		this.extension = createExtension();
-		project.getTasks().withType(FormatterTask.class, this::configureTaskDefault);
 		addSourceTasks();
-		configureCheckDependents();
-		addApplyTask();
-	}
-
-	private SpringJavaFormatExtension createExtension() {
-		SpringJavaFormatExtension extension = this.project.getExtensions().create(
-				"springJavaFormat", SpringJavaFormatExtension.class, this.project);
-		ConventionMapping mapping = ((IConventionAware) extension).getConventionMapping();
-		configureExtensionConections(mapping);
-		return extension;
-	}
-
-	private void configureExtensionConections(ConventionMapping mapping) {
-		mapping.map("sourceSets", ArrayList::new);
-		this.project.getPlugins().withType(JavaBasePlugin.class, (plugin) -> {
-			mapping.map("sourceSets", getJavaPluginConvention()::getSourceSets);
-		});
-		mapping.map("encoding",
-				() -> this.project.getTasks().withType(JavaCompile.class).stream()
-						.findFirst().map(JavaCompile::getOptions)
-						.map(CompileOptions::getEncoding).orElse(null));
-	}
-
-	private void configureTaskDefault(FormatterTask formatTask) {
-		ConventionMapping mapping = formatTask.getConventionMapping();
-		mapping.map("encoding", () -> this.extension.getEncoding());
 	}
 
 	private void addSourceTasks() {
 		this.project.getPlugins().withType(JavaBasePlugin.class, (plugin) -> {
-			getJavaPluginConvention().getSourceSets().all(this::addSourceTasks);
+			Task formatAll = this.project.task(FormatTask.NAME);
+			formatAll.setDescription(FormatTask.DESCRIPTION);
+			this.project.getConvention().getPlugin(JavaPluginConvention.class)
+					.getSourceSets()
+					.all((sourceSet) -> addSourceTasks(sourceSet, formatAll));
 		});
 	}
 
-	private void addSourceTasks(SourceSet sourceSet) {
-		addSourceTask(sourceSet, CheckTask.class, CheckTask.NAME, CheckTask.DESCRIPTION);
-		addSourceTask(sourceSet, FormatTask.class, FormatTask.NAME, FormatTask.DESCRIPTION);
+	private void addSourceTasks(SourceSet sourceSet, Task formatAll) {
+		CheckTask checkTask = addSourceTask(sourceSet, CheckTask.class, CheckTask.NAME,
+				CheckTask.DESCRIPTION);
+		this.project.getTasks().getByName(JavaBasePlugin.CHECK_TASK_NAME)
+				.dependsOn(checkTask);
+		FormatTask formatSourceSet = addSourceTask(sourceSet, FormatTask.class,
+				FormatTask.NAME, FormatTask.DESCRIPTION);
+		formatSourceSet.conventionMapping("encoding", () -> "UTF-8");
+		formatAll.dependsOn(formatSourceSet);
 	}
 
-	private void addSourceTask(SourceSet sourceSet, Class<? extends FormatterTask> taskType,
-			String name, String desc) {
+	private <T extends FormatterTask> T addSourceTask(SourceSet sourceSet,
+			Class<T> taskType, String name, String desc) {
 		String taskName = sourceSet.getTaskName(name, null);
-		SourceTask task = this.project.getTasks().create(taskName, taskType);
+		T task = this.project.getTasks().create(taskName, taskType);
 		task.setDescription(desc + " for " + sourceSet.getName());
 		task.setSource(sourceSet.getAllJava());
-	}
-
-	private void configureCheckDependents() {
-		this.project.getPlugins().withType(JavaBasePlugin.class, (plugin) -> {
-			this.project.getTasks().getByName(JavaBasePlugin.CHECK_TASK_NAME)
-					.dependsOn(getDependsOnSourcesTask(CheckTask.NAME));
-		});
-	}
-
-	private void addApplyTask() {
-		Task task = this.project.task(FormatTask.NAME);
-		task.setDescription(FormatTask.DESCRIPTION);
-		task.dependsOn(getDependsOnSourcesTask(FormatTask.NAME));
-	}
-
-	private Callable<List<String>> getDependsOnSourcesTask(String taskName) {
-		return () -> this.extension.getSourceSets().stream()
-				.map((sourceSet) -> sourceSet.getTaskName(taskName, null))
-				.collect(Collectors.toList());
-	}
-
-	private JavaPluginConvention getJavaPluginConvention() {
-		return this.project.getConvention().getPlugin(JavaPluginConvention.class);
+		return task;
 	}
 
 }
