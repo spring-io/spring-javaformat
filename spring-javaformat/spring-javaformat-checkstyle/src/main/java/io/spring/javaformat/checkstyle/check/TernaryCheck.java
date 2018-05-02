@@ -52,9 +52,13 @@ public class TernaryCheck extends AbstractCheck {
 	}
 
 	private void visitQuestion(DetailAST ast) {
-		if (!hasType(ast.getPreviousSibling(), TokenTypes.LPAREN)
-				|| !hasType(ast.getNextSibling(), TokenTypes.RPAREN)) {
-			log(ast.getLineNo(), ast.getColumnNo(), "ternary.missingParen");
+		DetailAST parent = ast.getParent();
+		DetailAST grandParent = (parent != null ? parent.getParent() : parent);
+		if (!hasType(grandParent, TokenTypes.ELIST) && !hasType(grandParent, TokenTypes.ARRAY_DECLARATOR)) {
+			if (!hasType(ast.getPreviousSibling(), TokenTypes.LPAREN)
+					|| !hasType(ast.getNextSibling(), TokenTypes.RPAREN)) {
+				log(ast.getLineNo(), ast.getColumnNo(), "ternary.missingParen");
+			}
 		}
 		if (hasType(ast.getFirstChild(), TokenTypes.EQUAL)) {
 			log(ast.getLineNo(), ast.getColumnNo(), "ternary.equalOperator");
@@ -62,7 +66,7 @@ public class TernaryCheck extends AbstractCheck {
 	}
 
 	private boolean hasType(DetailAST ast, int type) {
-		return ast != null && ast.getType() == type;
+		return (ast != null && ast.getType() == type);
 	}
 
 }
