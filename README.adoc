@@ -160,6 +160,13 @@ If you need to customize the project specific settings that the plugin applies y
 All `.prefs` files from this folder will be copied to the project `.settings` folders.
 Usually you'll provide your own `org.eclipse.jdt.core.prefs` and `org.eclipse.jdt.ui.prefs` files.
 
+You can also add a `.eclipse/eclipse.properties` file to customize the following items:
+
+[source,properties,indent=0]
+----
+	copyright-year= # The copyright year to use in new files
+----
+
 To install the plugin use the `io.spring.javaformat.eclipse.site` zip file.
 
 ### IntelliJ IDEA

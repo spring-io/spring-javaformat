@@ -40,7 +40,7 @@ public class ProjectSettingsFilesLocatorTests {
 	public TemporaryFolder temp = new TemporaryFolder();
 
 	@Test
-	public void locateSettingsFilesWhenNoFoldersShouldReturnDefault() {
+	public void locateSettingsFilesWhenNoFoldersShouldReturnDefault() throws IOException {
 		ProjectSettingsFiles files = new ProjectSettingsFilesLocator()
 				.locateSettingsFiles();
 		assertThat(files.iterator()).extracting(ProjectSettingsFile::getName)

@@ -38,12 +38,17 @@ public class ProjectSettingsFiles implements Iterable<ProjectSettingsFile> {
 
 	private final List<ProjectSettingsFile> files;
 
+	private final ProjectProperties projectProperties;
+
 	/**
 	 * Create a new {@link ProjectSettingsFiles} instances with the specified files.
 	 * @param files the project settings files
+	 * @param projectProperties project properties
 	 */
-	public ProjectSettingsFiles(Collection<ProjectSettingsFile> files) {
+	public ProjectSettingsFiles(Collection<ProjectSettingsFile> files,
+			ProjectProperties projectProperties) {
 		this.files = new ArrayList<>(files);
+		this.projectProperties = projectProperties;
 	}
 
 	@Override
@@ -69,7 +74,7 @@ public class ProjectSettingsFiles implements Iterable<ProjectSettingsFile> {
 				catch (CoreException ex) {
 				}
 			}
-			try (InputStream content = file.getContent()) {
+			try (InputStream content = this.projectProperties.getModifiedContent(file)) {
 				destination.create(new BufferedInputStream(content), true, monitor);
 			}
 		}

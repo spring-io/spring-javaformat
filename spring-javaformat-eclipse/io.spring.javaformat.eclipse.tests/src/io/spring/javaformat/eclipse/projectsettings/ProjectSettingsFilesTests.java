@@ -45,8 +45,8 @@ public class ProjectSettingsFilesTests {
 	@Test
 	public void iteratorIteratesFiles() throws Exception {
 		ProjectSettingsFile file = ProjectSettingsFile.fromFile(this.temp.newFile());
-		ProjectSettingsFiles files = new ProjectSettingsFiles(
-				Collections.singleton(file));
+		ProjectSettingsFiles files = new ProjectSettingsFiles(Collections.singleton(file),
+				new ProjectProperties());
 		assertThat(files).containsOnly(file);
 	}
 
@@ -54,8 +54,8 @@ public class ProjectSettingsFilesTests {
 	public void applyToProjectCopiesToDotSettings() throws Exception {
 		ProjectSettingsFile file = ProjectSettingsFile
 				.fromFile(this.temp.newFile("foo.prefs"));
-		ProjectSettingsFiles files = new ProjectSettingsFiles(
-				Collections.singleton(file));
+		ProjectSettingsFiles files = new ProjectSettingsFiles(Collections.singleton(file),
+				new ProjectProperties());
 		IProject project = mock(IProject.class);
 		IProgressMonitor monitor = mock(IProgressMonitor.class);
 		IFile projectFile = mock(IFile.class);

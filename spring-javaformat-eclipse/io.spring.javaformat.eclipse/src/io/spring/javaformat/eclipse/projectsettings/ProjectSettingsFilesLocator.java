@@ -17,6 +17,7 @@
 package io.spring.javaformat.eclipse.projectsettings;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -43,24 +44,27 @@ public class ProjectSettingsFilesLocator {
 		this.searchFolders = searchFolders.toArray(new File[0]);
 	}
 
-	public ProjectSettingsFiles locateSettingsFiles() {
+	public ProjectSettingsFiles locateSettingsFiles() throws IOException {
+		ProjectProperties projectProperties = new ProjectProperties();
 		Map<String, ProjectSettingsFile> files = new LinkedHashMap<>();
 		for (File searchFolder : this.searchFolders) {
 			for (String sourceFolder : SOURCE_FOLDERS) {
-				add(files, new File(searchFolder, sourceFolder));
+				add(projectProperties, files, new File(searchFolder, sourceFolder));
 			}
 		}
 		for (String file : DEFAULT_FILES) {
 			putIfAbsent(files, ProjectSettingsFile.fromClasspath(getClass(), file));
 		}
-		return new ProjectSettingsFiles(files.values());
+		return new ProjectSettingsFiles(files.values(), projectProperties);
 	}
 
-	private void add(Map<String, ProjectSettingsFile> files, File folder) {
+	private void add(ProjectProperties projectProperties,
+			Map<String, ProjectSettingsFile> files, File folder) throws IOException {
 		if (folder.exists() && folder.isDirectory()) {
 			for (File file : folder.listFiles(this::isPrefsFile)) {
 				putIfAbsent(files, ProjectSettingsFile.fromFile(file));
 			}
+			projectProperties.addFromFolder(folder);
 		}
 	}
 
