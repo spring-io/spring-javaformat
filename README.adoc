@@ -87,7 +87,6 @@ To enforce checksyle conventions add the checkstyle plugin and include a depende
 						<inherited>true</inherited>
 						<configuration>
 							<configLocation>io/spring/javaformat/checkstyle/checkstyle.xml</configLocation>
-							<consoleOutput>true</consoleOutput>
 							<includeTestSourceDirectory>true</includeTestSourceDirectory>
 						</configuration>
 						<goals>
