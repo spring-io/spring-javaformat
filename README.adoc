@@ -122,8 +122,6 @@ For source formatting, add the `spring-javaformat-gradle-plugin` to your `build`
 The plugin adds `format` and `formatcheck` tasks to your project.
 The `formatcheck` task is automatically applied when running the standard gradle `check` task.
 
-If you need to change the source encoding or the source sets that the plugin uses you can use the `springJavaFormat` DSL extension.
-
 #### Checkstyle
 To enforce checksyle conventions add the checkstyle plugin and include a dependency on `spring-javaformat-checkstyle`:
 
