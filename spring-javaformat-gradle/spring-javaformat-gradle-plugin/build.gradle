@@ -29,10 +29,10 @@ test {
 }
 
 eclipseJdt {
-	inputFile = rootProject.file('../../eclipse/org.eclipse.jdt.core.prefs')
+	inputFile = rootProject.file('../../.eclipse/org.eclipse.jdt.core.prefs')
 	doLast {
 		project.file('.settings/org.eclipse.jdt.ui.prefs').withWriter { writer ->
-			writer << file('../../eclipse/org.eclipse.jdt.ui.prefs').text
+			writer << file('../../.eclipse/org.eclipse.jdt.ui.prefs').text
 		}
 	}
 }
