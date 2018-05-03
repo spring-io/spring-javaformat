@@ -59,15 +59,21 @@ public class LambdaCheck extends AbstractCheck {
 		}
 		DetailAST block = lambda.getLastChild();
 		if (isStatementList(block) && block.getChildCount(TokenTypes.SEMI) == 0
-				&& !isFirstChildStatementContainer(block) && !isFirstChildThrow(block)) {
+				&& !isNecessaryBlock(block)) {
 			log(block.getLineNo(), block.getColumnNo(), "lambda.unnecessaryBlock");
 		}
 	}
 
-	private boolean isFirstChildStatementContainer(DetailAST block) {
+	private boolean isNecessaryBlock(DetailAST block) {
 		DetailAST firstChild = block.getFirstChild();
 		if (firstChild == null) {
 			return false;
+		}
+		if (firstChild.getType() == TokenTypes.LITERAL_THROW) {
+			return true;
+		}
+		if (block.getChildCount() == 1 && firstChild.getType() == TokenTypes.RCURLY) {
+			return true;
 		}
 		DetailAST candidate = firstChild.getFirstChild();
 		while (candidate != null) {
@@ -81,11 +87,6 @@ public class LambdaCheck extends AbstractCheck {
 
 	private boolean isStatementList(DetailAST ast) {
 		return ast != null && ast.getType() == TokenTypes.SLIST;
-	}
-
-	private boolean isFirstChildThrow(DetailAST block) {
-		DetailAST firstChild = block.getFirstChild();
-		return (firstChild != null) && firstChild.getType() == TokenTypes.LITERAL_THROW;
 	}
 
 	private boolean hasToken(DetailAST ast, int type) {
