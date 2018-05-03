@@ -38,7 +38,7 @@ public class FormatTask extends FormatterTask {
 	/**
 	 * The description of the task.
 	 */
-	public static final String DESCRIPTION = "Apply spring java formatting";
+	public static final String DESCRIPTION = "Apply Spring Java formatting";
 
 	@TaskAction
 	public void format() throws IOException, InterruptedException {

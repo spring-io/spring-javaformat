@@ -35,12 +35,12 @@ public class CheckTask extends FormatterTask {
 	/**
 	 * The name of the task.
 	 */
-	public static final String NAME = "formatcheck";
+	public static final String NAME = "checkFormat";
 
 	/**
 	 * The description of the task.
 	 */
-	public static final String DESCRIPTION = "Run spring java formatting checks";
+	public static final String DESCRIPTION = "Run Spring Java formatting checks";
 
 	@TaskAction
 	public void checkFormatting() throws IOException, InterruptedException {
