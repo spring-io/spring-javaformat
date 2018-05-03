@@ -42,17 +42,20 @@ public class SpringJavaFormatPlugin implements Plugin<Project> {
 		this.project.getPlugins().withType(JavaBasePlugin.class, (plugin) -> {
 			Task formatAll = this.project.task(FormatTask.NAME);
 			formatAll.setDescription(FormatTask.DESCRIPTION);
+			Task checkAll = this.project.task(CheckTask.NAME);
+			checkAll.setDescription(CheckTask.DESCRIPTION);
+			this.project.getTasks().getByName(JavaBasePlugin.CHECK_TASK_NAME)
+					.dependsOn(checkAll);
 			this.project.getConvention().getPlugin(JavaPluginConvention.class)
 					.getSourceSets()
-					.all((sourceSet) -> addSourceTasks(sourceSet, formatAll));
+					.all((sourceSet) -> addSourceTasks(sourceSet, checkAll, formatAll));
 		});
 	}
 
-	private void addSourceTasks(SourceSet sourceSet, Task formatAll) {
+	private void addSourceTasks(SourceSet sourceSet, Task checkAll, Task formatAll) {
 		CheckTask checkTask = addSourceTask(sourceSet, CheckTask.class, CheckTask.NAME,
 				CheckTask.DESCRIPTION);
-		this.project.getTasks().getByName(JavaBasePlugin.CHECK_TASK_NAME)
-				.dependsOn(checkTask);
+		checkAll.dependsOn(checkTask);
 		FormatTask formatSourceSet = addSourceTask(sourceSet, FormatTask.class,
 				FormatTask.NAME, FormatTask.DESCRIPTION);
 		formatSourceSet.conventionMapping("encoding", () -> "UTF-8");
