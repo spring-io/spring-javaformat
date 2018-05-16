@@ -86,7 +86,7 @@ public class GradleBuild implements TestRule {
 	}
 
 	private String getPluginClasspath() {
-		return absolutePath("bin") + "," + absolutePath("build/classes/java/main") + ","
+		return absolutePath("build/classes/java/main") + ","
 				+ absolutePath("build/resources/main") + ","
 				+ pathOfJarContaining(Formatter.class) + ","
 				+ pathOfJarContaining(Preparator.class) + ","
