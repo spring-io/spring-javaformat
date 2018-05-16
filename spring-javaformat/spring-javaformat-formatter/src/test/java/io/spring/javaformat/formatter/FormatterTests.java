@@ -17,11 +17,13 @@
 package io.spring.javaformat.formatter;
 
 import java.io.File;
+import java.util.Collection;
 
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.TextEdit;
 import org.junit.Test;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -56,6 +58,11 @@ public class FormatterTests extends AbstractFormatterTests {
 		TextEdit textEdit = new Formatter().format(sourceContent);
 		textEdit.apply(document);
 		return document.get();
+	}
+
+	@Parameters(name = "{0}")
+	public static Collection<Object[]> files() {
+		return AbstractFormatterTests.files("FormatterTests-expected");
 	}
 
 }

@@ -19,8 +19,10 @@ package io.spring.javaformat.formatter;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collection;
 
 import org.junit.Test;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -64,6 +66,11 @@ public class FileFormatterTests extends AbstractFormatterTests {
 		System.out.println(expected);
 		System.out.println("-----");
 		assertThat(formattedContent).isEqualTo(expected);
+	}
+
+	@Parameters(name = "{0}")
+	public static Collection<Object[]> files() {
+		return AbstractFormatterTests.files(null);
 	}
 
 }

@@ -24,7 +24,6 @@ import java.util.Collection;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
 /**
  * @author Phillip Webb
@@ -63,24 +62,19 @@ public abstract class AbstractFormatterTests {
 		return new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
 	}
 
-	@Parameters(name = "{0}")
-	public static Collection<Object[]> files() {
+	protected static Collection<Object[]> files(String expectedOverride) {
 		Collection<Object[]> files = new ArrayList<>();
 		File sourceDir = new File("src/test/resources/source");
 		File expectedDir = new File("src/test/resources/expected");
+		File expectedOverrideDir = new File("src/test/resources/" + expectedOverride);
 		for (File source : sourceDir.listFiles((dir, name) -> !name.startsWith("."))) {
-			File expected = new File(expectedDir, source.getName());
-			if (!ignore(source)) {
-				files.add(new Object[] { source, expected });
+			File expected = new File(expectedOverrideDir, source.getName());
+			if (!expected.exists()) {
+				expected = new File(expectedDir, source.getName());
 			}
+			files.add(new Object[] { source, expected });
 		}
 		return files;
-	}
-
-	private static boolean ignore(File source) {
-		// https://bugs.eclipse.org/bugs/show_bug.cgi?id=509480
-		return false;
-		// return source.getName().equals("enum-constructor.txt");
 	}
 
 }

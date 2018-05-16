@@ -20,6 +20,7 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.regex.Pattern;
 
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
@@ -31,6 +32,9 @@ import org.eclipse.text.edits.TextEdit;
  * @author Phillip Webb
  */
 public class FileEdit {
+
+	private static final Pattern TRAILING_WHITESPACE = Pattern.compile(" +$",
+			Pattern.MULTILINE);
 
 	private final File file;
 
@@ -71,11 +75,15 @@ public class FileEdit {
 			IDocument document = new Document(this.originalContent);
 			this.edit.apply(document);
 			String formattedContent = document.get();
-			return formattedContent;
+			return trimTrailingWhitespace(formattedContent);
 		}
 		catch (Exception ex) {
 			throw FileFormatterException.wrap(this.file, ex);
 		}
+	}
+
+	private String trimTrailingWhitespace(String content) {
+		return TRAILING_WHITESPACE.matcher(content).replaceAll("");
 	}
 
 }

@@ -35,7 +35,8 @@ public class VerifyApply {
 	public void verify(File base) throws IOException {
 		String formated = new String(Files.readAllBytes(base.toPath().resolve(JAVA_FILE)),
 				StandardCharsets.UTF_8);
-		assertThat(formated).contains("public class Simple {");
+		assertThat(formated).contains("Simple.\n *\n * @author")
+				.contains("public class Simple {");
 	}
 
 }
