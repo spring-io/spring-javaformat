@@ -40,8 +40,9 @@ run_maven clean deploy -U -Dfull -DaltDeploymentRepository=distribution::default
 git reset --hard HEAD^ > /dev/null
 if [[ $nextVersion != $snapshotVersion ]]; then
 	echo "Setting next development version (v$nextVersion)"
-	set_revision_to_pom "$nextVersion"
-	git add pom.xml > /dev/null
+	./mvnw versions:set -DnewVersion=$nextVersion -DgenerateBackupPoms=false                                                                                                                                                                                  ✭
+	./mvnw org.eclipse.tycho:tycho-versions-plugin:update-eclipse-metadata
+	git add . > /dev/null
 	git commit -m"Next development version (v$nextVersion)" > /dev/null
 fi;
 
