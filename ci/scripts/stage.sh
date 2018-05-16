@@ -13,22 +13,17 @@ git clone git-repo stage-git-repo > /dev/null
 pushd stage-git-repo > /dev/null
 
 snapshotVersion=$( xmllint --xpath '/*[local-name()="project"]/*[local-name()="version"]/text()' pom.xml )
-if [[ $RELEASE_TYPE = "M" ]]; then
-	stageVersion=$( get_next_milestone_release $snapshotVersion)
-	nextVersion=$snapshotVersion
-elif [[ $RELEASE_TYPE = "RC" ]]; then
-	stageVersion=$( get_next_rc_release $snapshotVersion)
-	nextVersion=$snapshotVersion
-elif [[ $RELEASE_TYPE = "RELEASE" ]]; then
-	stageVersion=$( get_next_release $snapshotVersion)
+if [[ $RELEASE_TYPE = "RELEASE" ]]; then
+	stageVersion=$( strip_snapshot_suffix $snapshotVersion)
 	nextVersion=$( bump_version_number $snapshotVersion)
 else
 	echo "Unknown release type $RELEASE_TYPE" >&2; exit 1;
 fi
 
 echo "Staging $stageVersion (next version will be $nextVersion)"
+run_maven versions:set -DnewVersion=$stageVersion -DgenerateBackupPoms=false
+run_maven org.eclipse.tycho:tycho-versions-plugin:update-eclipse-metadata
 
-set_revision_to_pom "$stageVersion"
 git config user.name "Spring Buildmaster" > /dev/null
 git config user.email "buildmaster@springframework.org" > /dev/null
 git add pom.xml > /dev/null
@@ -38,13 +33,11 @@ git tag -a "v$stageVersion" -m"Release v$stageVersion" > /dev/null
 run_maven clean deploy -U -Dfull -DaltDeploymentRepository=distribution::default::file://${repository}
 
 git reset --hard HEAD^ > /dev/null
-if [[ $nextVersion != $snapshotVersion ]]; then
-	echo "Setting next development version (v$nextVersion)"
-	./mvnw versions:set -DnewVersion=$nextVersion -DgenerateBackupPoms=false                                                                                                                                                                                  ✭
-	./mvnw org.eclipse.tycho:tycho-versions-plugin:update-eclipse-metadata
-	git add . > /dev/null
-	git commit -m"Next development version (v$nextVersion)" > /dev/null
-fi;
+echo "Setting next development version (v$nextVersion)"
+run_maven versions:set -DnewVersion=$nextVersion -DgenerateBackupPoms=false
+run_maven org.eclipse.tycho:tycho-versions-plugin:update-eclipse-metadata
+git add . > /dev/null
+git commit -m"Next development version (v$nextVersion)" > /dev/null
 
 echo "DONE"
 

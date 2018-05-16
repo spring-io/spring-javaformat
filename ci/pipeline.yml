@@ -101,42 +101,6 @@ jobs:
       params:
         path: git-repo
         status: failure
-- name: stage-milestone
-  serial: true
-  plan:
-  - get: spring-javaformat-ci-image
-  - get: git-repo
-    trigger: false
-  - task: stage
-    image: spring-javaformat-ci-image
-    file: git-repo/ci/tasks/stage.yml
-    params:
-      RELEASE_TYPE: M
-  - put: artifactory-repo
-    params:
-      <<: *artifactory-params
-      repo: libs-staging-local
-  - put: git-repo
-    params:
-      repository: stage-git-repo
-- name: stage-rc
-  serial: true
-  plan:
-  - get: spring-javaformat-ci-image
-  - get: git-repo
-    trigger: false
-  - task: stage
-    image: spring-javaformat-ci-image
-    file: git-repo/ci/tasks/stage.yml
-    params:
-      RELEASE_TYPE: RC
-  - put: artifactory-repo
-    params:
-      <<: *artifactory-params
-      repo: libs-staging-local
-  - put: git-repo
-    params:
-      repository: stage-git-repo
 - name: stage-release
   serial: true
   plan:
@@ -155,44 +119,6 @@ jobs:
   - put: git-repo
     params:
       repository: stage-git-repo
-- name: promote-milestone
-  serial: true
-  plan:
-  - get: spring-javaformat-ci-image
-  - get: git-repo
-    trigger: false
-  - get: artifactory-repo
-    trigger: false
-    passed: [stage-milestone]
-    params:
-      save_build_info: true
-  - task: promote
-    image: spring-javaformat-ci-image
-    file: git-repo/ci/tasks/promote.yml
-    params:
-      RELEASE_TYPE: M
-      ARTIFACTORY_SERVER: ((artifactory-server))
-      ARTIFACTORY_USERNAME: ((artifactory-username))
-      ARTIFACTORY_PASSWORD: ((artifactory-password))
-- name: promote-rc
-  serial: true
-  plan:
-  - get: spring-javaformat-ci-image
-  - get: git-repo
-    trigger: false
-  - get: artifactory-repo
-    trigger: false
-    passed: [stage-rc]
-    params:
-      save_build_info: true
-  - task: promote
-    image: spring-javaformat-ci-image
-    file: git-repo/ci/tasks/promote.yml
-    params:
-      RELEASE_TYPE: RC
-      ARTIFACTORY_SERVER: ((artifactory-server))
-      ARTIFACTORY_USERNAME: ((artifactory-username))
-      ARTIFACTORY_PASSWORD: ((artifactory-password))
 - name: promote-release
   serial: true
   plan:
@@ -237,7 +163,7 @@ groups:
 - name: "Build"
   jobs: ["build"]
 - name: "Release"
-  jobs: ["stage-milestone", "stage-rc", "stage-release", "promote-milestone", "promote-rc", "promote-release", "sync-to-maven-central"]
+  jobs: ["stage-release", "promote-release", "sync-to-maven-central"]
 - name: "CI Images"
   jobs: ["build-spring-javaformat-ci-images"]
 - name: "Build Pull Requests"
