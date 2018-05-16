@@ -12,7 +12,7 @@ git clone git-repo stage-git-repo > /dev/null
 
 pushd stage-git-repo > /dev/null
 
-snapshotVersion=$( get_revision_from_pom )
+snapshotVersion=$( xmllint --xpath '/*[local-name()="project"]/*[local-name()="version"]/text()' pom.xml )
 if [[ $RELEASE_TYPE = "M" ]]; then
 	stageVersion=$( get_next_milestone_release $snapshotVersion)
 	nextVersion=$snapshotVersion
