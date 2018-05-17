@@ -5,4 +5,5 @@
 <suppressions>
 	<suppress files="[\\/]src[\\/]test[\\/]java[\\/]" checks="Javadoc*" />
 	<suppress files=".*Tests\.java" checks="Javadoc*" />
+	<suppress files="generated-sources" checks="[a-zA-Z0-9]*" />
 </suppressions>
