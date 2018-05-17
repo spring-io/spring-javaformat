@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Spring Java Format
 Bundle-SymbolicName: io.spring.javaformat.eclipse;singleton:=true
 Automatic-Module-Name: io.spring.javaformat.eclipse
-Bundle-Version: 0.0.1.qualifier
+Bundle-Version: 0.0.2.qualifier
 Bundle-Activator: io.spring.javaformat.eclipse.Activator
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.ui,
