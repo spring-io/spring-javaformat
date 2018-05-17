@@ -10,6 +10,7 @@
 	</parent>
 	<artifactId>spring-javaformat-intellij-runtime</artifactId>
 	<packaging>pom</packaging>
+	<name>Spring JavaFormat IntelliJ Runtime</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
 		<intellij.binary>http://download.jetbrains.com/idea/ideaIC-2018.1.1.tar.gz</intellij.binary>

@@ -5,8 +5,28 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.spring.javaformat</groupId>
 	<artifactId>spring-javaformat-build</artifactId>
-	<packaging>pom</packaging>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>Spring JavaFormat Build</name>
+	<description>Spring JavaFormat</description>
+	<url>https://github.com/spring-io/spring-javaformat/#</url>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+		</license>
+	</licenses>
+	<scm>
+		<url>https://github.com/spring-io/spring-javaformat</url>
+	</scm>
+	<developers>
+		<developer>
+			<name>Pivotal</name>
+			<email>info@pivotal.io</email>
+			<organization>Pivotal Software, Inc.</organization>
+			<organizationUrl>http://www.spring.io</organizationUrl>
+		</developer>
+	</developers>
 	<properties>
 		<main.basedir>${basedir}</main.basedir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -376,6 +396,12 @@
 				<version>1.0.0</version>
 				<configuration>
 					<updatePomFile>true</updatePomFile>
+					<flattenMode>oss</flattenMode>
+					<pomElements>
+						<parent>expand</parent>
+						<distributionManagement>remove</distributionManagement>
+						<repositories>remove</repositories>
+					</pomElements>
 				</configuration>
 				<executions>
 					<execution>

@@ -8,6 +8,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>spring-javaformat-checkstyle</artifactId>
+	<name>Spring JavaFormat CheckStyle</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
 	</properties>

@@ -9,6 +9,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>spring-javaformat-formatter-eclipse</artifactId>
+	<name>Spring JavaFormat Eclipse</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
 	</properties>

@@ -10,6 +10,7 @@
 	</parent>
 	<artifactId>io.spring.javaformat.eclipse.site</artifactId>
 	<packaging>eclipse-repository</packaging>
+	<name>Spring JavaFormat Eclipse Site</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
 	</properties>

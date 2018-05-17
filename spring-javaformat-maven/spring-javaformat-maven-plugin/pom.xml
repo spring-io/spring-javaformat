@@ -9,6 +9,7 @@
 	</parent>
 	<artifactId>spring-javaformat-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
+	<name>Spring JavaFormat Maven Plugin</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
 	</properties>

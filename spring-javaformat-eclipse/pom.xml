@@ -10,6 +10,7 @@
 	</parent>
 	<artifactId>spring-javaformat-eclipse</artifactId>
 	<packaging>pom</packaging>
+	<name>Spring JavaFormat Eclipse</name>
 	<properties>
 		<main.basedir>${basedir}/..</main.basedir>
 	</properties>

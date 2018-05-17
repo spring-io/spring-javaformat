@@ -9,6 +9,7 @@
 	</parent>
 	<artifactId>spring-javaformat-gradle</artifactId>
 	<packaging>pom</packaging>
+	<name>Spring JavaFormat Gradle</name>
 	<properties>
 		<main.basedir>${basedir}/..</main.basedir>
 	</properties>

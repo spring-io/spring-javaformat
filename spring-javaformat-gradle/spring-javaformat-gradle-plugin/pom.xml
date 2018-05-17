@@ -10,6 +10,7 @@
 	</parent>
 	<artifactId>spring-javaformat-gradle-plugin</artifactId>
 	<packaging>pom</packaging>
+	<name>Spring JavaFormat Gradle Plugin</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
 		<gradle.executable>./gradlew</gradle.executable>

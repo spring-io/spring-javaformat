@@ -10,11 +10,17 @@
 	</parent>
 	<artifactId>spring-javaformat-formatter-eclipse-runtime</artifactId>
 	<packaging>eclipse-plugin</packaging>
+	<name>Spring JavaFormat Eclipse Runtime</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
 		<sourceartifacts>org.eclipse.jdt.core.source,org.eclipse.jface.source,org.eclipse.text.source</sourceartifacts>
 	</properties>
-	<build>
+	<licenses>
+		<license>
+			<name>Eclipse Public License, Version 1.0</name>
+			<url>https://www.eclipse.org/legal/epl-v10.html</url>
+		</license>
+	</licenses>	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
