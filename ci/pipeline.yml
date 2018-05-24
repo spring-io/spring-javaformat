@@ -161,11 +161,32 @@ jobs:
       SONATYPE_PASSWORD: ((sonatype-password))
       BINTRAY_SUBJECT: ((bintray-subject))
       BINTRAY_REPO: ((bintray-repo))
+- name: publish-eclipse-update-site
+  serial: true
+  plan:
+  - get: spring-javaformat-ci-image
+  - get: git-repo
+    trigger: true
+  - get: artifactory-repo
+    trigger: false
+    passed: [sync-to-maven-central]
+    params:
+      save_build_info: true
+  - task: publish-eclipse-update-site
+    image: spring-javaformat-ci-image
+    file: git-repo/ci/tasks/publish-eclipse-update-site.yml
+    params:
+      BINTRAY_USERNAME: ((bintray-username))
+      BINTRAY_PASSWORD: ((bintray-password))
+      SONATYPE_USERNAME: ((sonatype-username))
+      SONATYPE_PASSWORD: ((sonatype-password))
+      BINTRAY_SUBJECT: ((bintray-subject))
+      BINTRAY_REPO: ((bintray-repo))
 groups:
 - name: "Build"
   jobs: ["build"]
 - name: "Release"
-  jobs: ["stage-release", "promote-release", "sync-to-maven-central"]
+  jobs: ["stage-release", "promote-release", "sync-to-maven-central", "publish-eclipse-update-site"]
 - name: "CI Images"
   jobs: ["build-spring-javaformat-ci-images"]
 - name: "Build Pull Requests"

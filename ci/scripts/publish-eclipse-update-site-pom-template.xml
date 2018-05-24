@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.eclipse.m2e.maveneclipse</groupId>
+	<artifactId>m2eclipse-maveneclipse-publish</artifactId>
+	<version>0.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<properties>
+		<tycho-extras-version>1.1.0</tycho-extras-version>
+	</properties>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho.extras</groupId>
+				<artifactId>tycho-p2-extras-plugin</artifactId>
+				<version>${tycho-extras-version}</version>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>mirror</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<source>
+##respositories##
+					</source>
+					<destination>${project.build.directory}/repository</destination>
+					<compress>true</compress>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<configuration>
+							<propertyPrefix>mvn</propertyPrefix>
+							<target>
+								<mkdir dir="${mvnproject.build.directory}/repackage"/>
+								<unzip src="${mvnproject.build.directory}/repository/artifacts.jar" dest="${mvnproject.build.directory}/repackage"/>
+								<replace file="${mvnproject.build.directory}/repackage/artifacts.xml" token="${repoUrl}" value="@@@{repoUrl}/@@@{version}"/>
+								<replace file="${mvnproject.build.directory}/repackage/artifacts.xml" token="@@@" value="$"/>
+								<touch file="${mvnproject.build.directory}/repackage/artifacts.xml" millis="0" />
+								<zip destfile="${mvnproject.build.directory}/repository/artifacts.jar" update="true" basedir="${mvnproject.build.directory}/repackage"/>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
