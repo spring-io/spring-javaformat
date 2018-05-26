@@ -7,7 +7,7 @@ The set currently consists of:
 * A source formatter that applies wrapping and whitespace conventions
 * A checkstyle plugin that enforces consistency across a codebase
 
-Since the aim of this project is to provide consistency, each plugins not generally configurable.
+Since the aim of this project is to provide consistency, each plugin is not generally configurable.
 You need to change your code to match the required conventions.
 You can't configure the plugin conventions to match your style!
 
