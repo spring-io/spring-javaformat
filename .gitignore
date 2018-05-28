@@ -4,6 +4,9 @@ target
 .project
 .settings
 .idea
+*.iml
+*.ipr
+*.iws
 .flattened-pom.xml
 spring-javaformat-eclipse/io.spring.javaformat.eclipse/lib
 spring-javaformat-eclipse/io.spring.javaformat.eclipse.tests/lib
