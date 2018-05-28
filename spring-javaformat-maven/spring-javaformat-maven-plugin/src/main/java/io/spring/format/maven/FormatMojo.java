@@ -63,13 +63,13 @@ public abstract class FormatMojo extends AbstractMojo {
 	/**
 	 * Specifies the names filter of the source files to be excluded.
 	 */
-	@Parameter(property = "spring-format.excludes")
+	@Parameter(property = "spring-javaformat.excludes")
 	private String[] excludes;
 
 	/**
 	 * Specifies the names filter of the source files to be included.
 	 */
-	@Parameter(property = "spring-format.includes")
+	@Parameter(property = "spring-javaformat.includes")
 	private String[] includes;
 
 	/**

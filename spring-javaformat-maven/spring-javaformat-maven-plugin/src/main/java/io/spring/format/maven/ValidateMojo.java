@@ -58,7 +58,7 @@ public class ValidateMojo extends FormatMojo {
 			StringBuilder message = new StringBuilder(
 					"Formatting violations found in the following files:\n");
 			problems.stream().forEach((f) -> message.append(" * " + f + "\n"));
-			message.append("\nRun `spring-format:apply` to fix.");
+			message.append("\nRun `spring-javaformat:apply` to fix.");
 			throw new MojoFailureException(message.toString());
 		}
 	}
