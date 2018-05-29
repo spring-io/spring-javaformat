@@ -1,3 +1,4 @@
+:release-version: 0.0.1
 ## Spring Java Format
 
 ### What is this?
@@ -17,14 +18,14 @@ You can't configure the plugin conventions to match your style!
 
 For source formatting, add the `spring-javaformat-maven-plugin` to your `build` plugins as follows:
 
-[source,xml,indent=0]
+[source,xml,indent=0,subs="normal"]
 ----
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>io.spring.javaformat</groupId>
 				<artifactId>spring-javaformat-maven-plugin</artifactId>
-				<version>${version}</version>
+				<version>{release-version}</version>
 			</plugin>
 		</plugins>
 	</build>
@@ -34,14 +35,14 @@ You can now run `./mvnw spring-javaformat:apply` to reformat code.
 
 If you want to enforce that all code matches the required style, add the following:
 
-[source,xml,indent=0]
+[source,xml,indent=0,subs="normal"]
 ----
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>io.spring.javaformat</groupId>
 				<artifactId>spring-javaformat-maven-plugin</artifactId>
-				<version>${version}</version>
+				<version>{release-version}</version>
 				<executions>
 					<execution>
 						<phase>validate</phase>
@@ -60,7 +61,7 @@ If you want to enforce that all code matches the required style, add the followi
 
 To enforce checksyle conventions add the checkstyle plugin and include a dependency on `spring-javaformat-checkstyle`:
 
-[source,xml,indent=0]
+[source,xml,indent=0,subs="normal"]
 ----
 	<build>
 		<plugins>
@@ -77,7 +78,7 @@ To enforce checksyle conventions add the checkstyle plugin and include a depende
 					<dependency>
 						<groupId>io.spring.javaformat</groupId>
 						<artifactId>spring-javaformat-checkstyle</artifactId>
-						<version>${version}</version>
+						<version>{release-version}</version>
 					</dependency>
 				</dependencies>
 				<executions>
@@ -104,14 +105,14 @@ To enforce checksyle conventions add the checkstyle plugin and include a depende
 #### Source Formatting
 For source formatting, add the `spring-javaformat-gradle-plugin` to your `build` plugins as follows:
 
-[source,groovy,indent=0]
+[source,groovy,indent=0,subs="normal"]
 ----
 	buildscript {
 		repositories {
 			mavenCentral()
 		}
 		dependencies {
-			classpath("io.spring.javaformat:spring-javaformat-gradle-plugin:${version}")
+			classpath("io.spring.javaformat:spring-javaformat-gradle-plugin:{release-version}")
 		}
 	}
 
@@ -124,7 +125,7 @@ The `checkFormat` task is automatically applied when running the standard Gradle
 #### Checkstyle
 To enforce checksyle conventions add the checkstyle plugin and include a dependency on `spring-javaformat-checkstyle`:
 
-[source,groovy,indent=0]
+[source,groovy,indent=0,subs="normal"]
 ----
 apply plugin: 'checkstyle'
 
@@ -133,7 +134,7 @@ checkstyle {
 }
 
 dependencies {
-	checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.1-SNAPSHOT")
+	checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:{release-version}")
 }
 ----
 
@@ -165,12 +166,14 @@ You can also add a `.eclipse/eclipse.properties` file to customize the following
 ----
 
 To install the plugin use the `io.spring.javaformat.eclipse.site` zip file.
+You can download the latest version from http://repo.spring.io/release/io/spring/javaformat/io.spring.javaformat.eclipse.site/{release-version}[repo.spring.io] or use the https://dl.bintray.com/spring/javaformat-eclipse/[update site].
 
 ### IntelliJ IDEA
 The IntelliJ plugin provides custom formatter support for IDEA.
 The plugin is automatically activated whenever the Maven or Gradle plugins are discovered in a project build script.
 
-To install the plugin use the `spring-javaformat-intellij-plugin` zip file.
+To install the plugin use the `spring-javaformat-intellij-plugin` jar file.
+You can download the latest version from http://repo.spring.io/release/io/spring/javaformat/spring-javaformat-intellij-plugin/{release-version}[repo.spring.io].
 
 
 ### About the conventions
@@ -215,7 +218,7 @@ Keep private methods as close to the thing that calls them as possible.
 It's also recommend that you try to keep consistent ordering with fields and constructor parameters.
 For example:
 
-[source,java,indent=0]
+[source,java,indent=0,subs="normal"]
 ----
 class Name {
 
