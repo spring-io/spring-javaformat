@@ -27,6 +27,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 /**
  * Validates that source formatting matches the required style.
@@ -36,9 +37,19 @@ import org.apache.maven.plugins.annotations.Mojo;
 @Mojo(name = "validate", defaultPhase = LifecyclePhase.VALIDATE)
 public class ValidateMojo extends FormatMojo {
 
+	/**
+	 * Skip the execution.
+	 */
+	@Parameter(property = "spring-javaformat.skip", defaultValue = "false")
+	private boolean skip;
+
 	@Override
 	protected void execute(List<File> files, Charset encoding)
 			throws MojoExecutionException, MojoFailureException {
+		if (this.skip) {
+			getLog().debug("skipping validation as per configuration.");
+			return;
+		}
 		FileFormatter formatter = new FileFormatter();
 		List<File> problems = formatter.formatFiles(files, encoding)
 				.filter(FileEdit::hasEdits).map(FileEdit::getFile)
