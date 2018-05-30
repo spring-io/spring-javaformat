@@ -145,7 +145,7 @@ jobs:
   plan:
   - get: spring-javaformat-ci-image
   - get: git-repo
-    trigger: true
+    trigger: false
   - get: artifactory-repo
     trigger: false
     passed: [promote-release]
@@ -166,7 +166,7 @@ jobs:
   plan:
   - get: spring-javaformat-ci-image
   - get: git-repo
-    trigger: true
+    trigger: false
   - get: artifactory-repo
     trigger: false
     passed: [sync-to-maven-central]
