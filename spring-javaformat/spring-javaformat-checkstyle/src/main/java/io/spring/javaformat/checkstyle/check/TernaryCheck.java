@@ -54,7 +54,8 @@ public class TernaryCheck extends AbstractCheck {
 	private void visitQuestion(DetailAST ast) {
 		DetailAST parent = ast.getParent();
 		DetailAST grandParent = (parent != null ? parent.getParent() : parent);
-		if (!hasType(grandParent, TokenTypes.ELIST) && !hasType(grandParent, TokenTypes.ARRAY_DECLARATOR)) {
+		if (!hasType(grandParent, TokenTypes.ELIST)
+				&& !hasType(grandParent, TokenTypes.ARRAY_DECLARATOR)) {
 			if (!hasType(ast.getPreviousSibling(), TokenTypes.LPAREN)
 					|| !hasType(ast.getNextSibling(), TokenTypes.RPAREN)) {
 				log(ast.getLineNo(), ast.getColumnNo(), "ternary.missingParen");
