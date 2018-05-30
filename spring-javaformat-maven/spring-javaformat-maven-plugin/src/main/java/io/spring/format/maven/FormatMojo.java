@@ -17,6 +17,7 @@
 package io.spring.format.maven;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -41,6 +42,9 @@ import org.codehaus.plexus.util.FileUtils;
 public abstract class FormatMojo extends AbstractMojo {
 
 	private static final String[] DEFAULT_INCLUDES = new String[] { "**/*.java" };
+
+	private static final String GENERATED_SOURCE = File.separator + "generated-sources"
+			+ File.separator;
 
 	/**
 	 * The Maven Project Object.
@@ -80,6 +84,9 @@ public abstract class FormatMojo extends AbstractMojo {
 	@Parameter(property = "encoding", defaultValue = "${project.build.sourceEncoding}")
 	private String encoding;
 
+	@Parameter(property = "spring-javaformat.includeGeneratedSource", defaultValue = "false")
+	private boolean includeGeneratedSource;
+
 	@Override
 	public final void execute() throws MojoExecutionException, MojoFailureException {
 		List<File> directories = new ArrayList<>();
@@ -97,7 +104,31 @@ public abstract class FormatMojo extends AbstractMojo {
 	private Stream<File> resolve(List<String> directories) {
 		return directories.stream().map(
 				directory -> FileUtils.resolveFile(this.project.getBasedir(), directory))
-				.filter(File::exists).filter(File::isDirectory);
+				.filter(this::include);
+	}
+
+	private boolean include(File file) {
+		if (!file.exists()) {
+			return false;
+		}
+		if (!file.isDirectory()) {
+			return false;
+		}
+		if (!this.includeGeneratedSource && isGeneratedSource(file)) {
+			return false;
+		}
+		return true;
+	}
+
+	private boolean isGeneratedSource(File file) {
+		try {
+			String path = file.getCanonicalPath() + File.separator;
+			String projectPath = this.project.getBasedir().getCanonicalPath();
+			return path.startsWith(projectPath) && path.contains(GENERATED_SOURCE);
+		}
+		catch (IOException ex) {
+			return false;
+		}
 	}
 
 	private List<File> scan(File directory) {
