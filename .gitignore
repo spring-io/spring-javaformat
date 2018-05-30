@@ -3,8 +3,11 @@ target
 .classpath
 .project
 .settings
-.idea
 .flattened-pom.xml
+.idea
+*.iml
+*.ipr
+*.iws.flattened-pom.xml
 spring-javaformat-eclipse/io.spring.javaformat.eclipse/lib
 spring-javaformat-eclipse/io.spring.javaformat.eclipse.tests/lib
 .gradle
