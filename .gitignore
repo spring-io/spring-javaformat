@@ -7,7 +7,7 @@ target
 .idea
 *.iml
 *.ipr
-*.iws.flattened-pom.xml
+*.iws
 spring-javaformat-eclipse/io.spring.javaformat.eclipse/lib
 spring-javaformat-eclipse/io.spring.javaformat.eclipse.tests/lib
 .gradle
