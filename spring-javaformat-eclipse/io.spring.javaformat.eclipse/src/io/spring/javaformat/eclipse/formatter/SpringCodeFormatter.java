@@ -16,6 +16,8 @@
 
 package io.spring.javaformat.eclipse.formatter;
 
+import java.util.Map;
+
 import io.spring.javaformat.formatter.Formatter;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jface.text.IRegion;
@@ -42,6 +44,16 @@ public class SpringCodeFormatter extends CodeFormatter {
 			int indentationLevel, String lineSeparator) {
 		return this.delegate.format(kind, source, regions, indentationLevel,
 				lineSeparator);
+	}
+
+	@Override
+	public String createIndentationString(int indentationLevel) {
+		return this.delegate.createIndentationString(indentationLevel);
+	}
+
+	@Override
+	public void setOptions(Map<String, String> options) {
+		this.delegate.setOptions(options);
 	}
 
 }

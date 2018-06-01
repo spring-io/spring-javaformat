@@ -59,16 +59,16 @@ public class ExtendedCodeFormatter extends DefaultCodeFormatter {
 	protected void prepareWraps(int kind) {
 		ASTNode astRoot = getField("astRoot", ASTNode.class);
 		TokenManager tokenManager = getField("tokenManager", TokenManager.class);
-		applyPreparators(Phase.PRE_WRAPPING, astRoot, tokenManager);
+		applyPreparators(Phase.PRE_WRAPPING, kind, astRoot, tokenManager);
 		super.prepareWraps(kind);
-		applyPreparators(Phase.POST_WRAPPING, astRoot, tokenManager);
+		applyPreparators(Phase.POST_WRAPPING, kind, astRoot, tokenManager);
 	}
 
-	private void applyPreparators(Phase preWrapping, ASTNode astRoot,
+	private void applyPreparators(Phase preWrapping, int kind, ASTNode astRoot,
 			TokenManager tokenManager) {
 		this.preparators.stream()
 				.filter((preparator) -> preparator.getPhase() == preWrapping)
-				.forEach((preparator) -> preparator.apply(tokenManager, astRoot));
+				.forEach((preparator) -> preparator.apply(kind, tokenManager, astRoot));
 	}
 
 	@SuppressWarnings("unchecked")

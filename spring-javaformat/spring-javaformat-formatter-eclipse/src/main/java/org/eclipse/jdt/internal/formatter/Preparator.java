@@ -17,6 +17,7 @@
 package org.eclipse.jdt.internal.formatter;
 
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.formatter.CodeFormatter;
 
 /**
  * Strategy interface used by {@link ExtendedCodeFormatter} to allow additional code
@@ -32,10 +33,13 @@ public interface Preparator {
 
 	/**
 	 * Apply the preparator.
+	 * @param kind the format kind (see
+	 * {@link CodeFormatter#format(int, String, org.eclipse.jface.text.IRegion[], int, String)}
+	 * for details)
 	 * @param tokenManager the token manager
 	 * @param astRoot the AST root node
 	 */
-	void apply(TokenManager tokenManager, ASTNode astRoot);
+	void apply(int kind, TokenManager tokenManager, ASTNode astRoot);
 
 	/**
 	 * The phase where the {@link Preparator} should be applied.

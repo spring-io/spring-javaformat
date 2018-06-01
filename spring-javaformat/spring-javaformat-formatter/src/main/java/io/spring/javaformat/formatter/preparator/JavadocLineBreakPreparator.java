@@ -31,6 +31,7 @@ import org.eclipse.jdt.core.dom.Javadoc;
 import org.eclipse.jdt.core.dom.TagElement;
 import org.eclipse.jdt.core.dom.TextElement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jdt.internal.compiler.parser.TerminalTokens;
 
 /**
@@ -54,10 +55,12 @@ class JavadocLineBreakPreparator implements Preparator {
 	}
 
 	@Override
-	public void apply(TokenManager tokenManager, ASTNode astRoot) {
-		ASTVisitor visitor = new Vistor(tokenManager);
-		for (Comment comment : getComments(astRoot)) {
-			comment.accept(visitor);
+	public void apply(int kind, TokenManager tokenManager, ASTNode astRoot) {
+		if ((kind & CodeFormatter.F_INCLUDE_COMMENTS) != 0) {
+			ASTVisitor visitor = new Vistor(tokenManager);
+			for (Comment comment : getComments(astRoot)) {
+				comment.accept(visitor);
+			}
 		}
 	}
 

@@ -27,6 +27,7 @@ import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jdt.internal.compiler.parser.TerminalTokens;
 
 /**
@@ -37,9 +38,11 @@ import org.eclipse.jdt.internal.compiler.parser.TerminalTokens;
 class CodeLineBreakPreparator implements Preparator {
 
 	@Override
-	public void apply(TokenManager tokenManager, ASTNode astRoot) {
-		ASTVisitor visitor = new Vistor(tokenManager);
-		astRoot.accept(visitor);
+	public void apply(int kind, TokenManager tokenManager, ASTNode astRoot) {
+		if ((kind & CodeFormatter.K_COMPILATION_UNIT) != 0) {
+			ASTVisitor visitor = new Vistor(tokenManager);
+			astRoot.accept(visitor);
+		}
 	}
 
 	private static class Vistor extends ASTVisitor {

@@ -123,6 +123,16 @@ public class Formatter extends CodeFormatter {
 				lineSeparator));
 	}
 
+	@Override
+	public String createIndentationString(int indentationLevel) {
+		return this.delegate.createIndentationString(indentationLevel);
+	}
+
+	@Override
+	public void setOptions(Map<String, String> options) {
+		this.delegate.setOptions(options);
+	}
+
 	private <T> T nlsSafe(Supplier<T> formatted) {
 		if (this.options.contains(FormatterOption.SHOW_NLS_WARNINGS)) {
 			return formatted.get();
