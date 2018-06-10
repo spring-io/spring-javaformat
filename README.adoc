@@ -73,7 +73,7 @@ To enforce checksyle conventions add the checkstyle plugin and include a depende
 					<dependency>
 						<groupId>com.puppycrawl.tools</groupId>
 						<artifactId>checkstyle</artifactId>
-						<version>8.8</version>
+						<version>8.10.1</version>
 					</dependency>
 					<dependency>
 						<groupId>io.spring.javaformat</groupId>
@@ -130,7 +130,7 @@ To enforce checksyle conventions add the checkstyle plugin and include a depende
 apply plugin: 'checkstyle'
 
 checkstyle {
-	toolVersion = "8.9"
+	toolVersion = "8.10.1"
 }
 
 dependencies {
