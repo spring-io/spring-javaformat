@@ -25,6 +25,7 @@ public class TernaryInArray {
 		boolean a = true;
 		boolean b = false;
 		String[] c = new String[a != b ? 1 : 2];
+		String d = c[a != b ? 1 : 2];
 	}
 
 }

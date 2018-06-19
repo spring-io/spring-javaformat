@@ -68,6 +68,7 @@ public class TernaryCheck extends AbstractCheck {
 
 	private boolean isAllowedGrandParent(DetailAST grandParent) {
 		return hasType(grandParent, TokenTypes.ARRAY_DECLARATOR)
+				|| hasType(grandParent, TokenTypes.INDEX_OP)
 				|| hasType(grandParent, TokenTypes.LITERAL_IF)
 				|| hasType(grandParent, TokenTypes.LITERAL_WHILE);
 	}
