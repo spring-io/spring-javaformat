@@ -16,7 +16,7 @@
 		<intellij.binary>https://download.jetbrains.com/idea/ideaIC-2018.1.4-no-jdk.tar.gz</intellij.binary>
 		<intellij.binary.sha1>925d2d8afab9312a9515de0331f31991d9dfd45d</intellij.binary.sha1>
 		<intellij.source>https://github.com/JetBrains/intellij-community/archive/181.5087.zip</intellij.source>
-		<intellij.source.sha1>f1d39228688ad705e723724c147fc569d3b334c8</intellij.source.sha1>
+		<intellij.source.sha1>09aaaf75827ff5d89389d7cbd8fd76d0485f537b</intellij.source.sha1>
 		<intellij.source.root>intellij-community-181.5087</intellij.source.root>
 	</properties>
 	<build>
