@@ -25,7 +25,7 @@ import com.puppycrawl.tools.checkstyle.PackageObjectFactory;
 import com.puppycrawl.tools.checkstyle.PropertiesExpander;
 import com.puppycrawl.tools.checkstyle.PropertyResolver;
 import com.puppycrawl.tools.checkstyle.api.FileSetCheck;
-import io.spring.javaformat.checkstyle.check.HeaderCheck;
+import io.spring.javaformat.checkstyle.check.SpringHeaderCheck;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,9 +51,9 @@ public class SpringConfigurationLoaderTests {
 
 	private PropertyResolver getPropertyResolver() {
 		Properties properties = new Properties();
-		properties.put("headerType", HeaderCheck.DEFAULT_HEADER_TYPE);
+		properties.put("headerType", SpringHeaderCheck.DEFAULT_HEADER_TYPE);
 		properties.put("headerCopyrightPattern",
-				HeaderCheck.DEFAULT_HEADER_COPYRIGHT_PATTERN);
+				SpringHeaderCheck.DEFAULT_HEADER_COPYRIGHT_PATTERN);
 		return new PropertiesExpander(properties);
 	}
 

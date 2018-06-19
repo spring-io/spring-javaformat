@@ -37,7 +37,7 @@ import com.puppycrawl.tools.checkstyle.checks.header.RegexpHeaderCheck;
  *
  * @author Phillip Webb
  */
-public class HeaderCheck extends AbstractFileSetCheck {
+public class SpringHeaderCheck extends AbstractFileSetCheck {
 
 	private static final String UNCHECKED = "unchecked";
 

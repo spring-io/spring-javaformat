@@ -26,7 +26,7 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  *
  * @author Phillip Webb
  */
-public class CatchCheck extends AbstractCheck {
+public class SpringCatchCheck extends AbstractCheck {
 
 	@Override
 	public int[] getDefaultTokens() {

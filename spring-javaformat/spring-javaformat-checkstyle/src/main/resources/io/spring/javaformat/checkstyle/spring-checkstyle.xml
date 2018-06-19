@@ -2,7 +2,7 @@
 <!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN" "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
 <module name="com.puppycrawl.tools.checkstyle.Checker">
 	<!-- Root Checks -->
- 	<module name="io.spring.javaformat.checkstyle.check.HeaderCheck">
+ 	<module name="io.spring.javaformat.checkstyle.check.SpringHeaderCheck">
  		<property name="fileExtensions" value="java" />
  		<property name="headerType" value="${headerType}"/>
  		<property name="headerCopyrightPattern" value="${headerCopyrightPattern}"/>
@@ -164,9 +164,9 @@
 		<module name="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck" />
 
 		<!-- Spring Conventions -->
-		<module name="io.spring.javaformat.checkstyle.check.LambdaCheck" />
-		<module name="io.spring.javaformat.checkstyle.check.TernaryCheck" />
-		<module name="io.spring.javaformat.checkstyle.check.CatchCheck" />
-		<module name="io.spring.javaformat.checkstyle.check.JavadocCheck" />
+		<module name="io.spring.javaformat.checkstyle.check.SpringLambdaCheck" />
+		<module name="io.spring.javaformat.checkstyle.check.SpringTernaryCheck" />
+		<module name="io.spring.javaformat.checkstyle.check.SpringCatchCheck" />
+		<module name="io.spring.javaformat.checkstyle.check.SpringJavadocCheck" />
  	</module>
 </module>

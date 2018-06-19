@@ -30,7 +30,7 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  *
  * @author Phillip Webb
  */
-public class JavadocCheck extends AbstractCheck {
+public class SpringJavadocCheck extends AbstractCheck {
 
 	private static final Pattern[] PATTERNS = {
 			CommonUtils.createPattern("@param\\s+\\S+\\s+(.*)"),

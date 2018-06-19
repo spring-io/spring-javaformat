@@ -28,7 +28,7 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  *
  * @author Phillip Webb
  */
-public class LambdaCheck extends AbstractCheck {
+public class SpringLambdaCheck extends AbstractCheck {
 
 	@Override
 	public int[] getDefaultTokens() {

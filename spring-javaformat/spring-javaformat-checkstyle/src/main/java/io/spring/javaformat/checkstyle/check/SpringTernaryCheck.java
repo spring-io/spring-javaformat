@@ -27,7 +27,7 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  *
  * @author Phillip Webb
  */
-public class TernaryCheck extends AbstractCheck {
+public class SpringTernaryCheck extends AbstractCheck {
 
 	@Override
 	public int[] getDefaultTokens() {

@@ -39,7 +39,7 @@ import com.puppycrawl.tools.checkstyle.api.FileSetCheck;
 import com.puppycrawl.tools.checkstyle.api.FileText;
 import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
 import com.puppycrawl.tools.checkstyle.filters.SuppressElement;
-import io.spring.javaformat.checkstyle.check.HeaderCheck;
+import io.spring.javaformat.checkstyle.check.SpringHeaderCheck;
 
 /**
  * {@link FileSetCheck} that applies Spring checkstype rules.
@@ -60,9 +60,9 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 
 	private boolean debug;
 
-	private String headerType = HeaderCheck.DEFAULT_HEADER_TYPE;
+	private String headerType = SpringHeaderCheck.DEFAULT_HEADER_TYPE;
 
-	private String headerCopyrightPattern = HeaderCheck.DEFAULT_HEADER_COPYRIGHT_PATTERN;
+	private String headerCopyrightPattern = SpringHeaderCheck.DEFAULT_HEADER_COPYRIGHT_PATTERN;
 
 	/**
 	 * Sets tab width.
