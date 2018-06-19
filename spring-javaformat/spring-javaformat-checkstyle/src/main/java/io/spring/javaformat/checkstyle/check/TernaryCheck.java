@@ -55,7 +55,7 @@ public class TernaryCheck extends AbstractCheck {
 		DetailAST parent = ast.getParent();
 		DetailAST grandParent = (parent != null ? parent.getParent() : parent);
 		if (!hasType(grandParent, TokenTypes.ELIST)
-				&& !hasType(grandParent, TokenTypes.ARRAY_DECLARATOR)) {
+				&& !isAllowedGrandParent(grandParent)) {
 			if (!hasType(ast.getPreviousSibling(), TokenTypes.LPAREN)
 					|| !hasType(ast.getNextSibling(), TokenTypes.RPAREN)) {
 				log(ast.getLineNo(), ast.getColumnNo(), "ternary.missingParen");
@@ -64,6 +64,12 @@ public class TernaryCheck extends AbstractCheck {
 		if (hasType(ast.getFirstChild(), TokenTypes.EQUAL)) {
 			log(ast.getLineNo(), ast.getColumnNo(), "ternary.equalOperator");
 		}
+	}
+
+	private boolean isAllowedGrandParent(DetailAST grandParent) {
+		return hasType(grandParent, TokenTypes.ARRAY_DECLARATOR)
+				|| hasType(grandParent, TokenTypes.LITERAL_IF)
+				|| hasType(grandParent, TokenTypes.LITERAL_WHILE);
 	}
 
 	private boolean hasType(DetailAST ast, int type) {
