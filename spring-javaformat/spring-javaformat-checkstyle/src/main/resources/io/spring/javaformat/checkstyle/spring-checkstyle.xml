@@ -167,5 +167,6 @@
 		<module name="io.spring.javaformat.checkstyle.check.LambdaCheck" />
 		<module name="io.spring.javaformat.checkstyle.check.TernaryCheck" />
 		<module name="io.spring.javaformat.checkstyle.check.CatchCheck" />
+		<module name="io.spring.javaformat.checkstyle.check.JavadocCheck" />
  	</module>
 </module>
