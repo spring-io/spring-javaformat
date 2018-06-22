@@ -1,7 +1,7 @@
 github-repo: "https://github.com/spring-io/spring-javaformat.git"
 github-repo-name: "spring-io/spring-javaformat"
 docker-hub-organization: "springci"
-artifactory-server: "https://repo.spring.io/"
+artifactory-server: "https://repo.spring.io"
 branch: "master"
 build-name: "spring-javaformat"
 bintray-subject: "spring"
