@@ -1,5 +1,5 @@
-+JavadocBadCase.java:20:15: Javadoc element descriptions should not start with an uppercase letter [SpringJavadoc]
-+JavadocBadCase.java:27:29: Javadoc element descriptions should not start with an uppercase letter [SpringJavadoc]
-+JavadocBadCase.java:28:20: Javadoc element descriptions should not start with an uppercase letter [SpringJavadoc]
-+JavadocBadCase.java:29:37: Javadoc element descriptions should not start with an uppercase letter [SpringJavadoc]
++JavadocBadCase.java:20:15: Javadoc element descriptions should not start with an uppercase letter. [SpringJavadoc]
++JavadocBadCase.java:27:29: Javadoc element descriptions should not start with an uppercase letter. [SpringJavadoc]
++JavadocBadCase.java:28:20: Javadoc element descriptions should not start with an uppercase letter. [SpringJavadoc]
++JavadocBadCase.java:29:37: Javadoc element descriptions should not start with an uppercase letter. [SpringJavadoc]
 +4 errors

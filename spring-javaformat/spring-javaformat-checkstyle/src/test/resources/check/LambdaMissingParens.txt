@@ -1,1 +1,1 @@
-+Lambda argument missing parentheses [SpringLambda]
++Lambda argument missing parentheses. [SpringLambda]

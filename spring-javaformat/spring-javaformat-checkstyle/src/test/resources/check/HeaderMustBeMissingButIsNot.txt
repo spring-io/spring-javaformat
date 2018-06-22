@@ -1,2 +1,2 @@
-+Unexpected header [SpringHeader]
++Unexpected header. [SpringHeader]
 +1 error
