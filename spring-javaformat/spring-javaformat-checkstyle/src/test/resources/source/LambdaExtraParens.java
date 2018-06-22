@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2017-2018 the original author or authors.
  *
@@ -15,17 +16,22 @@
  */
 
 import java.util.function.Function;
+import java.util.function.BiFunction;
 
 /**
- * Lambda missing parentheses. Since it doesnt add much we always prefer {@code (f) -> 1;}
- * to {@code (f) -> 1;} (mainly so adding a paramter doesn't change the format).
+ * Lambda extra parentheses. If configured we enfoce that single args don't use
+ * parentheses.
  *
  * @author Phillip Webb
  */
-public class LambdaMissingParens {
+public class LambdaExtraParens {
 
 	public Function<String, Integer> test() {
-		return string -> 1;
+		return (string) -> 1;
+	}
+
+	public BiFunction<String, String, Integer> test2() {
+		return (string1, string2) -> 1;
 	}
 
 }

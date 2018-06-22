@@ -1,0 +1,2 @@
++Lambda argument has unnecessary parentheses. [SpringLambda]
++1 error

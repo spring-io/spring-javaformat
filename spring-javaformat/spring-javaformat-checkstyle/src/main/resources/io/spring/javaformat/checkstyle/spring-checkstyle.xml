@@ -2,11 +2,11 @@
 <!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN" "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
 <module name="com.puppycrawl.tools.checkstyle.Checker">
 	<!-- Root Checks -->
- 	<module name="io.spring.javaformat.checkstyle.check.SpringHeaderCheck">
- 		<property name="fileExtensions" value="java" />
- 		<property name="headerType" value="${headerType}"/>
- 		<property name="headerCopyrightPattern" value="${headerCopyrightPattern}"/>
- 	</module>
+	<module name="io.spring.javaformat.checkstyle.check.SpringHeaderCheck">
+		<property name="fileExtensions" value="java" />
+		<property name="headerType" value="${headerType}"/>
+		<property name="headerCopyrightPattern" value="${headerCopyrightPattern}"/>
+	</module>
 	<module name="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck">
 		<property name="lineSeparator" value="lf"/>
 	</module>

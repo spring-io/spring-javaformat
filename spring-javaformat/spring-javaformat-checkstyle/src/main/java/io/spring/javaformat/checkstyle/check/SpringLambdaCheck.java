@@ -30,6 +30,8 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  */
 public class SpringLambdaCheck extends AbstractCheck {
 
+	private boolean singleArgumentParentheses = true;
+
 	@Override
 	public int[] getDefaultTokens() {
 		return getAcceptableTokens();
@@ -54,14 +56,26 @@ public class SpringLambdaCheck extends AbstractCheck {
 	}
 
 	private void visitLambda(DetailAST lambda) {
-		if (!hasToken(lambda, TokenTypes.LPAREN)) {
-			log(lambda.getLineNo(), lambda.getColumnNo(), "lambda.missingParen");
+		if (hasSingleParameter(lambda)) {
+			boolean hasParentheses = hasToken(lambda, TokenTypes.LPAREN);
+			if (this.singleArgumentParentheses && !hasParentheses) {
+				log(lambda.getLineNo(), lambda.getColumnNo(), "lambda.missingParen");
+			}
+			else if (!this.singleArgumentParentheses && hasParentheses) {
+				log(lambda.getLineNo(), lambda.getColumnNo(), "lambda.unnecessaryParen");
+			}
 		}
 		DetailAST block = lambda.getLastChild();
 		if (isStatementList(block) && block.getChildCount(TokenTypes.SEMI) == 0
 				&& !isNecessaryBlock(block)) {
 			log(block.getLineNo(), block.getColumnNo(), "lambda.unnecessaryBlock");
 		}
+	}
+
+	private boolean hasSingleParameter(DetailAST lambda) {
+		DetailAST parameters = lambda.findFirstToken(TokenTypes.PARAMETERS);
+		return (parameters == null)
+				|| (parameters.getChildCount(TokenTypes.PARAMETER_DEF) == 1);
 	}
 
 	private boolean isNecessaryBlock(DetailAST block) {
@@ -91,6 +105,10 @@ public class SpringLambdaCheck extends AbstractCheck {
 
 	private boolean hasToken(DetailAST ast, int type) {
 		return ast.findFirstToken(type) != null;
+	}
+
+	public void setSingleArgumentParentheses(boolean singleArgumentParentheses) {
+		this.singleArgumentParentheses = singleArgumentParentheses;
 	}
 
 }
