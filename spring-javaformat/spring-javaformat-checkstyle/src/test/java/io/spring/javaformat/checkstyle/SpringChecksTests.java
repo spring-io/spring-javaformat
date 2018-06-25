@@ -27,8 +27,10 @@ import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+import com.puppycrawl.tools.checkstyle.AstTreeStringPrinter;
 import com.puppycrawl.tools.checkstyle.Checker;
 import com.puppycrawl.tools.checkstyle.ConfigurationLoader;
+import com.puppycrawl.tools.checkstyle.JavaParser;
 import com.puppycrawl.tools.checkstyle.ConfigurationLoader.IgnoredModulesOptions;
 import com.puppycrawl.tools.checkstyle.ModuleFactory;
 import com.puppycrawl.tools.checkstyle.PackageObjectFactory;
@@ -104,8 +106,19 @@ public class SpringChecksTests {
 	private void processAndCheckResults(RootModule rootModule)
 			throws CheckstyleException {
 		rootModule.addListener(this.parameter.getAssersionsListener());
+		printDebugInfo(this.parameter.getSourceFile());
 		rootModule.process(Arrays.asList(this.parameter.getSourceFile()));
 	}
+
+	private void printDebugInfo(File file) throws CheckstyleException {
+		try {
+			System.out.println(AstTreeStringPrinter.printFileAst(file,
+					JavaParser.Options.WITHOUT_COMMENTS));
+		}
+		catch (IOException ex) {
+		}
+	}
+
 
 	@Parameters(name = "{0}")
 	public static Collection<Parameter> files() throws IOException {

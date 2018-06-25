@@ -58,8 +58,6 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 
 	private Collection<FileSetCheck> checks;
 
-	private boolean debug;
-
 	private String headerType = SpringHeaderCheck.DEFAULT_HEADER_TYPE;
 
 	private String headerCopyrightPattern = SpringHeaderCheck.DEFAULT_HEADER_COPYRIGHT_PATTERN;
@@ -140,9 +138,6 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 	}
 
 	private void printDebugInfo(File file) throws CheckstyleException {
-		if (!this.debug) {
-			return;
-		}
 		try {
 			System.out.println(AstTreeStringPrinter.printFileAst(file,
 					JavaParser.Options.WITHOUT_COMMENTS));
@@ -155,10 +150,6 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 	public void setupChild(Configuration configuration) throws CheckstyleException {
 		throw new CheckstyleException(
 				"SpringChecks is not allowed as a parent of " + configuration.getName());
-	}
-
-	public void setDebug(boolean debug) {
-		this.debug = debug;
 	}
 
 	public void setHeaderType(String headerType) {
