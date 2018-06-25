@@ -1,0 +1,4 @@
+# We should have filtered out inner class references and loggers
+[ERROR] FiltersToSkipThis.java:32:17: Reference to instance variable 'inner' needs "this.". [RequireThis]
+[ERROR] FiltersToSkipThis.java:41:25: Reference to instance variable 'nested' needs "this.". [RequireThis]
++2 errors

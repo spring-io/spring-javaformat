@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN" "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+<module name="com.puppycrawl.tools.checkstyle.Checker">
+	<!-- TreeWalker Checks -->
+	<module name="com.puppycrawl.tools.checkstyle.TreeWalker">
+		<module name="io.spring.javaformat.checkstyle.filter.RequiresOuterThisFilter" />
+		<module name="io.spring.javaformat.checkstyle.filter.IdentCheckFilter">
+			<property name="names" value="logger" />
+			<module
+				name="com.puppycrawl.tools.checkstyle.checks.coding.RequireThisCheck">
+				<property name="checkMethods" value="false" />
+				<property name="validateOnlyOverlapping" value="false" />
+			</module>
+		</module>
+		<module name="io.spring.javaformat.checkstyle.check.SpringNoThisCheck">
+			<property name="names" value="logger" />
+		</module>
+	</module>
+</module>

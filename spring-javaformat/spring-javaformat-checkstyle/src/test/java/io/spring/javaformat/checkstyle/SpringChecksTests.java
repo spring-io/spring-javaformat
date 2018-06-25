@@ -30,8 +30,8 @@ import java.util.stream.Collectors;
 import com.puppycrawl.tools.checkstyle.AstTreeStringPrinter;
 import com.puppycrawl.tools.checkstyle.Checker;
 import com.puppycrawl.tools.checkstyle.ConfigurationLoader;
-import com.puppycrawl.tools.checkstyle.JavaParser;
 import com.puppycrawl.tools.checkstyle.ConfigurationLoader.IgnoredModulesOptions;
+import com.puppycrawl.tools.checkstyle.JavaParser;
 import com.puppycrawl.tools.checkstyle.ModuleFactory;
 import com.puppycrawl.tools.checkstyle.PackageObjectFactory;
 import com.puppycrawl.tools.checkstyle.PropertiesExpander;
@@ -118,7 +118,6 @@ public class SpringChecksTests {
 		catch (IOException ex) {
 		}
 	}
-
 
 	@Parameters(name = "{0}")
 	public static Collection<Parameter> files() throws IOException {
