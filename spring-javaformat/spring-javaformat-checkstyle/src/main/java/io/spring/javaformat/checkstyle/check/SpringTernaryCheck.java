@@ -16,6 +16,8 @@
 
 package io.spring.javaformat.checkstyle.check;
 
+import java.util.Locale;
+
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
@@ -28,6 +30,8 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  * @author Phillip Webb
  */
 public class SpringTernaryCheck extends AbstractCheck {
+
+	private EqualsTest equalsTest = EqualsTest.NEVER_FOR_NULLS;
 
 	@Override
 	public int[] getDefaultTokens() {
@@ -61,7 +65,7 @@ public class SpringTernaryCheck extends AbstractCheck {
 				log(ast.getLineNo(), ast.getColumnNo(), "ternary.missingParen");
 			}
 		}
-		if (hasType(ast.getFirstChild(), TokenTypes.EQUAL)) {
+		if (hasType(ast.getFirstChild(), TokenTypes.EQUAL) && !isEqualsTestAllowed(ast)) {
 			log(ast.getLineNo(), ast.getColumnNo(), "ternary.equalOperator");
 		}
 	}
@@ -73,8 +77,53 @@ public class SpringTernaryCheck extends AbstractCheck {
 				|| hasType(grandParent, TokenTypes.LITERAL_WHILE);
 	}
 
+	private boolean isEqualsTestAllowed(DetailAST ast) {
+		switch (this.equalsTest) {
+		case ANY:
+			return true;
+		case NEVER:
+			return false;
+		case NEVER_FOR_NULLS:
+			DetailAST equal = ast.findFirstToken(TokenTypes.EQUAL);
+			return equal.findFirstToken(TokenTypes.LITERAL_NULL) == null;
+		}
+		throw new IllegalStateException("Unsupported equals test " + this.equalsTest);
+	}
+
 	private boolean hasType(DetailAST ast, int type) {
 		return (ast != null && ast.getType() == type);
+	}
+
+	public void setEqualsTest(String equalsTest) {
+		try {
+			this.equalsTest = Enum.valueOf(EqualsTest.class,
+					equalsTest.trim().toUpperCase(Locale.ENGLISH));
+		}
+		catch (final IllegalArgumentException ex) {
+			throw new IllegalArgumentException("unable to parse " + equalsTest, ex);
+		}
+	}
+
+	/**
+	 * Type of equals operators allowed in the test condition.
+	 */
+	public enum EqualsTest {
+
+		/**
+		 * Equals checks can be used for any test.
+		 */
+		ANY,
+
+		/**
+		 * Equals tests can never be used.
+		 */
+		NEVER,
+
+		/**
+		 * Equals tests can never be used for {@code null} checks.
+		 */
+		NEVER_FOR_NULLS
+
 	}
 
 }

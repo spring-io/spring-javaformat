@@ -19,7 +19,7 @@
  *
  * @author Phillip Webb
  */
-public class TernaryEqualsEquals {
+public class TernaryEqualsEqualsAlways {
 
 	public void test() {
 		boolean a = true;

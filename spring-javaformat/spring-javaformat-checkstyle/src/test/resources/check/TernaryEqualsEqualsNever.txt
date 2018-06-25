@@ -1,0 +1,2 @@
++TernaryEqualsEqualsNever.java:27:33: Ternary operation should use != when testing. [SpringTernary]
++1 error

@@ -15,21 +15,16 @@
  */
 
 /**
- * This is an invalid example of a ternary expression.
+ * This is a valid example of a ternary expression.
  *
  * @author Phillip Webb
  */
-public class TernaryEqualsEquals {
+public class TernaryEqualsEqualsNever {
 
 	public void test() {
 		boolean a = true;
 		boolean b = false;
-		int c = (a != b ? 1 : 2);
-	}
-
-	public void test2() {
-		Boolean a = true;
-		int c = (a == null ? 1 : 2);
+		int c = (a == b ? 1 : 2);
 	}
 
 }
