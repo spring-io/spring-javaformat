@@ -1,2 +1,2 @@
-[ERROR] NoThis.java:29:22: Reference to instance variable 'logger' should not use "this.".
+[ERROR] NoThis.java:30:22: Reference to instance variable 'logger' should not use "this.".
 +1 error

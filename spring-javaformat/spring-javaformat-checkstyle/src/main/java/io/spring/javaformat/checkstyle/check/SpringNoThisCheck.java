@@ -35,6 +35,8 @@ public class SpringNoThisCheck extends AbstractCheck {
 
 	private Set<String> names = Collections.emptySet();
 
+	private boolean allowAssignement = true;
+
 	@Override
 	public int[] getDefaultTokens() {
 		return getAcceptableTokens();
@@ -62,13 +64,29 @@ public class SpringNoThisCheck extends AbstractCheck {
 		if (this.names.contains(name)) {
 			DetailAST sibling = ast.getPreviousSibling();
 			if (sibling != null && sibling.getType() == TokenTypes.LITERAL_THIS) {
-				log(ast.getLineNo(), ast.getColumnNo(), "nothis.unexpected", name);
+				DetailAST parent = getFirstNonDotParent(ast);
+				if (!(this.allowAssignement && parent != null
+						&& parent.getType() == TokenTypes.ASSIGN)) {
+					log(ast.getLineNo(), ast.getColumnNo(), "nothis.unexpected", name);
+				}
 			}
 		}
 	}
 
+	private DetailAST getFirstNonDotParent(DetailAST ast) {
+		DetailAST result = (ast != null ? ast.getParent() : null);
+		while (result != null && result.getType() == TokenTypes.DOT) {
+			result = result.getParent();
+		}
+		return result;
+	}
+
 	public void setNames(String... names) {
 		this.names = new HashSet<>(Arrays.asList(names));
+	}
+
+	public void setAllowAssignement(boolean allowAssignement) {
+		this.allowAssignement = allowAssignement;
 	}
 
 }

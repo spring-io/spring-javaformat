@@ -26,6 +26,7 @@ public class NotThis {
 	private Log logger;
 
 	public void test() {
+		this.logger = null;
 		this.logger.debug("test");
 	}
 
