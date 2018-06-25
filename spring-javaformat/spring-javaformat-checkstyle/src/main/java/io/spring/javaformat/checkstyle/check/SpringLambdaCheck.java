@@ -62,7 +62,10 @@ public class SpringLambdaCheck extends AbstractCheck {
 				log(lambda.getLineNo(), lambda.getColumnNo(), "lambda.missingParen");
 			}
 			else if (!this.singleArgumentParentheses && hasParentheses) {
-				log(lambda.getLineNo(), lambda.getColumnNo(), "lambda.unnecessaryParen");
+				if (!isUsingParametersToDefineType(lambda)) {
+					log(lambda.getLineNo(), lambda.getColumnNo(),
+							"lambda.unnecessaryParen");
+				}
 			}
 		}
 		DetailAST block = lambda.getLastChild();
@@ -76,6 +79,14 @@ public class SpringLambdaCheck extends AbstractCheck {
 		DetailAST parameters = lambda.findFirstToken(TokenTypes.PARAMETERS);
 		return (parameters == null)
 				|| (parameters.getChildCount(TokenTypes.PARAMETER_DEF) == 1);
+	}
+
+	private boolean isUsingParametersToDefineType(DetailAST lambda) {
+		DetailAST ast = lambda.findFirstToken(TokenTypes.PARAMETERS);
+		ast = (ast != null ? ast.findFirstToken(TokenTypes.PARAMETER_DEF) : null);
+		ast = (ast != null ? ast.findFirstToken(TokenTypes.TYPE) : null);
+		ast = (ast != null ? ast.findFirstToken(TokenTypes.IDENT) : null);
+		return ast != null;
 	}
 
 	private boolean isNecessaryBlock(DetailAST block) {

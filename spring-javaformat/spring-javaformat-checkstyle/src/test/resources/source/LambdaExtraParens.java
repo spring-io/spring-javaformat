@@ -34,4 +34,12 @@ public class LambdaExtraParens {
 		return (string1, string2) -> 1;
 	}
 
+	public void test3() {
+		Object x = null;
+		List<String> result = input((String x) -> 123);
+	}
+
+	private <T extends CharSequence> List<T> input(Function<T, Integer> in) {
+	}
+
 }

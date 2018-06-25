@@ -1,2 +1,2 @@
-+Lambda argument has unnecessary parentheses. [SpringLambda]
++LambdaExtraParens.java:30:33: Lambda argument has unnecessary parentheses. [SpringLambda]
 +1 error
