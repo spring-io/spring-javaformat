@@ -19,6 +19,7 @@ package io.spring.format.formatter.intellij;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -40,6 +41,8 @@ public class SpringFormatComponent extends AbstractProjectComponent {
 
 	private static final String CODE_STYLE_MANAGER_KEY = CodeStyleManager.class.getName();
 
+	private final StatusIndicator statusIndicator;
+
 	private final Lock lock = new ReentrantLock();
 
 	private Monitors monitors;
@@ -48,6 +51,7 @@ public class SpringFormatComponent extends AbstractProjectComponent {
 
 	protected SpringFormatComponent(Project project) {
 		super(project);
+		this.statusIndicator = new StatusIndicator(project);
 	}
 
 	@Override
@@ -85,6 +89,8 @@ public class SpringFormatComponent extends AbstractProjectComponent {
 		finally {
 			this.lock.unlock();
 		}
+		ApplicationManager.getApplication()
+				.invokeLater(() -> this.statusIndicator.update(state));
 	}
 
 	private void reregisterComponent(CodeStyleManager manager) {
