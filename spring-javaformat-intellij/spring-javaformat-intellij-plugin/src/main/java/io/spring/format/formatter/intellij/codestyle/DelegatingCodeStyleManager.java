@@ -18,6 +18,7 @@ package io.spring.format.formatter.intellij.codestyle;
 
 import java.util.Collection;
 
+import com.intellij.formatting.FormattingMode;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileTypes.FileType;
@@ -29,6 +30,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.ChangedRangesInfo;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.DocCommentSettings;
+import com.intellij.psi.codeStyle.FormattingModeAwareIndentAdjuster;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ThrowableRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +40,8 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Phillip Webb
  */
-public class DelegatingCodeStyleManager extends CodeStyleManager {
+public class DelegatingCodeStyleManager extends CodeStyleManager
+		implements FormattingModeAwareIndentAdjuster {
 
 	private final CodeStyleManager delegate;
 
@@ -200,6 +203,24 @@ public class DelegatingCodeStyleManager extends CodeStyleManager {
 	@Override
 	public <T> T performActionWithFormatterDisabled(Computable<T> r) {
 		return this.delegate.performActionWithFormatterDisabled(r);
+	}
+
+	@Override
+	public int adjustLineIndent(Document document, int offset, FormattingMode mode) {
+		if (this.delegate instanceof FormattingModeAwareIndentAdjuster) {
+			return ((FormattingModeAwareIndentAdjuster) this.delegate)
+					.adjustLineIndent(document, offset, mode);
+		}
+		return offset;
+	}
+
+	@Override
+	public FormattingMode getCurrentFormattingMode() {
+		if (this.delegate instanceof FormattingModeAwareIndentAdjuster) {
+			return ((FormattingModeAwareIndentAdjuster) this.delegate)
+					.getCurrentFormattingMode();
+		}
+		return FormattingMode.REFORMAT;
 	}
 
 }
