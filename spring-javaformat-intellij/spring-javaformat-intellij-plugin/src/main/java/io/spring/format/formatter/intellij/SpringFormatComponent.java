@@ -21,6 +21,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.AbstractProjectComponent;
+import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.codeStyle.CodeStyleManager;
@@ -33,7 +34,7 @@ import io.spring.format.formatter.intellij.codestyle.monitor.Trigger.State;
 import org.picocontainer.MutablePicoContainer;
 
 /**
- * TODO.
+ * {@link ProjectComponent} to add Spring Java Format IntelliJ support.
  *
  * @author Phillip Webb
  */

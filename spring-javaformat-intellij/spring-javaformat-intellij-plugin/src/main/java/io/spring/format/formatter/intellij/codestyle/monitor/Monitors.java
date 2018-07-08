@@ -26,26 +26,40 @@ import com.intellij.openapi.project.Project;
 import io.spring.format.formatter.intellij.codestyle.monitor.Trigger.State;
 
 /**
- * FIXME.
+ * Utility class used to manage a collection of {@link Monitors}. Creates and manages
+ * individual {@link Monitor} instances and takes care of combining {@link Trigger}
+ * results.
  *
  * @author Phillip Webb
  */
 public class Monitors {
 
-	private final Consumer<State> stateConsumer;
+	private final Consumer<State> stateChangeConsumer;
 
 	private final List<Monitor> monitors;
 
 	private final List<State> states = new ArrayList<State>();
 
-	public Monitors(Project project, Consumer<State> stateConsumer,
+	/**
+	 * Create a new {@link Monitors} instnace.
+	 * @param project the source project
+	 * @param stateChangeConsumer consumer called whenever the ultimate state changes
+	 * @param monitorFactories factories used to create the monitors
+	 */
+	public Monitors(Project project, Consumer<State> stateChangeConsumer,
 			Monitor.Factory... monitorFactories) {
-		this(project, stateConsumer, Arrays.asList(monitorFactories));
+		this(project, stateChangeConsumer, Arrays.asList(monitorFactories));
 	}
 
-	public Monitors(Project project, Consumer<State> stateConsumer,
+	/**
+	 * Create a new {@link Monitors} instnace.
+	 * @param project the source project
+	 * @param stateChangeConsumer consumer called whenever the ultimate state changes
+	 * @param monitorFactories factories used to create the monitors
+	 */
+	public Monitors(Project project, Consumer<State> stateChangeConsumer,
 			List<Monitor.Factory> monitorFactories) {
-		this.stateConsumer = stateConsumer;
+		this.stateChangeConsumer = stateChangeConsumer;
 		List<Monitor> monitors = new ArrayList<>(monitorFactories.size());
 		for (Monitor.Factory factory : monitorFactories) {
 			Monitor monitor = factory.createMonitor(project, addTrigger());
@@ -62,15 +76,19 @@ public class Monitors {
 			boolean activeBefore;
 			boolean activeAfter;
 			synchronized (this.states) {
-				activeBefore = this.states.stream()
-						.anyMatch(item -> item == State.ACTIVE);
+				activeBefore = containsActiveState(this.states);
 				this.states.set(index, state);
-				activeAfter = this.states.stream().anyMatch(item -> item == State.ACTIVE);
+				activeAfter = containsActiveState(this.states);
 			}
 			if (activeBefore != activeAfter) {
-				this.stateConsumer.accept(activeAfter ? State.ACTIVE : State.NOT_ACTIVE);
+				this.stateChangeConsumer
+						.accept(activeAfter ? State.ACTIVE : State.NOT_ACTIVE);
 			}
 		};
+	}
+
+	private boolean containsActiveState(List<State> states) {
+		return states.stream().anyMatch((item) -> item == State.ACTIVE);
 	}
 
 	private int addState() {
