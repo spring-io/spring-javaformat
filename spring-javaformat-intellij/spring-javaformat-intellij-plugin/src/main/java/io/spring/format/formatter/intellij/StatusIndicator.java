@@ -20,11 +20,14 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.Icon;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
+import com.intellij.openapi.wm.IdeFrame;
 import com.intellij.openapi.wm.StatusBar;
 import com.intellij.openapi.wm.StatusBarWidget;
 import com.intellij.openapi.wm.WindowManager;
+import com.intellij.openapi.wm.WindowManagerListener;
 import com.intellij.util.Consumer;
 import io.spring.format.formatter.intellij.codestyle.monitor.Trigger.State;
 
@@ -37,15 +40,19 @@ class StatusIndicator {
 
 	private final Project project;
 
-	private Component component;
+	private Widget widget;
 
 	StatusIndicator(Project project) {
 		this.project = project;
 	}
 
 	public void update(State state) {
-		final StatusBar statusBar = WindowManager.getInstance()
-				.getStatusBar(this.project);
+		WindowManager windowManager = WindowManager.getInstance();
+		final StatusBar statusBar = windowManager.getStatusBar(this.project);
+		if (statusBar == null) {
+			windowManager.addListener(new UpdateOnFrameCreateListener(state));
+			return;
+		}
 		if (state == State.ACTIVE) {
 			show(statusBar);
 		}
@@ -55,20 +62,47 @@ class StatusIndicator {
 	}
 
 	private void show(StatusBar statusBar) {
-		if (this.component == null) {
-			this.component = new Component();
-			statusBar.addWidget(this.component, this.project);
+		if (this.widget == null) {
+			this.widget = new Widget();
+			statusBar.addWidget(this.widget, this.project);
 		}
 	}
 
 	private void hide(final StatusBar statusBar) {
-		if (this.component != null) {
-			statusBar.removeWidget(this.component.ID());
-			this.component = null;
+		if (this.widget != null) {
+			statusBar.removeWidget(this.widget.ID());
+			this.widget = null;
 		}
 	}
 
-	private static class Component
+	/**
+	 * {@link WindowManagerListener} used to defer setting the status if the IDE frame
+	 * isn't available.
+	 */
+	private class UpdateOnFrameCreateListener implements WindowManagerListener {
+
+		private final State state;
+
+		UpdateOnFrameCreateListener(State state) {
+			this.state = state;
+		}
+
+		@Override
+		public void frameCreated(IdeFrame frame) {
+			WindowManager.getInstance().removeListener(this);
+			ApplicationManager.getApplication().invokeLater(() -> update(this.state));
+		}
+
+		@Override
+		public void beforeFrameReleased(IdeFrame frame) {
+		}
+
+	}
+
+	/**
+	 * The {@link StatusBarWidget} component for the status.
+	 */
+	private static class Widget
 			implements StatusBarWidget, StatusBarWidget.IconPresentation {
 
 		public static final Icon ICON = IconLoader

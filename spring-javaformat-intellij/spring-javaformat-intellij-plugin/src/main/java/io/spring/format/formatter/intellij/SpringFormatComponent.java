@@ -19,6 +19,8 @@ package io.spring.format.formatter.intellij;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.intellij.designer.designSurface.ScalableComponent;
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.components.ProjectComponent;
@@ -42,6 +44,9 @@ public class SpringFormatComponent extends AbstractProjectComponent {
 
 	private static final String CODE_STYLE_MANAGER_KEY = CodeStyleManager.class.getName();
 
+	private static final String ACTIVE_PROPERTY = ScalableComponent.class.getName()
+			+ ".ACTIVE";
+
 	private final StatusIndicator statusIndicator;
 
 	private final Lock lock = new ReentrantLock();
@@ -50,13 +55,19 @@ public class SpringFormatComponent extends AbstractProjectComponent {
 
 	private static final Logger logger = Logger.getInstance(SpringFormatComponent.class);
 
+	private PropertiesComponent properties;
+
 	protected SpringFormatComponent(Project project) {
 		super(project);
 		this.statusIndicator = new StatusIndicator(project);
+		this.properties = PropertiesComponent.getInstance(project);
 	}
 
 	@Override
 	public void initComponent() {
+		if (this.properties.getBoolean(ACTIVE_PROPERTY, false)) {
+			update(State.ACTIVE);
+		}
 		this.monitors = new Monitors(this.myProject, this::update, FileMonitor.factory(),
 				MavenMonitor.factory(), GradleMonitor.factory());
 	}
@@ -80,18 +91,20 @@ public class SpringFormatComponent extends AbstractProjectComponent {
 			if (state == State.ACTIVE && !(manager instanceof SpringCodeStyleManager)) {
 				logger.debug("Enabling SpringCodeStyleManager");
 				reregisterComponent(new SpringCodeStyleManager(manager));
+				this.properties.setValue(ACTIVE_PROPERTY, true);
 			}
 			if (state == State.NOT_ACTIVE
 					&& (manager instanceof SpringCodeStyleManager)) {
 				logger.debug("Disabling SpringCodeStyleManager");
 				reregisterComponent(((SpringCodeStyleManager) manager).getDelegate());
+				this.properties.setValue(ACTIVE_PROPERTY, false);
 			}
+			ApplicationManager.getApplication()
+					.invokeLater(() -> this.statusIndicator.update(state));
 		}
 		finally {
 			this.lock.unlock();
 		}
-		ApplicationManager.getApplication()
-				.invokeLater(() -> this.statusIndicator.update(state));
 	}
 
 	private void reregisterComponent(CodeStyleManager manager) {
