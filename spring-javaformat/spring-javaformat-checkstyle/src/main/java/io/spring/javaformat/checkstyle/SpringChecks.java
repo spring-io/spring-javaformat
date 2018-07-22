@@ -17,7 +17,6 @@
 package io.spring.javaformat.checkstyle;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Properties;
@@ -25,10 +24,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import com.puppycrawl.tools.checkstyle.AstTreeStringPrinter;
 import com.puppycrawl.tools.checkstyle.Checker;
 import com.puppycrawl.tools.checkstyle.DefaultContext;
-import com.puppycrawl.tools.checkstyle.JavaParser;
 import com.puppycrawl.tools.checkstyle.ModuleFactory;
 import com.puppycrawl.tools.checkstyle.PropertiesExpander;
 import com.puppycrawl.tools.checkstyle.api.AbstractFileSetCheck;
@@ -129,21 +126,11 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 	@Override
 	protected void processFiltered(File file, FileText fileText)
 			throws CheckstyleException {
-		printDebugInfo(file);
 		SortedSet<LocalizedMessage> messages = new TreeSet<>();
 		for (FileSetCheck check : this.checks) {
 			messages.addAll(check.process(file, fileText));
 		}
 		addMessages(messages);
-	}
-
-	private void printDebugInfo(File file) throws CheckstyleException {
-		try {
-			System.out.println(AstTreeStringPrinter.printFileAst(file,
-					JavaParser.Options.WITHOUT_COMMENTS));
-		}
-		catch (IOException ex) {
-		}
 	}
 
 	@Override
