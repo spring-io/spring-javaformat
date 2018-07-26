@@ -16,7 +16,7 @@
 
 package io.spring.javaformat.eclipse;
 
-import io.spring.javaformat.eclipse.m2e.gradle.RefreshProjectSettingsListeners;
+import io.spring.javaformat.eclipse.gradle.RefreshProjectSettingsListeners;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 

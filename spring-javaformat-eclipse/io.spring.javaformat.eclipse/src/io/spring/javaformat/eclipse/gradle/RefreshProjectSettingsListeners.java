@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.spring.javaformat.eclipse.m2e.gradle;
+package io.spring.javaformat.eclipse.gradle;
 
 import org.eclipse.buildship.core.CorePlugin;
 import org.eclipse.buildship.core.event.Event;
