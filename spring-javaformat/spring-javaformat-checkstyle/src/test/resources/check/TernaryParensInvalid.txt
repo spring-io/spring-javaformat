@@ -1,1 +1,2 @@
 +Ternary operation missing parentheses
++3 errors

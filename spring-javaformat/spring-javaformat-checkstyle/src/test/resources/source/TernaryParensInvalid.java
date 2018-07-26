@@ -15,16 +15,18 @@
  */
 
 /**
- * This is a valid example of a ternary expression.
+ * This is a invalid example of invalid ternary expressions.
  *
  * @author Phillip Webb
  */
-public class TernaryNoParens {
+public class TernaryParensInvalid {
 
 	public void test() {
 		boolean a = true;
 		boolean b = false;
-		int c = a != b ? 1 : 2;
+		int d = a != b ? 1 : 2;
+		int e = (a != b ? 1 : 2);
+		int f = (a != b) | (a == b) ? 1 : 2;
 	}
 
 }

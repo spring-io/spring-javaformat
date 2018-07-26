@@ -22,8 +22,8 @@ import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 /**
- * Checks that ternary operations follow Spring conventions. All ternary operators should
- * have parentheses. Not equals to should be used rather than equals as the test.
+ * Checks that ternary operations follow Spring conventions. All ternary tests should have
+ * parentheses. Not equals to should be used rather than equals as the test for nulls.
  *
  * @author Phillip Webb
  */
@@ -49,25 +49,44 @@ public class SpringTernaryCheck extends AbstractSpringCheck {
 	}
 
 	private void visitQuestion(DetailAST ast) {
-		DetailAST parent = ast.getParent();
-		DetailAST grandParent = (parent != null ? parent.getParent() : parent);
-		if (!hasType(grandParent, TokenTypes.ELIST)
-				&& !isAllowedGrandParent(grandParent)) {
-			if (!hasType(ast.getPreviousSibling(), TokenTypes.LPAREN)
-					|| !hasType(ast.getNextSibling(), TokenTypes.RPAREN)) {
+		DetailAST expression = ast.getFirstChild();
+		if (!hasType(expression, TokenTypes.LPAREN)) {
+			if (expression != null && requiresParens(expression)) {
 				log(ast.getLineNo(), ast.getColumnNo(), "ternary.missingParen");
 			}
 		}
-		if (hasType(ast.getFirstChild(), TokenTypes.EQUAL) && !isEqualsTestAllowed(ast)) {
+		while (hasType(expression, TokenTypes.LPAREN)) {
+			expression = expression.getNextSibling();
+		}
+		if (isSimpleEqualsExpression(expression) && !isEqualsTestAllowed(ast)) {
 			log(ast.getLineNo(), ast.getColumnNo(), "ternary.equalOperator");
 		}
 	}
 
-	private boolean isAllowedGrandParent(DetailAST grandParent) {
-		return hasType(grandParent, TokenTypes.ARRAY_DECLARATOR)
-				|| hasType(grandParent, TokenTypes.INDEX_OP)
-				|| hasType(grandParent, TokenTypes.LITERAL_IF)
-				|| hasType(grandParent, TokenTypes.LITERAL_WHILE);
+	private boolean requiresParens(DetailAST expression) {
+		if (expression != null && expression.getChildCount() > 1) {
+			switch (expression.getType()) {
+			case TokenTypes.METHOD_CALL:
+			case TokenTypes.DOT:
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isSimpleEqualsExpression(DetailAST expression) {
+		if (expression == null || expression.getType() != TokenTypes.EQUAL) {
+			return false;
+		}
+		DetailAST child = expression.getFirstChild();
+		while (child != null) {
+			if (child.getChildCount() > 0) {
+				return false;
+			}
+			child = child.getNextSibling();
+		}
+		return true;
 	}
 
 	private boolean isEqualsTestAllowed(DetailAST ast) {

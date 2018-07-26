@@ -15,7 +15,7 @@
  */
 
 /**
- * This is a valid example of a ternary expression.
+ * This is an example of a ternary expression in an array.
  *
  * @author Phillip Webb
  */
@@ -24,8 +24,8 @@ public class TernaryInArray {
 	public void test() {
 		boolean a = true;
 		boolean b = false;
-		String[] c = new String[a != b ? 1 : 2];
-		String d = c[a != b ? 1 : 2];
+		String[] c = new String[(a != b) ? 1 : 2];
+		String d = c[(a != b) ? 1 : 2];
 	}
 
 }

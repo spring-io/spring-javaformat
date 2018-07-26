@@ -15,16 +15,25 @@
  */
 
 /**
- * This is a valid example of a ternary expression.
+ * This is a valid example of valid ternary expressions.
  *
  * @author Phillip Webb
  */
-public class TernaryParens {
+public class TernaryParensValid {
+
+	private boolean test;
 
 	public void test() {
 		boolean a = true;
 		boolean b = false;
-		int c = (a != b ? 1 : 2);
+		int c = (a != b) ? 1 : 2;
+		int d = a ? 1 : 2;
+		int e = ((a != b) | (a == b)) ? 1 : 2;
+		int d = "a".equals("b") ? 1 : 2;
+	}
+
+	public int withMember() {
+		return this.test ? 1 : 2;
 	}
 
 }

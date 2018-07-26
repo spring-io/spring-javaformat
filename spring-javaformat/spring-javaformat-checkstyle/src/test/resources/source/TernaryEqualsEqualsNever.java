@@ -24,7 +24,7 @@ public class TernaryEqualsEqualsNever {
 	public void test() {
 		boolean a = true;
 		boolean b = false;
-		int c = (a == b ? 1 : 2);
+		int c = (a == b) ? 1 : 2;
 	}
 
 }

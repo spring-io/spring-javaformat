@@ -24,7 +24,7 @@ public class TernaryInWhile {
 	public void test() {
 		boolean a = true;
 		boolean b = false;
-		while (a != b ? true : false) {
+		while ((a != b) ? true : false) {
 			System.out.println("OK");
 		}
 	}
