@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class ProjectSettingsFilesLocator {
 
-	private static final String[] SOURCE_FOLDERS = { ".eclipse", ".eclipse" };
+	private static final String[] SOURCE_FOLDERS = { "eclipse", ".eclipse" };
 
 	private static final String[] DEFAULT_FILES = { "org.eclipse.jdt.core.prefs",
 			"org.eclipse.jdt.ui.prefs" };
