@@ -16,17 +16,15 @@
 
 package io.spring.javaformat.checkstyle.check;
 
-import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
 
 /**
  * Checks that catch blocks follow Spring conventions.
  *
  * @author Phillip Webb
  */
-public class SpringCatchCheck extends AbstractCheck {
+public class SpringCatchCheck extends AbstractSpringCheck {
 
 	@Override
 	public int[] getDefaultTokens() {
@@ -36,11 +34,6 @@ public class SpringCatchCheck extends AbstractCheck {
 	@Override
 	public int[] getAcceptableTokens() {
 		return new int[] { TokenTypes.LITERAL_CATCH };
-	}
-
-	@Override
-	public int[] getRequiredTokens() {
-		return CommonUtils.EMPTY_INT_ARRAY;
 	}
 
 	@Override

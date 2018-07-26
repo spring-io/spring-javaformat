@@ -21,17 +21,15 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
 
 /**
  * Checks that certain fields are never referenced using {@code 'this.'}.
  *
  * @author Phillip Webb
  */
-public class SpringNoThisCheck extends AbstractCheck {
+public class SpringNoThisCheck extends AbstractSpringCheck {
 
 	private Set<String> names = Collections.emptySet();
 
@@ -45,11 +43,6 @@ public class SpringNoThisCheck extends AbstractCheck {
 	@Override
 	public int[] getAcceptableTokens() {
 		return new int[] { TokenTypes.IDENT };
-	}
-
-	@Override
-	public int[] getRequiredTokens() {
-		return CommonUtils.EMPTY_INT_ARRAY;
 	}
 
 	@Override

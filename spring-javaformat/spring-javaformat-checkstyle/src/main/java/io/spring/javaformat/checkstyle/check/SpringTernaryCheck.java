@@ -18,10 +18,8 @@ package io.spring.javaformat.checkstyle.check;
 
 import java.util.Locale;
 
-import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
 
 /**
  * Checks that ternary operations follow Spring conventions. All ternary operators should
@@ -29,7 +27,7 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  *
  * @author Phillip Webb
  */
-public class SpringTernaryCheck extends AbstractCheck {
+public class SpringTernaryCheck extends AbstractSpringCheck {
 
 	private EqualsTest equalsTest = EqualsTest.NEVER_FOR_NULLS;
 
@@ -41,11 +39,6 @@ public class SpringTernaryCheck extends AbstractCheck {
 	@Override
 	public int[] getAcceptableTokens() {
 		return new int[] { TokenTypes.QUESTION };
-	}
-
-	@Override
-	public int[] getRequiredTokens() {
-		return CommonUtils.EMPTY_INT_ARRAY;
 	}
 
 	@Override

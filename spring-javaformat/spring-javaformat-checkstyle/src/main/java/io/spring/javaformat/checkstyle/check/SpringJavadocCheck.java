@@ -19,23 +19,20 @@ package io.spring.javaformat.checkstyle.check;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TextBlock;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
 
 /**
  * Checks that the javadoc comments follow Spring conventions.
  *
  * @author Phillip Webb
  */
-public class SpringJavadocCheck extends AbstractCheck {
+public class SpringJavadocCheck extends AbstractSpringCheck {
 
-	private static final Pattern[] PATTERNS = {
-			CommonUtils.createPattern("@param\\s+\\S+\\s+(.*)"),
-			CommonUtils.createPattern("@throws\\s+\\S+\\s+(.*)"),
-			CommonUtils.createPattern("@return\\s+(.*)") };
+	private static final Pattern[] PATTERNS = { Pattern.compile("@param\\s+\\S+\\s+(.*)"),
+			Pattern.compile("@throws\\s+\\S+\\s+(.*)"),
+			Pattern.compile("@return\\s+(.*)") };
 
 	@Override
 	public int[] getDefaultTokens() {
@@ -50,11 +47,6 @@ public class SpringJavadocCheck extends AbstractCheck {
 				TokenTypes.ENUM_DEF, TokenTypes.ANNOTATION_DEF, TokenTypes.METHOD_DEF,
 				TokenTypes.CTOR_DEF, TokenTypes.ENUM_CONSTANT_DEF,
 				TokenTypes.ANNOTATION_FIELD_DEF };
-	}
-
-	@Override
-	public int[] getRequiredTokens() {
-		return CommonUtils.EMPTY_INT_ARRAY;
 	}
 
 	@Override

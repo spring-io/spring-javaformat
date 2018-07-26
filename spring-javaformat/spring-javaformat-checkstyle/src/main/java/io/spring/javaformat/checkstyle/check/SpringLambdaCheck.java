@@ -16,10 +16,8 @@
 
 package io.spring.javaformat.checkstyle.check;
 
-import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
 
 /**
  * Checks that lambda definitions follow Spring conventions. Single argument lambda
@@ -28,7 +26,7 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  *
  * @author Phillip Webb
  */
-public class SpringLambdaCheck extends AbstractCheck {
+public class SpringLambdaCheck extends AbstractSpringCheck {
 
 	private boolean singleArgumentParentheses = true;
 
@@ -41,11 +39,6 @@ public class SpringLambdaCheck extends AbstractCheck {
 	public int[] getAcceptableTokens() {
 		return new int[] { TokenTypes.LAMBDA };
 
-	}
-
-	@Override
-	public int[] getRequiredTokens() {
-		return CommonUtils.EMPTY_INT_ARRAY;
 	}
 
 	@Override
