@@ -18,7 +18,6 @@ package io.spring.format.formatter.intellij.codestyle;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Adapter class to expose an IntelliJ {@link com.intellij.openapi.editor.Document} as an
@@ -30,8 +29,7 @@ class EclipseDocumentAdapter extends Document {
 
 	private final com.intellij.openapi.editor.Document intellijDocument;
 
-	EclipseDocumentAdapter(
-			@NotNull com.intellij.openapi.editor.Document intellijDocument) {
+	EclipseDocumentAdapter(com.intellij.openapi.editor.Document intellijDocument) {
 		super(intellijDocument.getText());
 		this.intellijDocument = intellijDocument;
 	}

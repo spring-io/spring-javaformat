@@ -40,12 +40,6 @@
 		</dependency>
 		<dependency>
 			<groupId>io.spring.javaformat.intellij</groupId>
-			<artifactId>annotations</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.spring.javaformat.intellij</groupId>
 			<artifactId>extensions</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
