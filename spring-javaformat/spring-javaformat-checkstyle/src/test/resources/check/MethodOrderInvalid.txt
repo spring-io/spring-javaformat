@@ -1,0 +1,5 @@
++MethodOrderInvalid.java:25:20: Method 'hashCode' is out of order, expected [equals, hashCode, toString].
++MethodOrderInvalid.java:30:24: Method 'equals' is out of order, expected [equals, hashCode, toString].
++MethodOrderInvalid.java:45:24: Method 'toString' is out of order, expected [equals, hashCode, toString].
++MethodOrderInvalid.java:48:25: Method 'equals' is out of order, expected [equals, hashCode, toString].
++MethodOrderInvalid.java:51:21: Method 'hashCode' is out of order, expected [equals, hashCode, toString].
