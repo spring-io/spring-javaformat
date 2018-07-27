@@ -49,7 +49,7 @@ import org.gradle.tooling.GradleConnector;
 @SuppressWarnings("restriction")
 public class RefreshProjectsSettingsJob extends Job {
 
-	private static final Object TASK_NAME = "formatcheckMain";
+	private static final Object TASK_NAME = "checkFormatMain";
 
 	private final CancellationTokenSource tokenSource;
 
