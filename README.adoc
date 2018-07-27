@@ -1,4 +1,4 @@
-:release-version: 0.0.5
+:release-version: 0.0.6
 ## Spring Java Format
 
 ### What is this?
