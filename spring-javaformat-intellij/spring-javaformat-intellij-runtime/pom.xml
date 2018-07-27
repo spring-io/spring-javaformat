@@ -13,11 +13,11 @@
 	<name>Spring JavaFormat IntelliJ Runtime</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
-		<intellij.binary>https://download.jetbrains.com/idea/ideaIC-2018.1.4-no-jdk.tar.gz</intellij.binary>
-		<intellij.binary.sha1>925d2d8afab9312a9515de0331f31991d9dfd45d</intellij.binary.sha1>
-		<intellij.source>https://github.com/JetBrains/intellij-community/archive/181.5087.zip</intellij.source>
-		<intellij.source.sha1>09aaaf75827ff5d89389d7cbd8fd76d0485f537b</intellij.source.sha1>
-		<intellij.source.root>intellij-community-181.5087</intellij.source.root>
+		<intellij.binary>https://download.jetbrains.com/idea/ideaIC-2018.2-no-jdk.tar.gz</intellij.binary>
+		<intellij.binary.sha1>528c3e895fb1d20a5fef2a212667d00861204ff9</intellij.binary.sha1>
+		<intellij.source>https://github.com/JetBrains/intellij-community/archive/182.3684.zip</intellij.source>
+		<intellij.source.sha1>8e6d2a49428011288b053f9a290d314c4f2dbf81</intellij.source.sha1>
+		<intellij.source.root>intellij-community-182.3684</intellij.source.root>
 	</properties>
 	<build>
 		<plugins>
@@ -90,8 +90,6 @@
 										<include
 											name="${intellij.source.root}/platform/extensions/src/**" />
 										<include
-											name="${intellij.source.root}/platform/annotations/common/src/**" />
-										<include
 											name="${intellij.source.root}/plugins/maven/src/**" />
 										<include
 											name="${intellij.source.root}/plugins/gradle/src/**" />
@@ -110,9 +108,6 @@
 								<zip
 									destfile="${project.build.directory}/intellij-source/extensions-sources.zip"
 									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/platform/extensions/src" />
-								<zip
-									destfile="${project.build.directory}/intellij-source/annotations-sources.zip"
-									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/platform/annotations/common/src" />
 								<zip
 									destfile="${project.build.directory}/intellij-source/maven-sources.zip"
 									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/plugins/maven/src" />
@@ -202,23 +197,6 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>install-intellij-annotations</id>
-						<phase>install</phase>
-						<inherited>false</inherited>
-						<goals>
-							<goal>install-file</goal>
-						</goals>
-						<configuration>
-							<file>${project.build.directory}/intellij/annotations.jar</file>
-							<sources>${project.build.directory}/intellij-source/annotations-sources.zip</sources>
-							<groupId>io.spring.javaformat.intellij</groupId>
-							<artifactId>annotations</artifactId>
-							<version>${project.version}</version>
-							<packaging>jar</packaging>
-							<generatePom>true</generatePom>
-						</configuration>
-					</execution>
-					<execution>
 						<id>install-intellij-maven</id>
 						<phase>install</phase>
 						<inherited>false</inherited>
@@ -259,7 +237,7 @@
 							<goal>install-file</goal>
 						</goals>
 						<configuration>
-							<file>${project.build.directory}/intellij/gradle.jar</file>
+							<file>${project.build.directory}/intellij/gradle-common.jar</file>
 							<sources>${project.build.directory}/intellij-source/gradle-sources.zip</sources>
 							<groupId>io.spring.javaformat.intellij</groupId>
 							<artifactId>gradle</artifactId>
