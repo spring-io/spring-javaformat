@@ -27,11 +27,6 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 public class SpringCatchCheck extends AbstractSpringCheck {
 
 	@Override
-	public int[] getDefaultTokens() {
-		return getAcceptableTokens();
-	}
-
-	@Override
 	public int[] getAcceptableTokens() {
 		return new int[] { TokenTypes.LITERAL_CATCH };
 	}

@@ -31,11 +31,6 @@ public class SpringLambdaCheck extends AbstractSpringCheck {
 	private boolean singleArgumentParentheses = true;
 
 	@Override
-	public int[] getDefaultTokens() {
-		return getAcceptableTokens();
-	}
-
-	@Override
 	public int[] getAcceptableTokens() {
 		return new int[] { TokenTypes.LAMBDA };
 

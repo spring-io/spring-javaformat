@@ -36,11 +36,6 @@ public class SpringNoThisCheck extends AbstractSpringCheck {
 	private boolean allowAssignement = true;
 
 	@Override
-	public int[] getDefaultTokens() {
-		return getAcceptableTokens();
-	}
-
-	@Override
 	public int[] getAcceptableTokens() {
 		return new int[] { TokenTypes.IDENT };
 	}

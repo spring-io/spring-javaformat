@@ -32,11 +32,6 @@ public class SpringTernaryCheck extends AbstractSpringCheck {
 	private EqualsTest equalsTest = EqualsTest.NEVER_FOR_NULLS;
 
 	@Override
-	public int[] getDefaultTokens() {
-		return getAcceptableTokens();
-	}
-
-	@Override
 	public int[] getAcceptableTokens() {
 		return new int[] { TokenTypes.QUESTION };
 	}
