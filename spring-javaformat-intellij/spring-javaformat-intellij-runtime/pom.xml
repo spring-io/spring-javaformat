@@ -16,7 +16,6 @@
 		<intellij.binary>https://download.jetbrains.com/idea/ideaIC-2018.2-no-jdk.tar.gz</intellij.binary>
 		<intellij.binary.sha1>528c3e895fb1d20a5fef2a212667d00861204ff9</intellij.binary.sha1>
 		<intellij.source>https://github.com/JetBrains/intellij-community/archive/182.3684.zip</intellij.source>
-		<intellij.source.sha1>8e6d2a49428011288b053f9a290d314c4f2dbf81</intellij.source.sha1>
 		<intellij.source.root>intellij-community-182.3684</intellij.source.root>
 	</properties>
 	<build>
@@ -52,7 +51,6 @@
 						</goals>
 						<configuration>
 							<url>${intellij.source}</url>
-							<sha1>${intellij.source.sha1}</sha1>
 							<outputFileName>intellij-source.zip</outputFileName>
 						</configuration>
 					</execution>
