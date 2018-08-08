@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.intellij.openapi.project.Project;
+
 import io.spring.format.formatter.intellij.codestyle.monitor.Trigger.State;
 
 /**

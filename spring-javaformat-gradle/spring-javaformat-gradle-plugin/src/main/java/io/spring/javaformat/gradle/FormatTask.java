@@ -18,10 +18,11 @@ package io.spring.javaformat.gradle;
 
 import java.io.IOException;
 
-import io.spring.javaformat.formatter.FileEdit;
-import io.spring.javaformat.formatter.FileFormatterException;
 import org.gradle.api.GradleException;
 import org.gradle.api.tasks.TaskAction;
+
+import io.spring.javaformat.formatter.FileEdit;
+import io.spring.javaformat.formatter.FileFormatterException;
 
 /**
  * {@link FormatterTask} to apply formatting.

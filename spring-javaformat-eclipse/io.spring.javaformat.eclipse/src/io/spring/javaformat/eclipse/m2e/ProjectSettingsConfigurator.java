@@ -20,15 +20,16 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.spring.javaformat.eclipse.Executor;
-import io.spring.javaformat.eclipse.Messages;
-import io.spring.javaformat.eclipse.projectsettings.ProjectSettingsFiles;
-import io.spring.javaformat.eclipse.projectsettings.ProjectSettingsFilesLocator;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
 import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
+
+import io.spring.javaformat.eclipse.Executor;
+import io.spring.javaformat.eclipse.Messages;
+import io.spring.javaformat.eclipse.projectsettings.ProjectSettingsFiles;
+import io.spring.javaformat.eclipse.projectsettings.ProjectSettingsFilesLocator;
 
 /**
  * Configurator to apply project specific settings.

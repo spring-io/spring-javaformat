@@ -19,11 +19,12 @@ package io.spring.javaformat.gradle;
 import java.nio.charset.Charset;
 import java.util.stream.Stream;
 
-import io.spring.javaformat.formatter.FileEdit;
-import io.spring.javaformat.formatter.FileFormatter;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.SourceTask;
+
+import io.spring.javaformat.formatter.FileEdit;
+import io.spring.javaformat.formatter.FileFormatter;
 
 /**
  * Abstract base class for formatter tasks.

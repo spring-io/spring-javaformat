@@ -25,8 +25,9 @@ import com.puppycrawl.tools.checkstyle.PackageObjectFactory;
 import com.puppycrawl.tools.checkstyle.PropertiesExpander;
 import com.puppycrawl.tools.checkstyle.PropertyResolver;
 import com.puppycrawl.tools.checkstyle.api.FileSetCheck;
-import io.spring.javaformat.checkstyle.check.SpringHeaderCheck;
 import org.junit.Test;
+
+import io.spring.javaformat.checkstyle.check.SpringHeaderCheck;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -78,13 +78,7 @@
 		<module name="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck">
 			<property name="processJavadoc" value="true" />
 		</module>
-		<module name="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck">
-			<property name="groups" value="java,/^javax?\./,*,org.springframework" />
-			<property name="ordered" value="true" />
-			<property name="separated" value="true" />
-			<property name="option" value="bottom" />
-			<property name="sortStaticImportsAlphabetically" value="true" />
-		</module>
+		<module name="io.spring.javaformat.checkstyle.check.SpringImportOrderCheck"/>
 
 		<!-- Javadoc Comments -->
 		<module name="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTypeCheck">

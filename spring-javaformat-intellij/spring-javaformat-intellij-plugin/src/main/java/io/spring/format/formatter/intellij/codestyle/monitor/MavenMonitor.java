@@ -20,12 +20,13 @@ import java.util.List;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
-import io.spring.format.formatter.intellij.codestyle.monitor.Trigger.State;
 import org.jetbrains.idea.maven.project.MavenProject;
 import org.jetbrains.idea.maven.project.MavenProjectChanges;
 import org.jetbrains.idea.maven.project.MavenProjectsManager;
 import org.jetbrains.idea.maven.project.MavenProjectsTree.Listener;
 import org.jetbrains.idea.maven.server.NativeMavenProjectHolder;
+
+import io.spring.format.formatter.intellij.codestyle.monitor.Trigger.State;
 
 /**
  * {@link Monitor} that looks for a {@code spring-javaformat-maven-plugin} declaration in

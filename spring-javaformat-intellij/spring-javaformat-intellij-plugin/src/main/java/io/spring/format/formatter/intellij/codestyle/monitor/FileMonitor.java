@@ -23,6 +23,7 @@ import com.intellij.openapi.vfs.VirtualFileListener;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.VirtualFileMoveEvent;
 import com.intellij.openapi.vfs.VirtualFilePropertyEvent;
+
 import io.spring.format.formatter.intellij.codestyle.monitor.Trigger.State;
 
 /**

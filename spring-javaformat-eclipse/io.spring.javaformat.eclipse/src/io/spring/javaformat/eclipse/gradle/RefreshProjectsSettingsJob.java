@@ -25,9 +25,6 @@ import com.google.common.base.Optional;
 import com.gradleware.tooling.toolingmodel.OmniEclipseProject;
 import com.gradleware.tooling.toolingmodel.OmniProjectTask;
 import com.gradleware.tooling.toolingmodel.repository.FetchStrategy;
-import io.spring.javaformat.eclipse.Executor;
-import io.spring.javaformat.eclipse.Messages;
-import io.spring.javaformat.eclipse.projectsettings.ProjectSettingsFilesLocator;
 import org.eclipse.buildship.core.CorePlugin;
 import org.eclipse.buildship.core.workspace.GradleBuild;
 import org.eclipse.buildship.core.workspace.GradleWorkspaceManager;
@@ -40,6 +37,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.gradle.tooling.CancellationTokenSource;
 import org.gradle.tooling.GradleConnector;
+
+import io.spring.javaformat.eclipse.Executor;
+import io.spring.javaformat.eclipse.Messages;
+import io.spring.javaformat.eclipse.projectsettings.ProjectSettingsFilesLocator;
 
 /**
  * Job to trigger refresh of project specific settings when the gradle plugin is used.
