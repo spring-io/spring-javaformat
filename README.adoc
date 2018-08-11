@@ -1,4 +1,5 @@
 :release-version: 0.0.6
+:checkstyle-version: 8.11
 ## Spring Java Format
 
 ### What is this?
@@ -73,7 +74,7 @@ To enforce checksyle conventions add the checkstyle plugin and include a depende
 					<dependency>
 						<groupId>com.puppycrawl.tools</groupId>
 						<artifactId>checkstyle</artifactId>
-						<version>8.8</version>
+						<version>{checkstyle-version}</version>
 					</dependency>
 					<dependency>
 						<groupId>io.spring.javaformat</groupId>
@@ -130,7 +131,7 @@ To enforce checksyle conventions add the checkstyle plugin and include a depende
 apply plugin: 'checkstyle'
 
 checkstyle {
-	toolVersion = "8.9"
+	toolVersion = "{checkstyle-version}"
 }
 
 dependencies {
