@@ -32,6 +32,15 @@ For source formatting, add the `spring-javaformat-maven-plugin` to your `build` 
 	</build>
 ----
 
+And the `io.spring.javaformat` plugin group in `~/.m2/settings.xml` as follows:
+
+[source,xml,indent=0,subs="normal"]
+----
+	<pluginGroups>
+		<pluginGroup>io.spring.javaformat</pluginGroup>
+	</pluginGroups>
+----
+
 You can now run `./mvnw spring-javaformat:apply` to reformat code.
 
 If you want to enforce that all code matches the required style, add the following:
