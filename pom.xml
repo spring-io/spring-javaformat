@@ -50,9 +50,6 @@
 		<tycho.version>1.1.0</tycho.version>
 		<tycho-extras.version>1.1.0</tycho-extras.version>
 	</properties>
-	<prerequisites>
-		<maven>3.5</maven>
-	</prerequisites>
 	<build>
 		<pluginManagement>
 			<plugins>
