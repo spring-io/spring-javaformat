@@ -57,7 +57,7 @@ public class SpringLambdaCheck extends AbstractSpringCheck {
 			}
 		}
 		DetailAST block = lambda.getLastChild();
-		if (isStatementList(block) && block.getChildCount(TokenTypes.SEMI) == 0
+		if (isStatementList(block) && block.getChildCount(TokenTypes.SEMI) <= 1
 				&& !isNecessaryBlock(block)) {
 			log(block.getLineNo(), block.getColumnNo(), "lambda.unnecessaryBlock");
 		}

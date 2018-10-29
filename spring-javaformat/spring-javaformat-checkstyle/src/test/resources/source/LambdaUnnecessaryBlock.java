@@ -30,4 +30,11 @@ public class LambdaUnnecessaryBlock {
 		};
 	}
 
+	public Consimer<String> test() {
+		return (string) -> {
+			new StringBuilder()
+				.append("foo");
+		};
+	}
+
 }
