@@ -244,3 +244,15 @@ class Name {
 
 }
 ----
+
+#### Disable formatter
+You can exclude some part of the code from the formatter with the `@formatter:[on|off]` isntruction in a comment.
+For example:
+[source,java,indent=0,subs="normal"]
+----
+// @formatter:off
+ 
+... code not be formatted
+
+// @formatter:on
+----
