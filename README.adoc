@@ -148,7 +148,7 @@ dependencies {
 }
 ----
 
-Your `src/checkstyle/checkstyle.xml` file should look then like this:
+Your `checkstyle.xml` file should look then like this:
 
 [source,xml,indent=0]
 ----
