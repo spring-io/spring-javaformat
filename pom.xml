@@ -13,7 +13,7 @@
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+			<url>https://www.apache.org/licenses/LICENSE-2.0</url>
 		</license>
 	</licenses>
 	<scm>
@@ -24,14 +24,14 @@
 			<name>Pivotal</name>
 			<email>info@pivotal.io</email>
 			<organization>Pivotal Software, Inc.</organization>
-			<organizationUrl>http://www.spring.io</organizationUrl>
+			<organizationUrl>https://www.spring.io</organizationUrl>
 		</developer>
 	</developers>
 	<properties>
 		<main.basedir>${basedir}</main.basedir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
-		<eclipse.repository>http://download.eclipse.org/releases/oxygen</eclipse.repository>
+		<eclipse.repository>https://download.eclipse.org/releases/oxygen</eclipse.repository>
 		<ant.version>1.8.1</ant.version>
 		<ant-contrib.version>1.0b3</ant-contrib.version>
 		<asm.version>5.2</asm.version>
