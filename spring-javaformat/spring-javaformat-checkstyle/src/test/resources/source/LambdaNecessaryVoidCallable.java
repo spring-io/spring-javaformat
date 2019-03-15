@@ -14,27 +14,19 @@
  * limitations under the License.
  */
 
-import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.concurrent.Callable;
 
 /**
- * Lambda blocks add noise since they introducde wrapping. If there's a single
- * statement we should not use them.
+ * This is a valid example of a lambda where the block is required.
  *
- * @author Phillip Webb
+ * @author Andy Wilkinson
  */
-public class LambdaUnnecessaryBlock {
+public class LambdaNecessaryVoidCallable {
 
-	public Function<String, Integer> test() {
-		return (string) -> {
-			return 1;
-		};
-	}
-
-	public Consumer<String> test() {
-		return (string) -> {
-			new StringBuilder()
-				.append("foo");
+	public Callable<Void> test() {
+		return () -> {
+			new String("test");
+			return null;
 		};
 	}
 

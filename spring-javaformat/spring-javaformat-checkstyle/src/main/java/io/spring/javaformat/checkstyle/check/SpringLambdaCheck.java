@@ -57,10 +57,24 @@ public class SpringLambdaCheck extends AbstractSpringCheck {
 			}
 		}
 		DetailAST block = lambda.getLastChild();
-		if (isStatementList(block) && block.getChildCount(TokenTypes.SEMI) <= 1
-				&& !isNecessaryBlock(block)) {
+		int statements = countDescendantsOfType(block, TokenTypes.SEMI);
+		int requireBlock = countDescendantsOfType(block, TokenTypes.LCURLY, TokenTypes.LITERAL_THROW, TokenTypes.SLIST);
+		if (statements == 1 && requireBlock == 0) {
 			log(block.getLineNo(), block.getColumnNo(), "lambda.unnecessaryBlock");
 		}
+	}
+
+	private int countDescendantsOfType(DetailAST ast, int... types) {
+		int count = 0;
+		for (int type: types) {
+			count += ast.getChildCount(type);
+		}
+		DetailAST child = ast.getFirstChild();
+		while (child != null) {
+			count += countDescendantsOfType(child, types);
+			child = child.getNextSibling();
+		}
+		return count;
 	}
 
 	private boolean hasSingleParameter(DetailAST lambda) {
@@ -75,31 +89,6 @@ public class SpringLambdaCheck extends AbstractSpringCheck {
 		ast = (ast != null ? ast.findFirstToken(TokenTypes.TYPE) : null);
 		ast = (ast != null ? ast.findFirstToken(TokenTypes.IDENT) : null);
 		return ast != null;
-	}
-
-	private boolean isNecessaryBlock(DetailAST block) {
-		DetailAST firstChild = block.getFirstChild();
-		if (firstChild == null) {
-			return false;
-		}
-		if (firstChild.getType() == TokenTypes.LITERAL_THROW) {
-			return true;
-		}
-		if (block.getChildCount() == 1 && firstChild.getType() == TokenTypes.RCURLY) {
-			return true;
-		}
-		DetailAST candidate = firstChild.getFirstChild();
-		while (candidate != null) {
-			if (isStatementList(candidate)) {
-				return true;
-			}
-			candidate = candidate.getNextSibling();
-		}
-		return false;
-	}
-
-	private boolean isStatementList(DetailAST ast) {
-		return ast != null && ast.getType() == TokenTypes.SLIST;
 	}
 
 	private boolean hasToken(DetailAST ast, int type) {
