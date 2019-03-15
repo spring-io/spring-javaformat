@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2018 the original author or authors.
+ * Copyright 2012-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -68,7 +69,8 @@ public class ProjectPropertiesTests {
 		ProjectProperties properties = new ProjectProperties();
 		File folder = this.temp.newFolder();
 		properties.addFromFolder(folder);
-		assertThat(properties.get("copyright-year")).isEqualTo("2018");
+		String currentYear = String.valueOf(LocalDate.now().getYear());
+		assertThat(properties.get("copyright-year")).isEqualTo(currentYear);
 	}
 
 	@Test
