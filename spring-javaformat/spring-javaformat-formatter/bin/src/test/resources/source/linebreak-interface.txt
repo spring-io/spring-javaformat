@@ -1,6 +1,0 @@
-package demo;
-
-public @interface InterfaceBraces {
-
-	String value();
-}
