@@ -13,10 +13,8 @@
 	<name>Spring JavaFormat IntelliJ Runtime</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
-		<intellij.binary>https://download.jetbrains.com/idea/ideaIC-2018.2-no-jdk.tar.gz</intellij.binary>
-		<intellij.binary.sha1>528c3e895fb1d20a5fef2a212667d00861204ff9</intellij.binary.sha1>
-		<intellij.source>https://github.com/JetBrains/intellij-community/archive/182.3684.zip</intellij.source>
-		<intellij.source.root>intellij-community-182.3684</intellij.source.root>
+		<intellij.binary>https://www.jetbrains.com/intellij-repository/releases/com/jetbrains/intellij/idea/ideaIC/2018.3.5/ideaIC-2018.3.5.zip</intellij.binary>
+		<intellij.source>https://github.com/JetBrains/intellij-community/archive/idea/183.6156.4.zip</intellij.source>
 	</properties>
 	<build>
 		<plugins>
@@ -39,8 +37,7 @@
 						</goals>
 						<configuration>
 							<url>${intellij.binary}</url>
-							<sha1>${intellij.binary.sha1}</sha1>
-							<outputFileName>intellij.tgz</outputFileName>
+							<outputFileName>intellij.zip</outputFileName>
 						</configuration>
 					</execution>
 					<execution>
@@ -68,56 +65,57 @@
 						</goals>
 						<configuration>
 							<target>
-								<untar src="${project.build.directory}/intellij.tgz"
-									compression="gzip" dest="${project.build.directory}/intellij">
+								<unzip src="${project.build.directory}/intellij.zip"
+										dest="${project.build.directory}/intellij">
 									<patternset>
-										<include name="*/lib/*.jar" />
-										<include name="*/plugins/maven/lib/*.jar" />
-										<include name="*/plugins/gradle/lib/*.jar" />
+										<include name="lib/*.jar" />
+										<include name="plugins/maven/lib/*.jar" />
+										<include name="plugins/gradle/lib/*.jar" />
 									</patternset>
 									<mapper type="flatten" />
-								</untar>
+								</unzip>
 								<unzip
 									src="${project.build.directory}/intellij-source.zip"
 									dest="${project.build.directory}/intellij-source">
 									<patternset>
 										<include
-											name="${intellij.source.root}/platform/core-api/src/**" />
+											name="*/platform/core-api/src/**" />
 										<include
-											name="${intellij.source.root}/platform/util/src/**" />
+											name="*/platform/util/src/**" />
 										<include
-											name="${intellij.source.root}/platform/extensions/src/**" />
+											name="*/platform/extensions/src/**" />
 										<include
-											name="${intellij.source.root}/plugins/maven/src/**" />
+											name="*/plugins/maven/src/**" />
 										<include
-											name="${intellij.source.root}/plugins/gradle/src/**" />
+											name="*/plugins/gradle/src/**" />
 										<include
-											name="${intellij.source.root}/plugins/gradle/tooling-extension-api/src/**" />
+											name="*/plugins/gradle/tooling-extension-api/src/**" />
 										<include
-											name="${intellij.source.root}/plugins/gradle/tooling-extension-impl/src/**" />
+											name="*/plugins/gradle/tooling-extension-impl/src/**" />
 									</patternset>
+									<cutdirsmapper dirs="1"/>
 								</unzip>
 								<zip
 									destfile="${project.build.directory}/intellij-source/platform-api-sources.zip"
-									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/platform/core-api/src" />
+									basedir="${project.build.directory}/intellij-source/platform/core-api/src" />
 								<zip
 									destfile="${project.build.directory}/intellij-source/util-sources.zip"
-									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/platform/util/src" />
+									basedir="${project.build.directory}/intellij-source/platform/util/src" />
 								<zip
 									destfile="${project.build.directory}/intellij-source/extensions-sources.zip"
-									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/platform/extensions/src" />
+									basedir="${project.build.directory}/intellij-source/platform/extensions/src" />
 								<zip
 									destfile="${project.build.directory}/intellij-source/maven-sources.zip"
-									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/plugins/maven/src" />
+									basedir="${project.build.directory}/intellij-source/plugins/maven/src" />
 								<zip
 									destfile="${project.build.directory}/intellij-source/gradle-sources.zip"
-									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/plugins/gradle/src" />
+									basedir="${project.build.directory}/intellij-source/plugins/gradle/src" />
 								<zip
 									destfile="${project.build.directory}/intellij-source/gradle-tooling-extension-api-sources.zip"
-									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/plugins/gradle/tooling-extension-api/src" />
+									basedir="${project.build.directory}/intellij-source/plugins/gradle/tooling-extension-api/src" />
 								<zip
 									destfile="${project.build.directory}/intellij-source/gradle-tooling-extension-impl-sources.zip"
-									basedir="${project.build.directory}/intellij-source/${intellij.source.root}/plugins/gradle/tooling-extension-impl/src" />
+									basedir="${project.build.directory}/intellij-source/plugins/gradle/tooling-extension-impl/src" />
 							</target>
 						</configuration>
 					</execution>
