@@ -79,12 +79,12 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-checkstyle-plugin</artifactId>
-					<version>2.17</version>
+					<version>3.0.0</version>
 					<dependencies>
 						<dependency>
 							<groupId>com.puppycrawl.tools</groupId>
 							<artifactId>checkstyle</artifactId>
-							<version>8.11</version>
+							<version>8.18</version>
 						</dependency>
 					</dependencies>
 				</plugin>
@@ -470,7 +470,7 @@
 			<dependency>
 				<groupId>com.puppycrawl.tools</groupId>
 				<artifactId>checkstyle</artifactId>
-				<version>8.11</version>
+				<version>8.18</version>
 			</dependency>
 			<dependency>
 				<groupId>net.sf.trove4j</groupId>

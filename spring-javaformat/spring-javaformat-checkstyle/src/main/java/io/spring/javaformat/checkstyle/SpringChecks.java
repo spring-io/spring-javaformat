@@ -35,7 +35,7 @@ import com.puppycrawl.tools.checkstyle.api.ExternalResourceHolder;
 import com.puppycrawl.tools.checkstyle.api.FileSetCheck;
 import com.puppycrawl.tools.checkstyle.api.FileText;
 import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
-import com.puppycrawl.tools.checkstyle.filters.SuppressElement;
+import com.puppycrawl.tools.checkstyle.filters.SuppressFilterElement;
 import io.spring.javaformat.checkstyle.check.SpringHeaderCheck;
 
 /**
@@ -113,7 +113,7 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 	public void beginProcessing(String charset) {
 		super.beginProcessing(charset);
 		try {
-			SuppressElement filter = new SuppressElement(
+			SuppressFilterElement filter = new SuppressFilterElement(
 					"[\\\\/]src[\\\\/]test[\\\\/]java[\\\\/]", "Javadoc*", null, null,
 					null, null);
 			((Checker) getMessageDispatcher()).addFilter(filter);
