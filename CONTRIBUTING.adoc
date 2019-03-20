@@ -16,8 +16,8 @@ Active contributors might be asked to join the core team, and given the ability 
 == Working with the code
 If you don't have an IDE preference we would recommend that you use
 https://spring.io/tools/sts[Spring Tools Suite] or
-http://eclipse.org[Eclipse] when working with the code. We use the
-http://eclipse.org/m2e/[M2Eclipse] eclipse plugin for maven support. Other IDEs and tools
+https://eclipse.org[Eclipse] when working with the code. We use the
+https://eclipse.org/m2e/[M2Eclipse] eclipse plugin for maven support. Other IDEs and tools
 should also work without issue.
 
 === Building from source
@@ -34,7 +34,7 @@ The project can be built from the root directory using the standard maven comman
 NOTE: You may need to increase the amount of memory available to Maven by setting a `MAVEN_OPTS` environment variable with the value `-Xmx512m`
 
 === Importing into eclipse
-You can import the code into any Eclipse based distribution as long as it had the http://eclipse.org/m2e/[M2Eclipse] eclipse plugin.
+You can import the code into any Eclipse based distribution as long as it had the https://eclipse.org/m2e/[M2Eclipse] eclipse plugin.
 If you don't already have m2eclipse installed it is available from the "Eclipse marketplace".
 
 NOTE: You'll need to close the `spring-javaformat-formatter-eclipse` and `spring-javaformat-formatter-eclipse-runtime` projects following import since they contain rewritten packages that aren't supported by the IDE

@@ -189,7 +189,7 @@ A Spring Java Format icon (image:spring-javaformat-intellij/spring-javaformat-in
 You can use the standard `code` -> `reformat code` action to format the code.
 
 To install the plugin use the `spring-javaformat-intellij-plugin` jar file.
-You can download the latest version from http://repo.spring.io/release/io/spring/javaformat/spring-javaformat-intellij-plugin/{release-version}[repo.spring.io].
+You can download the latest version from https://repo.spring.io/release/io/spring/javaformat/spring-javaformat-intellij-plugin/{release-version}[repo.spring.io].
 
 ### About the conventions
 Most of the coding conventions and style comes from the Spring Framework and Spring Boot projects.
