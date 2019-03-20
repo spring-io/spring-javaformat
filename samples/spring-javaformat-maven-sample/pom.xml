@@ -6,12 +6,15 @@
 	<groupId>io.spring.javaformat.sample</groupId>
 	<artifactId>spring-javaformat-maven-sample</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>io.spring.javaformat</groupId>
 				<artifactId>spring-javaformat-maven-plugin</artifactId>
-				<version>0.0.6-SNAPSHOT</version>
+				<version>0.0.7-SNAPSHOT</version>
 				<executions>
 					<execution>
 						<goals>
@@ -28,12 +31,12 @@
 					<dependency>
 						<groupId>com.puppycrawl.tools</groupId>
 						<artifactId>checkstyle</artifactId>
-						<version>8.8</version>
+						<version>8.18</version>
 					</dependency>
 					<dependency>
 						<groupId>io.spring.javaformat</groupId>
 						<artifactId>spring-javaformat-checkstyle</artifactId>
-						<version>${project.version}</version>
+						<version>0.0.7-SNAPSHOT</version>
 					</dependency>
 				</dependencies>
 				<executions>
