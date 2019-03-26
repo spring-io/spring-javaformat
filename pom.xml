@@ -31,7 +31,7 @@
 		<main.basedir>${basedir}</main.basedir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
-		<eclipse.repository>https://download.eclipse.org/releases/oxygen/201804111000</eclipse.repository>
+		<eclipse.repository>https://download.eclipse.org/releases/2019-03/201903201000</eclipse.repository>
 		<tycho.disableP2Mirrors>true</tycho.disableP2Mirrors>
 		<ant.version>1.8.1</ant.version>
 		<ant-contrib.version>1.0b3</ant-contrib.version>

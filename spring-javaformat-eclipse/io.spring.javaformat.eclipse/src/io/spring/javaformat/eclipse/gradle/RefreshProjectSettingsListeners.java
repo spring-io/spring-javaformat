@@ -16,11 +16,11 @@
 
 package io.spring.javaformat.eclipse.gradle;
 
-import org.eclipse.buildship.core.CorePlugin;
-import org.eclipse.buildship.core.event.Event;
-import org.eclipse.buildship.core.event.EventListener;
-import org.eclipse.buildship.core.workspace.GradleNatureAddedEvent;
-import org.eclipse.buildship.core.workspace.ProjectCreatedEvent;
+import org.eclipse.buildship.core.internal.CorePlugin;
+import org.eclipse.buildship.core.internal.event.Event;
+import org.eclipse.buildship.core.internal.event.EventListener;
+import org.eclipse.buildship.core.internal.workspace.GradleNatureAddedEvent;
+import org.eclipse.buildship.core.internal.workspace.ProjectCreatedEvent;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;

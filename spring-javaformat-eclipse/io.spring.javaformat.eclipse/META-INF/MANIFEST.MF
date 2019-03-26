@@ -15,7 +15,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.m2e.core;resolution:=optional,
  org.eclipse.m2e.maven.runtime;resolution:=optional,
  org.eclipse.buildship.core;resolution:=optional,
- com.gradleware.tooling.model;resolution:=optional,
  org.slf4j.api;bundle-version="1.7.0"
 Bundle-ClassPath: .,
  lib/spring-javaformat-formatter-eclipse.jar,

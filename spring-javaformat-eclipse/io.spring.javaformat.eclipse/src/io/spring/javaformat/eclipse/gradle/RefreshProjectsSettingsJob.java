@@ -19,18 +19,18 @@ package io.spring.javaformat.eclipse.gradle;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
-import com.google.common.base.Optional;
-import com.gradleware.tooling.toolingmodel.OmniEclipseProject;
-import com.gradleware.tooling.toolingmodel.OmniProjectTask;
-import com.gradleware.tooling.toolingmodel.repository.FetchStrategy;
 import io.spring.javaformat.eclipse.Executor;
 import io.spring.javaformat.eclipse.Messages;
 import io.spring.javaformat.eclipse.projectsettings.ProjectSettingsFilesLocator;
-import org.eclipse.buildship.core.CorePlugin;
-import org.eclipse.buildship.core.workspace.GradleBuild;
-import org.eclipse.buildship.core.workspace.GradleWorkspaceManager;
+import org.eclipse.buildship.core.GradleBuild;
+import org.eclipse.buildship.core.internal.CorePlugin;
+import org.eclipse.buildship.core.internal.workspace.FetchStrategy;
+import org.eclipse.buildship.core.internal.workspace.InternalGradleBuild;
+import org.eclipse.buildship.core.internal.workspace.InternalGradleWorkspace;
+import org.eclipse.buildship.core.internal.workspace.ModelProviderUtil;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -40,6 +40,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.gradle.tooling.CancellationTokenSource;
 import org.gradle.tooling.GradleConnector;
+import org.gradle.tooling.model.GradleTask;
+import org.gradle.tooling.model.eclipse.EclipseProject;
 
 /**
  * Job to trigger refresh of project specific settings when the gradle plugin is used.
@@ -73,20 +75,19 @@ public class RefreshProjectsSettingsJob extends Job {
 
 	private void configureProjects(IProgressMonitor monitor)
 			throws CoreException, IOException {
-		GradleWorkspaceManager manager = CorePlugin.gradleWorkspaceManager();
+		InternalGradleWorkspace workspace = CorePlugin.internalGradleWorkspace();
 		for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
-			Optional<GradleBuild> build = manager.getGradleBuild(project);
+			Optional<GradleBuild> build = workspace.getBuild(project);
 			if (build.isPresent()) {
-				configureProject(project, build.get(), monitor);
+				configureProject(project, (InternalGradleBuild) build.get(), monitor);
 			}
 		}
 	}
 
-	private void configureProject(IProject project, GradleBuild build,
+	private void configureProject(IProject project, InternalGradleBuild build,
 			IProgressMonitor monitor) throws CoreException, IOException {
-		Set<OmniEclipseProject> projects = build.getModelProvider()
-				.fetchEclipseGradleProjects(FetchStrategy.FORCE_RELOAD,
-						this.tokenSource.token(), monitor);
+		Set<EclipseProject> projects = ModelProviderUtil.fetchAllEclipseProjects(build,
+				this.tokenSource, FetchStrategy.FORCE_RELOAD, monitor);
 		if (hasSpringFormatPlugin(projects)) {
 			ProjectSettingsFilesLocator locator = new ProjectSettingsFilesLocator(
 					getSearchFolders(projects));
@@ -94,9 +95,9 @@ public class RefreshProjectsSettingsJob extends Job {
 		}
 	}
 
-	private boolean hasSpringFormatPlugin(Set<OmniEclipseProject> projects) {
-		for (OmniEclipseProject project : projects) {
-			for (OmniProjectTask task : project.getGradleProject().getProjectTasks()) {
+	private boolean hasSpringFormatPlugin(Set<EclipseProject> projects) {
+		for (EclipseProject project : projects) {
+			for (GradleTask task : project.getGradleProject().getTasks()) {
 				if (isSpringFormatPlugin(task)) {
 					return true;
 				}
@@ -105,15 +106,17 @@ public class RefreshProjectsSettingsJob extends Job {
 		return false;
 	}
 
-	private boolean isSpringFormatPlugin(OmniProjectTask task) {
+	private boolean isSpringFormatPlugin(GradleTask task) {
 		return TASK_NAME.equals(task.getName());
 	}
 
-	private Set<File> getSearchFolders(Set<OmniEclipseProject> projects) {
+	private Set<File> getSearchFolders(Set<EclipseProject> projects) {
 		Set<File> searchFolders = new LinkedHashSet<>();
-		for (OmniEclipseProject project : projects) {
-			searchFolders.add(project.getProjectDirectory());
-			searchFolders.add(project.getRoot().getProjectDirectory());
+		for (EclipseProject project : projects) {
+			while (project != null) {
+				searchFolders.add(project.getProjectDirectory());
+				project = project.getParent();
+			}
 		}
 		return searchFolders;
 	}
