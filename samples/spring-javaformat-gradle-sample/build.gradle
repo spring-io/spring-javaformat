@@ -4,7 +4,7 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath("io.spring.javaformat:spring-javaformat-gradle-plugin:0.0.7-SNAPSHOT")
+		classpath("io.spring.javaformat:spring-javaformat-gradle-plugin:0.0.8-SNAPSHOT")
 	}
 }
 
