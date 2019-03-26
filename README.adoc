@@ -1,8 +1,8 @@
 :release-version: 0.0.7
 :checkstyle-version: 8.18
-## Spring Java Format
+== Spring Java Format
 
-### What is this?
+=== What is this?
 A set of plugins that can be applied to any Java project to provide a consistent "`Spring`" style.
 The set currently consists of:
 
@@ -13,9 +13,9 @@ Since the aim of this project is to provide consistency, each plugin is not gene
 You need to change your code to match the required conventions.
 You can't configure the plugin conventions to match your style!
 
-### Maven
+=== Maven
 
-#### Source Formatting
+==== Source Formatting
 
 For source formatting, add the `spring-javaformat-maven-plugin` to your `build` plugins as follows:
 
@@ -67,7 +67,7 @@ If you want to enforce that all code matches the required style, add the followi
 	</build>
 ----
 
-#### Checkstyle
+=== Checkstyle
 
 To enforce checksyle conventions add the checkstyle plugin and include a dependency on `spring-javaformat-checkstyle`:
 
@@ -110,9 +110,9 @@ To enforce checksyle conventions add the checkstyle plugin and include a depende
 	</build>
 ----
 
-### Gradle
+=== Gradle
 
-#### Source Formatting
+==== Source Formatting
 For source formatting, add the `spring-javaformat-gradle-plugin` to your `build` plugins as follows:
 
 [source,groovy,indent=0,subs="normal"]
@@ -132,7 +132,7 @@ For source formatting, add the `spring-javaformat-gradle-plugin` to your `build`
 The plugin adds `format` and `checkFormat` tasks to your project.
 The `checkFormat` task is automatically applied when running the standard Gradle `check` task.
 
-#### Checkstyle
+==== Checkstyle
 To enforce checksyle conventions add the checkstyle plugin and include a dependency on `spring-javaformat-checkstyle`:
 
 [source,groovy,indent=0,subs="normal"]
@@ -162,7 +162,7 @@ Your `checkstyle.xml` file should look then like this:
 ----
 
 
-### Eclipse
+=== Eclipse
 The Eclipse plugin provides a custom formatter implementation and automatically applies project specific settings.
 The plugin is automatically activated whenever the Maven or Gradle plugins are discovered in a project build script.
 
@@ -182,7 +182,7 @@ You can download the latest version from
 https://repo.spring.io/release/io/spring/javaformat/io.spring.javaformat.eclipse.site/{release-version}[repo.spring.io]
 or use the https://dl.bintray.com/spring/javaformat-eclipse/[update site].
 
-### IntelliJ IDEA
+=== IntelliJ IDEA
 The IntelliJ plugin provides custom formatter support for IDEA.
 The plugin is automatically activated whenever the Maven or Gradle plugins are discovered in a project build script.
 A Spring Java Format icon (image:spring-javaformat-intellij/spring-javaformat-intellij-plugin/src/main/resources/spring-javaformat/formatOn.png[title="Icon"]) will also be displayed in the status bar to indicate the formatter is active.
@@ -191,15 +191,15 @@ You can use the standard `code` -> `reformat code` action to format the code.
 To install the plugin use the `spring-javaformat-intellij-plugin` jar file.
 You can download the latest version from https://repo.spring.io/release/io/spring/javaformat/spring-javaformat-intellij-plugin/{release-version}[repo.spring.io].
 
-### About the conventions
+=== About the conventions
 Most of the coding conventions and style comes from the Spring Framework and Spring Boot projects.
 Spring Framework manually formats code, where as Spring Boot uses automatic formatting.
 
-### Tips
+=== Tips
 Formatting and Checkstyle alone are not enough to produce truly consistent code.
 Here are some tips that we've found useful when developing Spring Boot.
 
-#### Wrapping
+==== Wrapping
 The source formatter intentionally uses a low character count of 90 chars for wrapping.
 If you're used to longer lines, this can take some getting used to.
 Specifically, if you have many nesting levels things can start to look quite bad.
@@ -207,23 +207,23 @@ Specifically, if you have many nesting levels things can start to look quite bad
 Generally, if you see code bunched up to the right of your screen you should take that as a signal to use the "`extract method`" refactor.
 Extracting small private methods will improve formatting and it helps when reading the code and debugging.
 
-#### Whitespace
+==== Whitespace
 Keeping whitespace lines out method bodies can help make the code easier to scan.
 If blank lines are only included between methods it becomes easier to see the overall structure of the class.
 If you find you need whitespace inside your method, consider if extracting a private method might give a better result.
 
-#### Comments
+==== Comments
 Try to add javadoc for each public method and constant.
 Private methods shouldn't generally need javadoc, unless it provides a natural place to document unusual behavior.
 
 The checkstyle rules will enforce that all public classes have javadoc.
 They will also ensure that `@author` tags are well formed.
 
-#### Final
+==== Final
 Private members should be `final` whenever possible.
 Local variable and parameters should generally not be explicitly declared as final since it adds so much noise.
 
-#### Read-down methods, fields and parameters
+==== Read-down methods, fields and parameters
 Methods don't need to be organized by scope.
 There's no need to group all `private`, `protected` and `public` methods together.
 Instead try to make your code easy to read when scanning the file from top to bottom.
