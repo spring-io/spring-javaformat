@@ -1,5 +1,12 @@
 == Concourse pipeline
 
+Ensure the team is set:
+
+[source]
+----
+$ fly -t spring set-team -n spring-javaformat --github-team=spring-io:spring-javaformat
+----
+
 The pipeline can be deployed using the following command:
 
 [source]
