@@ -67,6 +67,10 @@ If you want to enforce that all code matches the required style, add the followi
 	</build>
 ----
 
+NOTE: The source formatter does not fundamentally change your code.
+For example, it will not change the order of import statements.
+It is effectively limited to adding or removing whitespace and line feeds. 
+
 === Checkstyle
 
 To enforce checksyle conventions add the checkstyle plugin and include a dependency on `spring-javaformat-checkstyle`:
