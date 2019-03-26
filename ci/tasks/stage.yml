@@ -8,5 +8,7 @@ outputs:
 caches:
 - path: maven
 - path: gradle
+params:
+  RELEASE_TYPE
 run:
   path: git-repo/ci/scripts/stage.sh

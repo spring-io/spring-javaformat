@@ -13,7 +13,7 @@ curl \
 		-s \
 		--connect-timeout 240 \
 		--max-time 2700 \
-		-u ${BINTRAY_USERNAME}:${BINTRAY_PASSWORD} \
+		-u ${BINTRAY_USERNAME}:${BINTRAY_API_KEY} \
 		-f \
 		-X PUT \
 		-T "artifactory-repo/io/spring/javaformat/io.spring.javaformat.eclipse.site/${version}/io.spring.javaformat.eclipse.site-${version}.zip" \
@@ -33,7 +33,7 @@ curl \
 		-s \
 		--connect-timeout 240 \
 		--max-time 2700 \
-		-u ${BINTRAY_USERNAME}:${BINTRAY_PASSWORD} \
+		-u ${BINTRAY_USERNAME}:${BINTRAY_API_KEY} \
 		-f \
 		-X PUT \
 		-T "target/repository/content.jar" \
@@ -43,7 +43,7 @@ curl \
 		-s \
 		--connect-timeout 240 \
 		--max-time 2700 \
-		-u ${BINTRAY_USERNAME}:${BINTRAY_PASSWORD} \
+		-u ${BINTRAY_USERNAME}:${BINTRAY_API_KEY} \
 		-f \
 		-X PUT \
 		-T "target/repository/artifacts.jar" \

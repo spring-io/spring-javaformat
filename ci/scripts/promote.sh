@@ -9,14 +9,14 @@ groupId=$( cat artifactory-repo/build-info.json | jq -r '.buildInfo.modules[0].i
 version=$( cat artifactory-repo/build-info.json | jq -r '.buildInfo.modules[0].id' | sed 's/.*:.*:\(.*\)/\1/' )
 
 
-if [[ $RELEASE_TYPE = "M" ]]; then
+if [[ ${RELEASE_TYPE} = "M" ]]; then
 	targetRepo="libs-milestone-local"
-elif [[ $RELEASE_TYPE = "RC" ]]; then
+elif [[ ${RELEASE_TYPE} = "RC" ]]; then
 	targetRepo="libs-milestone-local"
-elif [[ $RELEASE_TYPE = "RELEASE" ]]; then
+elif [[ ${RELEASE_TYPE} = "RELEASE" ]]; then
 	targetRepo="libs-release-local"
 else
-	echo "Unknown release type $RELEASE_TYPE" >&2; exit 1;
+	echo "Unknown release type ${RELEASE_TYPE}" >&2; exit 1;
 fi
 
 echo "Promoting ${buildName}/${buildNumber} to ${targetRepo}"
@@ -32,7 +32,7 @@ curl \
 	-X \
 	POST "${ARTIFACTORY_SERVER}/api/build/promote/${buildName}/${buildNumber}" > /dev/null || { echo "Failed to promote" >&2; exit 1; }
 
-if [[ $RELEASE_TYPE = "RELEASE" ]]; then
+if [[ ${RELEASE_TYPE} = "RELEASE" ]]; then
 	curl \
 		-s \
 		--connect-timeout 240 \
@@ -48,17 +48,17 @@ if [[ $RELEASE_TYPE = "RELEASE" ]]; then
 	ARTIFACTS_PUBLISHED=false
 	WAIT_TIME=5
 	COUNTER=0
-	while [ $ARTIFACTS_PUBLISHED == "false" ] && [ $COUNTER -lt 60 ]; do
+	while [ $artifactsPublished == "false" ] && [ $COUNTER -lt 60 ]; do
 		result=$( curl -s https://api.bintray.com/packages/"${BINTRAY_SUBJECT}"/"${BINTRAY_REPO}"/"${groupId}" )
 		versions=$( echo "$result" | jq -r '.versions' )
 		exists=$( echo "$versions" | grep "$version" -o || true )
 		if [ "$exists" = "$version" ]; then
-			ARTIFACTS_PUBLISHED=true
+			artifactsPublished=true
 		fi
 		COUNTER=$(( COUNTER + 1 ))
 		sleep $WAIT_TIME
 	done
-	if [[ $ARTIFACTS_PUBLISHED = "false" ]]; then
+	if [[ $artifactsPublished = "false" ]]; then
 		echo "Failed to publish"
 		exit 1
 	fi

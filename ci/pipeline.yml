@@ -156,11 +156,11 @@ jobs:
     file: git-repo/ci/tasks/sync-to-maven-central.yml
     params:
       BINTRAY_USERNAME: ((bintray-username))
-      BINTRAY_PASSWORD: ((bintray-password))
-      SONATYPE_USERNAME: ((sonatype-username))
-      SONATYPE_PASSWORD: ((sonatype-password))
+      BINTRAY_API_KEY: ((bintray-api-key))
       BINTRAY_SUBJECT: ((bintray-subject))
       BINTRAY_REPO: ((bintray-repo))
+      SONATYPE_USER_TOKEN: ((sonatype-user-token))
+      SONATYPE_PASSWORD_TOKEN: ((sonatype-password-token))
 - name: publish-eclipse-update-site
   serial: true
   plan:
@@ -177,9 +177,7 @@ jobs:
     file: git-repo/ci/tasks/publish-eclipse-update-site.yml
     params:
       BINTRAY_USERNAME: ((bintray-username))
-      BINTRAY_PASSWORD: ((bintray-password))
-      SONATYPE_USERNAME: ((sonatype-username))
-      SONATYPE_PASSWORD: ((sonatype-password))
+      BINTRAY_API_KEY: ((bintray-api-key))
       BINTRAY_SUBJECT: ((bintray-subject))
       BINTRAY_REPO: ((bintray-repo))
 groups:
