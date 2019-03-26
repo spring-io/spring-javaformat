@@ -199,6 +199,21 @@ Spring Framework manually formats code, where as Spring Boot uses automatic form
 Formatting and Checkstyle alone are not enough to produce truly consistent code.
 Here are some tips that we've found useful when developing Spring Boot.
 
+==== Disabling formatting for blocks of code
+Some code isn't particularly amenable to automatic formatting.
+For example, Spring Security configurations often work better when manually formatted.
+
+If you need to disable formatting for a specific block of code you can enclose it in a `@formatter:off` / `@formatter:on` set: 
+
+[source,java]
+----
+// @formatter:off
+
+... code not be formatted
+
+// @formatter:on
+----
+
 ==== Wrapping
 The source formatter intentionally uses a low character count of 90 chars for wrapping.
 If you're used to longer lines, this can take some getting used to.
