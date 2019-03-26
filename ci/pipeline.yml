@@ -44,6 +44,12 @@ resources:
     username: ((artifactory-username))
     password: ((artifactory-password))
     build_name: ((build-name))
+- name: github-release
+  type: github-release
+  source:
+    owner: spring-io
+    repository: spring-javaformat
+    access_token: ((github-release-notes-access-token))
 jobs:
 - name: build-spring-javaformat-ci-images
   plan:
@@ -112,6 +118,11 @@ jobs:
     file: git-repo/ci/tasks/stage.yml
     params:
       RELEASE_TYPE: RELEASE
+  - task: generate-release-notes
+    file: git-repo/ci/tasks/generate-release-notes.yml
+    params:
+      GITHUB_USERNAME: ((github-username))
+      GITHUB_TOKEN: ((github-release-notes-access-token))
   - put: artifactory-repo
     params:
       <<: *artifactory-params
@@ -119,6 +130,11 @@ jobs:
   - put: git-repo
     params:
       repository: stage-git-repo
+  - put: github-release
+    params:
+      name: generated-release-notes/tag
+      tag: generated-release-notes/tag
+      body: generated-release-notes/release-notes
 - name: promote-release
   serial: true
   plan:
