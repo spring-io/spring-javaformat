@@ -61,7 +61,7 @@
 									classname="io.spring.javaformat.formatter.eclipse.rewrite.EclipseRewriter"
 									failonerror="true">
 									<arg
-										value="${project.build.directory}/${project.artifactId}-${project.version}.jar" />
+										value="${project.build.directory}${file.separator}${project.artifactId}-${project.version}.jar" />
 								</java>
 							</target>
 						</configuration>
