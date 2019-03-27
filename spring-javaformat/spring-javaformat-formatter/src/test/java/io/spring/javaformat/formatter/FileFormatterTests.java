@@ -33,6 +33,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class FileFormatterTests extends AbstractFormatterTests {
 
+	private static final boolean RUNNING_ON_WINDOWS = System.getProperty("os.name")
+			.toLowerCase().contains("win");
+
 	public FileFormatterTests(File source, File expected) {
 		super(source, expected);
 	}
@@ -59,12 +62,14 @@ public class FileFormatterTests extends AbstractFormatterTests {
 		FileEdit edit = new FileFormatter().formatFile(source, StandardCharsets.UTF_8);
 		String formattedContent = edit.getFormattedContent();
 		String expected = read(getExpected());
-		System.out.println(source);
-		System.out.println("----- got");
-		System.out.println(formattedContent);
-		System.out.println("----- expected");
-		System.out.println(expected);
-		System.out.println("-----");
+		if (!RUNNING_ON_WINDOWS) {
+			System.out.println(source);
+			System.out.println("----- got");
+			System.out.println(formattedContent);
+			System.out.println("----- expected");
+			System.out.println(expected);
+			System.out.println("-----");
+		}
 		assertThat(formattedContent).isEqualTo(expected);
 	}
 
