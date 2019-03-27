@@ -24,6 +24,7 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 
@@ -45,7 +46,7 @@ public final class EclipseRewriter {
 
 	public void rewrite(String file) throws IOException {
 		System.out.println("Rewriting classes in " + file);
-		URI uri = URI.create("jar:file:" + file);
+		URI uri = URI.create("jar:file:" + Paths.get(file).toUri().getPath());
 		try (FileSystem zip = FileSystems.newFileSystem(uri,
 				Collections.singletonMap("create", "true"))) {
 			rewrite(zip);
