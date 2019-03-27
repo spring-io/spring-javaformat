@@ -53,6 +53,9 @@ import org.xml.sax.InputSource;
 @RunWith(Parameterized.class)
 public class SpringChecksTests {
 
+	private static final boolean RUNNING_ON_WINDOWS = System.getProperty("os.name")
+			.toLowerCase().contains("win");
+
 	private static final File SOURCES_DIR = new File("src/test/resources/source");
 
 	private static final File CHECKS_DIR = new File("src/test/resources/check");
@@ -106,7 +109,9 @@ public class SpringChecksTests {
 	private void processAndCheckResults(RootModule rootModule)
 			throws CheckstyleException {
 		rootModule.addListener(this.parameter.getAssersionsListener());
-		printDebugInfo(this.parameter.getSourceFile());
+		if (!RUNNING_ON_WINDOWS) {
+			printDebugInfo(this.parameter.getSourceFile());
+		}
 		rootModule.process(Arrays.asList(this.parameter.getSourceFile()));
 	}
 
