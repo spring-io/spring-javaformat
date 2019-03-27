@@ -30,12 +30,14 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class VerifyApply {
 
+	private static final String LF = System.lineSeparator();
+
 	private static final String JAVA_FILE = "src/main/java/simple/Simple.java";
 
 	public void verify(File base) throws IOException {
 		String formated = new String(Files.readAllBytes(base.toPath().resolve(JAVA_FILE)),
 				StandardCharsets.UTF_8);
-		assertThat(formated).contains("Simple.\n *\n * @author")
+		assertThat(formated).contains("Simple." + LF + " *" + LF + " * @author")
 				.contains("public class Simple {");
 	}
 
