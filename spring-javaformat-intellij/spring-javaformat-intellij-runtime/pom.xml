@@ -13,8 +13,8 @@
 	<name>Spring JavaFormat IntelliJ Runtime</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
-		<intellij.binary>https://www.jetbrains.com/intellij-repository/releases/com/jetbrains/intellij/idea/ideaIC/2018.3.5/ideaIC-2018.3.5.zip</intellij.binary>
-		<intellij.source>https://github.com/JetBrains/intellij-community/archive/idea/183.6156.4.zip</intellij.source>
+		<intellij.binary>https://www.jetbrains.com/intellij-repository/releases/com/jetbrains/intellij/idea/ideaIC/2019.1/ideaIC-2019.1.zip</intellij.binary>
+		<intellij.source>https://github.com/JetBrains/intellij-community/archive/idea/191.6183.87.zip</intellij.source>
 	</properties>
 	<build>
 		<plugins>
@@ -81,6 +81,8 @@
 										<include
 											name="*/platform/core-api/src/**" />
 										<include
+											name="*/platform/platform-impl/src/**" />
+										<include
 											name="*/platform/util/src/**" />
 										<include
 											name="*/platform/extensions/src/**" />
@@ -98,6 +100,9 @@
 								<zip
 									destfile="${project.build.directory}/intellij-source/platform-api-sources.zip"
 									basedir="${project.build.directory}/intellij-source/platform/core-api/src" />
+								<zip
+									destfile="${project.build.directory}/intellij-source/platform-impl-sources.zip"
+									basedir="${project.build.directory}/intellij-source/platform/platform-impl/src" />
 								<zip
 									destfile="${project.build.directory}/intellij-source/util-sources.zip"
 									basedir="${project.build.directory}/intellij-source/platform/util/src" />
@@ -137,6 +142,23 @@
 							<sources>${project.build.directory}/intellij-source/platform-api-sources.zip</sources>
 							<groupId>io.spring.javaformat.intellij</groupId>
 							<artifactId>platform-api</artifactId>
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+					<execution>
+						<id>install-intellij-platform-impl</id>
+						<phase>install</phase>
+						<inherited>false</inherited>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.build.directory}/intellij/platform-impl.jar</file>
+							<sources>${project.build.directory}/intellij-source/platform-impl-sources.zip</sources>
+							<groupId>io.spring.javaformat.intellij</groupId>
+							<artifactId>platform-impl</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
 							<generatePom>true</generatePom>

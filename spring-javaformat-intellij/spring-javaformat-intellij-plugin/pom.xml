@@ -52,6 +52,12 @@
 		</dependency>
 		<dependency>
 			<groupId>io.spring.javaformat.intellij</groupId>
+			<artifactId>platform-impl</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.spring.javaformat.intellij</groupId>
 			<artifactId>util</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
