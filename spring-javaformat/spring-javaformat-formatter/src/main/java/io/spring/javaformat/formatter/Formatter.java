@@ -112,8 +112,19 @@ public class Formatter extends CodeFormatter {
 	 * @return the text edit
 	 */
 	public TextEdit format(String source, IRegion[] regions) {
+		return format(source, regions, DEFAULT_LINE_SEPARATOR);
+	}
+
+	/**
+	 * Format specific subsections of the given source content.
+	 * @param source the source content to format
+	 * @param regions the regions to format
+	 * @param lineSeparator the line separator
+	 * @return the text edit
+	 */
+	public TextEdit format(String source, IRegion[] regions, String lineSeparator) {
 		return format(DEFAULT_COMPONENTS, source, regions, DEFAULT_INDENTATION_LEVEL,
-				DEFAULT_LINE_SEPARATOR);
+				lineSeparator);
 	}
 
 	@Override

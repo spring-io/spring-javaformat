@@ -45,6 +45,8 @@ import org.eclipse.text.edits.TextEdit;
  */
 class SpringReformatter {
 
+	private static final String NORMALIZED_LINE_SEPARATOR = "\n";
+
 	private final Supplier<Project> project;
 
 	private final Supplier<Application> application;
@@ -101,7 +103,7 @@ class SpringReformatter {
 			Formatter formatter = new Formatter();
 			String source = document.getText();
 			IRegion[] regions = EclipseRegionAdapter.asArray(ranges);
-			TextEdit edit = formatter.format(source, regions);
+			TextEdit edit = formatter.format(source, regions, NORMALIZED_LINE_SEPARATOR);
 			applyEdit(document, edit);
 		}
 	}
