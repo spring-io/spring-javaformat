@@ -42,7 +42,7 @@
 		<!-- Class Design -->
 		<module name="com.puppycrawl.tools.checkstyle.checks.design.FinalClassCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.design.InterfaceIsTypeCheck" />
-		<module name="com.puppycrawl.tools.checkstyle.checks.design.HideUtilityClassConstructorCheck" />
+		<module name="io.spring.javaformat.checkstyle.check.SpringHideUtilityClassConstructor" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.design.MutableExceptionCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.design.InnerTypeLastCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.design.OneTopLevelClassCheck" />

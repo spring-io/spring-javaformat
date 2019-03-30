@@ -1,0 +1,1 @@
++HideUtilityClassConstructorInvalid.java:22:1: hide.utility.class [SpringHideUtilityClassConstructor]
