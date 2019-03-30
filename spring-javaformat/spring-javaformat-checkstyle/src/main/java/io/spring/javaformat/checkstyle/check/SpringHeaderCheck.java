@@ -23,6 +23,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -59,11 +63,20 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 	 */
 	public static final String DEFAULT_HEADER_COPYRIGHT_PATTERN = "20\\d\\d(-20\\d\\d)?";
 
+	private static final String DEFAULT_CHARSET = System.getProperty("file.encoding",
+			StandardCharsets.UTF_8.name());
+
+	private String charset = DEFAULT_CHARSET;
+
 	private String headerType = DEFAULT_HEADER_TYPE;
+
+	private URI headerFile;
 
 	private String headerCopyrightPattern = DEFAULT_HEADER_COPYRIGHT_PATTERN;
 
 	private String packageInfoHeaderType;
+
+	private URI packageInfoHeaderFile;
 
 	private HeaderCheck check;
 
@@ -72,23 +85,28 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 	@Override
 	protected void finishLocalSetup() throws CheckstyleException {
 		try {
-			this.check = createCheck(this.headerType);
-			this.packageInfoCheck = createCheck(this.packageInfoHeaderType != null
-					? this.packageInfoHeaderType : this.headerType);
+			this.check = createCheck(this.headerType, this.headerFile);
+			String packageInfoHeaderType = this.packageInfoHeaderType != null
+					? this.packageInfoHeaderType : this.headerType;
+			URI packageInfoHeaderFile = this.packageInfoHeaderFile != null
+					? this.packageInfoHeaderFile : this.headerFile;
+			this.packageInfoCheck = createCheck(packageInfoHeaderType,
+					packageInfoHeaderFile);
 		}
 		catch (IOException ex) {
 			throw new IllegalStateException(ex);
 		}
 	}
 
-	private HeaderCheck createCheck(String headerType) throws IOException {
+	private HeaderCheck createCheck(String headerType, URI headerFile)
+			throws IOException {
 		if (UNCHECKED.equals(headerType)) {
 			return HeaderCheck.NONE;
 		}
 		if (NONE.equals(headerType)) {
 			return new NoHeaderCheck();
 		}
-		return new RegexHeaderCheck(headerType, this.headerCopyrightPattern);
+		return new RegexHeaderCheck(headerType, headerFile);
 	}
 
 	@Override
@@ -104,8 +122,20 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 		return this.check;
 	}
 
+	public void setCharset(String charset) throws UnsupportedEncodingException {
+		if (!Charset.isSupported(charset)) {
+			throw new UnsupportedEncodingException(
+					"unsupported charset: '" + charset + "'");
+		}
+		this.charset = charset;
+	}
+
 	public void setHeaderType(String headerType) {
 		this.headerType = headerType;
+	}
+
+	public void setHeaderFile(URI headerFile) throws CheckstyleException {
+		this.headerFile = headerFile;
 	}
 
 	public void setHeaderCopyrightPattern(String headerCopyrightPattern) {
@@ -114,6 +144,10 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 
 	public void setPackageInfoHeaderType(String packageInfoHeaderType) {
 		this.packageInfoHeaderType = packageInfoHeaderType;
+	}
+
+	public void setPackageInfoHeaderFile(URI packageInfoHeaderFile) {
+		this.packageInfoHeaderFile = packageInfoHeaderFile;
 	}
 
 	/**
@@ -142,19 +176,26 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 
 		private final List<Pattern> lines;
 
-		RegexHeaderCheck(String type, String copyrightPattern) throws IOException {
+		RegexHeaderCheck(String type, URI file) throws IOException {
+			this.lines = loadLines(openInputStream(type, file));
+		}
+
+		private InputStream openInputStream(String type, URI file) throws IOException {
+			if (file != null) {
+				return file.toURL().openStream();
+			}
 			String name = "header-" + type + ".txt";
 			InputStream inputStream = SpringHeaderCheck.class.getResourceAsStream(name);
 			if (inputStream == null) {
 				throw new IllegalStateException("Unknown header type " + type);
 			}
-			this.lines = loadLines(inputStream, copyrightPattern);
+			return inputStream;
 		}
 
-		private List<Pattern> loadLines(InputStream inputStream, String copyrightPattern)
-				throws IOException {
+		private List<Pattern> loadLines(InputStream inputStream) throws IOException {
 			inputStream = new BufferedInputStream(inputStream);
-			try (Reader reader = new InputStreamReader(inputStream, "UTF-8")) {
+			try (Reader reader = new InputStreamReader(inputStream,
+					SpringHeaderCheck.this.charset)) {
 				LineNumberReader lineReader = new LineNumberReader(reader);
 				List<Pattern> lines = new ArrayList<>();
 				while (true) {
@@ -162,7 +203,8 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 					if (line == null) {
 						return lines;
 					}
-					lines.add(loadLine(line, copyrightPattern));
+					lines.add(loadLine(line,
+							SpringHeaderCheck.this.headerCopyrightPattern));
 				}
 			}
 		}

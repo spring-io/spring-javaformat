@@ -59,6 +59,8 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 
 	private String headerCopyrightPattern = SpringHeaderCheck.DEFAULT_HEADER_COPYRIGHT_PATTERN;
 
+	private String headerFile;
+
 	/**
 	 * Sets tab width.
 	 * @param tabWidth the distance between tab stops
@@ -91,10 +93,17 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 		context.add("tabWidth", String.valueOf(this.tabWidth));
 		context.add("moduleFactory", this.moduleFactory);
 		Properties properties = new Properties();
-		properties.put("headerType", this.headerType);
-		properties.put("headerCopyrightPattern", this.headerCopyrightPattern);
+		put(properties, "headerType", this.headerType);
+		put(properties, "headerCopyrightPattern", this.headerCopyrightPattern);
+		put(properties, "headerFile", this.headerFile);
 		this.checks = new SpringConfigurationLoader(context, this.moduleFactory)
 				.load(new PropertiesExpander(properties));
+	}
+
+	private void put(Properties properties, String name, Object value) {
+		if (value != null) {
+			properties.put(name, value);
+		}
 	}
 
 	@Override
@@ -145,6 +154,10 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 
 	public void setHeaderCopyrightPattern(String headerCopyrightPattern) {
 		this.headerCopyrightPattern = headerCopyrightPattern;
+	}
+
+	public void setHeaderFile(String headerFile) {
+		this.headerFile = headerFile;
 	}
 
 }

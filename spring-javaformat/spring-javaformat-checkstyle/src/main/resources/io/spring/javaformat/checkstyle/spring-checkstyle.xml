@@ -8,6 +8,7 @@
 	<module name="io.spring.javaformat.checkstyle.check.SpringHeaderCheck">
 		<property name="fileExtensions" value="java" />
 		<property name="headerType" value="${headerType}"/>
+		<property name="headerFile" value="${headerFile}" default=""/>
 		<property name="headerCopyrightPattern" value="${headerCopyrightPattern}"/>
 	</module>
 	<module name="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck">

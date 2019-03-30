@@ -1,0 +1,1 @@
+// (c) Somebody ${copyright-pattern}

@@ -52,6 +52,7 @@ public class SpringConfigurationLoaderTests {
 	private PropertyResolver getPropertyResolver() {
 		Properties properties = new Properties();
 		properties.put("headerType", SpringHeaderCheck.DEFAULT_HEADER_TYPE);
+		properties.put("headerFile", "");
 		properties.put("headerCopyrightPattern",
 				SpringHeaderCheck.DEFAULT_HEADER_COPYRIGHT_PATTERN);
 		return new PropertiesExpander(properties);
