@@ -85,7 +85,7 @@ public class ProjectPropertiesTests {
 		ProjectSettingsFile prefs = getFile(files, "org.eclipse.jdt.ui.prefs");
 		String content = loadContent(properties.getModifiedContent(prefs));
 		assertThat(content)
-				.contains("Copyright 2016-2019 the original author or authors");
+				.contains("Copyright 2016-2020 the original author or authors");
 
 	}
 
