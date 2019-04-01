@@ -22,9 +22,6 @@ import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import io.spring.javaformat.eclipse.Executor;
-import io.spring.javaformat.eclipse.Messages;
-import io.spring.javaformat.eclipse.projectsettings.ProjectSettingsFilesLocator;
 import org.eclipse.buildship.core.GradleBuild;
 import org.eclipse.buildship.core.internal.CorePlugin;
 import org.eclipse.buildship.core.internal.workspace.FetchStrategy;
@@ -42,6 +39,10 @@ import org.gradle.tooling.CancellationTokenSource;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.model.GradleTask;
 import org.gradle.tooling.model.eclipse.EclipseProject;
+
+import io.spring.javaformat.eclipse.Executor;
+import io.spring.javaformat.eclipse.Messages;
+import io.spring.javaformat.eclipse.projectsettings.ProjectSettingsFilesLocator;
 
 /**
  * Job to trigger refresh of project specific settings when the gradle plugin is used.

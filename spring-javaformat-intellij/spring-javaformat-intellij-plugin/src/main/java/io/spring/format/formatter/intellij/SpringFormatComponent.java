@@ -27,13 +27,14 @@ import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.codeStyle.CodeStyleManager;
+import org.picocontainer.MutablePicoContainer;
+
 import io.spring.format.formatter.intellij.codestyle.SpringCodeStyleManager;
 import io.spring.format.formatter.intellij.codestyle.monitor.FileMonitor;
 import io.spring.format.formatter.intellij.codestyle.monitor.GradleMonitor;
 import io.spring.format.formatter.intellij.codestyle.monitor.MavenMonitor;
 import io.spring.format.formatter.intellij.codestyle.monitor.Monitors;
 import io.spring.format.formatter.intellij.codestyle.monitor.Trigger.State;
-import org.picocontainer.MutablePicoContainer;
 
 /**
  * {@link ProjectComponent} to add Spring Java Format IntelliJ support.

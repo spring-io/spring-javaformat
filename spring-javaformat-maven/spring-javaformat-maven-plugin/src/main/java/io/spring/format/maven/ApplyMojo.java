@@ -20,13 +20,14 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.util.List;
 
-import io.spring.javaformat.formatter.FileEdit;
-import io.spring.javaformat.formatter.FileFormatter;
-import io.spring.javaformat.formatter.FileFormatterException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+
+import io.spring.javaformat.formatter.FileEdit;
+import io.spring.javaformat.formatter.FileFormatter;
+import io.spring.javaformat.formatter.FileFormatterException;
 
 /**
  * Applies source formatting to the codebase.

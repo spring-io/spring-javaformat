@@ -18,10 +18,11 @@ package io.spring.javaformat.eclipse.formatter;
 
 import java.util.Map;
 
-import io.spring.javaformat.formatter.Formatter;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.text.edits.TextEdit;
+
+import io.spring.javaformat.formatter.Formatter;
 
 /**
  * Eclipse {@link CodeFormatter} for Spring formatting.

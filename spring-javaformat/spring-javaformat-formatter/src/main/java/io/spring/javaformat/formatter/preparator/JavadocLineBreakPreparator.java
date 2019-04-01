@@ -20,9 +20,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import io.spring.javaformat.formatter.eclipse.Preparator;
-import io.spring.javaformat.formatter.eclipse.Token;
-import io.spring.javaformat.formatter.eclipse.TokenManager;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Comment;
@@ -33,6 +30,10 @@ import org.eclipse.jdt.core.dom.TextElement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jdt.internal.compiler.parser.TerminalTokens;
+
+import io.spring.javaformat.formatter.eclipse.Preparator;
+import io.spring.javaformat.formatter.eclipse.Token;
+import io.spring.javaformat.formatter.eclipse.TokenManager;
 
 /**
  * {@link Preparator} to fine tune Javadoc whitespace.

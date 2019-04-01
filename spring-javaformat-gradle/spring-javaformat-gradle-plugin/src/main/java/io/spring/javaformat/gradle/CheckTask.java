@@ -21,9 +21,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import io.spring.javaformat.formatter.FileEdit;
 import org.gradle.api.GradleException;
 import org.gradle.api.tasks.TaskAction;
+
+import io.spring.javaformat.formatter.FileEdit;
 
 /**
  * {@link FormatterTask} to check formatting.

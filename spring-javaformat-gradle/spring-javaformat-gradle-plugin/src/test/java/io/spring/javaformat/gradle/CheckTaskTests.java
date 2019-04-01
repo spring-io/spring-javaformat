@@ -18,11 +18,12 @@ package io.spring.javaformat.gradle;
 
 import java.io.IOException;
 
-import io.spring.javaformat.gradle.testkit.GradleBuild;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.TaskOutcome;
 import org.junit.Rule;
 import org.junit.Test;
+
+import io.spring.javaformat.gradle.testkit.GradleBuild;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
