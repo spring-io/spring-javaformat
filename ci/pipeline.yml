@@ -125,11 +125,6 @@ jobs:
   - put: git-repo
     params:
       repository: stage-git-repo
-  - put: github-release
-    params:
-      name: generated-release-notes/tag
-      tag: generated-release-notes/tag
-      body: generated-release-notes/release-notes
 - name: promote-release
   serial: true
   plan:
@@ -177,6 +172,11 @@ jobs:
     params:
       GITHUB_USERNAME: ((github-username))
       GITHUB_TOKEN: ((github-release-notes-access-token))
+  - put: github-release
+    params:
+      name: generated-release-notes/tag
+      tag: generated-release-notes/tag
+      body: generated-release-notes/release-notes
 - name: publish-eclipse-update-site
   serial: true
   plan:
