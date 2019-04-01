@@ -37,7 +37,10 @@ echo "Setting next development version (v$nextVersion)"
 run_maven versions:set -DnewVersion=$nextVersion -DgenerateBackupPoms=false
 run_maven org.eclipse.tycho:tycho-versions-plugin:update-eclipse-metadata
 sed -i "s/:release-version:.*/:release-version: ${stageVersion}/g" README.adoc
-git add . > /dev/null
+sed -i "s/spring-javaformat-gradle-plugin:.*/spring-javaformat-gradle-plugin:${stageVersion}\"\)/g" samples/spring-javaformat-gradle-sample/build.gradle
+sed -i "s/spring-javaformat-checkstyle:.*/spring-javaformat-checkstyle:${stageVersion}\"\)/g" samples/spring-javaformat-gradle-sample/build.gradle
+sed -i "s|<spring-javaformat.version>.*</spring-javaformat.version>|<spring-javaformat.version>${stageVersion}</spring-javaformat.version>|" samples/spring-javaformat-maven-sample/pom.xml 
+git add -u . > /dev/null
 git commit -m"Next development version (v${nextVersion})" > /dev/null
 
 echo "DONE"
