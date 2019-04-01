@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-version=$( cat built-artifact/version )
+version=$( cat version/version )
 
 java -jar /github-release-notes-generator.jar \
   --releasenotes.github.username=${GITHUB_USERNAME} \
