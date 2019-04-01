@@ -31,8 +31,6 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
-import io.spring.javaformat.formatter.Formatter;
-import io.spring.javaformat.formatter.eclipse.Preparator;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.gradle.internal.impldep.com.google.common.base.Charsets;
 import org.gradle.testkit.runner.BuildResult;
@@ -42,6 +40,9 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.xml.sax.InputSource;
+
+import io.spring.javaformat.formatter.Formatter;
+import io.spring.javaformat.formatter.eclipse.Preparator;
 
 /**
  * A {@link TestRule} for running a Gradle build using {@link GradleRunner}.

@@ -29,6 +29,7 @@ import com.intellij.openapi.wm.StatusBarWidget;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.openapi.wm.WindowManagerListener;
 import com.intellij.util.Consumer;
+
 import io.spring.format.formatter.intellij.codestyle.monitor.Trigger.State;
 
 /**

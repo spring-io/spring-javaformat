@@ -26,8 +26,9 @@ import com.intellij.openapi.externalSystem.service.project.ProjectDataManager;
 import com.intellij.openapi.externalSystem.service.project.manage.ProjectDataImportListener;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.messages.MessageBusConnection;
-import io.spring.format.formatter.intellij.codestyle.monitor.Trigger.State;
 import org.jetbrains.plugins.gradle.util.GradleConstants;
+
+import io.spring.format.formatter.intellij.codestyle.monitor.Trigger.State;
 
 /**
  * {@link Monitor} that looks for a {@code spring-javaformat-gradle-plugin} declaration in

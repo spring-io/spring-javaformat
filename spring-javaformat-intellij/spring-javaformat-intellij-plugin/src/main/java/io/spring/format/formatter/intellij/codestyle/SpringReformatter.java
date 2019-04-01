@@ -33,9 +33,10 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
-import io.spring.javaformat.formatter.Formatter;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.text.edits.TextEdit;
+
+import io.spring.javaformat.formatter.Formatter;
 
 /**
  * Reformatter used by {@link SpringCodeStyleManager} to determine when formatting can
