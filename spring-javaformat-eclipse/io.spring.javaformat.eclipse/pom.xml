@@ -22,5 +22,11 @@
 			<scope>runtime</scope>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>io.spring.javaformat</groupId>
+			<artifactId>spring-javaformat-checkstyle</artifactId>
+			<scope>runtime</scope>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

@@ -25,4 +25,16 @@
           class="io.spring.javaformat.eclipse.Startup">
     </startup>
  </extension>
+ <extension
+       point="net.sf.eclipsecs.core.checkstyleAddonProvider">
+ </extension>
+ <extension
+       id="id2"
+       point="net.sf.eclipsecs.core.configurations">
+    <check-configuration
+          description="Spring Build-in configuration"
+          location="io/spring/javaformat/checkstyle/checkstyle.xml"
+          name="Spring Builtin Checks">
+    </check-configuration>
+ </extension>
 </plugin>
