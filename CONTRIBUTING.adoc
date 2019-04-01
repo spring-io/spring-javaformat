@@ -37,6 +37,13 @@ NOTE: You may need to increase the amount of memory available to Maven by settin
 You can import the code into any Eclipse based distribution as long as it had the https://eclipse.org/m2e/[M2Eclipse] eclipse plugin.
 If you don't already have m2eclipse installed it is available from the "Eclipse marketplace".
 
+Once imported, you can apply eclipse settings by running:
+
+[indent=0]
+----
+	$ ./mvnw -Peclipse validate
+----
+
 NOTE: You'll need to close the `spring-javaformat-formatter-eclipse` and `spring-javaformat-formatter-eclipse-runtime` projects following import since they contain rewritten packages that aren't supported by the IDE
 
 === Importing into other IDEs
