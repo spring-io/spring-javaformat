@@ -25,5 +25,5 @@ checkstyle {
 }
 
 dependencies {
-	checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.7-SNAPSHOT")
+	checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.8-SNAPSHOT")
 }
