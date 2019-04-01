@@ -4,7 +4,7 @@ inputs:
 - name: git-repo
 - name: artifactory-repo
 params:
-  RELEASE_TYPE
+  RELEASE_TYPE:
   ARTIFACTORY_SERVER:
   ARTIFACTORY_USERNAME:
   ARTIFACTORY_PASSWORD:
