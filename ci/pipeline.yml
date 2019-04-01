@@ -118,11 +118,6 @@ jobs:
     file: git-repo/ci/tasks/stage.yml
     params:
       RELEASE_TYPE: RELEASE
-  - task: generate-release-notes
-    file: git-repo/ci/tasks/generate-release-notes.yml
-    params:
-      GITHUB_USERNAME: ((github-username))
-      GITHUB_TOKEN: ((github-release-notes-access-token))
   - put: artifactory-repo
     params:
       <<: *artifactory-params
@@ -177,6 +172,11 @@ jobs:
       BINTRAY_REPO: ((bintray-repo))
       SONATYPE_USER_TOKEN: ((sonatype-user-token))
       SONATYPE_PASSWORD_TOKEN: ((sonatype-password-token))
+  - task: generate-release-notes
+    file: git-repo/ci/tasks/generate-release-notes.yml
+    params:
+      GITHUB_USERNAME: ((github-username))
+      GITHUB_TOKEN: ((github-release-notes-access-token))
 - name: publish-eclipse-update-site
   serial: true
   plan:
