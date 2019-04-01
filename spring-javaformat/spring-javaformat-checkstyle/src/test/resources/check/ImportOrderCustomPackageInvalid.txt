@@ -1,0 +1,1 @@
++ImportOrderCustomPackageInvalid.java:21: import.ordering [SpringImportOrder]

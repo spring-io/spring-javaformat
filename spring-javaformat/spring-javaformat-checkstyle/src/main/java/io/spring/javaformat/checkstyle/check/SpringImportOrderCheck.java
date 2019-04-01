@@ -25,7 +25,10 @@ import com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck;
  */
 public class SpringImportOrderCheck extends ImportOrderCheck {
 
-	private static final String DEFAULT_PROJECT_ROOT_PACKAGE = "org.springframework";
+	/**
+	 * The default root package.
+	 */
+	public static final String DEFAULT_PROJECT_ROOT_PACKAGE = "org.springframework";
 
 	public SpringImportOrderCheck() {
 		setProjectRootPackage(DEFAULT_PROJECT_ROOT_PACKAGE);

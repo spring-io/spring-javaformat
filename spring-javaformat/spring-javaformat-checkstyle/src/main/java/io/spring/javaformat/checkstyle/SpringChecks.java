@@ -38,6 +38,7 @@ import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
 import com.puppycrawl.tools.checkstyle.filters.SuppressFilterElement;
 
 import io.spring.javaformat.checkstyle.check.SpringHeaderCheck;
+import io.spring.javaformat.checkstyle.check.SpringImportOrderCheck;
 
 /**
  * {@link FileSetCheck} that applies Spring checkstype rules.
@@ -61,6 +62,8 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 	private String headerCopyrightPattern = SpringHeaderCheck.DEFAULT_HEADER_COPYRIGHT_PATTERN;
 
 	private String headerFile;
+
+	private String projectRootPackage = SpringImportOrderCheck.DEFAULT_PROJECT_ROOT_PACKAGE;
 
 	/**
 	 * Sets tab width.
@@ -97,6 +100,7 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 		put(properties, "headerType", this.headerType);
 		put(properties, "headerCopyrightPattern", this.headerCopyrightPattern);
 		put(properties, "headerFile", this.headerFile);
+		put(properties, "projectRootPackage", this.projectRootPackage);
 		this.checks = new SpringConfigurationLoader(context, this.moduleFactory)
 				.load(new PropertiesExpander(properties));
 	}
@@ -159,6 +163,10 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 
 	public void setHeaderFile(String headerFile) {
 		this.headerFile = headerFile;
+	}
+
+	public void setProjectRootPackage(String projectRootPackage) {
+		this.projectRootPackage = projectRootPackage;
 	}
 
 }

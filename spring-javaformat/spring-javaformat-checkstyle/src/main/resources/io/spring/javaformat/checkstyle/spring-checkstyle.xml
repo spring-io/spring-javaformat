@@ -81,7 +81,9 @@
 		<module name="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck">
 			<property name="processJavadoc" value="true" />
 		</module>
-		<module name="io.spring.javaformat.checkstyle.check.SpringImportOrderCheck"/>
+		<module name="io.spring.javaformat.checkstyle.check.SpringImportOrderCheck">
+			<property name="projectRootPackage" value="${projectRootPackage}"/>
+		</module>
 
 		<!-- Javadoc Comments -->
 		<module name="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTypeCheck">

@@ -28,6 +28,7 @@ import com.puppycrawl.tools.checkstyle.api.FileSetCheck;
 import org.junit.Test;
 
 import io.spring.javaformat.checkstyle.check.SpringHeaderCheck;
+import io.spring.javaformat.checkstyle.check.SpringImportOrderCheck;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -56,6 +57,8 @@ public class SpringConfigurationLoaderTests {
 		properties.put("headerFile", "");
 		properties.put("headerCopyrightPattern",
 				SpringHeaderCheck.DEFAULT_HEADER_COPYRIGHT_PATTERN);
+		properties.put("projectRootPackage",
+				SpringImportOrderCheck.DEFAULT_PROJECT_ROOT_PACKAGE);
 		return new PropertiesExpander(properties);
 	}
 
