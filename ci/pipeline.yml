@@ -176,7 +176,7 @@ jobs:
     params:
       name: generated-release-notes/tag
       tag: generated-release-notes/tag
-      body: generated-release-notes/release-notes
+      body: generated-release-notes/release-notes.md
 - name: publish-eclipse-update-site
   serial: true
   plan:
