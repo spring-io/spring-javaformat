@@ -45,17 +45,17 @@ if [[ ${RELEASE_TYPE} = "RELEASE" ]]; then
 		POST "${ARTIFACTORY_SERVER}/api/build/distribute/${buildName}/${buildNumber}" > /dev/null || { echo "Failed to distribute" >&2; exit 1; }
 
 	echo "Waiting for artifacts to be published"
-	ARTIFACTS_PUBLISHED=false
+	artifactsPublished=false
 	WAIT_TIME=5
-	COUNTER=0
-	while [ $artifactsPublished == "false" ] && [ $COUNTER -lt 60 ]; do
+	counter=0
+	while [ $artifactsPublished == "false" ] && [ $counter -lt 120 ]; do
 		result=$( curl -s https://api.bintray.com/packages/"${BINTRAY_SUBJECT}"/"${BINTRAY_REPO}"/"${groupId}" )
 		versions=$( echo "$result" | jq -r '.versions' )
 		exists=$( echo "$versions" | grep "$version" -o || true )
 		if [ "$exists" = "$version" ]; then
 			artifactsPublished=true
 		fi
-		COUNTER=$(( COUNTER + 1 ))
+		counter=$(( counter + 1 ))
 		sleep $WAIT_TIME
 	done
 	if [[ $artifactsPublished = "false" ]]; then
