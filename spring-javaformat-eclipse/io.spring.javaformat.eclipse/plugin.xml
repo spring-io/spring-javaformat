@@ -32,9 +32,9 @@
        id="id2"
        point="net.sf.eclipsecs.core.configurations">
     <check-configuration
-          description="Spring Build-in configuration"
+          description="Spring Built-in configuration"
           location="io/spring/javaformat/checkstyle/checkstyle.xml"
-          name="Spring Builtin Checks">
+          name="Spring Built-in Checks">
     </check-configuration>
  </extension>
 </plugin>
