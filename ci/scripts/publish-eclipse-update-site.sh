@@ -22,6 +22,7 @@ curl \
 releasedVersions=$( curl -f -X GET https://api.bintray.com/packages/spring/javaformat-eclipse/update-site | jq -r '.versions[]' )
 respositories=""
 while read -r releasedVersion; do
+	echo "Adding repository for ${releasedVersion}"
 	respositories="${respositories}<repository><url>https://dl.bintray.com/spring/javaformat-eclipse/${releasedVersion}</url><layout>p2</layout></repository>"
 done <<< "${releasedVersions}"
 
