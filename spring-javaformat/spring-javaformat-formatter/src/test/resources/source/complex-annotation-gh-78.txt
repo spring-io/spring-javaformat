@@ -1,0 +1,8 @@
+package sample;
+
+import sample.SpringBootTest.WebEnvironment;
+
+@SpringBootTest(classes = RibbonClientConfigurationIntegrationTests.TestLBConfig.class, properties = "test.ribbon.ServerListRefreshInterval=999")
+public class SampleApplication {
+
+}

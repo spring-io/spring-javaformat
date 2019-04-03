@@ -190,6 +190,11 @@ public class Formatter extends CodeFormatter {
 			Preparators.forEach(this::addPreparator);
 		}
 
+		@Override
+		public void setOptions(Map<String, String> options) {
+			super.setOptions(OPTIONS);
+		}
+
 	}
 
 }
