@@ -51,8 +51,7 @@ public class SpringLambdaCheck extends AbstractSpringCheck {
 			}
 			else if (!this.singleArgumentParentheses && hasParentheses) {
 				if (!isUsingParametersToDefineType(lambda)) {
-					log(lambda.getLineNo(), lambda.getColumnNo(),
-							"lambda.unnecessaryParen");
+					log(lambda.getLineNo(), lambda.getColumnNo(), "lambda.unnecessaryParen");
 				}
 			}
 		}
@@ -66,7 +65,7 @@ public class SpringLambdaCheck extends AbstractSpringCheck {
 
 	private int countDescendantsOfType(DetailAST ast, int... types) {
 		int count = 0;
-		for (int type: types) {
+		for (int type : types) {
 			count += ast.getChildCount(type);
 		}
 		DetailAST child = ast.getFirstChild();
@@ -79,8 +78,7 @@ public class SpringLambdaCheck extends AbstractSpringCheck {
 
 	private boolean hasSingleParameter(DetailAST lambda) {
 		DetailAST parameters = lambda.findFirstToken(TokenTypes.PARAMETERS);
-		return (parameters == null)
-				|| (parameters.getChildCount(TokenTypes.PARAMETER_DEF) == 1);
+		return (parameters == null) || (parameters.getChildCount(TokenTypes.PARAMETER_DEF) == 1);
 	}
 
 	private boolean isUsingParametersToDefineType(DetailAST lambda) {

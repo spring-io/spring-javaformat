@@ -80,12 +80,10 @@ public class ProjectPropertiesTests {
 		writeProperties(file, "2016-2020");
 		ProjectProperties properties = new ProjectProperties();
 		properties.addFromFolder(folder);
-		ProjectSettingsFiles files = new ProjectSettingsFilesLocator()
-				.locateSettingsFiles();
+		ProjectSettingsFiles files = new ProjectSettingsFilesLocator().locateSettingsFiles();
 		ProjectSettingsFile prefs = getFile(files, "org.eclipse.jdt.ui.prefs");
 		String content = loadContent(properties.getModifiedContent(prefs));
-		assertThat(content)
-				.contains("Copyright 2016-2020 the original author or authors");
+		assertThat(content).contains("Copyright 2016-2020 the original author or authors");
 
 	}
 

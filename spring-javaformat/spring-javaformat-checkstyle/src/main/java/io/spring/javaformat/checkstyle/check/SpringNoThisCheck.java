@@ -53,8 +53,7 @@ public class SpringNoThisCheck extends AbstractSpringCheck {
 			DetailAST sibling = ast.getPreviousSibling();
 			if (sibling != null && sibling.getType() == TokenTypes.LITERAL_THIS) {
 				DetailAST parent = getFirstNonDotParent(ast);
-				if (!(this.allowAssignement && parent != null
-						&& parent.getType() == TokenTypes.ASSIGN)) {
+				if (!(this.allowAssignement && parent != null && parent.getType() == TokenTypes.ASSIGN)) {
 					log(ast.getLineNo(), ast.getColumnNo(), "nothis.unexpected", name);
 				}
 			}

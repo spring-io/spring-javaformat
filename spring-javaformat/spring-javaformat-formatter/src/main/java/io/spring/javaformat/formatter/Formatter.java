@@ -44,8 +44,7 @@ public class Formatter extends CodeFormatter {
 	/**
 	 * The components that will be formatted by default.
 	 */
-	private static final int DEFAULT_COMPONENTS = CodeFormatter.K_COMPILATION_UNIT
-			| CodeFormatter.F_INCLUDE_COMMENTS;
+	private static final int DEFAULT_COMPONENTS = CodeFormatter.K_COMPILATION_UNIT | CodeFormatter.F_INCLUDE_COMMENTS;
 
 	/**
 	 * The default indentation level.
@@ -93,16 +92,14 @@ public class Formatter extends CodeFormatter {
 	 * @return the text edit
 	 */
 	public TextEdit format(String source, int offset, int length) {
-		return format(DEFAULT_COMPONENTS, source, offset, length,
-				DEFAULT_INDENTATION_LEVEL, DEFAULT_LINE_SEPARATOR);
+		return format(DEFAULT_COMPONENTS, source, offset, length, DEFAULT_INDENTATION_LEVEL, DEFAULT_LINE_SEPARATOR);
 	}
 
 	@Override
-	public TextEdit format(int kind, String source, int offset, int length,
-			int indentationLevel, String lineSeparator) {
+	public TextEdit format(int kind, String source, int offset, int length, int indentationLevel,
+			String lineSeparator) {
 		return nlsSafe(() -> {
-			return this.delegate.format(kind, source, offset, length, indentationLevel,
-					lineSeparator);
+			return this.delegate.format(kind, source, offset, length, indentationLevel, lineSeparator);
 		});
 	}
 
@@ -124,15 +121,12 @@ public class Formatter extends CodeFormatter {
 	 * @return the text edit
 	 */
 	public TextEdit format(String source, IRegion[] regions, String lineSeparator) {
-		return format(DEFAULT_COMPONENTS, source, regions, DEFAULT_INDENTATION_LEVEL,
-				lineSeparator);
+		return format(DEFAULT_COMPONENTS, source, regions, DEFAULT_INDENTATION_LEVEL, lineSeparator);
 	}
 
 	@Override
-	public TextEdit format(int kind, String source, IRegion[] regions,
-			int indentationLevel, String lineSeparator) {
-		return nlsSafe(() -> this.delegate.format(kind, source, regions, indentationLevel,
-				lineSeparator));
+	public TextEdit format(int kind, String source, IRegion[] regions, int indentationLevel, String lineSeparator) {
+		return nlsSafe(() -> this.delegate.format(kind, source, regions, indentationLevel, lineSeparator));
 	}
 
 	@Override
@@ -174,8 +168,7 @@ public class Formatter extends CodeFormatter {
 		static {
 			try {
 				Properties properties = new Properties();
-				try (InputStream inputStream = Formatter.class
-						.getResourceAsStream("formatter.prefs")) {
+				try (InputStream inputStream = Formatter.class.getResourceAsStream("formatter.prefs")) {
 					properties.load(inputStream);
 					OPTIONS = (Map) Collections.unmodifiableMap(properties);
 				}

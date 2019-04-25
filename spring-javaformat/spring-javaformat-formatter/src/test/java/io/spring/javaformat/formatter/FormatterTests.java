@@ -42,8 +42,7 @@ public class FormatterTests extends AbstractFormatterTests {
 		String expectedContent = read(getExpected());
 		String formattedContent = format(sourceContent);
 		if (!expectedContent.equals(formattedContent)) {
-			System.out.println(
-					"Formatted " + getSource() + " does not match " + getExpected());
+			System.out.println("Formatted " + getSource() + " does not match " + getExpected());
 			print("Source " + getSource(), sourceContent);
 			print("Expected +" + getExpected(), expectedContent);
 			print("Got", formattedContent);

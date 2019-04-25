@@ -47,24 +47,20 @@ public final class EclipseRewriter {
 	public void rewrite(String file) throws IOException {
 		System.out.println("Rewriting classes in " + file);
 		URI uri = URI.create("jar:file:" + Paths.get(file).toUri().getPath());
-		try (FileSystem zip = FileSystems.newFileSystem(uri,
-				Collections.singletonMap("create", "true"))) {
+		try (FileSystem zip = FileSystems.newFileSystem(uri, Collections.singletonMap("create", "true"))) {
 			rewrite(zip);
 		}
 	}
 
 	private void rewrite(FileSystem zip) throws IOException {
-		Path path = zip
-				.getPath("org/eclipse/jdt/internal/formatter/DefaultCodeFormatter.class");
+		Path path = zip.getPath("org/eclipse/jdt/internal/formatter/DefaultCodeFormatter.class");
 		ClassWriter writer = new ClassWriter(0);
 		try (InputStream in = Files.newInputStream(path)) {
-			DefaultCodeFormatterManipulator manipulator = new DefaultCodeFormatterManipulator(
-					writer);
+			DefaultCodeFormatterManipulator manipulator = new DefaultCodeFormatterManipulator(writer);
 			ClassReader reader = new ClassReader(in);
 			reader.accept(manipulator, 0);
 		}
-		Files.copy(new ByteArrayInputStream(writer.toByteArray()), path,
-				StandardCopyOption.REPLACE_EXISTING);
+		Files.copy(new ByteArrayInputStream(writer.toByteArray()), path, StandardCopyOption.REPLACE_EXISTING);
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -78,11 +74,9 @@ public final class EclipseRewriter {
 		}
 
 		@Override
-		public MethodVisitor visitMethod(int access, String name, String desc,
-				String signature, String[] exceptions) {
+		public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
 			if ("prepareWraps".equals(name) && Opcodes.ACC_PRIVATE == access) {
-				return super.visitMethod(Opcodes.ACC_PROTECTED, name, desc, signature,
-						exceptions);
+				return super.visitMethod(Opcodes.ACC_PROTECTED, name, desc, signature, exceptions);
 			}
 			return new DefaultCodeFormatterMethodManipulator(
 					super.visitMethod(access, name, desc, signature, exceptions));
@@ -97,8 +91,7 @@ public final class EclipseRewriter {
 		}
 
 		@Override
-		public void visitMethodInsn(int opcode, String owner, String name, String desc,
-				boolean itf) {
+		public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
 			if ("prepareWraps".equals(name) && opcode == Opcodes.INVOKESPECIAL) {
 				super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, owner, name, desc, itf);
 				return;

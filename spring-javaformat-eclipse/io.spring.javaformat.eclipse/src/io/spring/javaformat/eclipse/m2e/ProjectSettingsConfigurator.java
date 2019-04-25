@@ -39,12 +39,10 @@ import io.spring.javaformat.eclipse.projectsettings.ProjectSettingsFilesLocator;
 public class ProjectSettingsConfigurator extends AbstractProjectConfigurator {
 
 	@Override
-	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor)
-			throws CoreException {
+	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {
 		new Executor(Messages.springFormatSettingsImportError).run(() -> {
 			List<File> searchFolders = getSearchFolders(request);
-			ProjectSettingsFiles settingsFiles = new ProjectSettingsFilesLocator(
-					searchFolders).locateSettingsFiles();
+			ProjectSettingsFiles settingsFiles = new ProjectSettingsFilesLocator(searchFolders).locateSettingsFiles();
 			settingsFiles.applyToProject(request.getProject(), monitor);
 		});
 	}

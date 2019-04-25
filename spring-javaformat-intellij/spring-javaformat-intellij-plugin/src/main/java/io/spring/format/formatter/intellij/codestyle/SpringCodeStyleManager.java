@@ -39,33 +39,28 @@ public class SpringCodeStyleManager extends DelegatingCodeStyleManager {
 		this.springReformatter = new SpringReformatter(() -> getProject());
 	}
 
-	SpringCodeStyleManager(CodeStyleManager delegate,
-			SpringReformatter springReformatter) {
+	SpringCodeStyleManager(CodeStyleManager delegate, SpringReformatter springReformatter) {
 		super(delegate);
 		this.springReformatter = springReformatter;
 	}
 
 	@Override
-	public void reformatText(PsiFile file, int startOffset, int endOffset)
-			throws IncorrectOperationException {
+	public void reformatText(PsiFile file, int startOffset, int endOffset) throws IncorrectOperationException {
 		reformat(file, () -> Collections.singleton(new TextRange(startOffset, endOffset)),
 				() -> super.reformatText(file, startOffset, endOffset));
 	}
 
 	@Override
-	public void reformatText(PsiFile file, Collection<TextRange> ranges)
-			throws IncorrectOperationException {
+	public void reformatText(PsiFile file, Collection<TextRange> ranges) throws IncorrectOperationException {
 		reformat(file, () -> ranges, () -> super.reformatText(file, ranges));
 	}
 
 	@Override
-	public void reformatTextWithContext(PsiFile file, Collection<TextRange> ranges)
-			throws IncorrectOperationException {
+	public void reformatTextWithContext(PsiFile file, Collection<TextRange> ranges) throws IncorrectOperationException {
 		reformat(file, () -> ranges, () -> super.reformatTextWithContext(file, ranges));
 	}
 
-	private void reformat(PsiFile file, Supplier<Collection<TextRange>> ranges,
-			Runnable delegate) {
+	private void reformat(PsiFile file, Supplier<Collection<TextRange>> ranges, Runnable delegate) {
 		if (this.springReformatter.canReformat(file)) {
 			this.springReformatter.reformat(file, ranges.get());
 		}

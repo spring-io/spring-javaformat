@@ -74,15 +74,12 @@ class CodeLineBreakPreparator implements Preparator {
 
 		private void visitType(AbstractTypeDeclaration node) {
 			SimpleName name = node.getName();
-			int openBraceIndex = (name == null
-					? this.tokenManager.firstIndexIn(node, TerminalTokens.TokenNameLBRACE)
-					: this.tokenManager.firstIndexAfter(name,
-							TerminalTokens.TokenNameLBRACE));
+			int openBraceIndex = (name == null ? this.tokenManager.firstIndexIn(node, TerminalTokens.TokenNameLBRACE)
+					: this.tokenManager.firstIndexAfter(name, TerminalTokens.TokenNameLBRACE));
 			Token openBraceToken = this.tokenManager.get(openBraceIndex);
 			openBraceToken.clearLineBreaksAfter();
 			openBraceToken.putLineBreaksAfter(2);
-			int closeBraceIndex = this.tokenManager.lastIndexIn(node,
-					TerminalTokens.TokenNameRBRACE);
+			int closeBraceIndex = this.tokenManager.lastIndexIn(node, TerminalTokens.TokenNameRBRACE);
 			Token closeBraceToken = this.tokenManager.get(closeBraceIndex);
 			closeBraceToken.clearLineBreaksBefore();
 			closeBraceToken.putLineBreaksBefore(2);
@@ -90,8 +87,7 @@ class CodeLineBreakPreparator implements Preparator {
 
 		@Override
 		public boolean visit(FieldDeclaration node) {
-			int index = this.tokenManager.lastIndexIn(node,
-					TerminalTokens.TokenNameSEMICOLON);
+			int index = this.tokenManager.lastIndexIn(node, TerminalTokens.TokenNameSEMICOLON);
 			while (tokenIsOfType(index + 1, TerminalTokens.TokenNameCOMMENT_LINE,
 					TerminalTokens.TokenNameCOMMENT_BLOCK)) {
 				if (this.tokenManager.get(index).getLineBreaksAfter() > 0

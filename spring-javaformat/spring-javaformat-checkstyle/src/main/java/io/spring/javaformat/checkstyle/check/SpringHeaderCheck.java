@@ -63,8 +63,7 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 	 */
 	public static final String DEFAULT_HEADER_COPYRIGHT_PATTERN = "20\\d\\d(-20\\d\\d)?";
 
-	private static final String DEFAULT_CHARSET = System.getProperty("file.encoding",
-			StandardCharsets.UTF_8.name());
+	private static final String DEFAULT_CHARSET = System.getProperty("file.encoding", StandardCharsets.UTF_8.name());
 
 	private String charset = DEFAULT_CHARSET;
 
@@ -86,20 +85,18 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 	protected void finishLocalSetup() throws CheckstyleException {
 		try {
 			this.check = createCheck(this.headerType, this.headerFile);
-			String packageInfoHeaderType = this.packageInfoHeaderType != null
-					? this.packageInfoHeaderType : this.headerType;
-			URI packageInfoHeaderFile = this.packageInfoHeaderFile != null
-					? this.packageInfoHeaderFile : this.headerFile;
-			this.packageInfoCheck = createCheck(packageInfoHeaderType,
-					packageInfoHeaderFile);
+			String packageInfoHeaderType = this.packageInfoHeaderType != null ? this.packageInfoHeaderType
+					: this.headerType;
+			URI packageInfoHeaderFile = this.packageInfoHeaderFile != null ? this.packageInfoHeaderFile
+					: this.headerFile;
+			this.packageInfoCheck = createCheck(packageInfoHeaderType, packageInfoHeaderFile);
 		}
 		catch (IOException ex) {
 			throw new IllegalStateException(ex);
 		}
 	}
 
-	private HeaderCheck createCheck(String headerType, URI headerFile)
-			throws IOException {
+	private HeaderCheck createCheck(String headerType, URI headerFile) throws IOException {
 		if (UNCHECKED.equals(headerType)) {
 			return HeaderCheck.NONE;
 		}
@@ -110,8 +107,7 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 	}
 
 	@Override
-	protected void processFiltered(File file, FileText fileText)
-			throws CheckstyleException {
+	protected void processFiltered(File file, FileText fileText) throws CheckstyleException {
 		getCheck(file).run(fileText);
 	}
 
@@ -124,8 +120,7 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 
 	public void setCharset(String charset) throws UnsupportedEncodingException {
 		if (!Charset.isSupported(charset)) {
-			throw new UnsupportedEncodingException(
-					"unsupported charset: '" + charset + "'");
+			throw new UnsupportedEncodingException("unsupported charset: '" + charset + "'");
 		}
 		this.charset = charset;
 	}
@@ -194,8 +189,7 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 
 		private List<Pattern> loadLines(InputStream inputStream) throws IOException {
 			inputStream = new BufferedInputStream(inputStream);
-			try (Reader reader = new InputStreamReader(inputStream,
-					SpringHeaderCheck.this.charset)) {
+			try (Reader reader = new InputStreamReader(inputStream, SpringHeaderCheck.this.charset)) {
 				LineNumberReader lineReader = new LineNumberReader(reader);
 				List<Pattern> lines = new ArrayList<>();
 				while (true) {
@@ -203,8 +197,7 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 					if (line == null) {
 						return lines;
 					}
-					lines.add(loadLine(line,
-							SpringHeaderCheck.this.headerCopyrightPattern));
+					lines.add(loadLine(line, SpringHeaderCheck.this.headerCopyrightPattern));
 				}
 			}
 		}
@@ -256,8 +249,7 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 		}
 
 		private boolean isHeaderComment(String fileLine) {
-			return (fileLine.contains("/*") || fileLine.contains("//"))
-					&& !fileLine.contains("/**");
+			return (fileLine.contains("/*") || fileLine.contains("//")) && !fileLine.contains("/**");
 		}
 
 	}

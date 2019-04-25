@@ -42,8 +42,7 @@ class ProjectProperties {
 
 	private static final String COPYRIGHT_YEAR = "copyright-year";
 
-	private static final DateTimeFormatter YEAR_FORMATTER = DateTimeFormatter
-			.ofPattern("yyyy");
+	private static final DateTimeFormatter YEAR_FORMATTER = DateTimeFormatter.ofPattern("yyyy");
 
 	private static final Map<String, Supplier<String>> DEFAULTS;
 	static {
@@ -79,16 +78,14 @@ class ProjectProperties {
 		if (file.getName().equals("org.eclipse.jdt.ui.prefs")) {
 			String content = loadContent(file);
 			content = content.replace("Copyright the original author or authors",
-					"Copyright " + get(COPYRIGHT_YEAR)
-							+ " the original author or authors");
+					"Copyright " + get(COPYRIGHT_YEAR) + " the original author or authors");
 			return new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
 		}
 		return file.getContent();
 	}
 
 	private String loadContent(ProjectSettingsFile file) throws IOException {
-		try (BufferedReader reader = new BufferedReader(
-				new InputStreamReader(file.getContent()))) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getContent()))) {
 			return reader.lines().collect(Collectors.joining("\n"));
 		}
 	}

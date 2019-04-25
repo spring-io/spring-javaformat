@@ -35,8 +35,7 @@ class EclipseDocumentAdapter extends Document {
 	}
 
 	@Override
-	public void replace(int pos, int length, String text, long modificationStamp)
-			throws BadLocationException {
+	public void replace(int pos, int length, String text, long modificationStamp) throws BadLocationException {
 		super.replace(pos, length, text, modificationStamp);
 		this.intellijDocument.replaceString(pos, pos + length, text);
 	}

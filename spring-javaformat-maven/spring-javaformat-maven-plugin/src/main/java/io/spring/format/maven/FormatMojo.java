@@ -43,8 +43,7 @@ public abstract class FormatMojo extends AbstractMojo {
 
 	private static final String[] DEFAULT_INCLUDES = new String[] { "**/*.java" };
 
-	private static final String GENERATED_SOURCE = File.separator + "generated-sources"
-			+ File.separator;
+	private static final String GENERATED_SOURCE = File.separator + "generated-sources" + File.separator;
 
 	/**
 	 * The Maven Project Object.
@@ -96,14 +95,12 @@ public abstract class FormatMojo extends AbstractMojo {
 		for (File directory : directories) {
 			files.addAll(scan(directory));
 		}
-		Charset encoding = (this.encoding == null ? StandardCharsets.UTF_8
-				: Charset.forName(this.encoding));
+		Charset encoding = (this.encoding == null ? StandardCharsets.UTF_8 : Charset.forName(this.encoding));
 		execute(files, encoding);
 	}
 
 	private Stream<File> resolve(List<String> directories) {
-		return directories.stream().map(
-				directory -> FileUtils.resolveFile(this.project.getBasedir(), directory))
+		return directories.stream().map(directory -> FileUtils.resolveFile(this.project.getBasedir(), directory))
 				.filter(this::include);
 	}
 
@@ -140,8 +137,8 @@ public abstract class FormatMojo extends AbstractMojo {
 		scanner.setCaseSensitive(false);
 		scanner.setFollowSymlinks(false);
 		scanner.scan();
-		return Arrays.asList(scanner.getIncludedFiles()).stream()
-				.map(name -> new File(directory, name)).collect(Collectors.toList());
+		return Arrays.asList(scanner.getIncludedFiles()).stream().map(name -> new File(directory, name))
+				.collect(Collectors.toList());
 	}
 
 	private boolean hasLength(Object[] array) {

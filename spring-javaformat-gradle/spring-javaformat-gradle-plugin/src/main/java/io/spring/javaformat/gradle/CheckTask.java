@@ -45,11 +45,10 @@ public class CheckTask extends FormatterTask {
 
 	@TaskAction
 	public void checkFormatting() throws IOException, InterruptedException {
-		List<File> problems = formatFiles().filter(FileEdit::hasEdits)
-				.map(FileEdit::getFile).collect(Collectors.toList());
+		List<File> problems = formatFiles().filter(FileEdit::hasEdits).map(FileEdit::getFile)
+				.collect(Collectors.toList());
 		if (!problems.isEmpty()) {
-			StringBuilder message = new StringBuilder(
-					"Formatting violations found in the following files:\n");
+			StringBuilder message = new StringBuilder("Formatting violations found in the following files:\n");
 			problems.stream().forEach((f) -> message.append(" * " + f + "\n"));
 			message.append("\nRun `format` to fix.");
 			throw new GradleException(message.toString());

@@ -43,17 +43,14 @@ public class ProjectSettingsFileTests {
 		writeText(file, "test");
 		ProjectSettingsFile projectSettingsFile = ProjectSettingsFile.fromFile(file);
 		assertThat(projectSettingsFile.getName()).isEqualTo(file.getName());
-		assertThat(projectSettingsFile.getContent())
-				.hasSameContentAs(new ByteArrayInputStream("test".getBytes()));
+		assertThat(projectSettingsFile.getContent()).hasSameContentAs(new ByteArrayInputStream("test".getBytes()));
 	}
 
 	@Test
 	public void fromClasspathResourceAdaptsResource() throws Exception {
-		ProjectSettingsFile projectSettingsFile = ProjectSettingsFile
-				.fromClasspath(getClass(), "test.txt");
+		ProjectSettingsFile projectSettingsFile = ProjectSettingsFile.fromClasspath(getClass(), "test.txt");
 		assertThat(projectSettingsFile.getName()).isEqualTo("test.txt");
-		assertThat(projectSettingsFile.getContent())
-				.hasSameContentAs(new ByteArrayInputStream("test".getBytes()));
+		assertThat(projectSettingsFile.getContent()).hasSameContentAs(new ByteArrayInputStream("test".getBytes()));
 	}
 
 	private void writeText(File file, String s) throws FileNotFoundException {

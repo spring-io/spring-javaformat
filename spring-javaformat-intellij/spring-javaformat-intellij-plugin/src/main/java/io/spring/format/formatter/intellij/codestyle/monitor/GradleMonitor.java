@@ -47,10 +47,9 @@ public class GradleMonitor extends Monitor {
 	}
 
 	private void check() {
-		ProjectDataManager projectDataManager = ServiceManager
-				.getService(ProjectDataManager.class);
-		boolean hasFormatPlugin = hasFormatPlugin(projectDataManager
-				.getExternalProjectsData(getProject(), GradleConstants.SYSTEM_ID));
+		ProjectDataManager projectDataManager = ServiceManager.getService(ProjectDataManager.class);
+		boolean hasFormatPlugin = hasFormatPlugin(
+				projectDataManager.getExternalProjectsData(getProject(), GradleConstants.SYSTEM_ID));
 		getTrigger().updateState(hasFormatPlugin ? State.ACTIVE : State.NOT_ACTIVE);
 	}
 

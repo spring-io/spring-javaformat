@@ -42,12 +42,12 @@ public class SpringConfigurationLoaderTests {
 	@Test
 	public void loadShouldLoadChecks() {
 		DefaultContext context = new DefaultContext();
-		context.add("moduleFactory", new PackageObjectFactory(
-				getClass().getPackage().getName(), getClass().getClassLoader()));
-		ModuleFactory moduleFactory = new PackageObjectFactory(
-				getClass().getPackage().getName(), getClass().getClassLoader());
-		Collection<FileSetCheck> checks = new SpringConfigurationLoader(context,
-				moduleFactory).load(getPropertyResolver());
+		context.add("moduleFactory",
+				new PackageObjectFactory(getClass().getPackage().getName(), getClass().getClassLoader()));
+		ModuleFactory moduleFactory = new PackageObjectFactory(getClass().getPackage().getName(),
+				getClass().getClassLoader());
+		Collection<FileSetCheck> checks = new SpringConfigurationLoader(context, moduleFactory)
+				.load(getPropertyResolver());
 		assertThat(checks).hasSize(3);
 	}
 
@@ -55,10 +55,8 @@ public class SpringConfigurationLoaderTests {
 		Properties properties = new Properties();
 		properties.put("headerType", SpringHeaderCheck.DEFAULT_HEADER_TYPE);
 		properties.put("headerFile", "");
-		properties.put("headerCopyrightPattern",
-				SpringHeaderCheck.DEFAULT_HEADER_COPYRIGHT_PATTERN);
-		properties.put("projectRootPackage",
-				SpringImportOrderCheck.DEFAULT_PROJECT_ROOT_PACKAGE);
+		properties.put("headerCopyrightPattern", SpringHeaderCheck.DEFAULT_HEADER_COPYRIGHT_PATTERN);
+		properties.put("projectRootPackage", SpringImportOrderCheck.DEFAULT_PROJECT_ROOT_PACKAGE);
 		return new PropertiesExpander(properties);
 	}
 

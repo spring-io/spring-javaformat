@@ -103,11 +103,9 @@ class StatusIndicator {
 	/**
 	 * The {@link StatusBarWidget} component for the status.
 	 */
-	private static class Widget
-			implements StatusBarWidget, StatusBarWidget.IconPresentation {
+	private static class Widget implements StatusBarWidget, StatusBarWidget.IconPresentation {
 
-		public static final Icon ICON = IconLoader
-				.getIcon("/spring-javaformat/formatOn.png");
+		public static final Icon ICON = IconLoader.getIcon("/spring-javaformat/formatOn.png");
 
 		@Override
 		public String ID() {

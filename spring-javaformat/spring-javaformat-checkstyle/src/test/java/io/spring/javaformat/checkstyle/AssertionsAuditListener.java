@@ -106,13 +106,12 @@ class AssertionsAuditListener implements AuditListener {
 	}
 
 	private void recordLevel(AuditEvent event) {
-		this.severityCounts.compute(event.getSeverityLevel(),
-				(level, count) -> (count == null ? 1 : count + 1));
+		this.severityCounts.compute(event.getSeverityLevel(), (level, count) -> (count == null ? 1 : count + 1));
 	}
 
 	private void recordLocalizedMessage(String message, String... args) {
-		recordMessage(new LocalizedMessage(0, Definitions.CHECKSTYLE_BUNDLE, message,
-				args, null, LocalizedMessage.class, null).getMessage());
+		recordMessage(new LocalizedMessage(0, Definitions.CHECKSTYLE_BUNDLE, message, args, null,
+				LocalizedMessage.class, null).getMessage());
 	}
 
 	private void recordMessage(String message) {

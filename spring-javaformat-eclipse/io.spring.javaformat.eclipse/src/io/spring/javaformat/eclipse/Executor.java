@@ -52,8 +52,7 @@ public class Executor {
 				throw (CoreException) ex;
 			}
 			String msg = NLS.bind(this.failureMessage, ex.getMessage());
-			throw new CoreException(
-					new Status(IStatus.ERROR, Activator.PLUGIN_ID, -1, msg, ex));
+			throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, -1, msg, ex));
 		}
 	}
 

@@ -41,12 +41,9 @@ public class FormatTaskTests {
 
 	@Test
 	public void checkOk() throws IOException {
-		BuildResult result = this.gradleBuild.source("src/test/resources/format")
-				.build("format");
-		assertThat(result.task(":formatMain").getOutcome())
-				.isEqualTo(TaskOutcome.SUCCESS);
-		File formattedFile = new File(this.gradleBuild.getProjectDir(),
-				"src/main/java/simple/Simple.java");
+		BuildResult result = this.gradleBuild.source("src/test/resources/format").build("format");
+		assertThat(result.task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+		File formattedFile = new File(this.gradleBuild.getProjectDir(), "src/main/java/simple/Simple.java");
 		String formattedContent = new String(Files.readAllBytes(formattedFile.toPath()));
 		assertThat(formattedContent).contains("class Simple {");
 	}

@@ -44,26 +44,23 @@ public class SpringJavaFormatPlugin implements Plugin<Project> {
 			formatAll.setDescription(FormatTask.DESCRIPTION);
 			Task checkAll = this.project.task(CheckTask.NAME);
 			checkAll.setDescription(CheckTask.DESCRIPTION);
-			this.project.getTasks().getByName(JavaBasePlugin.CHECK_TASK_NAME)
-					.dependsOn(checkAll);
-			this.project.getConvention().getPlugin(JavaPluginConvention.class)
-					.getSourceSets()
+			this.project.getTasks().getByName(JavaBasePlugin.CHECK_TASK_NAME).dependsOn(checkAll);
+			this.project.getConvention().getPlugin(JavaPluginConvention.class).getSourceSets()
 					.all((sourceSet) -> addSourceTasks(sourceSet, checkAll, formatAll));
 		});
 	}
 
 	private void addSourceTasks(SourceSet sourceSet, Task checkAll, Task formatAll) {
-		CheckTask checkTask = addSourceTask(sourceSet, CheckTask.class, CheckTask.NAME,
-				CheckTask.DESCRIPTION);
+		CheckTask checkTask = addSourceTask(sourceSet, CheckTask.class, CheckTask.NAME, CheckTask.DESCRIPTION);
 		checkAll.dependsOn(checkTask);
-		FormatTask formatSourceSet = addSourceTask(sourceSet, FormatTask.class,
-				FormatTask.NAME, FormatTask.DESCRIPTION);
+		FormatTask formatSourceSet = addSourceTask(sourceSet, FormatTask.class, FormatTask.NAME,
+				FormatTask.DESCRIPTION);
 		formatSourceSet.conventionMapping("encoding", () -> "UTF-8");
 		formatAll.dependsOn(formatSourceSet);
 	}
 
-	private <T extends FormatterTask> T addSourceTask(SourceSet sourceSet,
-			Class<T> taskType, String name, String desc) {
+	private <T extends FormatterTask> T addSourceTask(SourceSet sourceSet, Class<T> taskType, String name,
+			String desc) {
 		String taskName = sourceSet.getTaskName(name, null);
 		T task = this.project.getTasks().create(taskName, taskType);
 		task.setDescription(desc + " for " + sourceSet.getName());

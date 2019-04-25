@@ -45,8 +45,7 @@ public class ProjectSettingsFiles implements Iterable<ProjectSettingsFile> {
 	 * @param files the project settings files
 	 * @param projectProperties project properties
 	 */
-	public ProjectSettingsFiles(Collection<ProjectSettingsFile> files,
-			ProjectProperties projectProperties) {
+	public ProjectSettingsFiles(Collection<ProjectSettingsFile> files, ProjectProperties projectProperties) {
 		this.files = new ArrayList<>(files);
 		this.projectProperties = projectProperties;
 	}
@@ -63,8 +62,7 @@ public class ProjectSettingsFiles implements Iterable<ProjectSettingsFile> {
 	 * @throws IOException on IO error
 	 * @throws CoreException on eclipse file creation failure
 	 */
-	public void applyToProject(IProject project, IProgressMonitor monitor)
-			throws IOException, CoreException {
+	public void applyToProject(IProject project, IProgressMonitor monitor) throws IOException, CoreException {
 		for (ProjectSettingsFile file : this) {
 			IFile destination = project.getFile(".settings/" + file.getName());
 			if (destination.exists()) {

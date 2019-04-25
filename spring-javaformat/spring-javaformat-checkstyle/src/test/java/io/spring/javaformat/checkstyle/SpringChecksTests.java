@@ -53,8 +53,7 @@ import org.xml.sax.InputSource;
 @RunWith(Parameterized.class)
 public class SpringChecksTests {
 
-	private static final boolean RUNNING_ON_WINDOWS = System.getProperty("os.name")
-			.toLowerCase().contains("win");
+	private static final boolean RUNNING_ON_WINDOWS = System.getProperty("os.name").toLowerCase().contains("win");
 
 	private static final File SOURCES_DIR = new File("src/test/resources/source");
 
@@ -62,8 +61,7 @@ public class SpringChecksTests {
 
 	private static final File CONFIGS_DIR = new File("src/test/resources/config");
 
-	private static final File DEFAULT_CONFIG = new File(CONFIGS_DIR,
-			"default-checkstyle-configuration.xml");
+	private static final File DEFAULT_CONFIG = new File(CONFIGS_DIR, "default-checkstyle-configuration.xml");
 
 	private final Parameter parameter;
 
@@ -84,30 +82,24 @@ public class SpringChecksTests {
 	}
 
 	private Configuration loadConfiguration() throws Exception {
-		try (InputStream inputStream = new FileInputStream(
-				this.parameter.getConfigFile())) {
-			Configuration configuration = ConfigurationLoader.loadConfiguration(
-					new InputSource(inputStream),
-					new PropertiesExpander(new Properties()),
-					IgnoredModulesOptions.EXECUTE,
+		try (InputStream inputStream = new FileInputStream(this.parameter.getConfigFile())) {
+			Configuration configuration = ConfigurationLoader.loadConfiguration(new InputSource(inputStream),
+					new PropertiesExpander(new Properties()), IgnoredModulesOptions.EXECUTE,
 					ThreadModeSettings.SINGLE_THREAD_MODE_INSTANCE);
 			return configuration;
 		}
 	}
 
-	private RootModule createRootModule(Configuration configuration)
-			throws CheckstyleException {
-		ModuleFactory factory = new PackageObjectFactory(
-				Checker.class.getPackage().getName(), getClass().getClassLoader());
-		RootModule rootModule = (RootModule) factory
-				.createModule(configuration.getName());
+	private RootModule createRootModule(Configuration configuration) throws CheckstyleException {
+		ModuleFactory factory = new PackageObjectFactory(Checker.class.getPackage().getName(),
+				getClass().getClassLoader());
+		RootModule rootModule = (RootModule) factory.createModule(configuration.getName());
 		rootModule.setModuleClassLoader(getClass().getClassLoader());
 		rootModule.configure(configuration);
 		return rootModule;
 	}
 
-	private void processAndCheckResults(RootModule rootModule)
-			throws CheckstyleException {
+	private void processAndCheckResults(RootModule rootModule) throws CheckstyleException {
 		rootModule.addListener(this.parameter.getAssersionsListener());
 		if (!RUNNING_ON_WINDOWS) {
 			printDebugInfo(this.parameter.getSourceFile());
@@ -117,8 +109,7 @@ public class SpringChecksTests {
 
 	private void printDebugInfo(File file) throws CheckstyleException {
 		try {
-			System.out.println(AstTreeStringPrinter.printFileAst(file,
-					JavaParser.Options.WITHOUT_COMMENTS));
+			System.out.println(AstTreeStringPrinter.printFileAst(file, JavaParser.Options.WITHOUT_COMMENTS));
 		}
 		catch (IOException ex) {
 		}
@@ -126,8 +117,8 @@ public class SpringChecksTests {
 
 	@Parameters(name = "{0}")
 	public static Collection<Parameter> files() throws IOException {
-		return Arrays.stream(SOURCES_DIR.list((dir, name) -> !name.startsWith(".")))
-				.map(Parameter::new).collect(Collectors.toList());
+		return Arrays.stream(SOURCES_DIR.list((dir, name) -> !name.startsWith("."))).map(Parameter::new)
+				.collect(Collectors.toList());
 	}
 
 	private static class Parameter {
@@ -145,8 +136,7 @@ public class SpringChecksTests {
 			this.sourceFile = new File(SOURCES_DIR, sourceName);
 			File configFile = new File(CONFIGS_DIR, this.name + ".xml");
 			this.configFile = (configFile.exists() ? configFile : DEFAULT_CONFIG);
-			this.assersionsListener = new AssertionsAuditListener(
-					readChecks(this.name + ".txt"));
+			this.assersionsListener = new AssertionsAuditListener(readChecks(this.name + ".txt"));
 		}
 
 		private List<String> readChecks(String name) {

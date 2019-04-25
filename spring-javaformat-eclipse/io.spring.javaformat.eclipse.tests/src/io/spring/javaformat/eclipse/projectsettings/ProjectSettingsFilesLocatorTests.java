@@ -41,10 +41,9 @@ public class ProjectSettingsFilesLocatorTests {
 
 	@Test
 	public void locateSettingsFilesWhenNoFoldersShouldReturnDefault() throws IOException {
-		ProjectSettingsFiles files = new ProjectSettingsFilesLocator()
-				.locateSettingsFiles();
-		assertThat(files.iterator()).extracting(ProjectSettingsFile::getName)
-				.containsOnly("org.eclipse.jdt.core.prefs", "org.eclipse.jdt.ui.prefs");
+		ProjectSettingsFiles files = new ProjectSettingsFilesLocator().locateSettingsFiles();
+		assertThat(files.iterator()).extracting(ProjectSettingsFile::getName).containsOnly("org.eclipse.jdt.core.prefs",
+				"org.eclipse.jdt.ui.prefs");
 	}
 
 	@Test
@@ -52,11 +51,9 @@ public class ProjectSettingsFilesLocatorTests {
 		File folder = this.temp.newFolder();
 		writeFile(folder, "foo.prefs");
 		writeFile(folder, "bar.notprefs");
-		ProjectSettingsFiles files = new ProjectSettingsFilesLocator(folder)
-				.locateSettingsFiles();
-		assertThat(files.iterator()).extracting(ProjectSettingsFile::getName)
-				.containsOnly("org.eclipse.jdt.core.prefs", "org.eclipse.jdt.ui.prefs",
-						"foo.prefs");
+		ProjectSettingsFiles files = new ProjectSettingsFilesLocator(folder).locateSettingsFiles();
+		assertThat(files.iterator()).extracting(ProjectSettingsFile::getName).containsOnly("org.eclipse.jdt.core.prefs",
+				"org.eclipse.jdt.ui.prefs", "foo.prefs");
 	}
 
 	@Test
@@ -66,12 +63,10 @@ public class ProjectSettingsFilesLocatorTests {
 		File folder2 = this.temp.newFolder();
 		writeFile(folder2, "foo.prefs", "foo2");
 		writeFile(folder2, "org.eclipse.jdt.core.prefs", "core2");
-		ProjectSettingsFiles files = new ProjectSettingsFilesLocator(folder1, folder2)
-				.locateSettingsFiles();
+		ProjectSettingsFiles files = new ProjectSettingsFilesLocator(folder1, folder2).locateSettingsFiles();
 		Map<String, ProjectSettingsFile> found = new LinkedHashMap<>();
 		files.iterator().forEachRemaining((f) -> found.put(f.getName(), f));
-		assertThat(found.get("foo.prefs").getContent())
-				.hasSameContentAs(new ByteArrayInputStream("foo1".getBytes()));
+		assertThat(found.get("foo.prefs").getContent()).hasSameContentAs(new ByteArrayInputStream("foo1".getBytes()));
 		assertThat(found.get("org.eclipse.jdt.core.prefs").getContent())
 				.hasSameContentAs(new ByteArrayInputStream("core2".getBytes()));
 	}

@@ -39,18 +39,14 @@ public class CheckTaskTests {
 
 	@Test
 	public void checkOk() throws IOException {
-		BuildResult result = this.gradleBuild.source("src/test/resources/check-ok")
-				.build("check");
-		assertThat(result.task(":checkFormatMain").getOutcome())
-				.isEqualTo(TaskOutcome.SUCCESS);
+		BuildResult result = this.gradleBuild.source("src/test/resources/check-ok").build("check");
+		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
 	}
 
 	@Test
 	public void checkBad() throws IOException {
-		BuildResult result = this.gradleBuild.source("src/test/resources/check-bad")
-				.buildAndFail("check");
-		assertThat(result.task(":checkFormatMain").getOutcome())
-				.isEqualTo(TaskOutcome.FAILED);
+		BuildResult result = this.gradleBuild.source("src/test/resources/check-bad").buildAndFail("check");
+		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.FAILED);
 	}
 
 }

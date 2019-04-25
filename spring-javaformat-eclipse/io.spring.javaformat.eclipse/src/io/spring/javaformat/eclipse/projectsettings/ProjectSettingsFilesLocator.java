@@ -31,8 +31,7 @@ public class ProjectSettingsFilesLocator {
 
 	private static final String[] SOURCE_FOLDERS = { "eclipse", ".eclipse" };
 
-	private static final String[] DEFAULT_FILES = { "org.eclipse.jdt.core.prefs",
-			"org.eclipse.jdt.ui.prefs" };
+	private static final String[] DEFAULT_FILES = { "org.eclipse.jdt.core.prefs", "org.eclipse.jdt.ui.prefs" };
 
 	private final File[] searchFolders;
 
@@ -58,8 +57,8 @@ public class ProjectSettingsFilesLocator {
 		return new ProjectSettingsFiles(files.values(), projectProperties);
 	}
 
-	private void add(ProjectProperties projectProperties,
-			Map<String, ProjectSettingsFile> files, File folder) throws IOException {
+	private void add(ProjectProperties projectProperties, Map<String, ProjectSettingsFile> files, File folder)
+			throws IOException {
 		if (folder.exists() && folder.isDirectory()) {
 			for (File file : folder.listFiles(this::isPrefsFile)) {
 				putIfAbsent(files, ProjectSettingsFile.fromFile(file));
@@ -72,8 +71,7 @@ public class ProjectSettingsFilesLocator {
 		return file.getName().toLowerCase().endsWith(".prefs");
 	}
 
-	private void putIfAbsent(Map<String, ProjectSettingsFile> files,
-			ProjectSettingsFile candidate) {
+	private void putIfAbsent(Map<String, ProjectSettingsFile> files, ProjectSettingsFile candidate) {
 		files.putIfAbsent(candidate.getName(), candidate);
 	}
 

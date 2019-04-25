@@ -33,8 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class FileFormatterTests extends AbstractFormatterTests {
 
-	private static final boolean RUNNING_ON_WINDOWS = System.getProperty("os.name")
-			.toLowerCase().contains("win");
+	private static final boolean RUNNING_ON_WINDOWS = System.getProperty("os.name").toLowerCase().contains("win");
 
 	public FileFormatterTests(File source, File expected) {
 		super(source, expected);
@@ -42,16 +41,14 @@ public class FileFormatterTests extends AbstractFormatterTests {
 
 	@Test
 	public void formatFilesFromIteratorShouldFormatFile() throws Exception {
-		FileEdit edit = new FileFormatter()
-				.formatFiles(Arrays.asList(getSource()), StandardCharsets.UTF_8)
-				.findFirst().get();
+		FileEdit edit = new FileFormatter().formatFiles(Arrays.asList(getSource()), StandardCharsets.UTF_8).findFirst()
+				.get();
 		assertThat(edit.getFormattedContent()).isEqualTo(read(getExpected()));
 	}
 
 	@Test
 	public void formatFilesFromStreamShouldFormatFile() throws Exception {
-		FileEdit edit = new FileFormatter()
-				.formatFiles(Arrays.asList(getSource()).stream(), StandardCharsets.UTF_8)
+		FileEdit edit = new FileFormatter().formatFiles(Arrays.asList(getSource()).stream(), StandardCharsets.UTF_8)
 				.findFirst().get();
 		assertThat(edit.getFormattedContent()).isEqualTo(read(getExpected()));
 	}

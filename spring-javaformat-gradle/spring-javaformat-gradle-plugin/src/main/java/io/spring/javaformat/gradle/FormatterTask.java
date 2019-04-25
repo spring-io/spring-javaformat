@@ -59,8 +59,7 @@ abstract class FormatterTask extends SourceTask {
 	 */
 	protected final Stream<FileEdit> formatFiles() {
 		FileFormatter formatter = new FileFormatter();
-		Charset encoding = (getEncoding() != null ? Charset.forName(getEncoding())
-				: Charset.defaultCharset());
+		Charset encoding = (getEncoding() != null ? Charset.forName(getEncoding()) : Charset.defaultCharset());
 		return formatter.formatFiles(getSource().getFiles(), encoding);
 	}
 

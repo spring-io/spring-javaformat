@@ -38,8 +38,7 @@ public class ExtendedCodeFormatter extends DefaultCodeFormatter {
 		super();
 	}
 
-	public ExtendedCodeFormatter(DefaultCodeFormatterOptions defaultCodeFormatterOptions,
-			Map<String, String> options) {
+	public ExtendedCodeFormatter(DefaultCodeFormatterOptions defaultCodeFormatterOptions, Map<String, String> options) {
 		super(defaultCodeFormatterOptions, options);
 	}
 
@@ -64,10 +63,8 @@ public class ExtendedCodeFormatter extends DefaultCodeFormatter {
 		applyPreparators(Phase.POST_WRAPPING, kind, astRoot, tokenManager);
 	}
 
-	private void applyPreparators(Phase preWrapping, int kind, ASTNode astRoot,
-			TokenManager tokenManager) {
-		this.preparators.stream()
-				.filter((preparator) -> preparator.getPhase() == preWrapping)
+	private void applyPreparators(Phase preWrapping, int kind, ASTNode astRoot, TokenManager tokenManager) {
+		this.preparators.stream().filter((preparator) -> preparator.getPhase() == preWrapping)
 				.forEach((preparator) -> preparator.apply(kind, tokenManager, astRoot));
 	}
 

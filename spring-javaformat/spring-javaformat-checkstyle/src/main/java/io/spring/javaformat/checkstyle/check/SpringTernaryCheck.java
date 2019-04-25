@@ -103,8 +103,7 @@ public class SpringTernaryCheck extends AbstractSpringCheck {
 
 	public void setEqualsTest(String equalsTest) {
 		try {
-			this.equalsTest = Enum.valueOf(EqualsTest.class,
-					equalsTest.trim().toUpperCase(Locale.ENGLISH));
+			this.equalsTest = Enum.valueOf(EqualsTest.class, equalsTest.trim().toUpperCase(Locale.ENGLISH));
 		}
 		catch (final IllegalArgumentException ex) {
 			throw new IllegalArgumentException("unable to parse " + equalsTest, ex);

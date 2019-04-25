@@ -39,8 +39,7 @@ import com.intellij.util.ThrowableRunnable;
  *
  * @author Phillip Webb
  */
-public class DelegatingCodeStyleManager extends CodeStyleManager
-		implements FormattingModeAwareIndentAdjuster {
+public class DelegatingCodeStyleManager extends CodeStyleManager implements FormattingModeAwareIndentAdjuster {
 
 	private final CodeStyleManager delegate;
 
@@ -97,43 +96,36 @@ public class DelegatingCodeStyleManager extends CodeStyleManager
 	@Override
 	public PsiElement reformatRange(PsiElement element, int startOffset, int endOffset,
 			boolean canChangeWhiteSpacesOnly) throws IncorrectOperationException {
-		return this.delegate.reformatRange(element, startOffset, endOffset,
-				canChangeWhiteSpacesOnly);
+		return this.delegate.reformatRange(element, startOffset, endOffset, canChangeWhiteSpacesOnly);
 	}
 
 	@Override
-	public void reformatText(PsiFile file, int startOffset, int endOffset)
-			throws IncorrectOperationException {
+	public void reformatText(PsiFile file, int startOffset, int endOffset) throws IncorrectOperationException {
 		this.delegate.reformatText(file, startOffset, endOffset);
 	}
 
 	@Override
-	public void reformatText(PsiFile file, Collection<TextRange> ranges)
-			throws IncorrectOperationException {
+	public void reformatText(PsiFile file, Collection<TextRange> ranges) throws IncorrectOperationException {
 		this.delegate.reformatText(file, ranges);
 	}
 
 	@Override
-	public void reformatTextWithContext(PsiFile file, Collection<TextRange> ranges)
-			throws IncorrectOperationException {
+	public void reformatTextWithContext(PsiFile file, Collection<TextRange> ranges) throws IncorrectOperationException {
 		this.delegate.reformatTextWithContext(file, ranges);
 	}
 
 	@Override
-	public void reformatTextWithContext(PsiFile file, ChangedRangesInfo info)
-			throws IncorrectOperationException {
+	public void reformatTextWithContext(PsiFile file, ChangedRangesInfo info) throws IncorrectOperationException {
 		this.delegate.reformatTextWithContext(file, info);
 	}
 
 	@Override
-	public void adjustLineIndent(PsiFile file, TextRange rangeToAdjust)
-			throws IncorrectOperationException {
+	public void adjustLineIndent(PsiFile file, TextRange rangeToAdjust) throws IncorrectOperationException {
 		this.delegate.adjustLineIndent(file, rangeToAdjust);
 	}
 
 	@Override
-	public int adjustLineIndent(PsiFile file, int offset)
-			throws IncorrectOperationException {
+	public int adjustLineIndent(PsiFile file, int offset) throws IncorrectOperationException {
 		return this.delegate.adjustLineIndent(file, offset);
 	}
 
@@ -166,8 +158,7 @@ public class DelegatingCodeStyleManager extends CodeStyleManager
 
 	@Override
 	@Deprecated
-	public String fillIndent(com.intellij.psi.codeStyle.Indent indent,
-			FileType fileType) {
+	public String fillIndent(com.intellij.psi.codeStyle.Indent indent, FileType fileType) {
 		return this.delegate.fillIndent(indent, fileType);
 	}
 
@@ -178,8 +169,7 @@ public class DelegatingCodeStyleManager extends CodeStyleManager
 	}
 
 	@Override
-	public void reformatNewlyAddedElement(ASTNode block, ASTNode addedElement)
-			throws IncorrectOperationException {
+	public void reformatNewlyAddedElement(ASTNode block, ASTNode addedElement) throws IncorrectOperationException {
 		this.delegate.reformatNewlyAddedElement(block, addedElement);
 	}
 
@@ -194,8 +184,7 @@ public class DelegatingCodeStyleManager extends CodeStyleManager
 	}
 
 	@Override
-	public <T extends Throwable> void performActionWithFormatterDisabled(
-			ThrowableRunnable<T> r) throws T {
+	public <T extends Throwable> void performActionWithFormatterDisabled(ThrowableRunnable<T> r) throws T {
 		this.delegate.performActionWithFormatterDisabled(r);
 	}
 
@@ -207,8 +196,7 @@ public class DelegatingCodeStyleManager extends CodeStyleManager
 	@Override
 	public int adjustLineIndent(Document document, int offset, FormattingMode mode) {
 		if (this.delegate instanceof FormattingModeAwareIndentAdjuster) {
-			return ((FormattingModeAwareIndentAdjuster) this.delegate)
-					.adjustLineIndent(document, offset, mode);
+			return ((FormattingModeAwareIndentAdjuster) this.delegate).adjustLineIndent(document, offset, mode);
 		}
 		return offset;
 	}
@@ -216,8 +204,7 @@ public class DelegatingCodeStyleManager extends CodeStyleManager
 	@Override
 	public FormattingMode getCurrentFormattingMode() {
 		if (this.delegate instanceof FormattingModeAwareIndentAdjuster) {
-			return ((FormattingModeAwareIndentAdjuster) this.delegate)
-					.getCurrentFormattingMode();
+			return ((FormattingModeAwareIndentAdjuster) this.delegate).getCurrentFormattingMode();
 		}
 		return FormattingMode.REFORMAT;
 	}

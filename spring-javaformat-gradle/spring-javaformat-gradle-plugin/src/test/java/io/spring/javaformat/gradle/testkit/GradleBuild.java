@@ -87,10 +87,8 @@ public class GradleBuild implements TestRule {
 	}
 
 	private String getPluginClasspath() {
-		return absolutePath("build/classes/java/main") + ","
-				+ absolutePath("build/resources/main") + ","
-				+ pathOfJarContaining(Formatter.class) + ","
-				+ pathOfJarContaining(Preparator.class) + ","
+		return absolutePath("build/classes/java/main") + "," + absolutePath("build/resources/main") + ","
+				+ pathOfJarContaining(Formatter.class) + "," + pathOfJarContaining(Preparator.class) + ","
 				+ pathOfJarContaining(CodeFormatter.class);
 	}
 
@@ -135,11 +133,10 @@ public class GradleBuild implements TestRule {
 	public GradleRunner prepareRunner(String... arguments) throws IOException {
 		copyFolder(this.source.getAbsoluteFile().toPath(), this.projectDir.toPath());
 		File buildFile = new File(this.projectDir, "build.gradle");
-		String scriptContent = new String(Files.readAllBytes(buildFile.toPath()))
-				.replace("{version}", getSpringFormatVersion());
+		String scriptContent = new String(Files.readAllBytes(buildFile.toPath())).replace("{version}",
+				getSpringFormatVersion());
 		Files.write(buildFile.toPath(), scriptContent.getBytes(Charsets.UTF_8));
-		GradleRunner gradleRunner = GradleRunner.create().withProjectDir(this.projectDir)
-				.withDebug(true);
+		GradleRunner gradleRunner = GradleRunner.create().withProjectDir(this.projectDir).withDebug(true);
 		if (this.gradleVersion != null) {
 			gradleRunner.withGradleVersion(this.gradleVersion);
 		}
@@ -185,8 +182,7 @@ public class GradleBuild implements TestRule {
 
 	private String getSpringFormatVersion() {
 		return evaluateExpression(
-				"/*[local-name()='project']/*[local-name()='parent']/*[local-name()='version']"
-						+ "/text()");
+				"/*[local-name()='project']/*[local-name()='parent']/*[local-name()='version']" + "/text()");
 	}
 
 	private String evaluateExpression(String expression) {

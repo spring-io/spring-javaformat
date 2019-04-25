@@ -116,8 +116,7 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 		Set<String> locations = new LinkedHashSet<>();
 		for (FileSetCheck check : this.checks) {
 			if (check instanceof ExternalResourceHolder) {
-				locations.addAll(
-						((ExternalResourceHolder) check).getExternalResourceLocations());
+				locations.addAll(((ExternalResourceHolder) check).getExternalResourceLocations());
 			}
 		}
 		return locations;
@@ -127,9 +126,8 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 	public void beginProcessing(String charset) {
 		super.beginProcessing(charset);
 		try {
-			SuppressFilterElement filter = new SuppressFilterElement(
-					"[\\\\/]src[\\\\/]test[\\\\/]java[\\\\/]", "Javadoc*", null, null,
-					null, null);
+			SuppressFilterElement filter = new SuppressFilterElement("[\\\\/]src[\\\\/]test[\\\\/]java[\\\\/]",
+					"Javadoc*", null, null, null, null);
 			((Checker) getMessageDispatcher()).addFilter(filter);
 		}
 		catch (Exception ex) {
@@ -138,8 +136,7 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 	}
 
 	@Override
-	protected void processFiltered(File file, FileText fileText)
-			throws CheckstyleException {
+	protected void processFiltered(File file, FileText fileText) throws CheckstyleException {
 		SortedSet<LocalizedMessage> messages = new TreeSet<>();
 		for (FileSetCheck check : this.checks) {
 			messages.addAll(check.process(file, fileText));
@@ -149,8 +146,7 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 
 	@Override
 	public void setupChild(Configuration configuration) throws CheckstyleException {
-		throw new CheckstyleException(
-				"SpringChecks is not allowed as a parent of " + configuration.getName());
+		throw new CheckstyleException("SpringChecks is not allowed as a parent of " + configuration.getName());
 	}
 
 	public void setHeaderType(String headerType) {

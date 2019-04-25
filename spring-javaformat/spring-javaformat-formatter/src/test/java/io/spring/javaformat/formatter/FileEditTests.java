@@ -55,10 +55,10 @@ public class FileEditTests {
 	public void setup() throws IOException {
 		this.source = this.temp.newFile("source.txt");
 		this.expected = this.temp.newFile("expected.txt");
-		Files.copy(new File("src/test/resources/source/javadoc-top.txt").toPath(),
-				this.source.toPath(), StandardCopyOption.REPLACE_EXISTING);
-		Files.copy(new File("src/test/resources/expected/javadoc-top.txt").toPath(),
-				this.expected.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		Files.copy(new File("src/test/resources/source/javadoc-top.txt").toPath(), this.source.toPath(),
+				StandardCopyOption.REPLACE_EXISTING);
+		Files.copy(new File("src/test/resources/expected/javadoc-top.txt").toPath(), this.expected.toPath(),
+				StandardCopyOption.REPLACE_EXISTING);
 		String content = read(this.source);
 		this.textEdit = new Formatter().format(content);
 		this.fileEdit = new FileEdit(this.source, UTF_8, content, this.textEdit);

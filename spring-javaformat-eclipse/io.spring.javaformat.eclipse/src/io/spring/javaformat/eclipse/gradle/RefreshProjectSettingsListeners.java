@@ -78,8 +78,7 @@ public final class RefreshProjectSettingsListeners {
 
 		static void attach() {
 			if (PlatformUI.isWorkbenchRunning()) {
-				ICommandService commandService = PlatformUI.getWorkbench()
-						.getAdapter(ICommandService.class);
+				ICommandService commandService = PlatformUI.getWorkbench().getAdapter(ICommandService.class);
 				Command command = commandService.getCommand(COMMAND_NAME);
 				if (command != null) {
 					command.addExecutionListener(new CommandListener());
@@ -96,8 +95,7 @@ public final class RefreshProjectSettingsListeners {
 
 		@Override
 		public void onEvent(Event event) {
-			if (event instanceof ProjectCreatedEvent
-					|| event instanceof GradleNatureAddedEvent) {
+			if (event instanceof ProjectCreatedEvent || event instanceof GradleNatureAddedEvent) {
 				new RefreshProjectsSettingsJob().schedule();
 			}
 		}

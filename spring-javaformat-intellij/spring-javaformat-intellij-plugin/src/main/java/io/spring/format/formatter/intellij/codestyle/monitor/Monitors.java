@@ -47,8 +47,7 @@ public class Monitors {
 	 * @param stateChangeConsumer consumer called whenever the ultimate state changes
 	 * @param monitorFactories factories used to create the monitors
 	 */
-	public Monitors(Project project, Consumer<State> stateChangeConsumer,
-			Monitor.Factory... monitorFactories) {
+	public Monitors(Project project, Consumer<State> stateChangeConsumer, Monitor.Factory... monitorFactories) {
 		this(project, stateChangeConsumer, Arrays.asList(monitorFactories));
 	}
 
@@ -58,8 +57,7 @@ public class Monitors {
 	 * @param stateChangeConsumer consumer called whenever the ultimate state changes
 	 * @param monitorFactories factories used to create the monitors
 	 */
-	public Monitors(Project project, Consumer<State> stateChangeConsumer,
-			List<Monitor.Factory> monitorFactories) {
+	public Monitors(Project project, Consumer<State> stateChangeConsumer, List<Monitor.Factory> monitorFactories) {
 		this.stateChangeConsumer = stateChangeConsumer;
 		List<Monitor> monitors = new ArrayList<>(monitorFactories.size());
 		for (Monitor.Factory factory : monitorFactories) {
@@ -82,8 +80,7 @@ public class Monitors {
 				activeAfter = containsActiveState(this.states);
 			}
 			if (activeBefore != activeAfter) {
-				this.stateChangeConsumer
-						.accept(activeAfter ? State.ACTIVE : State.NOT_ACTIVE);
+				this.stateChangeConsumer.accept(activeAfter ? State.ACTIVE : State.NOT_ACTIVE);
 			}
 		};
 	}

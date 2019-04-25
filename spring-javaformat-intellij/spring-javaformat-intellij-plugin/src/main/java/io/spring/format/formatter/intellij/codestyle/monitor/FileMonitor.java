@@ -56,8 +56,7 @@ public class FileMonitor extends Monitor {
 
 	private void check() {
 		VirtualFile baseDir = getProject().getBaseDir();
-		VirtualFile triggerFile = (baseDir == null ? null
-				: baseDir.findChild(TRIGGER_FILE));
+		VirtualFile triggerFile = (baseDir == null ? null : baseDir.findChild(TRIGGER_FILE));
 		State currentState = (triggerFile == null ? State.NOT_ACTIVE : State.ACTIVE);
 		if (!currentState.equals(this.state)) {
 			getTrigger().updateState(currentState);
@@ -66,8 +65,7 @@ public class FileMonitor extends Monitor {
 	}
 
 	public static Factory factory() {
-		return (project, trigger) -> new FileMonitor(project, trigger,
-				VirtualFileManager.getInstance());
+		return (project, trigger) -> new FileMonitor(project, trigger, VirtualFileManager.getInstance());
 	}
 
 	/**

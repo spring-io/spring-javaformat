@@ -45,19 +45,16 @@ public class ValidateMojo extends FormatMojo {
 	private boolean skip;
 
 	@Override
-	protected void execute(List<File> files, Charset encoding)
-			throws MojoExecutionException, MojoFailureException {
+	protected void execute(List<File> files, Charset encoding) throws MojoExecutionException, MojoFailureException {
 		if (this.skip) {
 			getLog().debug("skipping validation as per configuration.");
 			return;
 		}
 		FileFormatter formatter = new FileFormatter();
-		List<File> problems = formatter.formatFiles(files, encoding)
-				.filter(FileEdit::hasEdits).map(FileEdit::getFile)
+		List<File> problems = formatter.formatFiles(files, encoding).filter(FileEdit::hasEdits).map(FileEdit::getFile)
 				.collect(Collectors.toList());
 		if (!problems.isEmpty()) {
-			StringBuilder message = new StringBuilder(
-					"Formatting violations found in the following files:\n");
+			StringBuilder message = new StringBuilder("Formatting violations found in the following files:\n");
 			problems.stream().forEach((f) -> message.append(" * " + f + "\n"));
 			message.append("\nRun `spring-javaformat:apply` to fix.");
 			throw new MojoFailureException(message.toString());

@@ -52,8 +52,7 @@ public class EclipseRegionAdapterTests {
 
 	@Test
 	public void asArrayShouldReturnArray() throws Exception {
-		List<TextRange> ranges = Arrays.asList(new TextRange(10, 20),
-				new TextRange(30, 35));
+		List<TextRange> ranges = Arrays.asList(new TextRange(10, 20), new TextRange(30, 35));
 		IRegion[] regions = EclipseRegionAdapter.asArray(ranges);
 		assertThat(regions).hasSize(2);
 		assertThat(regions[0].getOffset()).isEqualTo(10);

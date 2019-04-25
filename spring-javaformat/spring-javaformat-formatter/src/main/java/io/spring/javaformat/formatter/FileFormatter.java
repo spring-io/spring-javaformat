@@ -44,8 +44,7 @@ public class FileFormatter {
 	}
 
 	public FileFormatter(Formatter formatter) {
-		Optional.ofNullable(formatter).orElseThrow(
-				() -> new IllegalArgumentException("Formatter must not be null"));
+		Optional.ofNullable(formatter).orElseThrow(() -> new IllegalArgumentException("Formatter must not be null"));
 		this.formatter = formatter;
 	}
 

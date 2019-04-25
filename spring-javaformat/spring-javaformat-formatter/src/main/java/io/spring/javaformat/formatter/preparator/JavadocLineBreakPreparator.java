@@ -92,11 +92,9 @@ class JavadocLineBreakPreparator implements Preparator {
 
 		@Override
 		public boolean visit(Javadoc node) {
-			int commentIndex = this.tokenManager.firstIndexIn(node,
-					TerminalTokens.TokenNameCOMMENT_JAVADOC);
+			int commentIndex = this.tokenManager.firstIndexIn(node, TerminalTokens.TokenNameCOMMENT_JAVADOC);
 			Token commentToken = this.tokenManager.get(commentIndex);
-			this.commentTokenManager = new TokenManager(
-					commentToken.getInternalStructure(), this.tokenManager);
+			this.commentTokenManager = new TokenManager(commentToken.getInternalStructure(), this.tokenManager);
 			this.declaration = node.getParent();
 			this.firstTagElement = true;
 			this.hasText = false;
@@ -112,12 +110,11 @@ class JavadocLineBreakPreparator implements Preparator {
 		@Override
 		public boolean visit(TagElement node) {
 			if (isSquashRequired(node, this.declaration)) {
-				int startIndex = this.commentTokenManager
-						.findIndex(node.getStartPosition(), -1, false);
+				int startIndex = this.commentTokenManager.findIndex(node.getStartPosition(), -1, false);
 				Token token = this.commentTokenManager.get(startIndex);
 				token.clearLineBreaksBefore();
-				token.putLineBreaksBefore(this.declaration instanceof TypeDeclaration
-						&& this.firstTagElement && this.hasText ? 2 : 1);
+				token.putLineBreaksBefore(
+						this.declaration instanceof TypeDeclaration && this.firstTagElement && this.hasText ? 2 : 1);
 				this.firstTagElement = false;
 			}
 			return true;

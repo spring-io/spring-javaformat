@@ -36,4 +36,5 @@ abstract class AbstractSpringCheck extends AbstractCheck {
 	public int[] getRequiredTokens() {
 		return NO_REQUIRED_TOKENS;
 	}
+
 }

@@ -31,21 +31,18 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 public class SpringJavadocCheck extends AbstractSpringCheck {
 
 	private static final Pattern[] PATTERNS = { Pattern.compile("@param\\s+\\S+\\s+(.*)"),
-			Pattern.compile("@throws\\s+\\S+\\s+(.*)"),
-			Pattern.compile("@return\\s+(.*)") };
+			Pattern.compile("@throws\\s+\\S+\\s+(.*)"), Pattern.compile("@return\\s+(.*)") };
 
 	@Override
 	public int[] getDefaultTokens() {
-		return new int[] { TokenTypes.INTERFACE_DEF, TokenTypes.CLASS_DEF,
-				TokenTypes.ENUM_DEF, TokenTypes.ANNOTATION_DEF, TokenTypes.METHOD_DEF,
-				TokenTypes.CTOR_DEF };
+		return new int[] { TokenTypes.INTERFACE_DEF, TokenTypes.CLASS_DEF, TokenTypes.ENUM_DEF,
+				TokenTypes.ANNOTATION_DEF, TokenTypes.METHOD_DEF, TokenTypes.CTOR_DEF };
 	}
 
 	@Override
 	public int[] getAcceptableTokens() {
-		return new int[] { TokenTypes.INTERFACE_DEF, TokenTypes.CLASS_DEF,
-				TokenTypes.ENUM_DEF, TokenTypes.ANNOTATION_DEF, TokenTypes.METHOD_DEF,
-				TokenTypes.CTOR_DEF, TokenTypes.ENUM_CONSTANT_DEF,
+		return new int[] { TokenTypes.INTERFACE_DEF, TokenTypes.CLASS_DEF, TokenTypes.ENUM_DEF,
+				TokenTypes.ANNOTATION_DEF, TokenTypes.METHOD_DEF, TokenTypes.CTOR_DEF, TokenTypes.ENUM_CONSTANT_DEF,
 				TokenTypes.ANNOTATION_FIELD_DEF };
 	}
 
@@ -66,9 +63,7 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 				if (matcher.find()) {
 					String description = matcher.group(1).trim();
 					if (startsWithUppercase(description)) {
-						log(javadoc.getStartLineNo() + i,
-								text[i].length() - description.length(),
-								"javadoc.badCase");
+						log(javadoc.getStartLineNo() + i, text[i].length() - description.length(), "javadoc.badCase");
 					}
 				}
 			}

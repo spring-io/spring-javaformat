@@ -59,15 +59,13 @@ public class SpringMethodOrderCheck extends AbstractSpringCheck {
 	}
 
 	private void checkOrder(List<DetailAST> methods) {
-		List<String> methodsNames = methods.stream().map(DetailAST::getText)
-				.collect(Collectors.toList());
+		List<String> methodsNames = methods.stream().map(DetailAST::getText).collect(Collectors.toList());
 		List<String> expected = new ArrayList<>(EXPECTED_ORDER);
 		expected.retainAll(methodsNames);
 		for (int i = 0; i < methods.size(); i++) {
 			DetailAST method = methods.get(i);
 			if (!method.getText().equals(expected.get(i))) {
-				log(method.getLineNo(), method.getColumnNo(), "methodorder.outOfOrder",
-						method.getText(), expected);
+				log(method.getLineNo(), method.getColumnNo(), "methodorder.outOfOrder", method.getText(), expected);
 			}
 		}
 	}

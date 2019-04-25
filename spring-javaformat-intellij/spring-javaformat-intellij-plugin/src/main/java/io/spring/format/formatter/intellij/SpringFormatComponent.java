@@ -45,8 +45,7 @@ public class SpringFormatComponent extends AbstractProjectComponent {
 
 	private static final String CODE_STYLE_MANAGER_KEY = CodeStyleManager.class.getName();
 
-	private static final String ACTIVE_PROPERTY = ScalableComponent.class.getName()
-			+ ".ACTIVE";
+	private static final String ACTIVE_PROPERTY = ScalableComponent.class.getName() + ".ACTIVE";
 
 	private final StatusIndicator statusIndicator;
 
@@ -69,8 +68,8 @@ public class SpringFormatComponent extends AbstractProjectComponent {
 		if (this.properties.getBoolean(ACTIVE_PROPERTY, false)) {
 			update(State.ACTIVE);
 		}
-		this.monitors = new Monitors(this.myProject, this::update, FileMonitor.factory(),
-				MavenMonitor.factory(), GradleMonitor.factory());
+		this.monitors = new Monitors(this.myProject, this::update, FileMonitor.factory(), MavenMonitor.factory(),
+				GradleMonitor.factory());
 	}
 
 	@Override
@@ -94,14 +93,12 @@ public class SpringFormatComponent extends AbstractProjectComponent {
 				reregisterComponent(new SpringCodeStyleManager(manager));
 				this.properties.setValue(ACTIVE_PROPERTY, true);
 			}
-			if (state == State.NOT_ACTIVE
-					&& (manager instanceof SpringCodeStyleManager)) {
+			if (state == State.NOT_ACTIVE && (manager instanceof SpringCodeStyleManager)) {
 				logger.debug("Disabling SpringCodeStyleManager");
 				reregisterComponent(((SpringCodeStyleManager) manager).getDelegate());
 				this.properties.setValue(ACTIVE_PROPERTY, false);
 			}
-			ApplicationManager.getApplication()
-					.invokeLater(() -> this.statusIndicator.update(state));
+			ApplicationManager.getApplication().invokeLater(() -> this.statusIndicator.update(state));
 		}
 		finally {
 			this.lock.unlock();
@@ -109,8 +106,7 @@ public class SpringFormatComponent extends AbstractProjectComponent {
 	}
 
 	private void reregisterComponent(CodeStyleManager manager) {
-		MutablePicoContainer container = (MutablePicoContainer) this.myProject
-				.getPicoContainer();
+		MutablePicoContainer container = (MutablePicoContainer) this.myProject.getPicoContainer();
 		container.unregisterComponent(CODE_STYLE_MANAGER_KEY);
 		container.registerComponentInstance(CODE_STYLE_MANAGER_KEY, manager);
 	}

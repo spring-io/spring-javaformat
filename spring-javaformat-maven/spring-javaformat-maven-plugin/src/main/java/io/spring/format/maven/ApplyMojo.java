@@ -38,12 +38,10 @@ import io.spring.javaformat.formatter.FileFormatterException;
 public class ApplyMojo extends FormatMojo {
 
 	@Override
-	protected void execute(List<File> files, Charset encoding)
-			throws MojoExecutionException, MojoFailureException {
+	protected void execute(List<File> files, Charset encoding) throws MojoExecutionException, MojoFailureException {
 		try {
 			FileFormatter formatter = new FileFormatter();
-			formatter.formatFiles(files, encoding).filter(FileEdit::hasEdits)
-					.forEach(this::save);
+			formatter.formatFiles(files, encoding).filter(FileEdit::hasEdits).forEach(this::save);
 		}
 		catch (FileFormatterException ex) {
 			throw new MojoExecutionException("Unable to format file " + ex.getFile(), ex);

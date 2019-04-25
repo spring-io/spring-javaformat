@@ -80,12 +80,10 @@ class SpringReformatter {
 		reformat(file, ranges, this.documentManager.get().getDocument(file));
 	}
 
-	private void throwNotWritableException(PsiElement element)
-			throws IncorrectOperationException {
+	private void throwNotWritableException(PsiElement element) throws IncorrectOperationException {
 		if (element instanceof PsiDirectory) {
 			String url = ((PsiDirectory) element).getVirtualFile().getPresentableUrl();
-			throw new IncorrectOperationException(
-					PsiBundle.message("cannot.modify.a.read.only.directory", url));
+			throw new IncorrectOperationException(PsiBundle.message("cannot.modify.a.read.only.directory", url));
 		}
 		PsiFile file = element.getContainingFile();
 		if (file == null) {
@@ -95,8 +93,8 @@ class SpringReformatter {
 		if (virtualFile == null) {
 			throw new IncorrectOperationException();
 		}
-		throw new IncorrectOperationException(PsiBundle.message(
-				"cannot.modify.a.read.only.file", virtualFile.getPresentableUrl()));
+		throw new IncorrectOperationException(
+				PsiBundle.message("cannot.modify.a.read.only.file", virtualFile.getPresentableUrl()));
 	}
 
 	private void reformat(PsiFile file, Collection<TextRange> ranges, Document document) {

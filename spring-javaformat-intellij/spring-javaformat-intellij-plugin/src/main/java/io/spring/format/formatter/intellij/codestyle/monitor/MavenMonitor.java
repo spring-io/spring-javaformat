@@ -42,8 +42,7 @@ public class MavenMonitor extends Monitor {
 
 	private final MavenProjectsManager mavenProjectsManager;
 
-	public MavenMonitor(Project project, Trigger trigger,
-			MavenProjectsManager mavenProjectsManager) {
+	public MavenMonitor(Project project, Trigger trigger, MavenProjectsManager mavenProjectsManager) {
 		super(project, trigger);
 		this.mavenProjectsManager = mavenProjectsManager;
 		attachListener(mavenProjectsManager);
@@ -54,15 +53,13 @@ public class MavenMonitor extends Monitor {
 		mavenProjectsManager.addProjectsTreeListener(new Listener() {
 
 			@Override
-			public void projectsUpdated(
-					List<Pair<MavenProject, MavenProjectChanges>> updated,
+			public void projectsUpdated(List<Pair<MavenProject, MavenProjectChanges>> updated,
 					List<MavenProject> deleted) {
 				check();
 			}
 
 			@Override
-			public void projectResolved(
-					Pair<MavenProject, MavenProjectChanges> projectWithChanges,
+			public void projectResolved(Pair<MavenProject, MavenProjectChanges> projectWithChanges,
 					NativeMavenProjectHolder nativeMavenProject) {
 				check();
 			}
@@ -95,10 +92,8 @@ public class MavenMonitor extends Monitor {
 
 	public static Factory factory() {
 		return (project, trigger) -> {
-			MavenProjectsManager mavenProjectsManager = MavenProjectsManager
-					.getInstance(project);
-			return (mavenProjectsManager == null ? null
-					: new MavenMonitor(project, trigger, mavenProjectsManager));
+			MavenProjectsManager mavenProjectsManager = MavenProjectsManager.getInstance(project);
+			return (mavenProjectsManager == null ? null : new MavenMonitor(project, trigger, mavenProjectsManager));
 		};
 	}
 

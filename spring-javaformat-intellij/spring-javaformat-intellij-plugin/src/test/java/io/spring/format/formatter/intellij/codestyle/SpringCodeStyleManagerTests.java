@@ -55,8 +55,7 @@ public class SpringCodeStyleManagerTests {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		this.styleManager = new SpringCodeStyleManager(this.delegate,
-				this.springReformatter);
+		this.styleManager = new SpringCodeStyleManager(this.delegate, this.springReformatter);
 	}
 
 	@Test

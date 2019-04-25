@@ -31,8 +31,7 @@ public class MessagesTests {
 	@Test
 	public void bindHasCorrectMessage() {
 		String message = NLS.bind(Messages.springFormatSettingsImportError, "reason");
-		assertThat(message)
-				.isEqualTo("Error importing project specific settings: reason");
+		assertThat(message).isEqualTo("Error importing project specific settings: reason");
 	}
 
 }

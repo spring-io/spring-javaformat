@@ -33,8 +33,7 @@ import org.eclipse.text.edits.TextEdit;
  */
 public class FileEdit {
 
-	private static final Pattern TRAILING_WHITESPACE = Pattern.compile(" +$",
-			Pattern.MULTILINE);
+	private static final Pattern TRAILING_WHITESPACE = Pattern.compile(" +$", Pattern.MULTILINE);
 
 	private final File file;
 

@@ -102,8 +102,7 @@ public class DelegatingCodeStyleManagerTests {
 	}
 
 	@Test
-	public void reformatWithCanChangeWhiteSpacesOnlyShouldCallDelegate()
-			throws Exception {
+	public void reformatWithCanChangeWhiteSpacesOnlyShouldCallDelegate() throws Exception {
 		this.delegating.reformat(this.element, true);
 		verify(this.delegate).reformat(this.element, true);
 	}
@@ -115,8 +114,7 @@ public class DelegatingCodeStyleManagerTests {
 	}
 
 	@Test
-	public void reformatRangeWithCanChangeWhiteSpacesOnlyShouldCallDelegate()
-			throws Exception {
+	public void reformatRangeWithCanChangeWhiteSpacesOnlyShouldCallDelegate() throws Exception {
 		this.delegating.reformatRange(this.element, 12, 34, true);
 		verify(this.delegate).reformatRange(this.element, 12, 34, true);
 	}
@@ -192,8 +190,7 @@ public class DelegatingCodeStyleManagerTests {
 	@Test
 	@Deprecated
 	public void fillIndentShouldCallDelegate() throws Exception {
-		com.intellij.psi.codeStyle.Indent indent = mock(
-				com.intellij.psi.codeStyle.Indent.class);
+		com.intellij.psi.codeStyle.Indent indent = mock(com.intellij.psi.codeStyle.Indent.class);
 		this.delegating.fillIndent(indent, this.fileType);
 		verify(this.delegate).fillIndent(indent, this.fileType);
 	}
@@ -218,8 +215,7 @@ public class DelegatingCodeStyleManagerTests {
 	}
 
 	@Test
-	public void performActionWithFormatterDisabledWithRunnableShouldCallDelegate()
-			throws Exception {
+	public void performActionWithFormatterDisabledWithRunnableShouldCallDelegate() throws Exception {
 		Runnable runnable = mock(Runnable.class);
 		this.delegating.performActionWithFormatterDisabled(runnable);
 		verify(this.delegate).performActionWithFormatterDisabled(runnable);
@@ -227,8 +223,7 @@ public class DelegatingCodeStyleManagerTests {
 
 	@Test
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void performActionWithFormatterDisabledWithThrowableRunnableShouldCallDelegate()
-			throws Throwable {
+	public void performActionWithFormatterDisabledWithThrowableRunnableShouldCallDelegate() throws Throwable {
 		ThrowableRunnable runnable = mock(ThrowableRunnable.class);
 		this.delegating.performActionWithFormatterDisabled(runnable);
 		verify(this.delegate).performActionWithFormatterDisabled(runnable);
@@ -236,8 +231,7 @@ public class DelegatingCodeStyleManagerTests {
 
 	@Test
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void performActionWithFormatterDisabledWithComputableShouldCallDelegate()
-			throws Exception {
+	public void performActionWithFormatterDisabledWithComputableShouldCallDelegate() throws Exception {
 		Computable computable = mock(Computable.class);
 		this.delegating.performActionWithFormatterDisabled(computable);
 		verify(this.delegate).performActionWithFormatterDisabled(computable);

@@ -50,19 +50,15 @@ class SpringConfigurationLoader {
 	}
 
 	public Collection<FileSetCheck> load(PropertyResolver propertyResolver) {
-		Configuration config = loadConfiguration(
-				getClass().getResourceAsStream("spring-checkstyle.xml"),
+		Configuration config = loadConfiguration(getClass().getResourceAsStream("spring-checkstyle.xml"),
 				propertyResolver);
-		return Arrays.stream(config.getChildren()).map(this::load)
-				.collect(Collectors.toList());
+		return Arrays.stream(config.getChildren()).map(this::load).collect(Collectors.toList());
 	}
 
-	private Configuration loadConfiguration(InputStream inputStream,
-			PropertyResolver propertyResolver) {
+	private Configuration loadConfiguration(InputStream inputStream, PropertyResolver propertyResolver) {
 		try {
 			InputSource inputSource = new InputSource(inputStream);
-			return ConfigurationLoader.loadConfiguration(inputSource, propertyResolver,
-					IgnoredModulesOptions.EXECUTE);
+			return ConfigurationLoader.loadConfiguration(inputSource, propertyResolver, IgnoredModulesOptions.EXECUTE);
 		}
 		catch (CheckstyleException ex) {
 			throw new IllegalStateException(ex);
@@ -87,13 +83,11 @@ class SpringConfigurationLoader {
 			return module;
 		}
 		catch (CheckstyleException ex) {
-			throw new IllegalStateException(
-					"cannot initialize module " + name + " - " + ex.getMessage(), ex);
+			throw new IllegalStateException("cannot initialize module " + name + " - " + ex.getMessage(), ex);
 		}
 	}
 
-	private void initialize(Configuration configuration, AutomaticBean bean)
-			throws CheckstyleException {
+	private void initialize(Configuration configuration, AutomaticBean bean) throws CheckstyleException {
 		bean.contextualize(this.context);
 		bean.configure(configuration);
 	}

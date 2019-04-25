@@ -56,8 +56,8 @@ public class CheckFilter extends AbstractCheck {
 		String name = childConf.getName();
 		Object module = moduleFactory.createModule(name);
 		if (!(module instanceof AbstractCheck)) {
-			throw new CheckstyleException("OptionalCheck is not allowed as a parent of "
-					+ name + " Please review 'Parent Module' section for this Check.");
+			throw new CheckstyleException("OptionalCheck is not allowed as a parent of " + name
+					+ " Please review 'Parent Module' section for this Check.");
 		}
 		if (this.check != null) {
 			throw new CheckstyleException("Can only make a single check optional");
@@ -126,7 +126,5 @@ public class CheckFilter extends AbstractCheck {
 	public void leaveToken(DetailAST ast) {
 		this.check.leaveToken(ast);
 	}
-
-
 
 }

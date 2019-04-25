@@ -67,8 +67,8 @@ public class SpringReformatterTests {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		this.reformatter = new TestSpringReformatter(() -> this.project,
-				() -> this.application, () -> this.documentManager);
+		this.reformatter = new TestSpringReformatter(() -> this.project, () -> this.application,
+				() -> this.documentManager);
 	}
 
 	@Test
@@ -98,16 +98,14 @@ public class SpringReformatterTests {
 		String text = "public class Hello {}";
 		given(document.getText()).willReturn(text);
 		given(this.documentManager.getDocument(this.file)).willReturn(document);
-		this.reformatter.reformat(this.file,
-				Arrays.asList(new TextRange(0, text.length())));
+		this.reformatter.reformat(this.file, Arrays.asList(new TextRange(0, text.length())));
 		verify(document).replaceString(20, 20, "\n\n");
 		verify(this.documentManager).commitDocument(document);
 	}
 
 	static class TestSpringReformatter extends SpringReformatter {
 
-		TestSpringReformatter(Supplier<Project> project,
-				Supplier<Application> application,
+		TestSpringReformatter(Supplier<Project> project, Supplier<Application> application,
 				Supplier<PsiDocumentManager> documentManager) {
 			super(project, application, documentManager);
 		}

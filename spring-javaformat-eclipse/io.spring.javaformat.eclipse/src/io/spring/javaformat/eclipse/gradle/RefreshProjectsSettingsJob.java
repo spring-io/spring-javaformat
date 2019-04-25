@@ -74,8 +74,7 @@ public class RefreshProjectsSettingsJob extends Job {
 		return Status.OK_STATUS;
 	}
 
-	private void configureProjects(IProgressMonitor monitor)
-			throws CoreException, IOException {
+	private void configureProjects(IProgressMonitor monitor) throws CoreException, IOException {
 		InternalGradleWorkspace workspace = CorePlugin.internalGradleWorkspace();
 		for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
 			Optional<GradleBuild> build = workspace.getBuild(project);
@@ -85,13 +84,12 @@ public class RefreshProjectsSettingsJob extends Job {
 		}
 	}
 
-	private void configureProject(IProject project, InternalGradleBuild build,
-			IProgressMonitor monitor) throws CoreException, IOException {
-		Set<EclipseProject> projects = ModelProviderUtil.fetchAllEclipseProjects(build,
-				this.tokenSource, FetchStrategy.FORCE_RELOAD, monitor);
+	private void configureProject(IProject project, InternalGradleBuild build, IProgressMonitor monitor)
+			throws CoreException, IOException {
+		Set<EclipseProject> projects = ModelProviderUtil.fetchAllEclipseProjects(build, this.tokenSource,
+				FetchStrategy.FORCE_RELOAD, monitor);
 		if (hasSpringFormatPlugin(projects)) {
-			ProjectSettingsFilesLocator locator = new ProjectSettingsFilesLocator(
-					getSearchFolders(projects));
+			ProjectSettingsFilesLocator locator = new ProjectSettingsFilesLocator(getSearchFolders(projects));
 			locator.locateSettingsFiles().applyToProject(project, monitor);
 		}
 	}
