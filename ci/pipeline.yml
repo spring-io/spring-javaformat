@@ -11,6 +11,7 @@ resource_types:
 resources:
 - name: git-repo
   type: git
+  icon: github-circle
   source:
     uri: ((github-repo))
     username: ((github-username))
@@ -19,6 +20,7 @@ resources:
     ignore_paths: ["ci/images/*"]
 - name: git-pull-request
   type: pull-request
+  icon: source-pull
   source:
     access_token: ((github-access-token))
     repo: ((github-repo-name))
@@ -26,12 +28,14 @@ resources:
     ignore_paths: ["ci/*"]
 - name: ci-images-git-repo
   type: git
+  icon: github-circle
   source:
     uri: ((github-repo))
     branch: ((branch))
     paths: ["ci/images/*"]
 - name: spring-javaformat-ci-image
   type: docker-image
+  icon: docker
   source:
     repository: ((docker-hub-organization))/spring-javaformat-ci-image
     username: ((docker-hub-username))
@@ -39,6 +43,7 @@ resources:
     tag: ((branch))
 - name: artifactory-repo
   type: artifactory-resource
+  icon: package-variant
   source:
     uri: ((artifactory-server))
     username: ((artifactory-username))
@@ -46,6 +51,7 @@ resources:
     build_name: ((build-name))
 - name: github-release
   type: github-release
+  icon: briefcase-download
   source:
     owner: spring-io
     repository: spring-javaformat
