@@ -22,7 +22,7 @@ resources:
   type: pull-request
   icon: source-pull
   source:
-    access_token: ((github-access-token))
+    access_token: ((github-ci-pull-request-token))
     repo: ((github-repo-name))
     base: ((branch))
     ignore_paths: ["ci/*"]
@@ -55,7 +55,7 @@ resources:
   source:
     owner: spring-io
     repository: spring-javaformat
-    access_token: ((github-release-notes-access-token))
+    access_token: ((github-ci-release-token))
 jobs:
 - name: build-spring-javaformat-ci-images
   plan:
