@@ -1,0 +1,1 @@
++JUnit 4 @Test annotation should not be used in a JUnit 5 test.

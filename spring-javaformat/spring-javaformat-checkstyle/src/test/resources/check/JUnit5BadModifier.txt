@@ -1,0 +1,2 @@
++Test method 'doSomethingWorks' should not be public
++Test method 'doSomethingElseWorks' should not be private
