@@ -69,6 +69,7 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 
 	@Override
 	public void beginTree(DetailAST rootAST) {
+		this.imports.clear();
 		this.testMethods.clear();
 	}
 
