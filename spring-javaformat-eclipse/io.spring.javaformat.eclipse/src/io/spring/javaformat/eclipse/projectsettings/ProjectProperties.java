@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -31,7 +32,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * Eclipse properties used to modify setting files content.
@@ -86,7 +86,13 @@ class ProjectProperties {
 
 	private String loadContent(ProjectSettingsFile file) throws IOException {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getContent()))) {
-			return reader.lines().collect(Collectors.joining("\n"));
+			StringWriter writer = new StringWriter();
+			char[] buffer = new char[4096];
+			int read = 0;
+			while ((read = reader.read(buffer)) >= 0) {
+				writer.write(buffer, 0, read);
+			}
+			return writer.toString();
 		}
 	}
 
