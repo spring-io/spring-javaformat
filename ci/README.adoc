@@ -1,44 +1,18 @@
 == Concourse pipeline
 
-Ensure the team is set:
+Ensure that you've setup the spring-boot target and can login
 
 [source]
 ----
-$ fly -t spring set-team -n spring-javaformat --github-team=spring-io:spring-javaformat
+$ fly -t spring-javaformat login -n spring-javaformat -c https://ci.spring.io
 ----
 
 The pipeline can be deployed using the following command:
 
 [source]
 ----
-$ fly -t spring set-pipeline -p spring-javaformat -c ci/pipeline.yml -l ci/parameters.yml
+$ fly -t spring-javaformat set-pipeline -p spring-javaformat -c ci/pipeline.yml -l ci/parameters.yml
 ----
 
 NOTE: This assumes that you have credhub integration configured with the appropriate
 secrets.
-
-=== Release
-
-To release a milestone:
-
-[source]
-----
-$ fly -t spring trigger-job -j spring-javaformat/stage-milestone
-$ fly -t spring trigger-job -j spring-javaformat/promote-milestone
-----
-
-To release an RC:
-
-[source]
-----
-$ fly -t spring trigger-job -j spring-javaformat/stage-rc
-$ fly -t spring trigger-job -j spring-javaformat/promote-rc
-----
-
-To release a GA:
-
-[source]
-----
-$ fly -t spring trigger-job -j spring-javaformat/stage-release
-$ fly -t spring trigger-job -j spring-javaformat/promote-release
-----

@@ -63,7 +63,8 @@ jobs:
     trigger: true
   - put: spring-javaformat-ci-image
     params:
-      build: ci-images-git-repo/ci/images/spring-javaformat-ci-image
+      build: ci-images-git-repo/ci/images
+      dockerfile: ci-images-git-repo/ci/images/spring-javaformat-ci-image/Dockerfile
 - name: build
   serial: true
   public: true
