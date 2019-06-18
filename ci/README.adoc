@@ -1,6 +1,6 @@
 == Concourse pipeline
 
-Ensure that you've setup the spring-boot target and can login
+Ensure that you've setup the target and can login
 
 [source]
 ----
