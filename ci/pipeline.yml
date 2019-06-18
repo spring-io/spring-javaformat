@@ -178,7 +178,7 @@ jobs:
     file: git-repo/ci/tasks/generate-release-notes.yml
     params:
       GITHUB_USERNAME: ((github-username))
-      GITHUB_TOKEN: ((github-release-notes-access-token))
+      GITHUB_TOKEN: ((github-ci-release-token))
   - put: github-release
     params:
       name: generated-release-notes/tag
