@@ -47,10 +47,6 @@ import io.spring.javaformat.checkstyle.check.SpringImportOrderCheck;
  */
 public class SpringChecks extends AbstractFileSetCheck implements ExternalResourceHolder {
 
-	private static final int DEFAULT_TAB_WIDTH = 8;
-
-	private int tabWidth = DEFAULT_TAB_WIDTH;
-
 	private ClassLoader classLoader;
 
 	private ModuleFactory moduleFactory;
@@ -64,14 +60,6 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 	private String headerFile;
 
 	private String projectRootPackage = SpringImportOrderCheck.DEFAULT_PROJECT_ROOT_PACKAGE;
-
-	/**
-	 * Sets tab width.
-	 * @param tabWidth the distance between tab stops
-	 */
-	public void setTabWidth(int tabWidth) {
-		this.tabWidth = tabWidth;
-	}
 
 	/**
 	 * Sets classLoader to load class.
@@ -94,7 +82,7 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 		DefaultContext context = new DefaultContext();
 		context.add("classLoader", this.classLoader);
 		context.add("severity", getSeverity());
-		context.add("tabWidth", String.valueOf(this.tabWidth));
+		context.add("tabWidth", String.valueOf(getTabWidth()));
 		context.add("moduleFactory", this.moduleFactory);
 		Properties properties = new Properties();
 		put(properties, "headerType", this.headerType);
