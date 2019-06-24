@@ -43,7 +43,7 @@ public class JavadocValid<T> {
 	 * @return the thing
 	 * @throws RuntimeException on the error
 	 */
-	public String test3(String something) throw RuntimeException {
+	public String test3(String something) throws RuntimeException {
 	}
 
 }
