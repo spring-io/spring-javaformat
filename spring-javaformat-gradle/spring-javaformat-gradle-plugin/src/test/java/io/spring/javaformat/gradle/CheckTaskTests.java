@@ -44,8 +44,26 @@ public class CheckTaskTests {
 	}
 
 	@Test
+	public void whenFirstInvocationSucceedsThenSecondInvocationIsUpToDate() throws IOException {
+		GradleBuild gradleBuild = this.gradleBuild.source("src/test/resources/check-ok");
+		BuildResult result = gradleBuild.build("check");
+		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+		result = gradleBuild.build("check");
+		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.UP_TO_DATE);
+	}
+
+	@Test
 	public void checkBad() throws IOException {
 		BuildResult result = this.gradleBuild.source("src/test/resources/check-bad").buildAndFail("check");
+		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.FAILED);
+	}
+
+	@Test
+	public void whenFirstInvocationFailsThenSecondInvocationFails() throws IOException {
+		GradleBuild gradleBuild = this.gradleBuild.source("src/test/resources/check-bad");
+		BuildResult result = gradleBuild.buildAndFail("check");
+		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.FAILED);
+		result = gradleBuild.buildAndFail("check");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.FAILED);
 	}
 

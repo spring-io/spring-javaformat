@@ -154,7 +154,9 @@ public class GradleBuild implements TestRule {
 				try {
 					Path relative = source.relativize(child);
 					Path destination = target.resolve(relative);
-					Files.copy(child, destination, StandardCopyOption.REPLACE_EXISTING);
+					if (!destination.toFile().isDirectory()) {
+						Files.copy(child, destination, StandardCopyOption.REPLACE_EXISTING);
+					}
 				}
 				catch (Exception ex) {
 					throw new IllegalStateException(ex);

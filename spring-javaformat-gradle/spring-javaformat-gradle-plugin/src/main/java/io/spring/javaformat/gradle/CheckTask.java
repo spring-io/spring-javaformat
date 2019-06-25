@@ -43,6 +43,10 @@ public class CheckTask extends FormatterTask {
 	 */
 	public static final String DESCRIPTION = "Run Spring Java formatting checks";
 
+	public CheckTask() {
+		getOutputs().upToDateWhen((task) -> true);
+	}
+
 	@TaskAction
 	public void checkFormatting() throws IOException, InterruptedException {
 		List<File> problems = formatFiles().filter(FileEdit::hasEdits).map(FileEdit::getFile)
