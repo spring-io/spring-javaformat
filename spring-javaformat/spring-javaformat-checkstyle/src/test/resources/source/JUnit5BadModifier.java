@@ -23,6 +23,46 @@ import org.junit.jupiter.api.Test;
  */
 public class JUnit5BadModifier {
 
+	@BeforeAll
+	public static void publicBeforeAll() {
+
+	}
+
+	@BeforeEach
+	public void publicBeforeEach() {
+
+	}
+
+	@AfterAll
+	public static void publicAfterAll() {
+
+	}
+
+	@BeforeEach
+	public void publicAfterEach() {
+
+	}
+
+	@BeforeAll
+	private static void privateBeforeAll() {
+
+	}
+
+	@BeforeEach
+	private void privateBeforeEach() {
+
+	}
+
+	@AfterAll
+	private static void privateAfterAll() {
+
+	}
+
+	@BeforeEach
+	private void privateAfterEach() {
+
+	}
+
 	@Test
 	public void doSomethingWorks() {
 		// test here

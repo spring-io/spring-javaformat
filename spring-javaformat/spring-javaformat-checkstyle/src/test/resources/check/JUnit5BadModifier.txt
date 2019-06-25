@@ -1,2 +1,10 @@
 +Test method 'doSomethingWorks' should not be public
 +Test method 'doSomethingElseWorks' should not be private
++Lifecycle method 'publicBeforeAll' should not be public
++Lifecycle method 'publicBeforeEach' should not be public
++Lifecycle method 'publicAfterAll' should not be public
++Lifecycle method 'publicAfterEach' should not be public
++Lifecycle method 'privateBeforeAll' should not be private
++Lifecycle method 'privateBeforeEach' should not be private
++Lifecycle method 'privateAfterAll' should not be private
++Lifecycle method 'privateAfterEach' should not be private

@@ -43,6 +43,10 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 	private static final List<String> TEST_ANNOTATIONS = Collections
 			.unmodifiableList(Arrays.asList("Test", JUNIT4_TEST_ANNOTATION, JUNIT5_TEST_ANNOTATION));
 
+	private static final List<String> LIFECYCLE_ANNOTATIONS = Collections.unmodifiableList(Arrays.asList("BeforeAll",
+			"org.junit.jupiter.api.BeforeAll", "BeforeEach", "org.junit.jupiter.api.BeforeEach", "AfterAll",
+			"org.junit.jupiter.api.AfterAll", "AfterEach", "org.junit.jupiter.api.AfterEach"));
+
 	private static final List<String> BANNED_IMPORTS;
 	static {
 		List<String> bannedImports = new ArrayList<>();
@@ -62,6 +66,8 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 
 	private final Map<String, FullIdent> imports = new LinkedHashMap<>();
 
+	private final List<DetailAST> lifecycleMethods = new ArrayList<>();
+
 	@Override
 	public int[] getAcceptableTokens() {
 		return new int[] { TokenTypes.METHOD_DEF, TokenTypes.IMPORT };
@@ -71,6 +77,7 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 	public void beginTree(DetailAST rootAST) {
 		this.imports.clear();
 		this.testMethods.clear();
+		this.lifecycleMethods.clear();
 	}
 
 	@Override
@@ -88,6 +95,9 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 		if (AnnotationUtil.containsAnnotation(ast, TEST_ANNOTATIONS)) {
 			this.testMethods.add(ast);
 		}
+		if (AnnotationUtil.containsAnnotation(ast, LIFECYCLE_ANNOTATIONS)) {
+			this.lifecycleMethods.add(ast);
+		}
 	}
 
 	private void visitImport(DetailAST ast) {
@@ -103,7 +113,7 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 	}
 
 	private boolean shouldCheck() {
-		if (this.testMethods.isEmpty()) {
+		if (this.testMethods.isEmpty() && this.lifecycleMethods.isEmpty()) {
 			return false;
 		}
 		for (String unlessImport : this.unlessImports) {
@@ -126,13 +136,18 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 				log(testMethod, "junit5.bannedTestAnnotation");
 			}
 		}
-		for (DetailAST testMethod : this.testMethods) {
-			DetailAST modifiers = testMethod.findFirstToken(TokenTypes.MODIFIERS);
+		checkMethodVisibility(this.testMethods, "junit5.testPublicMethod", "junit5.testPrivateMethod");
+		checkMethodVisibility(this.lifecycleMethods, "junit5.lifecyclePublicMethod", "junit5.lifecyclePrivateMethod");
+	}
+
+	private void checkMethodVisibility(List<DetailAST> methods, String publicMessageKey, String privateMessageKey) {
+		for (DetailAST method : methods) {
+			DetailAST modifiers = method.findFirstToken(TokenTypes.MODIFIERS);
 			if (modifiers.findFirstToken(TokenTypes.LITERAL_PUBLIC) != null) {
-				log(testMethod, "junit5.publicMethod");
+				log(method, publicMessageKey);
 			}
 			if (modifiers.findFirstToken(TokenTypes.LITERAL_PRIVATE) != null) {
-				log(testMethod, "junit5.privateMethod");
+				log(method, privateMessageKey);
 			}
 		}
 	}
