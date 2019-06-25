@@ -32,6 +32,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 		<eclipse.repository>https://download.eclipse.org/releases/2019-03/201903201000</eclipse.repository>
+		<eclipse.buildship.repository>https://download.eclipse.org/buildship/updates/e411/releases/3.x/3.1.0.v20190501-0832</eclipse.buildship.repository>
 		<eclipse.checkstyle.repository>https://dl.bintray.com/eclipse-cs/eclipse-cs/8.18.0</eclipse.checkstyle.repository>
 		<tycho.disableP2Mirrors>true</tycho.disableP2Mirrors>
 		<ant.version>1.8.1</ant.version>
@@ -591,6 +592,11 @@
 			<id>eclipse</id>
 			<layout>p2</layout>
 			<url>${eclipse.repository}</url>
+		</repository>
+		<repository>
+			<id>eclipse-buildship</id>
+			<layout>p2</layout>
+			<url>${eclipse.buildship.repository}</url>
 		</repository>
 		<repository>
 			<id>eclipse-checkstyle</id>

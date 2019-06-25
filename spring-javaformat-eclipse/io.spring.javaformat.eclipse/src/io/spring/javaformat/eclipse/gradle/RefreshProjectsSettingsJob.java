@@ -18,16 +18,15 @@ package io.spring.javaformat.eclipse.gradle;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.buildship.core.GradleBuild;
 import org.eclipse.buildship.core.internal.CorePlugin;
-import org.eclipse.buildship.core.internal.workspace.FetchStrategy;
 import org.eclipse.buildship.core.internal.workspace.InternalGradleBuild;
 import org.eclipse.buildship.core.internal.workspace.InternalGradleWorkspace;
-import org.eclipse.buildship.core.internal.workspace.ModelProviderUtil;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -86,15 +85,15 @@ public class RefreshProjectsSettingsJob extends Job {
 
 	private void configureProject(IProject project, InternalGradleBuild build, IProgressMonitor monitor)
 			throws CoreException, IOException {
-		Set<EclipseProject> projects = ModelProviderUtil.fetchAllEclipseProjects(build, this.tokenSource,
-				FetchStrategy.FORCE_RELOAD, monitor);
+		Collection<EclipseProject> projects = build.getModelProvider()
+				.fetchEclipseProjectAndRunSyncTasks(this.tokenSource, monitor);
 		if (hasSpringFormatPlugin(projects)) {
 			ProjectSettingsFilesLocator locator = new ProjectSettingsFilesLocator(getSearchFolders(projects));
 			locator.locateSettingsFiles().applyToProject(project, monitor);
 		}
 	}
 
-	private boolean hasSpringFormatPlugin(Set<EclipseProject> projects) {
+	private boolean hasSpringFormatPlugin(Collection<EclipseProject> projects) {
 		for (EclipseProject project : projects) {
 			for (GradleTask task : project.getGradleProject().getTasks()) {
 				if (isSpringFormatPlugin(task)) {
@@ -109,7 +108,7 @@ public class RefreshProjectsSettingsJob extends Job {
 		return TASK_NAME.equals(task.getName());
 	}
 
-	private Set<File> getSearchFolders(Set<EclipseProject> projects) {
+	private Set<File> getSearchFolders(Collection<EclipseProject> projects) {
 		Set<File> searchFolders = new LinkedHashSet<>();
 		for (EclipseProject project : projects) {
 			while (project != null) {
