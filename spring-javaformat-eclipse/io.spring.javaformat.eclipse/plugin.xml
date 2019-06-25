@@ -20,12 +20,6 @@
        point="org.eclipse.m2e.core.lifecycleMappingMetadataSource">
  </extension>
  <extension
-       point="org.eclipse.ui.startup">
-    <startup
-          class="io.spring.javaformat.eclipse.Startup">
-    </startup>
- </extension>
- <extension
        point="net.sf.eclipsecs.core.checkstyleAddonProvider">
  </extension>
  <extension

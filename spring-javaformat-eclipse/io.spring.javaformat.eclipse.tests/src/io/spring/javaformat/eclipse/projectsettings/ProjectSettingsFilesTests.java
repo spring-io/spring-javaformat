@@ -16,6 +16,7 @@
 
 package io.spring.javaformat.eclipse.projectsettings;
 
+import java.io.InputStream;
 import java.util.Collections;
 
 import org.eclipse.core.resources.IFile;
@@ -59,8 +60,7 @@ public class ProjectSettingsFilesTests {
 		given(project.getFile(".settings/foo.prefs")).willReturn(projectFile);
 		given(projectFile.exists()).willReturn(true);
 		files.applyToProject(project, monitor);
-		verify(projectFile).delete(true, monitor);
-		verify(projectFile).create(any(), eq(true), eq(monitor));
+		verify(projectFile).setContents((InputStream) any(), eq(1), eq(monitor));
 	}
 
 }

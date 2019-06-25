@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -65,15 +66,13 @@ public class ProjectSettingsFiles implements Iterable<ProjectSettingsFile> {
 	public void applyToProject(IProject project, IProgressMonitor monitor) throws IOException, CoreException {
 		for (ProjectSettingsFile file : this) {
 			IFile destination = project.getFile(".settings/" + file.getName());
-			if (destination.exists()) {
-				try {
-					destination.delete(true, monitor);
-				}
-				catch (CoreException ex) {
-				}
-			}
 			try (InputStream content = this.projectProperties.getModifiedContent(file)) {
-				destination.create(new BufferedInputStream(content), true, monitor);
+				if (!destination.exists()) {
+					destination.create(new BufferedInputStream(content), true, monitor);
+				}
+				else {
+					destination.setContents(new BufferedInputStream(content), IResource.FORCE, monitor);
+				}
 			}
 		}
 	}
