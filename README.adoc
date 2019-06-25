@@ -69,7 +69,7 @@ If you want to enforce that all code matches the required style, add the followi
 
 NOTE: The source formatter does not fundamentally change your code.
 For example, it will not change the order of import statements.
-It is effectively limited to adding or removing whitespace and line feeds. 
+It is effectively limited to adding or removing whitespace and line feeds.
 
 === Checkstyle
 
@@ -207,7 +207,7 @@ Here are some tips that we've found useful when developing Spring Boot.
 Some code isn't particularly amenable to automatic formatting.
 For example, Spring Security configurations often work better when manually formatted.
 
-If you need to disable formatting for a specific block of code you can enclose it in a `@formatter:off` / `@formatter:on` set: 
+If you need to disable formatting for a specific block of code you can enclose it in a `@formatter:off` / `@formatter:on` set:
 
 [source,java]
 ----
@@ -219,12 +219,15 @@ If you need to disable formatting for a specific block of code you can enclose i
 ----
 
 ==== Wrapping
-The source formatter intentionally uses a low character count of 90 chars for wrapping.
-If you're used to longer lines, this can take some getting used to.
-Specifically, if you have many nesting levels things can start to look quite bad.
+The source formatter uses 120 chars for wrapping. This aims to strike a balance between
+making use of available horizontal space in your IDE and avoiding unwanted additional
+wrapping when viewing code on GitHub and the like.
 
-Generally, if you see code bunched up to the right of your screen you should take that as a signal to use the "`extract method`" refactor.
-Extracting small private methods will improve formatting and it helps when reading the code and debugging.
+If you're used to longer lines, 120 chars can take some getting used to. Specifically, if
+you have many nesting levels things can start to look quite bad. Generally, if you see
+code bunched up to the right of your screen you should take that as a signal to use the
+"`extract method`" refactor. Extracting small private methods will improve formatting and
+it helps when reading the code and debugging.
 
 ==== Whitespace
 Keeping whitespace lines out method bodies can help make the code easier to scan.
