@@ -18,6 +18,7 @@ package io.spring.javaformat.eclipse.gradle;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Optional;
@@ -55,9 +56,16 @@ public class RefreshProjectsSettingsJob extends Job {
 
 	private final CancellationTokenSource tokenSource;
 
+	private final Set<IProject> projects;
+
 	public RefreshProjectsSettingsJob() {
+		this(null);
+	}
+
+	public RefreshProjectsSettingsJob(Set<IProject> projects) {
 		super("Refresh spring-javaformat project settings");
 		this.tokenSource = GradleConnector.newCancellationTokenSource();
+		this.projects = projects;
 	}
 
 	@Override
@@ -75,7 +83,11 @@ public class RefreshProjectsSettingsJob extends Job {
 
 	private void configureProjects(IProgressMonitor monitor) throws CoreException, IOException {
 		InternalGradleWorkspace workspace = CorePlugin.internalGradleWorkspace();
-		for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+		Collection<IProject> projects = this.projects;
+		if (projects == null) {
+			projects = Arrays.asList(ResourcesPlugin.getWorkspace().getRoot().getProjects());
+		}
+		for (IProject project : projects) {
 			Optional<GradleBuild> build = workspace.getBuild(project);
 			if (build.isPresent()) {
 				configureProject(project, (InternalGradleBuild) build.get(), monitor);
