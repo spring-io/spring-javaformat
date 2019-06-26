@@ -4,7 +4,7 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath("io.spring.javaformat:spring-javaformat-gradle-plugin:0.0.12")
+		classpath("io.spring.javaformat:spring-javaformat-gradle-plugin:0.0.14-SNAPSHOT")
 	}
 }
 
@@ -25,5 +25,5 @@ checkstyle {
 }
 
 dependencies {
-	checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.12")
+	checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.14-SNAPSHOT")
 }
