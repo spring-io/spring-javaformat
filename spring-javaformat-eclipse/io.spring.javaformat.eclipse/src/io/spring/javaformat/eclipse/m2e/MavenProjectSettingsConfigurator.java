@@ -32,11 +32,11 @@ import io.spring.javaformat.eclipse.projectsettings.ProjectSettingsFiles;
 import io.spring.javaformat.eclipse.projectsettings.ProjectSettingsFilesLocator;
 
 /**
- * Configurator to apply project specific settings.
+ * Configurator to apply project-specific settings to Maven projects.
  *
  * @author Phillip Webb
  */
-public class ProjectSettingsConfigurator extends AbstractProjectConfigurator {
+public class MavenProjectSettingsConfigurator extends AbstractProjectConfigurator {
 
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {

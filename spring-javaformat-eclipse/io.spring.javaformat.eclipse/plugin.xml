@@ -11,7 +11,7 @@
  <extension
        point="org.eclipse.m2e.core.projectConfigurators">
     <configurator
-          class="io.spring.javaformat.eclipse.m2e.ProjectSettingsConfigurator"
+          class="io.spring.javaformat.eclipse.m2e.MavenProjectSettingsConfigurator"
           id="io.spring.javaformat.eclipse.m2e.configurator"
           runsAfter="org.eclipse.m2e.jdt.javaConfigurator">
     </configurator>
@@ -30,5 +30,12 @@
           location="io/spring/javaformat/checkstyle/checkstyle.xml"
           name="Spring Built-in Checks">
     </check-configuration>
+ </extension>
+ <extension
+       point="org.eclipse.buildship.core.projectconfigurators">
+       <configurator
+             id="io.spring.javaformat.eclipse.gradle.ProjectSettingsConfigurator"
+             class="io.spring.javaformat.eclipse.gradle.GradleProjectSettingsConfigurator">
+       </configurator>
  </extension>
 </plugin>

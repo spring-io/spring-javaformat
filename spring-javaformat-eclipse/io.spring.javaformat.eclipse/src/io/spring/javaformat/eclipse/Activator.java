@@ -19,8 +19,6 @@ package io.spring.javaformat.eclipse;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import io.spring.javaformat.eclipse.gradle.RefreshProjectSettingsListeners;
-
 /**
  * The activator class controls the plug-in life cycle.
  *
@@ -41,7 +39,6 @@ public class Activator extends AbstractUIPlugin {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		RefreshProjectSettingsListeners.attach();
 		plugin = this;
 	}
 

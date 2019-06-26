@@ -18,92 +18,68 @@ package io.spring.javaformat.eclipse.gradle;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.buildship.core.GradleBuild;
+import org.eclipse.buildship.core.InitializationContext;
+import org.eclipse.buildship.core.ProjectConfigurator;
+import org.eclipse.buildship.core.ProjectContext;
 import org.eclipse.buildship.core.internal.CorePlugin;
 import org.eclipse.buildship.core.internal.workspace.FetchStrategy;
 import org.eclipse.buildship.core.internal.workspace.InternalGradleBuild;
 import org.eclipse.buildship.core.internal.workspace.InternalGradleWorkspace;
 import org.eclipse.buildship.core.internal.workspace.ModelProviderUtil;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.gradle.tooling.CancellationTokenSource;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.model.GradleTask;
 import org.gradle.tooling.model.eclipse.EclipseProject;
 
-import io.spring.javaformat.eclipse.Executor;
-import io.spring.javaformat.eclipse.Messages;
 import io.spring.javaformat.eclipse.projectsettings.ProjectSettingsFilesLocator;
 
 /**
- * Job to trigger refresh of project specific settings when the gradle plugin is used.
+ * {@link ProjectConfigurator} to apply project-specific settings to Gradle projects.
  *
+ * @author Andy Wilkinson
  * @author Phillip Webb
  */
 @SuppressWarnings("restriction")
-public class RefreshProjectsSettingsJob extends Job {
+public class GradleProjectSettingsConfigurator implements ProjectConfigurator {
 
 	private static final Object TASK_NAME = "checkFormatMain";
 
-	private final CancellationTokenSource tokenSource;
+	private CancellationTokenSource tokenSource;
 
-	private final Set<IProject> projects;
-
-	public RefreshProjectsSettingsJob() {
-		this(null);
-	}
-
-	public RefreshProjectsSettingsJob(Set<IProject> projects) {
-		super("Refresh spring-javaformat project settings");
+	@Override
+	public void init(InitializationContext context, IProgressMonitor monitor) {
 		this.tokenSource = GradleConnector.newCancellationTokenSource();
-		this.projects = projects;
+
 	}
 
 	@Override
-	protected IStatus run(IProgressMonitor monitor) {
+	public void configure(ProjectContext context, IProgressMonitor monitor) {
 		try {
-			new Executor(Messages.springFormatSettingsImportError).run(() -> {
-				configureProjects(monitor);
-			});
+			configureProject(context.getProject(), monitor);
 		}
-		catch (CoreException ex) {
-			return ex.getStatus();
+		catch (Exception ex) {
+			context.error("Failed to apply project settings", ex);
 		}
-		return Status.OK_STATUS;
 	}
 
-	private void configureProjects(IProgressMonitor monitor) throws CoreException, IOException {
+	private void configureProject(IProject project, IProgressMonitor monitor) throws CoreException, IOException {
 		InternalGradleWorkspace workspace = CorePlugin.internalGradleWorkspace();
-		Collection<IProject> projects = this.projects;
-		if (projects == null) {
-			projects = Arrays.asList(ResourcesPlugin.getWorkspace().getRoot().getProjects());
-		}
-		for (IProject project : projects) {
-			Optional<GradleBuild> build = workspace.getBuild(project);
-			if (build.isPresent()) {
-				configureProject(project, (InternalGradleBuild) build.get(), monitor);
+		Optional<GradleBuild> build = workspace.getBuild(project);
+		if (build.isPresent()) {
+			Set<EclipseProject> projects = ModelProviderUtil.fetchAllEclipseProjects((InternalGradleBuild) build.get(),
+					this.tokenSource, FetchStrategy.FORCE_RELOAD, monitor);
+			if (hasSpringFormatPlugin(projects)) {
+				ProjectSettingsFilesLocator locator = new ProjectSettingsFilesLocator(getSearchFolders(projects));
+				locator.locateSettingsFiles().applyToProject(project, monitor);
 			}
-		}
-	}
-
-	private void configureProject(IProject project, InternalGradleBuild build, IProgressMonitor monitor)
-			throws CoreException, IOException {
-		Set<EclipseProject> projects = ModelProviderUtil.fetchAllEclipseProjects(build, this.tokenSource,
-				FetchStrategy.FORCE_RELOAD, monitor);
-		if (hasSpringFormatPlugin(projects)) {
-			ProjectSettingsFilesLocator locator = new ProjectSettingsFilesLocator(getSearchFolders(projects));
-			locator.locateSettingsFiles().applyToProject(project, monitor);
 		}
 	}
 
@@ -131,6 +107,10 @@ public class RefreshProjectsSettingsJob extends Job {
 			}
 		}
 		return searchFolders;
+	}
+
+	@Override
+	public void unconfigure(ProjectContext context, IProgressMonitor monitor) {
 	}
 
 }
