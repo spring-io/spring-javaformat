@@ -117,7 +117,7 @@ public class SpringChecksTests {
 
 	@Parameters(name = "{0}")
 	public static Collection<Parameter> files() throws IOException {
-		return Arrays.stream(SOURCES_DIR.list((dir, name) -> !name.startsWith("."))).map(Parameter::new)
+		return Arrays.stream(SOURCES_DIR.list((dir, name) -> !name.startsWith("."))).sorted().map(Parameter::new)
 				.collect(Collectors.toList());
 	}
 

@@ -1,0 +1,3 @@
++Method 'badPrivateInner' in private class should not be public.
++Method 'badDefaultInner' in private class should not be public.
++2 errors

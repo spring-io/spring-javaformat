@@ -1,0 +1,3 @@
++Method 'bad' in private class should not be public.
++Method 'badStatic' in private class should not be public.
++2 errors
