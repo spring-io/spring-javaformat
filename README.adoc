@@ -1,5 +1,5 @@
 :release-version: 0.0.14
-:checkstyle-version: 8.18
+:checkstyle-version: 8.21
 == Spring Java Format
 
 === What is this?
