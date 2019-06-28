@@ -1,0 +1,3 @@
++JavadocNonPublicSince.java:21:11: Javadoc @since tag should not be used on private classes. [SpringJavadoc]
++JavadocNonPublicSince.java:28:19: Javadoc @since tag should not be used on private classes. [SpringJavadoc]
++2 errors

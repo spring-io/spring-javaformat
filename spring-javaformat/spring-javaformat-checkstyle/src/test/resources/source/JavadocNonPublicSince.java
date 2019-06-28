@@ -15,35 +15,20 @@
  */
 
 /**
- * Valid Javadoc.
+ * Javadoc with a bad since tag.
  *
- * @param <T> this is a valid param
  * @author Phillip Webb
+ * @since 1.2.3
  */
-public class JavadocValid<T> {
+class JavadocNonPublicSince {
 
 	/**
-	 * Do something.
-	 * @param something a lovely thing
+	 * Inner class.
+	 *
+	 * @since 1.2.3
 	 */
-	public void test(String something) {
-	}
+	private static class Inner {
 
-	/**
-	 * Do something else.
-	 * @param something a loveley thing. Even if we've got some additional desc.
-	 */
-	public void test2(String something) {
-	}
-
-	/**
-	 * Do something else.
-	 * @param something a loveley thing that goes on a bit and causes us to wrap at end.
-	 * Even if we've got some additional desc.
-	 * @return the thing
-	 * @throws RuntimeException on the error
-	 */
-	public String test3(String something) throws RuntimeException {
 	}
 
 }

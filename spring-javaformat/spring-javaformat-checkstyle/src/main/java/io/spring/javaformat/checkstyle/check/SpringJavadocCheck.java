@@ -30,8 +30,12 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  */
 public class SpringJavadocCheck extends AbstractSpringCheck {
 
-	private static final Pattern[] PATTERNS = { Pattern.compile("@param\\s+\\S+\\s+(.*)"),
+	private static final Pattern[] CASE_CHECKED_TAG_PATTERNS = { Pattern.compile("@param\\s+\\S+\\s+(.*)"),
 			Pattern.compile("@throws\\s+\\S+\\s+(.*)"), Pattern.compile("@return\\s+(.*)") };
+
+	private static final Pattern SINCE_TAG_PATTERN = Pattern.compile("@since\\s+(.*)");
+
+	private boolean publicOnlySinceTags;
 
 	@Override
 	public int[] getDefaultTokens() {
@@ -51,27 +55,63 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 		int lineNumber = ast.getLineNo();
 		TextBlock javadoc = getFileContents().getJavadocBefore(lineNumber);
 		if (javadoc != null) {
-			checkParamTags(javadoc);
+			checkParamTags(ast, javadoc);
 		}
 	}
 
-	private void checkParamTags(TextBlock javadoc) {
+	private void checkParamTags(DetailAST ast, TextBlock javadoc) {
 		String[] text = javadoc.getText();
 		for (int i = 0; i < text.length; i++) {
-			for (Pattern pattern : PATTERNS) {
-				Matcher matcher = pattern.matcher(text[i]);
-				if (matcher.find()) {
-					String description = matcher.group(1).trim();
-					if (startsWithUppercase(description)) {
-						log(javadoc.getStartLineNo() + i, text[i].length() - description.length(), "javadoc.badCase");
-					}
+			String line = text[i];
+			int lineNumber = javadoc.getStartLineNo() + i;
+			checkCase(line, lineNumber);
+			checkSinceTag(ast, line, lineNumber);
+		}
+	}
+
+	private void checkCase(String line, int lineNumber) {
+		for (Pattern pattern : CASE_CHECKED_TAG_PATTERNS) {
+			Matcher matcher = pattern.matcher(line);
+			if (matcher.find()) {
+				String description = matcher.group(1).trim();
+				if (startsWithUppercase(description)) {
+					log(lineNumber, line.length() - description.length(), "javadoc.badCase");
 				}
 			}
 		}
 	}
 
+	private void checkSinceTag(DetailAST ast, String line, int lineNumber) {
+		if (this.publicOnlySinceTags) {
+			Matcher matcher = SINCE_TAG_PATTERN.matcher(line);
+			if (matcher.find()) {
+				String description = matcher.group(1).trim();
+				DetailAST classDef = getClassDef(ast);
+				DetailAST classModifiers = classDef.findFirstToken(TokenTypes.MODIFIERS);
+				if (classModifiers.findFirstToken(TokenTypes.LITERAL_PUBLIC) == null
+						&& classModifiers.findFirstToken(TokenTypes.LITERAL_PROTECTED) == null) {
+					log(lineNumber, line.length() - description.length(), "javadoc.publicSince");
+				}
+			}
+		}
+	}
+
+	private DetailAST getClassDef(DetailAST ast) {
+		while (ast != null) {
+			if (ast.getType() == TokenTypes.CLASS_DEF) {
+				return ast;
+			}
+			ast = ast.getParent();
+		}
+		return null;
+	}
+
 	private boolean startsWithUppercase(String description) {
 		return description.length() > 0 && Character.isUpperCase(description.charAt(0));
+	}
+
+	public void setPublicOnlySinceTags(boolean publicOnlySinceTags) {
+		this.publicOnlySinceTags = publicOnlySinceTags;
 	}
 
 }
