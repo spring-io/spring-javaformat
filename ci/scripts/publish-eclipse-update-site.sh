@@ -19,7 +19,12 @@ curl \
 		-T "artifactory-repo/io/spring/javaformat/io.spring.javaformat.eclipse.site/${version}/io.spring.javaformat.eclipse.site-${version}.zip" \
 		"https://api.bintray.com/content/spring/javaformat-eclipse/update-site/${version}/${version}/site.zip?explode=1&publish=1" > /dev/null || { echo "Failed to publish" >&2; exit 1; }
 
-releasedVersions=$( curl -f -X GET https://api.bintray.com/packages/spring/javaformat-eclipse/update-site | jq -r '.versions[]' )
+# Getting the released versions can be flaky, try a few times
+for i in {1..2}; do
+	releasedVersions=$( curl -f -X GET https://api.bintray.com/packages/spring/javaformat-eclipse/update-site | jq -r '.versions[]' )
+	sleep 10
+done
+
 respositories=""
 while read -r releasedVersion; do
 	echo "Adding repository for ${releasedVersion}"
