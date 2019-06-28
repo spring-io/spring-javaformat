@@ -16,6 +16,9 @@
 
 package io.spring.javaformat.checkstyle.check;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,6 +37,18 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 			Pattern.compile("@throws\\s+\\S+\\s+(.*)"), Pattern.compile("@return\\s+(.*)") };
 
 	private static final Pattern SINCE_TAG_PATTERN = Pattern.compile("@since\\s+(.*)");
+
+	private static final Set<Integer> TOP_LEVEL_TYPES;
+	static {
+		Set<Integer> topLevelTypes = new HashSet<Integer>();
+		topLevelTypes.add(TokenTypes.INTERFACE_DEF);
+		topLevelTypes.add(TokenTypes.CLASS_DEF);
+		topLevelTypes.add(TokenTypes.ENUM_DEF);
+		topLevelTypes.add(TokenTypes.ANNOTATION_DEF);
+		TOP_LEVEL_TYPES = Collections.unmodifiableSet(topLevelTypes);
+	}
+
+	private boolean requireSinceTag;
 
 	private boolean publicOnlySinceTags;
 
@@ -55,59 +70,57 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 		int lineNumber = ast.getLineNo();
 		TextBlock javadoc = getFileContents().getJavadocBefore(lineNumber);
 		if (javadoc != null) {
-			checkParamTags(ast, javadoc);
+			checkTagCase(ast, javadoc);
+			checkSinceTag(ast, javadoc);
 		}
 	}
 
-	private void checkParamTags(DetailAST ast, TextBlock javadoc) {
+	private void checkTagCase(DetailAST ast, TextBlock javadoc) {
 		String[] text = javadoc.getText();
 		for (int i = 0; i < text.length; i++) {
-			String line = text[i];
-			int lineNumber = javadoc.getStartLineNo() + i;
-			checkCase(line, lineNumber);
-			checkSinceTag(ast, line, lineNumber);
-		}
-	}
-
-	private void checkCase(String line, int lineNumber) {
-		for (Pattern pattern : CASE_CHECKED_TAG_PATTERNS) {
-			Matcher matcher = pattern.matcher(line);
-			if (matcher.find()) {
-				String description = matcher.group(1).trim();
-				if (startsWithUppercase(description)) {
-					log(lineNumber, line.length() - description.length(), "javadoc.badCase");
+			for (Pattern pattern : CASE_CHECKED_TAG_PATTERNS) {
+				Matcher matcher = pattern.matcher(text[i]);
+				if (matcher.find()) {
+					String description = matcher.group(1).trim();
+					if (startsWithUppercase(description)) {
+						log(javadoc.getStartLineNo() + i, text[i].length() - description.length(), "javadoc.badCase");
+					}
 				}
 			}
 		}
 	}
 
-	private void checkSinceTag(DetailAST ast, String line, int lineNumber) {
-		if (this.publicOnlySinceTags) {
-			Matcher matcher = SINCE_TAG_PATTERN.matcher(line);
+	private void checkSinceTag(DetailAST ast, TextBlock javadoc) {
+		if (!TOP_LEVEL_TYPES.contains(ast.getType())) {
+			return;
+		}
+		String[] text = javadoc.getText();
+		DetailAST modifiers = ast.findFirstToken(TokenTypes.MODIFIERS);
+		boolean privateType = modifiers.findFirstToken(TokenTypes.LITERAL_PUBLIC) == null
+				&& modifiers.findFirstToken(TokenTypes.LITERAL_PROTECTED) == null;
+		boolean innerType = ast.getParent() != null;
+		boolean found = false;
+		for (int i = 0; i < text.length; i++) {
+			Matcher matcher = SINCE_TAG_PATTERN.matcher(text[i]);
 			if (matcher.find()) {
+				found = true;
 				String description = matcher.group(1).trim();
-				DetailAST classDef = getClassDef(ast);
-				DetailAST classModifiers = classDef.findFirstToken(TokenTypes.MODIFIERS);
-				if (classModifiers.findFirstToken(TokenTypes.LITERAL_PUBLIC) == null
-						&& classModifiers.findFirstToken(TokenTypes.LITERAL_PROTECTED) == null) {
-					log(lineNumber, line.length() - description.length(), "javadoc.publicSince");
+				if (this.publicOnlySinceTags && privateType) {
+					log(javadoc.getStartLineNo() + i, text[i].length() - description.length(), "javadoc.publicSince");
 				}
 			}
 		}
-	}
-
-	private DetailAST getClassDef(DetailAST ast) {
-		while (ast != null) {
-			if (ast.getType() == TokenTypes.CLASS_DEF) {
-				return ast;
-			}
-			ast = ast.getParent();
+		if (this.requireSinceTag && !innerType && !found && !(this.publicOnlySinceTags && privateType)) {
+			log(javadoc.getStartLineNo(), 0, "javadoc.missingSince");
 		}
-		return null;
 	}
 
 	private boolean startsWithUppercase(String description) {
 		return description.length() > 0 && Character.isUpperCase(description.charAt(0));
+	}
+
+	public void setRequireSinceTag(boolean requireSinceTag) {
+		this.requireSinceTag = requireSinceTag;
 	}
 
 	public void setPublicOnlySinceTags(boolean publicOnlySinceTags) {
