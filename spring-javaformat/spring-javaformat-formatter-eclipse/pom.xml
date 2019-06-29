@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>io.spring.javaformat</groupId>
 		<artifactId>spring-javaformat</artifactId>
-		<version>0.0.15-SNAPSHOT</version>
+		<version>0.0.16-SNAPSHOT</version>
 	</parent>
 	<artifactId>spring-javaformat-formatter-eclipse</artifactId>
 	<name>Spring JavaFormat Eclipse</name>
@@ -17,7 +17,7 @@
 		<dependency>
 			<groupId>io.spring.javaformat</groupId>
 			<artifactId>spring-javaformat-formatter-eclipse-runtime</artifactId>
-			<version>0.0.15-SNAPSHOT</version>
+			<version>0.0.16-SNAPSHOT</version>
 			<optional>true</optional>
 		</dependency>
 	</dependencies>
