@@ -20,3 +20,11 @@ spring-javaformat/spring-javaformat-checkstyle/bin
 spring-javaformat/spring-javaformat-formatter-eclipse-rewriter/bin
 build.log
 pid
+
+# npm
+node_modules/
+
+# vscode
+spring-javaformat-vscode/spring-javaformat/out/
+spring-javaformat-vscode/spring-javaformat/runtime/
+*.vsix
