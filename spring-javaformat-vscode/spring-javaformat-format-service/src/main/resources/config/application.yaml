@@ -1,0 +1,5 @@
+# 基础应用配置
+spring:
+  application.name: Spring-Java-Formatter-Web
+server:
+  port: ${port:9987}

@@ -268,6 +268,12 @@ Once the configuration file is created, configure your IDE to use it:
 
 
 
+=== Visual Studio Code
+The vscode extension provides custom formatter support for Visual Studio Code.
+The extension is automatically activated whenever a `.java` file is opened. And it requires a few seconds to warm-up while you start with the first workspace.
+
+
+
 === About the Conventions
 Most of the coding conventions and style comes from the Spring Framework and Spring Boot projects.
 Spring Framework manually formats code, where as Spring Boot uses automatic formatting.
