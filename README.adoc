@@ -263,6 +263,9 @@ Once the configuration file is created, configure your IDE to use it:
 * Specify the appropriate `Checkstyle version`
 * Add your Checkstyle configuration file
 
+=== Visual Studio Code
+The vscode extension provides custom formatter support for Visual Studio Code.
+The extension is automatically activated whenever a `.java` file is opened. And it requires a few seconds to warm-up while you start with the first workspace.
 
 
 === About the Conventions

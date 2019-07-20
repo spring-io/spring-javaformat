@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - FormatterWebApplication",
+            "request": "launch",
+            "mainClass": "io.spring.format.FormatterWebApplication",
+            "projectName": "spring-javaformat-format-service"
+        }
+    ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "spring-javaformat",
+  "displayName": "spring-javaformat-vscode-extension",
+  "description": "Format .java files in spring-javaformat way",
+  "version": "1.0.0",
+  "publisher": "howardzuo",
+  "engines": {
+    "vscode": "^1.36.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spring-io/spring-javaformat.git"
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "categories": [
+    "Formatters"
+  ],
+  "activationEvents": [
+    "onLanguage:java"
+  ],
+  "main": "./out/extension.js",
+  "devDependencies": {
+    "@types/glob": "^7.1.1",
+    "@types/node": "^10.12.21",
+    "@types/vscode": "^1.36.0",
+    "glob": "^7.1.4",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "portfinder": "^1.0.21",
+    "ps-list": "^6.3.0"
+  }
+}
