@@ -75,10 +75,10 @@ class AssertionsAuditListener implements AuditListener {
 	private void runCheck(String check) {
 		String description = this.filenames.toString();
 		if (check.startsWith("+")) {
-			assertThat(this.message).as(description).contains(check.substring(1));
+			assertThat(this.message.toString()).as(description).contains(check.substring(1));
 		}
 		else if (check.startsWith("-")) {
-			assertThat(this.message).as(description).doesNotContain(check.substring(1));
+			assertThat(this.message.toString()).as(description).doesNotContain(check.substring(1));
 		}
 	}
 

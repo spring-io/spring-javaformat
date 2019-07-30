@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
-public class NewlineAtEndOfFile {
+/**
+ * This is a valid example of a class name matching its filename.
+ *
+ * @author Christoph Dreis
+ */
+public class OuterTypeFilenameValid {
 
 }
