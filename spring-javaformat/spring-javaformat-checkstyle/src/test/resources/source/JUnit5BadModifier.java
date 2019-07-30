@@ -73,4 +73,14 @@ public class JUnit5BadModifier {
 		// test here
 	}
 
+	@TestTemplate
+	public void doSomethingWithTemplateWorks() {
+		// test here
+	}
+
+	@TestTemplate
+	private void doSomethingElseWithTemplateWorks() {
+		// test here
+	}
+
 }
