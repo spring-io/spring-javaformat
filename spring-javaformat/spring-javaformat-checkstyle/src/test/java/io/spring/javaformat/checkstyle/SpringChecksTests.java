@@ -24,6 +24,7 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -71,6 +72,8 @@ public class SpringChecksTests {
 
 	@Test
 	public void processHasExpectedResults() throws Exception {
+		Locale previousLocale = Locale.getDefault();
+		Locale.setDefault(Locale.ENGLISH);
 		Configuration configuration = loadConfiguration();
 		RootModule rootModule = createRootModule(configuration);
 		try {
@@ -78,6 +81,7 @@ public class SpringChecksTests {
 		}
 		finally {
 			rootModule.destroy();
+			Locale.setDefault(previousLocale);
 		}
 	}
 
@@ -100,7 +104,7 @@ public class SpringChecksTests {
 	}
 
 	private void processAndCheckResults(RootModule rootModule) throws CheckstyleException {
-		rootModule.addListener(this.parameter.getAssersionsListener());
+		rootModule.addListener(this.parameter.getAssertionsListener());
 		if (!RUNNING_ON_WINDOWS) {
 			printDebugInfo(this.parameter.getSourceFile());
 		}
@@ -127,7 +131,7 @@ public class SpringChecksTests {
 
 		private final File sourceFile;
 
-		private final AssertionsAuditListener assersionsListener;
+		private final AssertionsAuditListener assertionsListener;
 
 		private final File configFile;
 
@@ -136,7 +140,7 @@ public class SpringChecksTests {
 			this.sourceFile = new File(SOURCES_DIR, sourceName);
 			File configFile = new File(CONFIGS_DIR, this.name + ".xml");
 			this.configFile = (configFile.exists() ? configFile : DEFAULT_CONFIG);
-			this.assersionsListener = new AssertionsAuditListener(readChecks(this.name + ".txt"));
+			this.assertionsListener = new AssertionsAuditListener(readChecks(this.name + ".txt"));
 		}
 
 		private List<String> readChecks(String name) {
@@ -156,8 +160,8 @@ public class SpringChecksTests {
 			return this.configFile;
 		}
 
-		public AssertionsAuditListener getAssersionsListener() {
-			return this.assersionsListener;
+		public AssertionsAuditListener getAssertionsListener() {
+			return this.assertionsListener;
 		}
 
 		@Override

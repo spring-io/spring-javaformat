@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
-public class NewlineAtEndOfFile {
+/**
+ * This is an example of a class name not matching its filename.
+ *
+ * @author Christoph Dreis
+ */
+public class NameNotMatching {
 
 }
