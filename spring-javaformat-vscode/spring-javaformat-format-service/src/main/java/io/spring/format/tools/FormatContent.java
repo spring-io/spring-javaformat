@@ -52,7 +52,7 @@ final public class FormatContent {
 			return trimTrailingWhitespace(formattedContent);
 		}
 		catch (Exception e) {
-			return "";
+			return source;
 		}
 	}
 
