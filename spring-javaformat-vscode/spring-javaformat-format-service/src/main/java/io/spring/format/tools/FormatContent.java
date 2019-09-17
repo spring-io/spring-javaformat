@@ -33,8 +33,6 @@ final public class FormatContent {
 
 	private static final Pattern TRAILING_WHITESPACE = Pattern.compile(" +$", Pattern.MULTILINE);
 
-	private final static Formatter formatter = new Formatter();
-
 	private FormatContent() {
 
 	}
@@ -45,6 +43,7 @@ final public class FormatContent {
 		}
 
 		try {
+			final Formatter formatter = new Formatter();
 			TextEdit textEdit = formatter.format(source);
 			IDocument document = new Document(source);
 			textEdit.apply(document);

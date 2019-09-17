@@ -12,10 +12,16 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.languages.registerDocumentFormattingEditProvider(
-      {
-        language: 'java',
-        scheme: 'file'
-      },
+      [
+        {
+          language: 'java',
+          scheme: 'file'
+        },
+        {
+          language: 'markdown',
+          scheme: 'file'
+        }
+      ],
       new SpringJavaFormatter()
     )
   )

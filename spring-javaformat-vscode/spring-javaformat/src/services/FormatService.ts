@@ -7,11 +7,11 @@ import { window } from 'vscode'
 
 const JAR_NAME = 'spring-javaformat-format-service-0.0.16-SNAPSHOT.jar'
 
-const RUNTIME_JAR_PATH = resolve(__dirname, '..', 'runtime', JAR_NAME)
+const RUNTIME_JAR_PATH = resolve(__dirname, '..', '..', 'runtime', JAR_NAME)
 
 export default class FormatService {
   private static instance: FormatService = new FormatService()
-  private port: number = 0
+  private port: number = 9987
 
   constructor() {
     const hideFunc = window.setStatusBarMessage('spring-javaformat service initializing....')
@@ -70,10 +70,6 @@ export default class FormatService {
 
   private async run(port: number) {
     return new Promise((resolve, reject) => {
-      const startTimer = setTimeout(() => {
-        resolve()
-      }, 1000 * 10)
-
       const childProcess = child_process.exec(`java -Dport=${port} -jar ${RUNTIME_JAR_PATH} `, {})
 
       childProcess.stdout.on('data', data => {

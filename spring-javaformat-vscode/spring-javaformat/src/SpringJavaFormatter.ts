@@ -8,7 +8,8 @@ import {
   Range
 } from 'vscode'
 
-import FormatService from './FormatService'
+import { formatMarkdown } from './formatters/MarkdownFormatter'
+import { formatJava } from './formatters/JavaFormatter'
 
 export default class SpringJavaFormatter implements DocumentFormattingEditProvider {
   provideDocumentFormattingEdits(
@@ -16,11 +17,12 @@ export default class SpringJavaFormatter implements DocumentFormattingEditProvid
     options: FormattingOptions,
     token: CancellationToken
   ): ProviderResult<TextEdit[]> {
-    return FormatService.getInstance()
-      .formatCode(document.getText())
-      .then(content => {
-        const range = new Range(document.positionAt(0), document.positionAt(document.getText().length))
-        return [TextEdit.replace(range, content)]
-      })
+    if (document.languageId === 'java') {
+      return formatJava(document)
+    }
+    if (document.languageId === 'markdown') {
+      return formatMarkdown(document)
+    }
+    return []
   }
 }
