@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.m2e.jdt;resolution:=optional,
  org.eclipse.m2e.core;resolution:=optional,
  org.eclipse.m2e.maven.runtime;resolution:=optional,
- org.eclipse.buildship.core;bundle-version="[3.0.0,3.1.0)";resolution:=optional,
+ org.eclipse.buildship.core;bundle-version="[3.0.0,3.3.0)";resolution:=optional,
  net.sf.eclipsecs.core;bundle-version="8.18.0";resolution:=optional
 Bundle-ClassPath: .,
  lib/spring-javaformat-formatter-eclipse.jar,
