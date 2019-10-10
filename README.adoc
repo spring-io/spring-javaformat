@@ -230,7 +230,7 @@ code bunched up to the right of your screen you should take that as a signal to 
 it helps when reading the code and debugging.
 
 ==== Whitespace
-Keeping whitespace lines out method bodies can help make the code easier to scan.
+Keeping whitespace lines out of method bodies can help make the code easier to scan.
 If blank lines are only included between methods it becomes easier to see the overall structure of the class.
 If you find you need whitespace inside your method, consider if extracting a private method might give a better result.
 
