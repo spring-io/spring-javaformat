@@ -40,8 +40,11 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 
 	private static final String JUNIT5_TEST_ANNOTATION = "org.junit.jupiter.api.Test";
 
+	private static final String JUNIT5_TEST_TEMPLATE_ANNOTATION = "org.junit.jupiter.api.TestTemplate";
+
 	private static final List<String> TEST_ANNOTATIONS = Collections
-			.unmodifiableList(Arrays.asList("Test", JUNIT4_TEST_ANNOTATION, JUNIT5_TEST_ANNOTATION));
+			.unmodifiableList(Arrays.asList("Test", "TestTemplate", JUNIT4_TEST_ANNOTATION, JUNIT5_TEST_ANNOTATION,
+					JUNIT5_TEST_TEMPLATE_ANNOTATION));
 
 	private static final List<String> LIFECYCLE_ANNOTATIONS = Collections.unmodifiableList(Arrays.asList("BeforeAll",
 			"org.junit.jupiter.api.BeforeAll", "BeforeEach", "org.junit.jupiter.api.BeforeEach", "AfterAll",
