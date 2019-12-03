@@ -53,6 +53,14 @@ public class SpringMethodVisibilityCheck extends AbstractSpringCheck {
 				|| classModifiers.findFirstToken(TokenTypes.LITERAL_PROTECTED) != null) {
 			return;
 		}
+		DetailAST interfaceDef = getInterfaceDef(classDef.getParent());
+		if (interfaceDef != null) {
+			DetailAST interfaceModifiers = interfaceDef.findFirstToken(TokenTypes.MODIFIERS);
+			if (interfaceModifiers.findFirstToken(TokenTypes.LITERAL_PUBLIC) != null
+					|| interfaceModifiers.findFirstToken(TokenTypes.LITERAL_PROTECTED) != null) {
+				return;
+			}
+		}
 		DetailAST ident = method.findFirstToken(TokenTypes.IDENT);
 		log(ident.getLineNo(), ident.getColumnNo(), "methodvisibility.publicMethod", ident.getText());
 	}
@@ -73,8 +81,16 @@ public class SpringMethodVisibilityCheck extends AbstractSpringCheck {
 	}
 
 	private DetailAST getClassDef(DetailAST ast) {
+		return findParent(ast, TokenTypes.CLASS_DEF);
+	}
+
+	private DetailAST getInterfaceDef(DetailAST ast) {
+		return findParent(ast, TokenTypes.INTERFACE_DEF);
+	}
+
+	private DetailAST findParent(DetailAST ast, int classDef) {
 		while (ast != null) {
-			if (ast.getType() == TokenTypes.CLASS_DEF) {
+			if (ast.getType() == classDef) {
 				return ast;
 			}
 			ast = ast.getParent();
