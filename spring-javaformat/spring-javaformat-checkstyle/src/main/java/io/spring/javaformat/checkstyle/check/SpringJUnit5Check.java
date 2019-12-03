@@ -20,8 +20,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
@@ -38,21 +40,28 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 
 	private static final String JUNIT4_TEST_ANNOTATION = "org.junit.Test";
 
-	private static final String JUNIT5_TEST_ANNOTATION = "org.junit.jupiter.api.Test";
-
-	private static final String JUNIT5_TEST_TEMPLATE_ANNOTATION = "org.junit.jupiter.api.TestTemplate";
-
-	private static final List<String> TEST_ANNOTATIONS = Collections
-			.unmodifiableList(Arrays.asList("Test", "TestTemplate", JUNIT4_TEST_ANNOTATION, JUNIT5_TEST_ANNOTATION,
-					JUNIT5_TEST_TEMPLATE_ANNOTATION));
-
-	private static final List<String> LIFECYCLE_ANNOTATIONS = Collections.unmodifiableList(Arrays.asList("BeforeAll",
-			"org.junit.jupiter.api.BeforeAll", "BeforeEach", "org.junit.jupiter.api.BeforeEach", "AfterAll",
-			"org.junit.jupiter.api.AfterAll", "AfterEach", "org.junit.jupiter.api.AfterEach"));
-
-	private static final List<String> BANNED_IMPORTS;
+	private static final List<String> TEST_ANNOTATIONS;
 	static {
-		List<String> bannedImports = new ArrayList<>();
+		Set<String> annotations = new LinkedHashSet<>();
+		addAnnotation(annotations, JUNIT4_TEST_ANNOTATION);
+		addAnnotation(annotations, "org.junit.jupiter.api.Test");
+		addAnnotation(annotations, "org.junit.jupiter.api.TestTemplate");
+		TEST_ANNOTATIONS = Collections.unmodifiableList(new ArrayList<>(annotations));
+	}
+
+	private static final List<String> LIFECYCLE_ANNOTATIONS;
+	static {
+		Set<String> annotations = new LinkedHashSet<>();
+		addAnnotation(annotations, "org.junit.jupiter.api.BeforeAll");
+		addAnnotation(annotations, "org.junit.jupiter.api.BeforeEach");
+		addAnnotation(annotations, "org.junit.jupiter.api.AfterAll");
+		addAnnotation(annotations, "org.junit.jupiter.api.AfterEach");
+		LIFECYCLE_ANNOTATIONS = Collections.unmodifiableList(new ArrayList<>(annotations));
+	}
+
+	private static final Set<String> BANNED_IMPORTS;
+	static {
+		Set<String> bannedImports = new LinkedHashSet<>();
 		bannedImports.add(JUNIT4_TEST_ANNOTATION);
 		bannedImports.add("org.junit.After");
 		bannedImports.add("org.junit.AfterClass");
@@ -60,7 +69,15 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 		bannedImports.add("org.junit.BeforeClass");
 		bannedImports.add("org.junit.Rule");
 		bannedImports.add("org.junit.ClassRule");
-		BANNED_IMPORTS = Collections.unmodifiableList(bannedImports);
+		BANNED_IMPORTS = Collections.unmodifiableSet(bannedImports);
+	}
+
+	private static void addAnnotation(Set<String> annotations, String annotation) {
+		annotations.add(annotation);
+		int lastDot = annotation.lastIndexOf(".");
+		if (lastDot != -1) {
+			annotations.add(annotation.substring(lastDot + 1));
+		}
 	}
 
 	private List<String> unlessImports = new ArrayList<>();
