@@ -27,10 +27,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -40,6 +43,22 @@ import org.objectweb.asm.Opcodes;
  * @author Phillip Webb
  */
 public final class EclipseRewriter {
+
+	private static final Set<String> UPDATED_METHODS;
+	static {
+		Set<String> updatedMethods = new LinkedHashSet<String>();
+		updatedMethods.add("prepareWraps");
+		updatedMethods.add("tokenizeSource");
+		UPDATED_METHODS = Collections.unmodifiableSet(updatedMethods);
+	}
+
+	private static final Set<String> UPDATED_FIELDS;
+	static {
+		Set<String> updatedFields = new LinkedHashSet<String>();
+		updatedFields.add("sourceLevel");
+		updatedFields.add("tokens");
+		UPDATED_FIELDS = Collections.unmodifiableSet(updatedFields);
+	}
 
 	private EclipseRewriter() {
 	}
@@ -74,9 +93,17 @@ public final class EclipseRewriter {
 		}
 
 		@Override
+		public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
+			if (access == Opcodes.ACC_PRIVATE && UPDATED_FIELDS.contains(name)) {
+				access = Opcodes.ACC_PROTECTED;
+			}
+			return super.visitField(access, name, desc, signature, value);
+		}
+
+		@Override
 		public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-			if ("prepareWraps".equals(name) && Opcodes.ACC_PRIVATE == access) {
-				return super.visitMethod(Opcodes.ACC_PROTECTED, name, desc, signature, exceptions);
+			if (access == Opcodes.ACC_PRIVATE && UPDATED_METHODS.contains(name)) {
+				access = Opcodes.ACC_PROTECTED;
 			}
 			return new DefaultCodeFormatterMethodManipulator(
 					super.visitMethod(access, name, desc, signature, exceptions));
@@ -92,9 +119,8 @@ public final class EclipseRewriter {
 
 		@Override
 		public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-			if ("prepareWraps".equals(name) && opcode == Opcodes.INVOKESPECIAL) {
-				super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, owner, name, desc, itf);
-				return;
+			if (opcode == Opcodes.INVOKESPECIAL && UPDATED_METHODS.contains(name)) {
+				opcode = Opcodes.INVOKEVIRTUAL;
 			}
 			super.visitMethodInsn(opcode, owner, name, desc, itf);
 		}

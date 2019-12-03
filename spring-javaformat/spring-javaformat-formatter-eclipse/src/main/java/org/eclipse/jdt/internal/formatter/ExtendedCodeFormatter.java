@@ -21,7 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.core.compiler.InvalidInputException;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
+import org.eclipse.jdt.internal.compiler.parser.Scanner;
+import org.eclipse.jdt.internal.compiler.parser.TerminalTokens;
 import org.eclipse.jdt.internal.formatter.Preparator.Phase;
 
 /**
@@ -31,6 +35,8 @@ import org.eclipse.jdt.internal.formatter.Preparator.Phase;
  * @author Phillip Webb
  */
 public class ExtendedCodeFormatter extends DefaultCodeFormatter {
+
+	private static boolean useLegacyTokenize = false;
 
 	private final List<Preparator> preparators = new ArrayList<>();
 
@@ -52,6 +58,43 @@ public class ExtendedCodeFormatter extends DefaultCodeFormatter {
 
 	protected void addPreparator(Preparator preparator) {
 		this.preparators.add(preparator);
+	}
+
+	@Override
+	protected void tokenizeSource(int kind) {
+		if (useLegacyTokenize) {
+			legacyTokenizeSource(kind);
+			return;
+		}
+		try {
+			super.tokenizeSource(kind);
+		}
+		catch (NoSuchMethodError ex) {
+			useLegacyTokenize = true;
+			legacyTokenizeSource(kind);
+		}
+	}
+
+	private void legacyTokenizeSource(int kind) {
+		this.tokens.clear();
+		long sourceLevel = CompilerOptions.versionToJdkLevel(this.sourceLevel);
+		Scanner scanner = new Scanner(true, false, false, sourceLevel, null, null, false);
+		scanner.setSource(this.sourceArray);
+		scanner.fakeInModule = (kind & K_MODULE_INFO) != 0;
+		while (true) {
+			try {
+				int tokenType = scanner.getNextToken();
+				if (tokenType == TerminalTokens.TokenNameEOF) {
+					break;
+				}
+				Token token = Token.fromCurrent(scanner, tokenType);
+				this.tokens.add(token);
+			}
+			catch (InvalidInputException ex) {
+				Token token = Token.fromCurrent(scanner, TerminalTokens.TokenNameNotAToken);
+				this.tokens.add(token);
+			}
+		}
 	}
 
 	@Override
