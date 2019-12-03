@@ -18,6 +18,7 @@ package io.spring.javaformat.eclipse.gradle;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -30,7 +31,6 @@ import org.eclipse.buildship.core.internal.CorePlugin;
 import org.eclipse.buildship.core.internal.workspace.FetchStrategy;
 import org.eclipse.buildship.core.internal.workspace.InternalGradleBuild;
 import org.eclipse.buildship.core.internal.workspace.InternalGradleWorkspace;
-import org.eclipse.buildship.core.internal.workspace.ModelProviderUtil;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -74,8 +74,8 @@ public class GradleProjectSettingsConfigurator implements ProjectConfigurator {
 		InternalGradleWorkspace workspace = CorePlugin.internalGradleWorkspace();
 		Optional<GradleBuild> build = workspace.getBuild(project);
 		if (build.isPresent()) {
-			Set<EclipseProject> projects = ModelProviderUtil.fetchAllEclipseProjects((InternalGradleBuild) build.get(),
-					this.tokenSource, FetchStrategy.FORCE_RELOAD, monitor);
+			Collection<EclipseProject> projects = ((InternalGradleBuild) build.get()).getModelProvider()
+					.fetchModels(EclipseProject.class, FetchStrategy.FORCE_RELOAD, this.tokenSource, monitor);
 			if (hasSpringFormatPlugin(projects)) {
 				ProjectSettingsFilesLocator locator = new ProjectSettingsFilesLocator(getSearchFolders(projects));
 				locator.locateSettingsFiles().applyToProject(project, monitor);
@@ -83,7 +83,7 @@ public class GradleProjectSettingsConfigurator implements ProjectConfigurator {
 		}
 	}
 
-	private boolean hasSpringFormatPlugin(Set<EclipseProject> projects) {
+	private boolean hasSpringFormatPlugin(Collection<EclipseProject> projects) {
 		for (EclipseProject project : projects) {
 			for (GradleTask task : project.getGradleProject().getTasks()) {
 				if (isSpringFormatPlugin(task)) {
@@ -98,7 +98,7 @@ public class GradleProjectSettingsConfigurator implements ProjectConfigurator {
 		return TASK_NAME.equals(task.getName());
 	}
 
-	private Set<File> getSearchFolders(Set<EclipseProject> projects) {
+	private Set<File> getSearchFolders(Collection<EclipseProject> projects) {
 		Set<File> searchFolders = new LinkedHashSet<>();
 		for (EclipseProject project : projects) {
 			while (project != null) {
