@@ -44,8 +44,11 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 	static {
 		Set<String> annotations = new LinkedHashSet<>();
 		addAnnotation(annotations, JUNIT4_TEST_ANNOTATION);
+		addAnnotation(annotations, "org.junit.jupiter.api.RepeatedTest");
 		addAnnotation(annotations, "org.junit.jupiter.api.Test");
+		addAnnotation(annotations, "org.junit.jupiter.api.TestFactory");
 		addAnnotation(annotations, "org.junit.jupiter.api.TestTemplate");
+		addAnnotation(annotations, "org.junit.jupiter.params.ParameterizedTest");
 		TEST_ANNOTATIONS = Collections.unmodifiableList(new ArrayList<>(annotations));
 	}
 
