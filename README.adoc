@@ -138,11 +138,12 @@ The `checkFormat` task is automatically applied when running the standard Gradle
 
 In case you want to exclude a package from being checked, for example if you generate sources, you can do this by adding following configuration:
 
-```
+[source,groovy,indent=0,subs="normal"]
+----
 tasks.withType(io.spring.javaformat.gradle.CheckTask) {
     exclude "package/to/exclude"
 }
-```
+----
 
 ==== Checkstyle
 To enforce checksyle conventions add the checkstyle plugin and include a dependency on `spring-javaformat-checkstyle`:
