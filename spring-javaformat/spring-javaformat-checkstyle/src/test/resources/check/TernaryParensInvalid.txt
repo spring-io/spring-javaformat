@@ -1,2 +1,2 @@
-+Ternary operation missing parentheses
++Ternary operation missing parentheses. Use the form "(a != b) ? y : n"
 +3 errors
