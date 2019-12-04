@@ -35,7 +35,7 @@ import io.spring.javaformat.formatter.FileFormatter;
  *
  * @author Phillip Webb
  */
-@Mojo(name = "validate", defaultPhase = LifecyclePhase.VALIDATE)
+@Mojo(name = "validate", defaultPhase = LifecyclePhase.VALIDATE, threadSafe = true)
 public class ValidateMojo extends FormatMojo {
 
 	/**

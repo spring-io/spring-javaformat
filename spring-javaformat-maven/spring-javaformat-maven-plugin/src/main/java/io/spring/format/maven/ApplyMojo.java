@@ -34,7 +34,7 @@ import io.spring.javaformat.formatter.FileFormatterException;
  *
  * @author Phillip Webb
  */
-@Mojo(name = "apply", defaultPhase = LifecyclePhase.PROCESS_SOURCES)
+@Mojo(name = "apply", defaultPhase = LifecyclePhase.PROCESS_SOURCES, threadSafe = true)
 public class ApplyMojo extends FormatMojo {
 
 	@Override
