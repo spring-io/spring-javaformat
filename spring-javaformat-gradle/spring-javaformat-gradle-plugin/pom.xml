@@ -32,6 +32,7 @@
 						<inherited>false</inherited>
 						<configuration>
 							<includeScope>compile</includeScope>
+							<excludeTransitive>true</excludeTransitive>
 							<outputDirectory>${project.build.directory}/dependencies/compile</outputDirectory>
 						</configuration>
 					</execution>
