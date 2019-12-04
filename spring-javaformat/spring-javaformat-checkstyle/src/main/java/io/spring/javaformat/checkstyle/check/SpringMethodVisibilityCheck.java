@@ -45,21 +45,12 @@ public class SpringMethodVisibilityCheck extends AbstractSpringCheck {
 			return;
 		}
 		DetailAST classDef = getClassDef(method.getParent());
-		if (classDef == null) {
-			return;
-		}
-		DetailAST classModifiers = classDef.findFirstToken(TokenTypes.MODIFIERS);
-		if (classModifiers.findFirstToken(TokenTypes.LITERAL_PUBLIC) != null
-				|| classModifiers.findFirstToken(TokenTypes.LITERAL_PROTECTED) != null) {
+		if (classDef == null || isPublicOrProtected(classDef)) {
 			return;
 		}
 		DetailAST interfaceDef = getInterfaceDef(classDef.getParent());
-		if (interfaceDef != null) {
-			DetailAST interfaceModifiers = interfaceDef.findFirstToken(TokenTypes.MODIFIERS);
-			if (interfaceModifiers.findFirstToken(TokenTypes.LITERAL_PUBLIC) != null
-					|| interfaceModifiers.findFirstToken(TokenTypes.LITERAL_PROTECTED) != null) {
-				return;
-			}
+		if (interfaceDef != null && isPublicOrProtected(interfaceDef)) {
+			return;
 		}
 		DetailAST ident = method.findFirstToken(TokenTypes.IDENT);
 		log(ident.getLineNo(), ident.getColumnNo(), "methodvisibility.publicMethod", ident.getText());
@@ -96,6 +87,15 @@ public class SpringMethodVisibilityCheck extends AbstractSpringCheck {
 			ast = ast.getParent();
 		}
 		return null;
+	}
+
+	private boolean isPublicOrProtected(DetailAST ast) {
+		DetailAST modifiers = ast.findFirstToken(TokenTypes.MODIFIERS);
+		if (modifiers == null) {
+			return false;
+		}
+		return modifiers.findFirstToken(TokenTypes.LITERAL_PUBLIC) != null
+				|| modifiers.findFirstToken(TokenTypes.LITERAL_PROTECTED) != null;
 	}
 
 }
