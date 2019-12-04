@@ -9,7 +9,9 @@ groupId=$( cat artifactory-repo/build-info.json | jq -r '.buildInfo.modules[0].i
 version=$( cat artifactory-repo/build-info.json | jq -r '.buildInfo.modules[0].id' | sed 's/.*:.*:\(.*\)/\1/' )
 
 echo "Publishing ${buildName}/${buildNumber} to Eclipse Update Site"
-curl \
+# We need to push twice for some reason otherwise we get out of date versions
+for i in {1..2}; do
+	curl \
 		-s \
 		--connect-timeout 240 \
 		--max-time 2700 \
@@ -18,11 +20,8 @@ curl \
 		-X PUT \
 		-T "artifactory-repo/io/spring/javaformat/io.spring.javaformat.eclipse.site/${version}/io.spring.javaformat.eclipse.site-${version}.zip" \
 		"https://api.bintray.com/content/spring/javaformat-eclipse/update-site/${version}/${version}/site.zip?explode=1&publish=1" > /dev/null || { echo "Failed to publish" >&2; exit 1; }
-
-# Getting the released versions can be flaky, try a few times
-for i in {1..2}; do
 	releasedVersions=$( curl -f -X GET https://api.bintray.com/packages/spring/javaformat-eclipse/update-site | jq -r '.versions[]' )
-	sleep 10
+	sleep 30
 done
 
 respositories=""
