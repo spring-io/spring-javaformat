@@ -1,1 +1,3 @@
-+HeaderMismatch.java:5: header.mismatch [SpringHeader]
++HeaderMismatch.java:5
++Line does not match expected header
++[SpringHeader]

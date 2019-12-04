@@ -1,1 +1,3 @@
-+HeaderTooShort.java:14: header.mismatch [SpringHeader]
++HeaderTooShort.java:14
++Line does not match expected header
++[SpringHeader]

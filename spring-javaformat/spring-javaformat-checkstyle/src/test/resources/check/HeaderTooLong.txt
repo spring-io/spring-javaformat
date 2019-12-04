@@ -1,1 +1,3 @@
-+HeaderTooLong.java:15: header.mismatch [SpringHeader]
++HeaderTooLong.java:15:
++Line does not match expected header
++[SpringHeader]
