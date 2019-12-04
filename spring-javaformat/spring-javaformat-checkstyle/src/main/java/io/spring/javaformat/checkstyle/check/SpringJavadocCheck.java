@@ -95,9 +95,8 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 			return;
 		}
 		String[] text = javadoc.getText();
-		DetailAST modifiers = ast.findFirstToken(TokenTypes.MODIFIERS);
-		boolean privateType = modifiers.findFirstToken(TokenTypes.LITERAL_PUBLIC) == null
-				&& modifiers.findFirstToken(TokenTypes.LITERAL_PROTECTED) == null;
+		DetailAST interfaceDef = getInterfaceDef(ast);
+		boolean privateType = !isPublicOrProtected(ast) && (interfaceDef == null || !isPublicOrProtected(interfaceDef));
 		boolean innerType = ast.getParent() != null;
 		boolean found = false;
 		for (int i = 0; i < text.length; i++) {
@@ -125,6 +124,29 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 
 	public void setPublicOnlySinceTags(boolean publicOnlySinceTags) {
 		this.publicOnlySinceTags = publicOnlySinceTags;
+	}
+
+	private DetailAST getInterfaceDef(DetailAST ast) {
+		return findParent(ast, TokenTypes.INTERFACE_DEF);
+	}
+
+	private DetailAST findParent(DetailAST ast, int classDef) {
+		while (ast != null) {
+			if (ast.getType() == classDef) {
+				return ast;
+			}
+			ast = ast.getParent();
+		}
+		return null;
+	}
+
+	private boolean isPublicOrProtected(DetailAST ast) {
+		DetailAST modifiers = ast.findFirstToken(TokenTypes.MODIFIERS);
+		if (modifiers == null) {
+			return false;
+		}
+		return modifiers.findFirstToken(TokenTypes.LITERAL_PUBLIC) != null
+				|| modifiers.findFirstToken(TokenTypes.LITERAL_PROTECTED) != null;
 	}
 
 }
