@@ -39,6 +39,7 @@ import com.puppycrawl.tools.checkstyle.utils.AnnotationUtil;
 public class SpringJUnit5Check extends AbstractSpringCheck {
 
 	private static final String JUNIT4_TEST_ANNOTATION = "org.junit.Test";
+	private static final String TESTNG_TEST_ANNOTATION = "org.testng.annotations.Test";
 
 	private static final List<String> TEST_ANNOTATIONS;
 	static {
@@ -66,6 +67,7 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 	static {
 		Set<String> bannedImports = new LinkedHashSet<>();
 		bannedImports.add(JUNIT4_TEST_ANNOTATION);
+		bannedImports.add(TESTNG_TEST_ANNOTATION);
 		bannedImports.add("org.junit.After");
 		bannedImports.add("org.junit.AfterClass");
 		bannedImports.add("org.junit.Before");
