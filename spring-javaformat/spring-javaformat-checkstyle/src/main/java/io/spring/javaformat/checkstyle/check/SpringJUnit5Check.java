@@ -37,30 +37,23 @@ import com.puppycrawl.tools.checkstyle.utils.AnnotationUtil;
  * @author Phillip Webb
  */
 public class SpringJUnit5Check extends AbstractSpringCheck {
-
 	private static final String JUNIT4_TEST_ANNOTATION = "org.junit.Test";
 
-	private static final List<String> TEST_ANNOTATIONS;
-	static {
-		Set<String> annotations = new LinkedHashSet<>();
-		addAnnotation(annotations, JUNIT4_TEST_ANNOTATION);
-		addAnnotation(annotations, "org.junit.jupiter.api.RepeatedTest");
-		addAnnotation(annotations, "org.junit.jupiter.api.Test");
-		addAnnotation(annotations, "org.junit.jupiter.api.TestFactory");
-		addAnnotation(annotations, "org.junit.jupiter.api.TestTemplate");
-		addAnnotation(annotations, "org.junit.jupiter.params.ParameterizedTest");
-		TEST_ANNOTATIONS = Collections.unmodifiableList(new ArrayList<>(annotations));
-	}
+	private static final List<String> TEST_ANNOTATIONS = Collections.unmodifiableList(Arrays.asList(
+			"RepeatedTest",
+			"Test",
+			"TestFactory",
+			"TestTemplate",
+			"ParameterizedTest"
+	));
 
-	private static final List<String> LIFECYCLE_ANNOTATIONS;
-	static {
-		Set<String> annotations = new LinkedHashSet<>();
-		addAnnotation(annotations, "org.junit.jupiter.api.BeforeAll");
-		addAnnotation(annotations, "org.junit.jupiter.api.BeforeEach");
-		addAnnotation(annotations, "org.junit.jupiter.api.AfterAll");
-		addAnnotation(annotations, "org.junit.jupiter.api.AfterEach");
-		LIFECYCLE_ANNOTATIONS = Collections.unmodifiableList(new ArrayList<>(annotations));
-	}
+	private static final List<String> LIFECYCLE_ANNOTATIONS = Collections.unmodifiableList(Arrays.asList(
+			"BeforeAll",
+			"BeforeEach",
+			"AfterAll",
+			"AfterEach"
+			)
+	);
 
 	private static final Set<String> BANNED_IMPORTS;
 	static {
@@ -73,14 +66,6 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 		bannedImports.add("org.junit.Rule");
 		bannedImports.add("org.junit.ClassRule");
 		BANNED_IMPORTS = Collections.unmodifiableSet(bannedImports);
-	}
-
-	private static void addAnnotation(Set<String> annotations, String annotation) {
-		annotations.add(annotation);
-		int lastDot = annotation.lastIndexOf(".");
-		if (lastDot != -1) {
-			annotations.add(annotation.substring(lastDot + 1));
-		}
 	}
 
 	private List<String> unlessImports = new ArrayList<>();
