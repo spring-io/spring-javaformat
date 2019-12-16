@@ -67,10 +67,6 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 		BANNED_IMPORTS = Collections.unmodifiableSet(bannedImports);
 	}
 
-	private static void addAnnotation(Set<String> annotations, String annotation) {
-		annotations.add(annotation);
-	}
-
 	private List<String> unlessImports = new ArrayList<>();
 
 	private final List<DetailAST> testMethods = new ArrayList<>();
