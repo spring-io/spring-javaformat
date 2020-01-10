@@ -48,6 +48,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
+				<dependencies>
+					<dependency>
+						<groupId>${project.groupId}</groupId>
+						<artifactId>spring-javaformat-formatter-shader</artifactId>
+						<version>${project.version}</version>
+					</dependency>
+				</dependencies>
 				<configuration>
 					<createSourcesJar>true</createSourcesJar>
 					<promoteTransitiveDependencies>true</promoteTransitiveDependencies>
@@ -71,6 +78,9 @@
 							<shadedPattern>io.spring.javaformat.org.osgi</shadedPattern>
 						</relocation>
 					</relocations>
+					<transformers>
+						<transformer implementation="io.spring.javaformat.formatter.shader.PrefsResourceTransformer" />
+					</transformers>
 				</configuration>
 				<executions>
 					<execution>
@@ -84,7 +94,6 @@
 		</plugins>
 	</build>
 	<dependencies>
-		<!-- Provided -->
 		<dependency>
 			<groupId>io.spring.javaformat</groupId>
 			<artifactId>spring-javaformat-formatter</artifactId>
