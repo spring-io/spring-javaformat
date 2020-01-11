@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,8 @@ package io.spring.format.formatter.intellij;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.intellij.designer.designSurface.ScalableComponent;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -41,11 +39,13 @@ import io.spring.format.formatter.intellij.codestyle.monitor.Trigger.State;
  *
  * @author Phillip Webb
  */
-public class SpringFormatComponent extends AbstractProjectComponent {
+public class SpringFormatComponent implements ProjectComponent {
 
 	private static final String CODE_STYLE_MANAGER_KEY = CodeStyleManager.class.getName();
 
-	private static final String ACTIVE_PROPERTY = ScalableComponent.class.getName() + ".ACTIVE";
+	private static final String ACTIVE_PROPERTY = SpringFormatComponent.class.getName() + ".ACTIVE";
+
+	private final Project project;
 
 	private final StatusIndicator statusIndicator;
 
@@ -58,7 +58,7 @@ public class SpringFormatComponent extends AbstractProjectComponent {
 	private PropertiesComponent properties;
 
 	protected SpringFormatComponent(Project project) {
-		super(project);
+		this.project = project;
 		this.statusIndicator = new StatusIndicator(project);
 		this.properties = PropertiesComponent.getInstance(project);
 	}
@@ -68,7 +68,7 @@ public class SpringFormatComponent extends AbstractProjectComponent {
 		if (this.properties.getBoolean(ACTIVE_PROPERTY, false)) {
 			update(State.ACTIVE);
 		}
-		this.monitors = new Monitors(this.myProject, this::update, FileMonitor.factory(), MavenMonitor.factory(),
+		this.monitors = new Monitors(this.project, this::update, FileMonitor.factory(), MavenMonitor.factory(),
 				GradleMonitor.factory());
 	}
 
@@ -83,7 +83,7 @@ public class SpringFormatComponent extends AbstractProjectComponent {
 	private void update(State state) {
 		this.lock.lock();
 		try {
-			CodeStyleManager manager = CodeStyleManager.getInstance(this.myProject);
+			CodeStyleManager manager = CodeStyleManager.getInstance(this.project);
 			if (manager == null) {
 				logger.warn("Unable to find exiting CodeStyleManager");
 				return;
@@ -106,7 +106,7 @@ public class SpringFormatComponent extends AbstractProjectComponent {
 	}
 
 	private void reregisterComponent(CodeStyleManager manager) {
-		MutablePicoContainer container = (MutablePicoContainer) this.myProject.getPicoContainer();
+		MutablePicoContainer container = (MutablePicoContainer) this.project.getPicoContainer();
 		container.unregisterComponent(CODE_STYLE_MANAGER_KEY);
 		container.registerComponentInstance(CODE_STYLE_MANAGER_KEY, manager);
 	}

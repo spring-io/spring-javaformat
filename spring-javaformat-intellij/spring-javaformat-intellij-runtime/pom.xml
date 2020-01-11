@@ -13,8 +13,9 @@
 	<name>Spring JavaFormat IntelliJ Runtime</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
-		<intellij.binary>https://www.jetbrains.com/intellij-repository/releases/com/jetbrains/intellij/idea/ideaIC/2019.1/ideaIC-2019.1.zip</intellij.binary>
-		<intellij.source>https://github.com/JetBrains/intellij-community/archive/idea/191.6183.87.zip</intellij.source>
+		<intellij.binary>https://download.jetbrains.com/idea/ideaIC-2019.3.1.tar.gz</intellij.binary>
+		<intellij.source>https://github.com/JetBrains/intellij-community/archive/idea/193.5662.53.zip</intellij.source>
+		<intellij.root>idea-IC-193.5662.53</intellij.root>
 	</properties>
 	<build>
 		<plugins>
@@ -37,7 +38,7 @@
 						</goals>
 						<configuration>
 							<url>${intellij.binary}</url>
-							<outputFileName>intellij.zip</outputFileName>
+							<outputFileName>intellij.tar.gz</outputFileName>
 						</configuration>
 					</execution>
 					<execution>
@@ -65,15 +66,16 @@
 						</goals>
 						<configuration>
 							<target>
-								<unzip src="${project.build.directory}/intellij.zip"
+								<gunzip src="${project.build.directory}/intellij.tar.gz"/>
+								<untar src="${project.build.directory}/intellij.tar"
 										dest="${project.build.directory}/intellij">
 									<patternset>
-										<include name="lib/*.jar" />
-										<include name="plugins/maven/lib/*.jar" />
-										<include name="plugins/gradle/lib/*.jar" />
+										<include name="${intellij.root}/lib/*.jar" />
+										<include name="${intellij.root}/plugins/maven/lib/*.jar" />
+										<include name="${intellij.root}/plugins/gradle/lib/*.jar" />
 									</patternset>
 									<mapper type="flatten" />
-								</unzip>
+								</untar>
 								<unzip
 									src="${project.build.directory}/intellij-source.zip"
 									dest="${project.build.directory}/intellij-source">
@@ -84,6 +86,8 @@
 											name="*/platform/platform-impl/src/**" />
 										<include
 											name="*/platform/util/src/**" />
+										<include
+											name="*/platform/util/ui/src/**" />
 										<include
 											name="*/platform/extensions/src/**" />
 										<include
@@ -106,6 +110,9 @@
 								<zip
 									destfile="${project.build.directory}/intellij-source/util-sources.zip"
 									basedir="${project.build.directory}/intellij-source/platform/util/src" />
+								<zip
+									destfile="${project.build.directory}/intellij-source/platform-util-ui-sources.zip"
+									basedir="${project.build.directory}/intellij-source/platform/util/ui/src" />
 								<zip
 									destfile="${project.build.directory}/intellij-source/extensions-sources.zip"
 									basedir="${project.build.directory}/intellij-source/platform/extensions/src" />
@@ -176,6 +183,23 @@
 							<sources>${project.build.directory}/intellij-source/util-sources.zip</sources>
 							<groupId>io.spring.javaformat.intellij</groupId>
 							<artifactId>util</artifactId>
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+					<execution>
+						<id>install-intellij-platform-util-ui</id>
+						<phase>install</phase>
+						<inherited>false</inherited>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.build.directory}/intellij/platform-util-ui.jar</file>
+							<sources>${project.build.directory}/intellij-source/platform-util-ui-sources.zip</sources>
+							<groupId>io.spring.javaformat.intellij</groupId>
+							<artifactId>platform-util-ui</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
 							<generatePom>true</generatePom>
