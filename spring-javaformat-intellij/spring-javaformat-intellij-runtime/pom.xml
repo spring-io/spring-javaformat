@@ -91,6 +91,8 @@
 										<include
 											name="*/platform/extensions/src/**" />
 										<include
+											name="*/platform/service-container/src/**" />
+										<include
 											name="*/plugins/maven/src/**" />
 										<include
 											name="*/plugins/gradle/src/**" />
@@ -116,6 +118,9 @@
 								<zip
 									destfile="${project.build.directory}/intellij-source/extensions-sources.zip"
 									basedir="${project.build.directory}/intellij-source/platform/extensions/src" />
+								<zip
+									destfile="${project.build.directory}/intellij-source/platform-service-container-sources.zip"
+									basedir="${project.build.directory}/intellij-source/platform/service-container/src" />
 								<zip
 									destfile="${project.build.directory}/intellij-source/maven-sources.zip"
 									basedir="${project.build.directory}/intellij-source/plugins/maven/src" />
@@ -217,6 +222,23 @@
 							<sources>${project.build.directory}/intellij-source/extensions-sources.zip</sources>
 							<groupId>io.spring.javaformat.intellij</groupId>
 							<artifactId>extensions</artifactId>
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+					<execution>
+						<id>install-intellij-platform-service-container</id>
+						<phase>install</phase>
+						<inherited>false</inherited>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.build.directory}/intellij/platform-serviceContainer.jar</file>
+							<sources>${project.build.directory}/intellij-source/platform-service-container-sources.zip</sources>
+							<groupId>io.spring.javaformat.intellij</groupId>
+							<artifactId>platform-service-container</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
 							<generatePom>true</generatePom>

@@ -19,12 +19,17 @@ package io.spring.format.formatter.intellij;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.intellij.ide.plugins.IdeaPluginDescriptor;
+import com.intellij.ide.plugins.PluginManagerCore;
 import com.intellij.ide.util.PropertiesComponent;
+import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.codeStyle.CodeStyleManager;
+import com.intellij.serviceContainer.PlatformComponentManagerImpl;
 import org.picocontainer.MutablePicoContainer;
 
 import io.spring.format.formatter.intellij.codestyle.SpringCodeStyleManager;
@@ -90,12 +95,12 @@ public class SpringFormatComponent implements ProjectComponent {
 			}
 			if (state == State.ACTIVE && !(manager instanceof SpringCodeStyleManager)) {
 				logger.debug("Enabling SpringCodeStyleManager");
-				reregisterComponent(new SpringCodeStyleManager(manager));
+				registerCodeStyleManager(new SpringCodeStyleManager(manager));
 				this.properties.setValue(ACTIVE_PROPERTY, true);
 			}
 			if (state == State.NOT_ACTIVE && (manager instanceof SpringCodeStyleManager)) {
 				logger.debug("Disabling SpringCodeStyleManager");
-				reregisterComponent(((SpringCodeStyleManager) manager).getDelegate());
+				registerCodeStyleManager(((SpringCodeStyleManager) manager).getDelegate());
 				this.properties.setValue(ACTIVE_PROPERTY, false);
 			}
 			ApplicationManager.getApplication().invokeLater(() -> this.statusIndicator.update(state));
@@ -105,10 +110,17 @@ public class SpringFormatComponent implements ProjectComponent {
 		}
 	}
 
-	private void reregisterComponent(CodeStyleManager manager) {
-		MutablePicoContainer container = (MutablePicoContainer) this.project.getPicoContainer();
-		container.unregisterComponent(CODE_STYLE_MANAGER_KEY);
-		container.registerComponentInstance(CODE_STYLE_MANAGER_KEY, manager);
+	private void registerCodeStyleManager(CodeStyleManager manager) {
+		if (ApplicationInfo.getInstance().getBuild().getBaselineVersion() >= 193) {
+			PlatformComponentManagerImpl platformComponentManager = (PlatformComponentManagerImpl) this.project;
+			IdeaPluginDescriptor plugin = PluginManagerCore.getPlugin(PluginId.getId("spring-javaformat"));
+			platformComponentManager.registerServiceInstance(CodeStyleManager.class, manager, plugin);
+		}
+		else {
+			MutablePicoContainer container = (MutablePicoContainer) this.project.getPicoContainer();
+			container.unregisterComponent(CODE_STYLE_MANAGER_KEY);
+			container.registerComponentInstance(CODE_STYLE_MANAGER_KEY, manager);
+		}
 	}
 
 }
