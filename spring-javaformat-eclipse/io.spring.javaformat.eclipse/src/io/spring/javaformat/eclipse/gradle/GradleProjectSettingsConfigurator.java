@@ -31,6 +31,7 @@ import org.eclipse.buildship.core.internal.CorePlugin;
 import org.eclipse.buildship.core.internal.workspace.FetchStrategy;
 import org.eclipse.buildship.core.internal.workspace.InternalGradleBuild;
 import org.eclipse.buildship.core.internal.workspace.InternalGradleWorkspace;
+import org.eclipse.buildship.core.internal.workspace.ModelProvider;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -74,18 +75,33 @@ public class GradleProjectSettingsConfigurator implements ProjectConfigurator {
 		InternalGradleWorkspace workspace = CorePlugin.internalGradleWorkspace();
 		Optional<GradleBuild> build = workspace.getBuild(project);
 		if (build.isPresent()) {
-			Collection<EclipseProject> projects = ((InternalGradleBuild) build.get()).getModelProvider()
-					.fetchModels(EclipseProject.class, FetchStrategy.FORCE_RELOAD, this.tokenSource, monitor);
-			if (hasSpringFormatPlugin(projects)) {
-				ProjectSettingsFilesLocator locator = new ProjectSettingsFilesLocator(getSearchFolders(projects));
+			ModelProvider modelProvider = ((InternalGradleBuild) build.get()).getModelProvider();
+			Collection<EclipseProject> rootProjects = modelProvider.fetchModels(EclipseProject.class,
+					FetchStrategy.FORCE_RELOAD, this.tokenSource, monitor);
+			EclipseProject eclipseProject = findProjectByName(rootProjects, project.getName());
+			if (hasSpringFormatPlugin(eclipseProject)) {
+				ProjectSettingsFilesLocator locator = new ProjectSettingsFilesLocator(getSearchFolders(rootProjects));
 				locator.locateSettingsFiles().applyToProject(project, monitor);
 			}
 		}
 	}
 
-	private boolean hasSpringFormatPlugin(Collection<EclipseProject> projects) {
-		for (EclipseProject project : projects) {
-			for (GradleTask task : project.getGradleProject().getTasks()) {
+	private EclipseProject findProjectByName(Iterable<? extends EclipseProject> candidates, String name) {
+		for (EclipseProject candidate : candidates) {
+			if (name.equals(candidate.getName())) {
+				return candidate;
+			}
+			EclipseProject childResult = findProjectByName(candidate.getChildren(), name);
+			if (childResult != null) {
+				return childResult;
+			}
+		}
+		return null;
+	}
+
+	private boolean hasSpringFormatPlugin(EclipseProject eclipseProject) {
+		if (eclipseProject != null) {
+			for (GradleTask task : eclipseProject.getGradleProject().getTasks()) {
 				if (isSpringFormatPlugin(task)) {
 					return true;
 				}
