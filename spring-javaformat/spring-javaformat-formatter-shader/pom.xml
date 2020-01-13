@@ -9,7 +9,7 @@
 		<version>0.0.19-SNAPSHOT</version>
 	</parent>
 	<artifactId>spring-javaformat-formatter-shader</artifactId>
-	<name>Spring JavaFormat Formatter Shaded</name>
+	<name>Spring JavaFormat Formatter Shader</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
 	</properties>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 
 package io.spring.javaformat.gradle;
+
+import java.io.File;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -52,6 +54,8 @@ public class SpringJavaFormatPlugin implements Plugin<Project> {
 
 	private void addSourceTasks(SourceSet sourceSet, Task checkAll, Task formatAll) {
 		CheckTask checkTask = addSourceTask(sourceSet, CheckTask.class, CheckTask.NAME, CheckTask.DESCRIPTION);
+		checkTask.setReportLocation(
+				new File(this.project.getBuildDir(), "reports/format/" + sourceSet.getName() + "/check-format.txt"));
 		checkAll.dependsOn(checkTask);
 		FormatTask formatSourceSet = addSourceTask(sourceSet, FormatTask.class, FormatTask.NAME,
 				FormatTask.DESCRIPTION);
