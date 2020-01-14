@@ -16,12 +16,20 @@
 
 package io.spring.javaformat.gradle;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
+import java.util.Collections;
+import java.util.stream.Stream;
 
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.TaskOutcome;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import io.spring.javaformat.gradle.testkit.GradleBuild;
 
@@ -36,6 +44,9 @@ public class CheckTaskTests {
 
 	@Rule
 	public final GradleBuild gradleBuild = new GradleBuild();
+
+	@Rule
+	public final TemporaryFolder temp = new TemporaryFolder();
 
 	@Test
 	public void checkOk() throws IOException {
@@ -53,6 +64,18 @@ public class CheckTaskTests {
 	}
 
 	@Test
+	public void whenFirstInvocationSucceedsAndSourceIsModifiedThenSecondInvocationSucceeds() throws IOException {
+		copyFolder(new File("src/test/resources/check-ok").toPath(), this.temp.getRoot().toPath());
+		GradleBuild gradleBuild = this.gradleBuild.source(this.temp.getRoot());
+		BuildResult result = gradleBuild.build("check");
+		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+		Files.write(new File(this.temp.getRoot(), "src/main/java/simple/Simple.java").toPath(),
+				Collections.singletonList("// A change to the file"), StandardOpenOption.APPEND);
+		result = gradleBuild.build("--debug", "check");
+		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+	}
+
+	@Test
 	public void checkBad() throws IOException {
 		BuildResult result = this.gradleBuild.source("src/test/resources/check-bad").buildAndFail("check");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.FAILED);
@@ -65,6 +88,23 @@ public class CheckTaskTests {
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.FAILED);
 		result = gradleBuild.buildAndFail("check");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.FAILED);
+	}
+
+	private void copyFolder(Path source, Path target) throws IOException {
+		try (Stream<Path> stream = Files.walk(source)) {
+			stream.forEach((child) -> {
+				try {
+					Path relative = source.relativize(child);
+					Path destination = target.resolve(relative);
+					if (!destination.toFile().isDirectory()) {
+						Files.copy(child, destination, StandardCopyOption.REPLACE_EXISTING);
+					}
+				}
+				catch (Exception ex) {
+					throw new IllegalStateException(ex);
+				}
+			});
+		}
 	}
 
 }
