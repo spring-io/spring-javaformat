@@ -32,12 +32,12 @@
 					<dependency>
 						<groupId>com.puppycrawl.tools</groupId>
 						<artifactId>checkstyle</artifactId>
-						<version>8.18</version>
+						<version>8.29</version>
 					</dependency>
 					<dependency>
 						<groupId>io.spring.javaformat</groupId>
 						<artifactId>spring-javaformat-checkstyle</artifactId>
-						<version>0.0.7-SNAPSHOT</version>
+						<version>0.0.20-SNAPSHOT</version>
 					</dependency>
 				</dependencies>
 				<executions>
