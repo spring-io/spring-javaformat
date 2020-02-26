@@ -15,11 +15,6 @@
  */
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.TestTemplate;
 
 /**
  * Test with bad modifiers.
@@ -43,7 +38,7 @@ public class JUnit5BadModifier {
 
 	}
 
-	@AfterEach
+	@BeforeEach
 	public void publicAfterEach() {
 
 	}
@@ -63,7 +58,7 @@ public class JUnit5BadModifier {
 
 	}
 
-	@AfterEach
+	@BeforeEach
 	private void privateAfterEach() {
 
 	}
