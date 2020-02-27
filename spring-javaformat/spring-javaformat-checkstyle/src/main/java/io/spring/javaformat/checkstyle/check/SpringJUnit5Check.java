@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,22 +43,21 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 	private static final List<String> TEST_ANNOTATIONS;
 	static {
 		Set<String> annotations = new LinkedHashSet<>();
-		addAnnotation(annotations, JUNIT4_TEST_ANNOTATION);
-		addAnnotation(annotations, "org.junit.jupiter.api.RepeatedTest");
-		addAnnotation(annotations, "org.junit.jupiter.api.Test");
-		addAnnotation(annotations, "org.junit.jupiter.api.TestFactory");
-		addAnnotation(annotations, "org.junit.jupiter.api.TestTemplate");
-		addAnnotation(annotations, "org.junit.jupiter.params.ParameterizedTest");
+		annotations.add("RepeatedTest");
+		annotations.add("Test");
+		annotations.add("TestFactory");
+		annotations.add("TestTemplate");
+		annotations.add("ParameterizedTest");
 		TEST_ANNOTATIONS = Collections.unmodifiableList(new ArrayList<>(annotations));
 	}
 
 	private static final List<String> LIFECYCLE_ANNOTATIONS;
 	static {
 		Set<String> annotations = new LinkedHashSet<>();
-		addAnnotation(annotations, "org.junit.jupiter.api.BeforeAll");
-		addAnnotation(annotations, "org.junit.jupiter.api.BeforeEach");
-		addAnnotation(annotations, "org.junit.jupiter.api.AfterAll");
-		addAnnotation(annotations, "org.junit.jupiter.api.AfterEach");
+		annotations.add("BeforeAll");
+		annotations.add("BeforeEach");
+		annotations.add("AfterAll");
+		annotations.add("AfterEach");
 		LIFECYCLE_ANNOTATIONS = Collections.unmodifiableList(new ArrayList<>(annotations));
 	}
 
@@ -73,14 +72,6 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 		bannedImports.add("org.junit.Rule");
 		bannedImports.add("org.junit.ClassRule");
 		BANNED_IMPORTS = Collections.unmodifiableSet(bannedImports);
-	}
-
-	private static void addAnnotation(Set<String> annotations, String annotation) {
-		annotations.add(annotation);
-		int lastDot = annotation.lastIndexOf(".");
-		if (lastDot != -1) {
-			annotations.add(annotation.substring(lastDot + 1));
-		}
 	}
 
 	private List<String> unlessImports = new ArrayList<>();
