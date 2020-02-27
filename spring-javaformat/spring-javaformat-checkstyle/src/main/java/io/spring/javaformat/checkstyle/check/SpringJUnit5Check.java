@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,23 +37,29 @@ import com.puppycrawl.tools.checkstyle.utils.AnnotationUtil;
  * @author Phillip Webb
  */
 public class SpringJUnit5Check extends AbstractSpringCheck {
+
 	private static final String JUNIT4_TEST_ANNOTATION = "org.junit.Test";
 
-	private static final List<String> TEST_ANNOTATIONS = Collections.unmodifiableList(Arrays.asList(
-			"RepeatedTest",
-			"Test",
-			"TestFactory",
-			"TestTemplate",
-			"ParameterizedTest"
-	));
+	private static final List<String> TEST_ANNOTATIONS;
+	static {
+		Set<String> annotations = new LinkedHashSet<>();
+		annotations.add("RepeatedTest");
+		annotations.add("Test");
+		annotations.add("TestFactory");
+		annotations.add("TestTemplate");
+		annotations.add("ParameterizedTest");
+		TEST_ANNOTATIONS = Collections.unmodifiableList(new ArrayList<>(annotations));
+	}
 
-	private static final List<String> LIFECYCLE_ANNOTATIONS = Collections.unmodifiableList(Arrays.asList(
-			"BeforeAll",
-			"BeforeEach",
-			"AfterAll",
-			"AfterEach"
-			)
-	);
+	private static final List<String> LIFECYCLE_ANNOTATIONS;
+	static {
+		Set<String> annotations = new LinkedHashSet<>();
+		annotations.add("BeforeAll");
+		annotations.add("BeforeEach");
+		annotations.add("AfterAll");
+		annotations.add("AfterEach");
+		LIFECYCLE_ANNOTATIONS = Collections.unmodifiableList(new ArrayList<>(annotations));
+	}
 
 	private static final Set<String> BANNED_IMPORTS;
 	static {
