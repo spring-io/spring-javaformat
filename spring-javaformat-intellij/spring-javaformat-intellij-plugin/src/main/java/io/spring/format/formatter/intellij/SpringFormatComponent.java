@@ -16,6 +16,7 @@
 
 package io.spring.format.formatter.intellij;
 
+import java.lang.reflect.Method;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -26,10 +27,11 @@ import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.extensions.PluginDescriptor;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.serviceContainer.PlatformComponentManagerImpl;
+import com.intellij.serviceContainer.ComponentManagerImpl;
 import org.picocontainer.MutablePicoContainer;
 
 import io.spring.format.formatter.intellij.codestyle.SpringCodeStyleManager;
@@ -112,9 +114,14 @@ public class SpringFormatComponent implements ProjectComponent {
 
 	private void registerCodeStyleManager(CodeStyleManager manager) {
 		if (ApplicationInfo.getInstance().getBuild().getBaselineVersion() >= 193) {
-			PlatformComponentManagerImpl platformComponentManager = (PlatformComponentManagerImpl) this.project;
 			IdeaPluginDescriptor plugin = PluginManagerCore.getPlugin(PluginId.getId("spring-javaformat"));
-			platformComponentManager.registerServiceInstance(CodeStyleManager.class, manager, plugin);
+			try {
+				((ComponentManagerImpl) this.project).registerServiceInstance(CodeStyleManager.class, manager, plugin);
+			}
+			catch (NoSuchMethodError ex) {
+				Method method = findRegisterServiceInstanceMethod(this.project.getClass());
+				invokeRegisterServiceInstanceMethod(manager, plugin, method);
+			}
 		}
 		else {
 			MutablePicoContainer container = (MutablePicoContainer) this.project.getPicoContainer();
@@ -123,4 +130,32 @@ public class SpringFormatComponent implements ProjectComponent {
 		}
 	}
 
+	private Method findRegisterServiceInstanceMethod(Class<?> projectClass) {
+		if (projectClass != null) {
+			Method[] methods = projectClass.getDeclaredMethods();
+			for (Method method : methods) {
+				if (method.getName().equals("registerServiceInstance") && method.getParameterCount() == 3) {
+					if (PluginDescriptor.class.isAssignableFrom(method.getParameterTypes()[2])) {
+						return method;
+					}
+				}
+			}
+			return findRegisterServiceInstanceMethod(projectClass.getSuperclass());
+		}
+		return null;
+	}
+
+	private void invokeRegisterServiceInstanceMethod(CodeStyleManager manager, IdeaPluginDescriptor plugin,
+			Method method) {
+		if (method == null) {
+			throw new IllegalStateException("Unsupported IntelliJ version");
+		}
+		method.setAccessible(true);
+		try {
+			method.invoke(this.project, manager, plugin);
+		}
+		catch (Exception ex) {
+			throw new IllegalStateException(ex);
+		}
+	}
 }
