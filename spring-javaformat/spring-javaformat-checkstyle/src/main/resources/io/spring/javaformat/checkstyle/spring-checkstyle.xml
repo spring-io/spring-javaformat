@@ -117,7 +117,9 @@
 				org.springframework.test.web.servlet.setup.MockMvcBuilders.*,
 				org.springframework.web.reactive.function.BodyInserters.*,
 				org.springframework.web.reactive.function.server.RequestPredicates.*,
-				org.springframework.web.reactive.function.server.RouterFunctions.*" />
+				org.springframework.web.reactive.function.server.RouterFunctions.*,
+				org.springframework.ws.test.client.RequestMatchers.*,
+				org.springframework.ws.test.client.ResponseCreators.*" />
 		</module>
 		<module name="com.puppycrawl.tools.checkstyle.checks.imports.RedundantImportCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck">
