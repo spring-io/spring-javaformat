@@ -16,8 +16,10 @@
 
 package io.spring.javaformat.checkstyle.check;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,8 +35,14 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  */
 public class SpringJavadocCheck extends AbstractSpringCheck {
 
-	private static final Pattern[] CASE_CHECKED_TAG_PATTERNS = { Pattern.compile("@param\\s+\\S+\\s+(.*)"),
-			Pattern.compile("@throws\\s+\\S+\\s+(.*)"), Pattern.compile("@return\\s+(.*)") };
+	private static final List<Pattern> CASE_CHECKED_TAG_PATTERNS;
+	static {
+		List<Pattern> patterns = new ArrayList<>();
+		patterns.add(Pattern.compile("@param\\s+\\S+\\s+(.*)"));
+		patterns.add(Pattern.compile("@throws\\s+\\S+\\s+(.*)"));
+		patterns.add(Pattern.compile("@return\\s+(.*)"));
+		CASE_CHECKED_TAG_PATTERNS = Collections.unmodifiableList(patterns);
+	}
 
 	private static final Pattern SINCE_TAG_PATTERN = Pattern.compile("@since\\s+(.*)");
 
