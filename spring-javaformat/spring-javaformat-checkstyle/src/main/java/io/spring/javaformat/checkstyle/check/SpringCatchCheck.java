@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,6 +59,9 @@ public class SpringCatchCheck extends AbstractSpringCheck {
 		String text = ast.getText();
 		if (text.length() == 1) {
 			log(ast.getLineNo(), ast.getColumnNo(), "catch.singleLetter");
+		}
+		if (text.toLowerCase().equals("o_o")) {
+			log(ast.getLineNo(), ast.getColumnNo(), "catch.wideEye");
 		}
 	}
 
