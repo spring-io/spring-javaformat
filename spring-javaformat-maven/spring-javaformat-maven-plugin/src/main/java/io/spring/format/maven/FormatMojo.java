@@ -43,7 +43,9 @@ public abstract class FormatMojo extends AbstractMojo {
 
 	private static final String[] DEFAULT_INCLUDES = new String[] { "**/*.java" };
 
-	private static final String GENERATED_SOURCE = File.separator + "generated-sources" + File.separator;
+	private static final String GENERATED_SOURCES = File.separator + "generated-sources" + File.separator;
+
+	private static final String GENERATED_TEST_SOURCES = File.separator + "generated-test-sources" + File.separator;
 
 	/**
 	 * The Maven Project Object.
@@ -121,7 +123,8 @@ public abstract class FormatMojo extends AbstractMojo {
 		try {
 			String path = file.getCanonicalPath() + File.separator;
 			String projectPath = this.project.getBasedir().getCanonicalPath();
-			return path.startsWith(projectPath) && path.contains(GENERATED_SOURCE);
+			return path.startsWith(projectPath)
+					&& (path.contains(GENERATED_SOURCES) || path.contains(GENERATED_TEST_SOURCES));
 		}
 		catch (IOException ex) {
 			return false;
