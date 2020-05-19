@@ -1,5 +1,5 @@
 :release-version: 0.0.22
-:checkstyle-version: 8.29
+:checkstyle-version: 8.32
 == Spring Java Format
 
 === What is this?
@@ -82,7 +82,7 @@ To enforce checksyle conventions add the checkstyle plugin and include a depende
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.0.0</version>
+				<version>3.1.1</version>
 				<dependencies>
 					<dependency>
 						<groupId>com.puppycrawl.tools</groupId>
