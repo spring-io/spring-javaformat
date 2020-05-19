@@ -44,6 +44,13 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 		CASE_CHECKED_TAG_PATTERNS = Collections.unmodifiableList(patterns);
 	}
 
+	private static final List<Pattern> BANNED_TAGS;
+	static {
+		List<Pattern> patterns = new ArrayList<>();
+		patterns.add(Pattern.compile("(@soundtrack)\\s+.*"));
+		BANNED_TAGS = Collections.unmodifiableList(patterns);
+	}
+
 	private static final Pattern SINCE_TAG_PATTERN = Pattern.compile("@since\\s+(.*)");
 
 	private static final Set<Integer> TOP_LEVEL_TYPES;
@@ -78,8 +85,26 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 		int lineNumber = ast.getLineNo();
 		TextBlock javadoc = getFileContents().getJavadocBefore(lineNumber);
 		if (javadoc != null) {
-			checkTagCase(ast, javadoc);
-			checkSinceTag(ast, javadoc);
+			checkJavadoc(ast, javadoc);
+		}
+	}
+
+	private void checkJavadoc(DetailAST ast, TextBlock javadoc) {
+		checkBannedTags(ast, javadoc);
+		checkTagCase(ast, javadoc);
+		checkSinceTag(ast, javadoc);
+	}
+
+	private void checkBannedTags(DetailAST ast, TextBlock javadoc) {
+		String[] text = javadoc.getText();
+		for (int i = 0; i < text.length; i++) {
+			for (Pattern pattern : BANNED_TAGS) {
+				Matcher matcher = pattern.matcher(text[i]);
+				if (matcher.find()) {
+					String tagName = matcher.group(1).trim();
+					log(javadoc.getStartLineNo() + i, tagName.length(), "javadoc.bannedTag", tagName);
+				}
+			}
 		}
 	}
 
