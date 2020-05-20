@@ -77,6 +77,7 @@
 			<property name="excludes" value="
 				io.restassured.RestAssured.*,
 				org.assertj.core.api.Assertions.*,
+				org.assertj.core.api.Assumptions.*,
 				org.awaitility.Awaitility.*,
 				org.hamcrest.CoreMatchers.*,
 				org.hamcrest.Matchers.*,
