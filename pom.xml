@@ -38,7 +38,7 @@
 		<ant-contrib.version>1.0b3</ant-contrib.version>
 		<asm.version>5.2</asm.version>
 		<assertj.version>3.8.0</assertj.version>
-		<checkstyle.version>8.29</checkstyle.version>
+		<checkstyle.version>8.32</checkstyle.version>
 		<gradle.version>3.4</gradle.version>
 		<groovy.version>2.4.7</groovy.version>
 		<maven-core.version>3.5.0</maven-core.version>
@@ -82,7 +82,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-checkstyle-plugin</artifactId>
-					<version>3.1.0</version>
+					<version>3.1.1</version>
 					<dependencies>
 						<dependency>
 							<groupId>com.puppycrawl.tools</groupId>
