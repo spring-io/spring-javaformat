@@ -16,93 +16,70 @@
 
 package io.spring.javaformat.eclipse.gradle;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.List;
+import java.util.Map.Entry;
 
-import org.eclipse.buildship.core.GradleBuild;
-import org.eclipse.buildship.core.InitializationContext;
 import org.eclipse.buildship.core.ProjectConfigurator;
-import org.eclipse.buildship.core.ProjectContext;
-import org.eclipse.buildship.core.internal.CorePlugin;
-import org.eclipse.buildship.core.internal.workspace.FetchStrategy;
-import org.eclipse.buildship.core.internal.workspace.InternalGradleBuild;
-import org.eclipse.buildship.core.internal.workspace.InternalGradleWorkspace;
-import org.eclipse.buildship.core.internal.workspace.ModelProvider;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.gradle.tooling.CancellationTokenSource;
-import org.gradle.tooling.GradleConnector;
-import org.gradle.tooling.model.GradleTask;
-import org.gradle.tooling.model.eclipse.EclipseProject;
+import org.eclipse.m2e.core.lifecyclemapping.model.IPluginExecutionMetadata;
+import org.eclipse.m2e.core.project.IMavenProjectChangedListener;
+import org.eclipse.m2e.core.project.IMavenProjectRegistry;
+import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
+import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
+import org.eclipse.m2e.core.project.configurator.MojoExecutionKey;
+import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
 
-import io.spring.javaformat.eclipse.projectsettings.ProjectSettingsFilesLocator;
+import io.spring.javaformat.eclipse.preferences.PreferenceSetter;
 
 /**
- * {@link ProjectConfigurator} to apply project-specific settings to Gradle projects.
+ * {@link ProjectConfigurator} to apply project-specific settings to Gradle
+ * projects.
  *
  * @author Andy Wilkinson
  * @author Phillip Webb
  */
 @SuppressWarnings("restriction")
-public class GradleProjectSettingsConfigurator implements ProjectConfigurator {
+public class GradleProjectSettingsConfigurator extends AbstractProjectConfigurator {
 
-	private static final Object TASK_NAME = "checkFormatMain";
-
-	private CancellationTokenSource tokenSource;
+	private final static IMavenProjectChangedListener projectChangedListener = new IMavenProjectChangedListener() {
+		@Override
+		public void mavenProjectChanged(final MavenProjectChangedEvent[] events, final IProgressMonitor monitor) {
+			for (final MavenProjectChangedEvent event : events) {
+				updateProjectSettings(event, monitor);
+			}
+		}
+	};
 
 	@Override
-	public void init(InitializationContext context, IProgressMonitor monitor) {
-		this.tokenSource = GradleConnector.newCancellationTokenSource();
-
+	public void setProjectManager(final IMavenProjectRegistry projectManager) {
+		projectManager.addMavenProjectChangedListener(this.projectChangedListener);
+		super.setProjectManager(projectManager);
 	}
 
-	@Override
-	public void configure(ProjectContext context, IProgressMonitor monitor) {
-		try {
-			configureProject(context.getProject(), monitor);
-		}
-		catch (Exception ex) {
-			context.error("Failed to apply project settings", ex);
-		}
-	}
-
-	private void configureProject(IProject project, IProgressMonitor monitor) throws CoreException, IOException {
-		InternalGradleWorkspace workspace = CorePlugin.internalGradleWorkspace();
-		Optional<GradleBuild> build = workspace.getBuild(project);
-		if (build.isPresent()) {
-			ModelProvider modelProvider = ((InternalGradleBuild) build.get()).getModelProvider();
-			Collection<EclipseProject> rootProjects = modelProvider.fetchModels(EclipseProject.class,
-					FetchStrategy.FORCE_RELOAD, this.tokenSource, monitor);
-			EclipseProject eclipseProject = findProjectByName(rootProjects, project.getName());
-			if (hasSpringFormatPlugin(eclipseProject)) {
-				ProjectSettingsFilesLocator locator = new ProjectSettingsFilesLocator(getSearchFolders(rootProjects));
-				locator.locateSettingsFiles().applyToProject(project, monitor);
+	public static void updateProjectSettings(final MavenProjectChangedEvent event, final IProgressMonitor monitor) {
+		switch (event.getKind()) {
+		case MavenProjectChangedEvent.KIND_ADDED:
+			// opening project
+			break;
+		case MavenProjectChangedEvent.KIND_CHANGED:
+			final PreferenceSetter setter = new PreferenceSetter(event.getMavenProject().getProject());
+			setter.reset();
+			if (thePluginIsInThePom(event)) {
+				setter.set();
 			}
+			break;
+		case MavenProjectChangedEvent.KIND_REMOVED:
+			// closing project
+			break;
 		}
 	}
 
-	private EclipseProject findProjectByName(Iterable<? extends EclipseProject> candidates, String name) {
-		for (EclipseProject candidate : candidates) {
-			if (name.equals(candidate.getName())) {
-				return candidate;
-			}
-			EclipseProject childResult = findProjectByName(candidate.getChildren(), name);
-			if (childResult != null) {
-				return childResult;
-			}
-		}
-		return null;
-	}
-
-	private boolean hasSpringFormatPlugin(EclipseProject eclipseProject) {
-		if (eclipseProject != null) {
-			for (GradleTask task : eclipseProject.getGradleProject().getTasks()) {
-				if (isSpringFormatPlugin(task)) {
+	private static boolean thePluginIsInThePom(final MavenProjectChangedEvent event) {
+		if (event.getMavenProject() != null) {
+			for (final Entry<MojoExecutionKey, List<IPluginExecutionMetadata>> m : event.getMavenProject()
+					.getMojoExecutionMapping().entrySet()) {
+				if ("amiga-javaformat-maven-plugin".equals(m.getKey().getArtifactId())) {
 					return true;
 				}
 			}
@@ -110,23 +87,9 @@ public class GradleProjectSettingsConfigurator implements ProjectConfigurator {
 		return false;
 	}
 
-	private boolean isSpringFormatPlugin(GradleTask task) {
-		return TASK_NAME.equals(task.getName());
-	}
-
-	private Set<File> getSearchFolders(Collection<EclipseProject> projects) {
-		Set<File> searchFolders = new LinkedHashSet<>();
-		for (EclipseProject project : projects) {
-			while (project != null) {
-				searchFolders.add(project.getProjectDirectory());
-				project = project.getParent();
-			}
-		}
-		return searchFolders;
-	}
-
 	@Override
-	public void unconfigure(ProjectContext context, IProgressMonitor monitor) {
+	public void configure(final ProjectConfigurationRequest request, final IProgressMonitor monitor)
+			throws CoreException {
+		// Nothing. The listener acts in configuration like a normal modification
 	}
-
 }

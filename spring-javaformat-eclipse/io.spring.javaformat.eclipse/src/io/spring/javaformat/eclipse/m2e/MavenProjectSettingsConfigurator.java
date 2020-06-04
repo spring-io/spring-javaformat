@@ -16,20 +16,20 @@
 
 package io.spring.javaformat.eclipse.m2e;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
-import org.apache.maven.project.MavenProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.m2e.core.lifecyclemapping.model.IPluginExecutionMetadata;
+import org.eclipse.m2e.core.project.IMavenProjectChangedListener;
+import org.eclipse.m2e.core.project.IMavenProjectRegistry;
+import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
 import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
+import org.eclipse.m2e.core.project.configurator.MojoExecutionKey;
 import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
 
-import io.spring.javaformat.eclipse.Executor;
-import io.spring.javaformat.eclipse.Messages;
-import io.spring.javaformat.eclipse.projectsettings.ProjectSettingsFiles;
-import io.spring.javaformat.eclipse.projectsettings.ProjectSettingsFilesLocator;
+import io.spring.javaformat.eclipse.preferences.PreferenceSetter;
 
 /**
  * Configurator to apply project-specific settings to Maven projects.
@@ -37,24 +37,54 @@ import io.spring.javaformat.eclipse.projectsettings.ProjectSettingsFilesLocator;
  * @author Phillip Webb
  */
 public class MavenProjectSettingsConfigurator extends AbstractProjectConfigurator {
+	private final static IMavenProjectChangedListener projectChangedListener = new IMavenProjectChangedListener() {
+		@Override
+		public void mavenProjectChanged(final MavenProjectChangedEvent[] events, final IProgressMonitor monitor) {
+			for (final MavenProjectChangedEvent event : events) {
+				updateProjectSettings(event, monitor);
+			}
+		}
+	};
 
 	@Override
-	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {
-		new Executor(Messages.springFormatSettingsImportError).run(() -> {
-			List<File> searchFolders = getSearchFolders(request);
-			ProjectSettingsFiles settingsFiles = new ProjectSettingsFilesLocator(searchFolders).locateSettingsFiles();
-			settingsFiles.applyToProject(request.getProject(), monitor);
-		});
+	public void setProjectManager(final IMavenProjectRegistry projectManager) {
+		projectManager.addMavenProjectChangedListener(this.projectChangedListener);
+		super.setProjectManager(projectManager);
 	}
 
-	private List<File> getSearchFolders(ProjectConfigurationRequest request) {
-		List<File> files = new ArrayList<>();
-		MavenProject project = request.getMavenProject();
-		while (project != null && project.getBasedir() != null) {
-			files.add(project.getBasedir());
-			project = project.getParent();
+	public static void updateProjectSettings(final MavenProjectChangedEvent event, final IProgressMonitor monitor) {
+		switch (event.getKind()) {
+		case MavenProjectChangedEvent.KIND_ADDED:
+			// opening project
+			break;
+		case MavenProjectChangedEvent.KIND_CHANGED:
+			final PreferenceSetter setter = new PreferenceSetter(event.getMavenProject().getProject());
+			setter.reset();
+			if (thePluginIsInThePom(event)) {
+				setter.set();
+			}
+			break;
+		case MavenProjectChangedEvent.KIND_REMOVED:
+			// closing project
+			break;
 		}
-		return files;
 	}
 
+	private static boolean thePluginIsInThePom(final MavenProjectChangedEvent event) {
+		if (event.getMavenProject() != null) {
+			for (final Entry<MojoExecutionKey, List<IPluginExecutionMetadata>> m : event.getMavenProject()
+					.getMojoExecutionMapping().entrySet()) {
+				if ("spring-javaformat-maven-plugin".equals(m.getKey().getArtifactId())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public void configure(final ProjectConfigurationRequest request, final IProgressMonitor monitor)
+			throws CoreException {
+		// Nothing. The listener acts in configuration like a normal modification
+	}
 }
