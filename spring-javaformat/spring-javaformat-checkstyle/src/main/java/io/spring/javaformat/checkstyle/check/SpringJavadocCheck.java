@@ -53,6 +53,8 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 
 	private static final Pattern SINCE_TAG_PATTERN = Pattern.compile("@since\\s+(.*)");
 
+	private static final Pattern PARAM_TAG_PATTERN = Pattern.compile("@param\\s+(.*)");
+
 	private static final Set<Integer> TOP_LEVEL_TYPES;
 	static {
 		Set<Integer> topLevelTypes = new HashSet<Integer>();
@@ -93,6 +95,22 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 		checkBannedTags(ast, javadoc);
 		checkTagCase(ast, javadoc);
 		checkSinceTag(ast, javadoc);
+		checkMethodJavaDoc(ast, javadoc);
+	}
+
+	private void checkMethodJavaDoc(DetailAST ast, TextBlock javadoc) {
+		if (TokenTypes.METHOD_DEF != ast.getType()) {
+			return;
+		}
+		else {
+			String[] text = javadoc.getText();
+			for (int i = 0; i < text.length; i++) {
+				Matcher matcher = SINCE_TAG_PATTERN.matcher(text[i]);
+				if (matcher.find() && text[i - 1].trim().equals("*")) {
+					log(javadoc.getStartLineNo() + i - 1, 0, "javadoc.whiteSpace");
+				}
+			}
+		}
 	}
 
 	private void checkBannedTags(DetailAST ast, TextBlock javadoc) {
