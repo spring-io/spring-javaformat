@@ -55,7 +55,7 @@ public class SpringConfigurationLoaderTests {
 	@Test
 	public void loadWithExcludeShouldExcludeChecks() {
 		Set<String> excludes = Collections
-				.singleton("com.puppycrawl.tools.checkstyle.checks.imports.AvoidStaticImportCheck");
+				.singleton("com.puppycrawl.tools.checkstyle.checks.whitespace.MethodParamPadCheck");
 		Collection<FileSetCheck> checks = load(excludes);
 		assertThat(checks).hasSize(3);
 		TreeWalker treeWalker = (TreeWalker) checks.toArray()[2];
