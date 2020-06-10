@@ -31,8 +31,10 @@
 		<main.basedir>${basedir}</main.basedir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
-		<eclipse.repository>https://download.eclipse.org/releases/2019-12/201912181000/</eclipse.repository>
-		<eclipse.checkstyle.repository>https://dl.bintray.com/eclipse-cs/eclipse-cs/8.18.0</eclipse.checkstyle.repository>
+		<eclipse.repository>https://download.eclipse.org/releases/2020-03/202003181000/</eclipse.repository>
+		<eclipse.java14.repository>https://download.eclipse.org/eclipse/updates/4.15-P-builds/</eclipse.java14.repository>
+		<eclipse.checkstyle.repository>https://dl.bintray.com/eclipse-cs/eclipse-cs/8.32.0
+		</eclipse.checkstyle.repository>
 		<tycho.disableP2Mirrors>true</tycho.disableP2Mirrors>
 		<ant.version>1.8.1</ant.version>
 		<ant-contrib.version>1.0b3</ant-contrib.version>
@@ -42,16 +44,18 @@
 		<gradle.version>3.4</gradle.version>
 		<groovy.version>2.4.7</groovy.version>
 		<maven-core.version>3.5.0</maven-core.version>
-		<maven-plugin-api.version>${maven-core.version}</maven-plugin-api.version>
-		<maven-plugin-annotations.version>3.5</maven-plugin-annotations.version>
+		<maven-plugin-api.version>${maven-core.version}
+		</maven-plugin-api.version>
+		<maven-plugin-annotations.version>3.5
+		</maven-plugin-annotations.version>
 		<mockito.version>2.8.47</mockito.version>
 		<junit.version>4.12</junit.version>
 		<javassist.version>3.21.0-GA</javassist.version>
 		<picocontainer.version>1.2</picocontainer.version>
 		<system-rules.version>1.16.0</system-rules.version>
 		<trove4j.version>3.0.3</trove4j.version>
-		<tycho.version>1.4.0</tycho.version>
-		<tycho-extras.version>1.4.0</tycho-extras.version>
+		<tycho.version>1.7.0</tycho.version>
+		<tycho-extras.version>1.7.0</tycho-extras.version>
 	</properties>
 	<build>
 		<pluginManagement>
@@ -212,7 +216,8 @@
 							<exclude>**/Abstract*.java</exclude>
 						</excludes>
 						<argLine>${ui.test.vmargs}</argLine>
-						<forkedProcessTimeoutInSeconds>7200</forkedProcessTimeoutInSeconds>
+						<forkedProcessTimeoutInSeconds>7200
+						</forkedProcessTimeoutInSeconds>
 						<useUIHarness>false</useUIHarness>
 					</configuration>
 				</plugin>
@@ -447,9 +452,12 @@
 						<configuration>
 							<skip>${disable.checks}</skip>
 							<configLocation>src/checkstyle/checkstyle.xml</configLocation>
-							<suppressionsLocation>src/checkstyle/checkstyle-suppressions.xml</suppressionsLocation>
-							<headerLocation>src/checkstyle/checkstyle-header.txt</headerLocation>
-							<propertyExpansion>checkstyle.build.directory=${project.build.directory}</propertyExpansion>
+							<suppressionsLocation>src/checkstyle/checkstyle-suppressions.xml
+							</suppressionsLocation>
+							<headerLocation>src/checkstyle/checkstyle-header.txt
+							</headerLocation>
+							<propertyExpansion>checkstyle.build.directory=${project.build.directory}
+							</propertyExpansion>
 							<encoding>UTF-8</encoding>
 							<consoleOutput>true</consoleOutput>
 							<failsOnError>true</failsOnError>
@@ -593,6 +601,11 @@
 			<url>${eclipse.repository}</url>
 		</repository>
 		<repository>
+			<id>eclipse-java14</id>
+			<layout>p2</layout>
+			<url>${eclipse.java14.repository}</url>
+		</repository>
+		<repository>
 			<id>eclipse-checkstyle</id>
 			<layout>p2</layout>
 			<url>${eclipse.checkstyle.repository}</url>
@@ -615,7 +628,8 @@
 				</os>
 			</activation>
 			<properties>
-				<ui.test.vmargs>-Xmx512m -XX:MaxPermSize=256m -XstartOnFirstThread</ui.test.vmargs>
+				<ui.test.vmargs>-Xmx512m -XX:MaxPermSize=256m -XstartOnFirstThread
+				</ui.test.vmargs>
 			</properties>
 		</profile>
 		<profile>
