@@ -17,14 +17,18 @@
 package io.spring.javaformat.checkstyle;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Properties;
+import java.util.Set;
 
 import com.puppycrawl.tools.checkstyle.DefaultContext;
 import com.puppycrawl.tools.checkstyle.ModuleFactory;
 import com.puppycrawl.tools.checkstyle.PackageObjectFactory;
 import com.puppycrawl.tools.checkstyle.PropertiesExpander;
 import com.puppycrawl.tools.checkstyle.PropertyResolver;
+import com.puppycrawl.tools.checkstyle.TreeWalker;
 import com.puppycrawl.tools.checkstyle.api.FileSetCheck;
+import org.assertj.core.extractor.Extractors;
 import org.junit.Test;
 
 import io.spring.javaformat.checkstyle.check.SpringHeaderCheck;
@@ -41,14 +45,34 @@ public class SpringConfigurationLoaderTests {
 
 	@Test
 	public void loadShouldLoadChecks() {
+		Collection<FileSetCheck> checks = load(null);
+		assertThat(checks).hasSize(3);
+		TreeWalker treeWalker = (TreeWalker) checks.toArray()[2];
+		Set<?> ordinaryChecks = (Set<?>) Extractors.byName("ordinaryChecks").extract(treeWalker);
+		assertThat(ordinaryChecks).hasSize(60);
+	}
+
+	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void loadWithExcludeShouldExcludeChecks() {
+		Set<String> excludes = Collections
+				.singleton("com.puppycrawl.tools.checkstyle.checks.imports.AvoidStaticImportCheck");
+		Collection<FileSetCheck> checks = load(excludes);
+		assertThat(checks).hasSize(3);
+		TreeWalker treeWalker = (TreeWalker) checks.toArray()[2];
+		Set<?> ordinaryChecks = (Set<?>) Extractors.byName("ordinaryChecks").extract(treeWalker);
+		assertThat(ordinaryChecks).hasSize(59);
+	}
+
+	private Collection<FileSetCheck> load(Set<String> excludes) {
 		DefaultContext context = new DefaultContext();
-		context.add("moduleFactory",
-				new PackageObjectFactory(getClass().getPackage().getName(), getClass().getClassLoader()));
 		ModuleFactory moduleFactory = new PackageObjectFactory(getClass().getPackage().getName(),
 				getClass().getClassLoader());
+		moduleFactory = new FilteredModuleFactory(moduleFactory, excludes);
+		context.add("moduleFactory", moduleFactory);
 		Collection<FileSetCheck> checks = new SpringConfigurationLoader(context, moduleFactory)
 				.load(getPropertyResolver());
-		assertThat(checks).hasSize(3);
+		return checks;
 	}
 
 	private PropertyResolver getPropertyResolver() {

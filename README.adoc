@@ -212,6 +212,22 @@ Spring Framework manually formats code, where as Spring Boot uses automatic form
 Formatting and Checkstyle alone are not enough to produce truly consistent code.
 Here are some tips that we've found useful when developing Spring Boot.
 
+==== Excluding specific checks
+If you want most `SpringChecks` but need to exclude one or two, you can do something like this in your `checkstyle.xml`:
+
+[source,xml,indent=0]
+----
+	<?xml version="1.0"?>
+	<!DOCTYPE module PUBLIC
+    		"-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+    		"https://checkstyle.org/dtds/configuration_1_3.dtd">
+	<module name="com.puppycrawl.tools.checkstyle.Checker">
+		<module name="io.spring.javaformat.checkstyle.SpringChecks">
+			<property name="excludes" value="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStaticImportCheck" />
+		</module>
+	</module>
+----
+
 ==== Disabling formatting for blocks of code
 Some code isn't particularly amenable to automatic formatting.
 For example, Spring Security configurations often work better when manually formatted.

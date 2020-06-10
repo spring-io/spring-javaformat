@@ -17,7 +17,9 @@
 package io.spring.javaformat.checkstyle;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Properties;
 import java.util.Set;
@@ -61,6 +63,8 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 
 	private String projectRootPackage = SpringImportOrderCheck.DEFAULT_PROJECT_ROOT_PACKAGE;
 
+	private Set<String> excludes;
+
 	/**
 	 * Sets classLoader to load class.
 	 * @param classLoader class loader to resolve classes with.
@@ -79,18 +83,18 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 
 	@Override
 	public void finishLocalSetup() {
+		ModuleFactory moduleFactory = new FilteredModuleFactory(this.moduleFactory, this.excludes);
 		DefaultContext context = new DefaultContext();
 		context.add("classLoader", this.classLoader);
 		context.add("severity", getSeverity());
 		context.add("tabWidth", String.valueOf(getTabWidth()));
-		context.add("moduleFactory", this.moduleFactory);
+		context.add("moduleFactory", moduleFactory);
 		Properties properties = new Properties();
 		put(properties, "headerType", this.headerType);
 		put(properties, "headerCopyrightPattern", this.headerCopyrightPattern);
 		put(properties, "headerFile", this.headerFile);
 		put(properties, "projectRootPackage", this.projectRootPackage);
-		this.checks = new SpringConfigurationLoader(context, this.moduleFactory)
-				.load(new PropertiesExpander(properties));
+		this.checks = new SpringConfigurationLoader(context, moduleFactory).load(new PropertiesExpander(properties));
 	}
 
 	private void put(Properties properties, String name, Object value) {
@@ -151,6 +155,10 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 
 	public void setProjectRootPackage(String projectRootPackage) {
 		this.projectRootPackage = projectRootPackage;
+	}
+
+	public void setExcludes(String... excludes) {
+		this.excludes = new HashSet<>(Arrays.asList(excludes));
 	}
 
 }
