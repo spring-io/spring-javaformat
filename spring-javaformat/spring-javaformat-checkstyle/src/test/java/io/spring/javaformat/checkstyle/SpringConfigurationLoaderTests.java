@@ -53,7 +53,6 @@ public class SpringConfigurationLoaderTests {
 	}
 
 	@Test
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void loadWithExcludeShouldExcludeChecks() {
 		Set<String> excludes = Collections
 				.singleton("com.puppycrawl.tools.checkstyle.checks.imports.AvoidStaticImportCheck");
