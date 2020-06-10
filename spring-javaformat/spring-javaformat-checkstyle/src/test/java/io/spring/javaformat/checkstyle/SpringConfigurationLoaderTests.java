@@ -80,6 +80,7 @@ public class SpringConfigurationLoaderTests {
 		properties.put("headerFile", "");
 		properties.put("headerCopyrightPattern", SpringHeaderCheck.DEFAULT_HEADER_COPYRIGHT_PATTERN);
 		properties.put("projectRootPackage", SpringImportOrderCheck.DEFAULT_PROJECT_ROOT_PACKAGE);
+		properties.put("avoidStaticImportExcludes", "");
 		return new PropertiesExpander(properties);
 	}
 
