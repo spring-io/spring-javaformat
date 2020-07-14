@@ -26,6 +26,8 @@ import com.puppycrawl.tools.checkstyle.checks.imports.AvoidStaticImportCheck;
 
 /**
  * Spring variant of {@link AvoidStarImportCheck}.
+ *
+ * @author Phillip Webb
  */
 public class SpringAvoidStaticImportCheck extends AvoidStaticImportCheck {
 
