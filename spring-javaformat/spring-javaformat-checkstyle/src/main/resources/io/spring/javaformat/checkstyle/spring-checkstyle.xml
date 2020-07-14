@@ -11,9 +11,7 @@
 		<property name="headerFile" value="${headerFile}" default=""/>
 		<property name="headerCopyrightPattern" value="${headerCopyrightPattern}"/>
 	</module>
-	<module name="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck">
-		<property name="lineSeparator" value="lf"/>
-	</module>
+	<module name="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck" />
 
 	<!-- TreeWalker Checks -->
 	<module name="com.puppycrawl.tools.checkstyle.TreeWalker">
