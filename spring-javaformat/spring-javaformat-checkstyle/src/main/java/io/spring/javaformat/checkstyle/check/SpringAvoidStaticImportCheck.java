@@ -50,6 +50,7 @@ public class SpringAvoidStaticImportCheck extends AvoidStaticImportCheck {
 		excludes.add("org.mockito.ArgumentMatchers.*");
 		excludes.add("org.mockito.BDDMockito.*");
 		excludes.add("org.mockito.Matchers.*");
+		excludes.add("org.mockito.AdditionalMatchers.*");
 		excludes.add("org.mockito.Mockito.*");
 		excludes.add("org.springframework.boot.configurationprocessor.ConfigurationMetadataMatchers.*");
 		excludes.add("org.springframework.boot.configurationprocessor.TestCompiler.*");
