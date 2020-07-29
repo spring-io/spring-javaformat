@@ -223,7 +223,7 @@ If you want most `SpringChecks` but need to exclude one or two, you can do somet
     		"https://checkstyle.org/dtds/configuration_1_3.dtd">
 	<module name="com.puppycrawl.tools.checkstyle.Checker">
 		<module name="io.spring.javaformat.checkstyle.SpringChecks">
-			<property name="excludes" value="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStaticImportCheck" />
+			<property name="excludes" value="io.spring.javaformat.checkstyle.check.SpringAvoidStaticImportCheck" />
 		</module>
 	</module>
 ----
