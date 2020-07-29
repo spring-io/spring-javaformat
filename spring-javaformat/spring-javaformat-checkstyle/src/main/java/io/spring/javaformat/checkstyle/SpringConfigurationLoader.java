@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 
 import com.puppycrawl.tools.checkstyle.ConfigurationLoader;
 import com.puppycrawl.tools.checkstyle.ConfigurationLoader.IgnoredModulesOptions;
-import com.puppycrawl.tools.checkstyle.ModuleFactory;
 import com.puppycrawl.tools.checkstyle.PropertyResolver;
 import com.puppycrawl.tools.checkstyle.api.AutomaticBean;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
@@ -42,9 +41,9 @@ class SpringConfigurationLoader {
 
 	private final Context context;
 
-	private final ModuleFactory moduleFactory;
+	private final FilteredModuleFactory moduleFactory;
 
-	SpringConfigurationLoader(Context context, ModuleFactory moduleFactory) {
+	SpringConfigurationLoader(Context context, FilteredModuleFactory moduleFactory) {
 		this.context = context;
 		this.moduleFactory = moduleFactory;
 	}
@@ -52,7 +51,8 @@ class SpringConfigurationLoader {
 	public Collection<FileSetCheck> load(PropertyResolver propertyResolver) {
 		Configuration config = loadConfiguration(getClass().getResourceAsStream("spring-checkstyle.xml"),
 				propertyResolver);
-		return Arrays.stream(config.getChildren()).map(this::load).collect(Collectors.toList());
+		return Arrays.stream(config.getChildren()).filter(this.moduleFactory::nonFiltered).map(this::load)
+				.collect(Collectors.toList());
 	}
 
 	private Configuration loadConfiguration(InputStream inputStream, PropertyResolver propertyResolver) {

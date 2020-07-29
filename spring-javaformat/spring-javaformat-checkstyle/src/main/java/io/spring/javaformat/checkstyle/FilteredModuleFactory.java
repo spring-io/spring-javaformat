@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.puppycrawl.tools.checkstyle.TreeWalkerAuditEvent;
 import com.puppycrawl.tools.checkstyle.TreeWalkerFilter;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
+import com.puppycrawl.tools.checkstyle.api.Configuration;
 
 class FilteredModuleFactory implements ModuleFactory {
 
@@ -47,17 +48,25 @@ class FilteredModuleFactory implements ModuleFactory {
 	@Override
 	public Object createModule(String name) throws CheckstyleException {
 		Object module = this.moduleFactory.createModule(name);
-		if (module instanceof AbstractCheck) {
-			module = filter((AbstractCheck) module);
+		if (isFiltered(module)) {
+			if (module instanceof AbstractCheck) {
+				return FILTERED;
+			}
+			throw new IllegalStateException("Unable to filter module " + module.getClass().getName());
 		}
 		return module;
 	}
 
-	private Object filter(AbstractCheck check) {
-		if (this.excludes != null && this.excludes.contains(check.getClass().getName())) {
-			return FILTERED;
-		}
-		return check;
+	boolean nonFiltered(Configuration configuration) {
+		return !isFiltered(configuration.getName());
+	}
+
+	private boolean isFiltered(Object module) {
+		return isFiltered(module.getClass().getName());
+	}
+
+	private boolean isFiltered(String name) {
+		return this.excludes != null && this.excludes.contains(name);
 	}
 
 }

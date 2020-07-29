@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import com.puppycrawl.tools.checkstyle.DefaultContext;
-import com.puppycrawl.tools.checkstyle.ModuleFactory;
 import com.puppycrawl.tools.checkstyle.PackageObjectFactory;
 import com.puppycrawl.tools.checkstyle.PropertiesExpander;
 import com.puppycrawl.tools.checkstyle.PropertyResolver;
@@ -63,13 +62,19 @@ public class SpringConfigurationLoaderTests {
 		assertThat(ordinaryChecks).hasSize(59);
 	}
 
+	@Test
+	public void loadWithExcludeHeaderShouldExcludeChecks() {
+		Set<String> excludes = Collections.singleton("io.spring.javaformat.checkstyle.check.SpringHeaderCheck");
+		Object[] checks = load(excludes).stream().toArray();
+		assertThat(checks).hasSize(2);
+	}
+
 	private Collection<FileSetCheck> load(Set<String> excludes) {
 		DefaultContext context = new DefaultContext();
-		ModuleFactory moduleFactory = new PackageObjectFactory(getClass().getPackage().getName(),
-				getClass().getClassLoader());
-		moduleFactory = new FilteredModuleFactory(moduleFactory, excludes);
-		context.add("moduleFactory", moduleFactory);
-		Collection<FileSetCheck> checks = new SpringConfigurationLoader(context, moduleFactory)
+		FilteredModuleFactory filteredModuleFactory = new FilteredModuleFactory(
+				new PackageObjectFactory(getClass().getPackage().getName(), getClass().getClassLoader()), excludes);
+		context.add("moduleFactory", filteredModuleFactory);
+		Collection<FileSetCheck> checks = new SpringConfigurationLoader(context, filteredModuleFactory)
 				.load(getPropertyResolver());
 		return checks;
 	}
