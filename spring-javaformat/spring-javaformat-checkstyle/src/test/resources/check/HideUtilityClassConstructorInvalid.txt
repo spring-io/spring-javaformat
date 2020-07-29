@@ -1,1 +1,1 @@
-+HideUtilityClassConstructorInvalid.java:22:1: hide.utility.class [SpringHideUtilityClassConstructor]
++HideUtilityClassConstructorInvalid.java:22:1: Utility classes should not have a public or default constructor. [SpringHideUtilityClassConstructor]
