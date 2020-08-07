@@ -88,8 +88,16 @@ public abstract class FormatMojo extends AbstractMojo {
 	@Parameter(property = "spring-javaformat.includeGeneratedSource", defaultValue = "false")
 	private boolean includeGeneratedSource;
 
+	/**
+	 * Specifies the line separator to use when formatting.
+	 */
+	@Parameter(property = "spring-javaformat.lineSeparator")
+	private LineSeparator lineSeparator;
+
 	@Override
 	public final void execute() throws MojoExecutionException, MojoFailureException {
+		System.getProperties().setProperty("line.separator", this.lineSeparator.getSymbol());
+
 		List<File> directories = new ArrayList<>();
 		resolve(this.sourceDirectories).forEach(directories::add);
 		resolve(this.testSourceDirectories).forEach(directories::add);
@@ -158,4 +166,35 @@ public abstract class FormatMojo extends AbstractMojo {
 	protected abstract void execute(List<File> files, Charset encoding)
 			throws MojoExecutionException, MojoFailureException;
 
+
+	/*
+	 * The types of line separator. {@link FormatMojo#lineSeparator}
+	 */
+	enum LineSeparator {
+
+		/**
+		 * Carriage Return.
+		 */
+		CR("\r"),
+
+		/**
+		 * Linefeed.
+		 */
+		LF("\n"),
+
+		/**
+		 * Carriage Return & Linefeed.
+		 */
+		CRLF("\r\n");
+
+		LineSeparator(String symbol) {
+			this.symbol = symbol;
+		}
+
+		private final String symbol;
+
+		private String getSymbol() {
+			return this.symbol;
+		}
+	}
 }
