@@ -96,7 +96,9 @@ public abstract class FormatMojo extends AbstractMojo {
 
 	@Override
 	public final void execute() throws MojoExecutionException, MojoFailureException {
-		System.getProperties().setProperty("line.separator", this.lineSeparator.getSymbol());
+		if (this.lineSeparator != null) {
+			System.getProperties().setProperty("line.separator", this.lineSeparator.getSymbol());
+		}
 
 		List<File> directories = new ArrayList<>();
 		resolve(this.sourceDirectories).forEach(directories::add);
