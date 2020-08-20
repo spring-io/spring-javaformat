@@ -19,15 +19,16 @@ package io.spring.format.formatter.intellij.codestyle;
 import java.util.Collection;
 import java.util.function.Supplier;
 
+import com.intellij.core.CoreBundle;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiBundle;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
@@ -47,6 +48,8 @@ import io.spring.javaformat.formatter.Formatter;
 class SpringReformatter {
 
 	private static final String NORMALIZED_LINE_SEPARATOR = "\n";
+
+	private static final FileType JAVA_FILE_TYPE = FileTypeManager.getInstance().getStdFileType("JAVA");
 
 	private final Supplier<Project> project;
 
@@ -68,7 +71,7 @@ class SpringReformatter {
 	}
 
 	public boolean canReformat(PsiFile file) {
-		return StdFileTypes.JAVA.equals(file.getFileType());
+		return JAVA_FILE_TYPE.equals(file.getFileType());
 	}
 
 	public void reformat(PsiFile file, Collection<TextRange> ranges) {
@@ -83,7 +86,7 @@ class SpringReformatter {
 	private void throwNotWritableException(PsiElement element) throws IncorrectOperationException {
 		if (element instanceof PsiDirectory) {
 			String url = ((PsiDirectory) element).getVirtualFile().getPresentableUrl();
-			throw new IncorrectOperationException(PsiBundle.message("cannot.modify.a.read.only.directory", url));
+			throw new IncorrectOperationException(CoreBundle.message("cannot.modify.a.read.only.directory", url));
 		}
 		PsiFile file = element.getContainingFile();
 		if (file == null) {
@@ -94,7 +97,7 @@ class SpringReformatter {
 			throw new IncorrectOperationException();
 		}
 		throw new IncorrectOperationException(
-				PsiBundle.message("cannot.modify.a.read.only.file", virtualFile.getPresentableUrl()));
+				CoreBundle.message("cannot.modify.a.read.only.file", virtualFile.getPresentableUrl()));
 	}
 
 	private void reformat(PsiFile file, Collection<TextRange> ranges, Document document) {
