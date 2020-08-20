@@ -151,6 +151,11 @@ public class DelegatingCodeStyleManager extends CodeStyleManager implements Form
 	}
 
 	@Override
+	public String getLineIndent(PsiFile file, int offset, FormattingMode mode) {
+		return this.delegate.getLineIndent(file, offset, mode);
+	}
+
+	@Override
 	@Deprecated
 	public com.intellij.psi.codeStyle.Indent getIndent(String text, FileType fileType) {
 		return this.delegate.getIndent(text, fileType);
@@ -207,6 +212,16 @@ public class DelegatingCodeStyleManager extends CodeStyleManager implements Form
 			return ((FormattingModeAwareIndentAdjuster) this.delegate).getCurrentFormattingMode();
 		}
 		return FormattingMode.REFORMAT;
+	}
+
+	@Override
+	public void scheduleIndentAdjustment(Document document, int offset) {
+		this.delegate.scheduleIndentAdjustment(document, offset);
+	}
+
+	@Override
+	public void scheduleReformatWhenSettingsComputed(PsiFile file) {
+		this.delegate.scheduleReformatWhenSettingsComputed(file);
 	}
 
 }
