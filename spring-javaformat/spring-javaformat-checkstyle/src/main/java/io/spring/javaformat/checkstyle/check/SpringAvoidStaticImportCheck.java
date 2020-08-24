@@ -68,6 +68,7 @@ public class SpringAvoidStaticImportCheck extends AvoidStaticImportCheck {
 		excludes.add("org.springframework.restdocs.snippet.Attributes.*");
 		excludes.add("org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.*");
 		excludes.add("org.springframework.security.config.Customizer.*");
+		excludes.add("org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.*");
 		excludes.add("org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.*");
 		excludes.add("org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*");
 		excludes.add("org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.*");
