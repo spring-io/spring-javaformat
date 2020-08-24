@@ -26,6 +26,15 @@ import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 
 class FilteredModuleFactory implements ModuleFactory {
 
+	static final TreeWalkerFilter FILTERED = new TreeWalkerFilter() {
+
+		@Override
+		public boolean accept(TreeWalkerAuditEvent treeWalkerAuditEvent) {
+			return true;
+		}
+
+	};
+
 	private final ModuleFactory moduleFactory;
 
 	private final Set<String> excludes;
@@ -46,24 +55,9 @@ class FilteredModuleFactory implements ModuleFactory {
 
 	private Object filter(AbstractCheck check) {
 		if (this.excludes != null && this.excludes.contains(check.getClass().getName())) {
-			return new FilteredCheck(check);
+			return FILTERED;
 		}
 		return check;
-	}
-
-	static class FilteredCheck implements TreeWalkerFilter {
-
-		private final AbstractCheck check;
-
-		FilteredCheck(AbstractCheck check) {
-			this.check = check;
-		}
-
-		@Override
-		public boolean accept(TreeWalkerAuditEvent treeWalkerAuditEvent) {
-			return true;
-		}
-
 	}
 
 }
