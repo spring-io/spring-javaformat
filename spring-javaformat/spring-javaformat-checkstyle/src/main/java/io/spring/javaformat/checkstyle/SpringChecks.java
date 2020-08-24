@@ -19,12 +19,14 @@ package io.spring.javaformat.checkstyle;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Properties;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import com.puppycrawl.tools.checkstyle.Checker;
 import com.puppycrawl.tools.checkstyle.DefaultContext;
@@ -61,6 +63,8 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 
 	private String headerFile;
 
+	private Set<String> avoidStaticImportExcludes = Collections.emptySet();
+
 	private String projectRootPackage = SpringImportOrderCheck.DEFAULT_PROJECT_ROOT_PACKAGE;
 
 	private Set<String> excludes;
@@ -94,6 +98,8 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 		put(properties, "headerCopyrightPattern", this.headerCopyrightPattern);
 		put(properties, "headerFile", this.headerFile);
 		put(properties, "projectRootPackage", this.projectRootPackage);
+		put(properties, "avoidStaticImportExcludes",
+				this.avoidStaticImportExcludes.stream().collect(Collectors.joining(",")));
 		this.checks = new SpringConfigurationLoader(context, moduleFactory).load(new PropertiesExpander(properties));
 	}
 
@@ -151,6 +157,10 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 
 	public void setHeaderFile(String headerFile) {
 		this.headerFile = headerFile;
+	}
+
+	public void setAvoidStaticImportExcludes(String[] avoidStaticImportExcludes) {
+		this.avoidStaticImportExcludes = new LinkedHashSet<>(Arrays.asList(avoidStaticImportExcludes));
 	}
 
 	public void setProjectRootPackage(String projectRootPackage) {

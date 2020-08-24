@@ -53,10 +53,9 @@ public class SpringConfigurationLoaderTests {
 	}
 
 	@Test
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void loadWithExcludeShouldExcludeChecks() {
 		Set<String> excludes = Collections
-				.singleton("com.puppycrawl.tools.checkstyle.checks.imports.AvoidStaticImportCheck");
+				.singleton("com.puppycrawl.tools.checkstyle.checks.whitespace.MethodParamPadCheck");
 		Collection<FileSetCheck> checks = load(excludes);
 		assertThat(checks).hasSize(3);
 		TreeWalker treeWalker = (TreeWalker) checks.toArray()[2];
@@ -81,6 +80,7 @@ public class SpringConfigurationLoaderTests {
 		properties.put("headerFile", "");
 		properties.put("headerCopyrightPattern", SpringHeaderCheck.DEFAULT_HEADER_COPYRIGHT_PATTERN);
 		properties.put("projectRootPackage", SpringImportOrderCheck.DEFAULT_PROJECT_ROOT_PACKAGE);
+		properties.put("avoidStaticImportExcludes", "");
 		return new PropertiesExpander(properties);
 	}
 
