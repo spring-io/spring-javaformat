@@ -148,7 +148,7 @@ public class SpringFormatComponent implements ProjectComponent {
 	private void invokeRegisterServiceInstanceMethod(CodeStyleManager manager, IdeaPluginDescriptor plugin,
 			Method method) {
 		if (method == null) {
-			throw new IllegalStateException("Unsupported IntelliJ version");
+			throw new IllegalStateException("Unsupported IntelliJ IDEA version");
 		}
 		method.setAccessible(true);
 		try {

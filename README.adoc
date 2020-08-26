@@ -196,7 +196,7 @@ https://repo.spring.io/release/io/spring/javaformat/io.spring.javaformat.eclipse
 or use the https://dl.bintray.com/spring/javaformat-eclipse/[update site].
 
 === IntelliJ IDEA
-The IntelliJ plugin provides custom formatter support for IDEA.
+The IntelliJ IDEA plugin provides custom formatter support for IntelliJ IDEA.
 The plugin is automatically activated whenever the Maven or Gradle plugins are discovered in a project build script.
 A Spring Java Format icon (image:spring-javaformat-intellij/spring-javaformat-intellij-plugin/src/main/resources/spring-javaformat/formatOn.png[title="Icon"]) will also be displayed in the status bar to indicate the formatter is active.
 You can use the standard `code` -> `reformat code` action to format the code.

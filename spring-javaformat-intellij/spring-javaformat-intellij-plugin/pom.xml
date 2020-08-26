@@ -8,7 +8,7 @@
 		<version>0.0.26-SNAPSHOT</version>
 	</parent>
 	<artifactId>spring-javaformat-intellij-plugin</artifactId>
-	<name>Spring JavaFormat IntelliJ Plugin</name>
+	<name>Spring JavaFormat IntelliJ IDEA Plugin</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
 	</properties>
