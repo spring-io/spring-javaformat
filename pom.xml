@@ -9,7 +9,7 @@
 	<packaging>pom</packaging>
 	<name>Spring JavaFormat Build</name>
 	<description>Spring JavaFormat</description>
-	<url>https://github.com/spring-io/spring-javaformat/#</url>
+	<url>https://github.com/spring-io/spring-javaformat/</url>
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
@@ -33,8 +33,7 @@
 		<java.version>1.8</java.version>
 		<eclipse.repository>https://download.eclipse.org/releases/2020-03/202003181000/</eclipse.repository>
 		<eclipse.java14.repository>https://download.eclipse.org/eclipse/updates/4.15-P-builds/</eclipse.java14.repository>
-		<eclipse.checkstyle.repository>https://dl.bintray.com/eclipse-cs/eclipse-cs/8.32.0
-		</eclipse.checkstyle.repository>
+		<eclipse.checkstyle.repository>https://dl.bintray.com/eclipse-cs/eclipse-cs/8.32.0</eclipse.checkstyle.repository>
 		<tycho.disableP2Mirrors>true</tycho.disableP2Mirrors>
 		<ant.version>1.8.1</ant.version>
 		<ant-contrib.version>1.0b3</ant-contrib.version>
@@ -44,10 +43,8 @@
 		<gradle.version>3.4</gradle.version>
 		<groovy.version>2.4.7</groovy.version>
 		<maven-core.version>3.5.0</maven-core.version>
-		<maven-plugin-api.version>${maven-core.version}
-		</maven-plugin-api.version>
-		<maven-plugin-annotations.version>3.5
-		</maven-plugin-annotations.version>
+		<maven-plugin-api.version>${maven-core.version}</maven-plugin-api.version>
+		<maven-plugin-annotations.version>3.5</maven-plugin-annotations.version>
 		<mockito.version>2.8.47</mockito.version>
 		<junit.version>4.12</junit.version>
 		<javassist.version>3.21.0-GA</javassist.version>
@@ -234,9 +231,7 @@
 					</dependencies>
 					<configuration>
 						<timestampProvider>jgit</timestampProvider>
-						<jgit.ignore>
-							pom.xml
-						</jgit.ignore>
+						<jgit.ignore>pom.xml</jgit.ignore>
 						<jgit.dirtyWorkingTree>warning</jgit.dirtyWorkingTree>
 					</configuration>
 				</plugin>
@@ -309,53 +304,35 @@
 								</pluginExecution>
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<groupId>
-											org.apache.maven.plugins
-										</groupId>
-										<artifactId>
-											maven-checkstyle-plugin
-										</artifactId>
-										<versionRange>
-											[2.17,)
-										</versionRange>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-checkstyle-plugin</artifactId>
+										<versionRange>[2.17,)</versionRange>
 										<goals>
 											<goal>check</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore/>
 									</action>
 								</pluginExecution>
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<groupId>
-											org.codehaus.mojo
-										</groupId>
-										<artifactId>
-											flatten-maven-plugin
-										</artifactId>
-										<versionRange>
-											[1.0.0,)
-										</versionRange>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>flatten-maven-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
 										<goals>
 											<goal>flatten</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore/>
 									</action>
 								</pluginExecution>
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<groupId>
-											org.eclipse.tycho
-										</groupId>
-										<artifactId>
-											tycho-versions-plugin
-										</artifactId>
-										<versionRange>
-											[1.1.0,)
-										</versionRange>
+										<groupId>org.eclipse.tycho</groupId>
+										<artifactId>tycho-versions-plugin</artifactId>
+										<versionRange>[1.1.0,)</versionRange>
 										<goals>
 											<goal>
 												update-eclipse-metadata
@@ -363,26 +340,20 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore/>
 									</action>
 								</pluginExecution>
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<groupId>
-											org.apache.maven.plugins
-										</groupId>
-										<artifactId>
-											maven-antrun-plugin
-										</artifactId>
-										<versionRange>
-											[1.8,)
-										</versionRange>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-antrun-plugin</artifactId>
+										<versionRange>[1.8,)</versionRange>
 										<goals>
 											<goal>run</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore/>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
@@ -452,12 +423,9 @@
 						<configuration>
 							<skip>${disable.checks}</skip>
 							<configLocation>src/checkstyle/checkstyle.xml</configLocation>
-							<suppressionsLocation>src/checkstyle/checkstyle-suppressions.xml
-							</suppressionsLocation>
-							<headerLocation>src/checkstyle/checkstyle-header.txt
-							</headerLocation>
-							<propertyExpansion>checkstyle.build.directory=${project.build.directory}
-							</propertyExpansion>
+							<suppressionsLocation>src/checkstyle/checkstyle-suppressions.xml</suppressionsLocation>
+							<headerLocation>src/checkstyle/checkstyle-header.txt</headerLocation>
+							<propertyExpansion>checkstyle.build.directory=${project.build.directory}</propertyExpansion>
 							<encoding>UTF-8</encoding>
 							<consoleOutput>true</consoleOutput>
 							<failsOnError>true</failsOnError>
@@ -628,8 +596,7 @@
 				</os>
 			</activation>
 			<properties>
-				<ui.test.vmargs>-Xmx512m -XX:MaxPermSize=256m -XstartOnFirstThread
-				</ui.test.vmargs>
+				<ui.test.vmargs>-Xmx512m -XX:MaxPermSize=256m -XstartOnFirstThread</ui.test.vmargs>
 			</properties>
 		</profile>
 		<profile>
