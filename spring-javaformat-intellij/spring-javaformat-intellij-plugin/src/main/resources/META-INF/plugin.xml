@@ -5,8 +5,7 @@
 		provide a consistent “Spring” style.
 	</description>
 	<version>${project.version}</version>
-	<vendor url="https://spring.io">Spring</vendor>
-	<idea-version since-build="162.0"/>
+	<vendor url="https://spring.io">Spring Team</vendor>
 	<depends>org.jetbrains.idea.maven</depends>
 	<depends>org.jetbrains.plugins.gradle</depends>
 	<project-components>
