@@ -22,7 +22,10 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -46,6 +49,15 @@ public abstract class FormatMojo extends AbstractMojo {
 	private static final String GENERATED_SOURCES = File.separator + "generated-sources" + File.separator;
 
 	private static final String GENERATED_TEST_SOURCES = File.separator + "generated-test-sources" + File.separator;
+
+	private static final Map<String, String> LINE_SEPARATOR;
+	static {
+		Map<String, String> lineSeparator = new LinkedHashMap<>();
+		lineSeparator.put("cr", "\r");
+		lineSeparator.put("lf", "\n");
+		lineSeparator.put("crlf", "\r\n");
+		LINE_SEPARATOR = Collections.unmodifiableMap(lineSeparator);
+	}
 
 	/**
 	 * The Maven Project Object.
@@ -88,6 +100,12 @@ public abstract class FormatMojo extends AbstractMojo {
 	@Parameter(property = "spring-javaformat.includeGeneratedSource", defaultValue = "false")
 	private boolean includeGeneratedSource;
 
+	/**
+	 * Specifies the line separator to use when formatting.
+	 */
+	@Parameter(property = "spring-javaformat.lineSeparator")
+	private String lineSeparator;
+
 	@Override
 	public final void execute() throws MojoExecutionException, MojoFailureException {
 		List<File> directories = new ArrayList<>();
@@ -98,7 +116,14 @@ public abstract class FormatMojo extends AbstractMojo {
 			files.addAll(scan(directory));
 		}
 		Charset encoding = (this.encoding == null ? StandardCharsets.UTF_8 : Charset.forName(this.encoding));
-		execute(files, encoding);
+		String lineSeparator = null;
+		if (this.lineSeparator != null) {
+			lineSeparator = LINE_SEPARATOR.get(this.lineSeparator.toLowerCase());
+			if (lineSeparator == null) {
+				throw new MojoExecutionException("Unknown lineSeparator " + this.lineSeparator);
+			}
+		}
+		execute(files, encoding, this.lineSeparator != null ? lineSeparator : null);
 	}
 
 	private Stream<File> resolve(List<String> directories) {
@@ -152,10 +177,11 @@ public abstract class FormatMojo extends AbstractMojo {
 	 * Perform the formatting build-process behavior this {@code Mojo} implements.
 	 * @param files the files to process
 	 * @param encoding the encoding
+	 * @param lineSeparator the line separator
 	 * @throws MojoExecutionException on execution error
 	 * @throws MojoFailureException on failure
 	 */
-	protected abstract void execute(List<File> files, Charset encoding)
+	protected abstract void execute(List<File> files, Charset encoding, String lineSeparator)
 			throws MojoExecutionException, MojoFailureException;
 
 }
