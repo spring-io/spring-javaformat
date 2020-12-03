@@ -53,6 +53,8 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 
 	private static final Pattern SINCE_TAG_PATTERN = Pattern.compile("@since\\s+(.*)");
 
+	private static final Pattern AT_TAG_PATTERN = Pattern.compile("@\\w+\\s+.*");
+
 	private static final Set<Integer> TOP_LEVEL_TYPES;
 	static {
 		Set<Integer> topLevelTypes = new HashSet<Integer>();
@@ -93,6 +95,7 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 		checkBannedTags(ast, javadoc);
 		checkTagCase(ast, javadoc);
 		checkSinceTag(ast, javadoc);
+		checkMethodJavaDoc(ast, javadoc);
 	}
 
 	private void checkBannedTags(DetailAST ast, TextBlock javadoc) {
@@ -144,6 +147,19 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 		}
 		if (this.requireSinceTag && !innerType && !found && !(this.publicOnlySinceTags && privateType)) {
 			log(javadoc.getStartLineNo(), 0, "javadoc.missingSince");
+		}
+	}
+
+	private void checkMethodJavaDoc(DetailAST ast, TextBlock javadoc) {
+		if (TokenTypes.METHOD_DEF != ast.getType()) {
+			return;
+		}
+		String[] text = javadoc.getText();
+		for (int i = 0; i < text.length; i++) {
+			Matcher matcher = AT_TAG_PATTERN.matcher(text[i]);
+			if (matcher.find() && i > 0 && text[i - 1].trim().equals("*")) {
+				log(javadoc.getStartLineNo() + i - 1, 0, "javadoc.emptyLineBeforeTag");
+			}
 		}
 	}
 

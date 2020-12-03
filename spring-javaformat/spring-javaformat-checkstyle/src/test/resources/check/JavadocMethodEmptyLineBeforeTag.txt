@@ -1,0 +1,2 @@
++Method Javadoc should not have empty line before tag.
++1 error
