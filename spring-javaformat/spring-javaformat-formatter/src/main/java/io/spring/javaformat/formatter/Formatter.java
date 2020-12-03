@@ -54,7 +54,7 @@ public class Formatter extends CodeFormatter {
 	/**
 	 * The default line separator.
 	 */
-	private static final String DEFAULT_LINE_SEPARATOR = null;
+	public static final String DEFAULT_LINE_SEPARATOR = null;
 
 	private final Set<FormatterOption> options;
 
@@ -81,7 +81,17 @@ public class Formatter extends CodeFormatter {
 	 * @return the text edit
 	 */
 	public TextEdit format(String source) {
-		return format(source, 0, source.length());
+		return format(source, DEFAULT_LINE_SEPARATOR);
+	}
+
+	/**
+	 * Format the given source content.
+	 * @param source the source content to format
+	 * @param lineSeparator the line separator
+	 * @return the text edit
+	 */
+	public TextEdit format(String source, String lineSeparator) {
+		return format(source, 0, source.length(), lineSeparator);
 	}
 
 	/**
@@ -92,7 +102,19 @@ public class Formatter extends CodeFormatter {
 	 * @return the text edit
 	 */
 	public TextEdit format(String source, int offset, int length) {
-		return format(DEFAULT_COMPONENTS, source, offset, length, DEFAULT_INDENTATION_LEVEL, DEFAULT_LINE_SEPARATOR);
+		return format(source, offset, length, DEFAULT_LINE_SEPARATOR);
+	}
+
+	/**
+	 * Format a specific subsection of the given source content.
+	 * @param source the source content to format
+	 * @param offset the offset to start formatting
+	 * @param length the length to format
+	 * @param lineSeparator the line separator
+	 * @return the text edit
+	 */
+	public TextEdit format(String source, int offset, int length, String lineSeparator) {
+		return format(DEFAULT_COMPONENTS, source, offset, length, DEFAULT_INDENTATION_LEVEL, lineSeparator);
 	}
 
 	@Override

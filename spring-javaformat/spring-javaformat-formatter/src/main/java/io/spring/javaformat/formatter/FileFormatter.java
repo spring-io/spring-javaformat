@@ -56,7 +56,19 @@ public class FileFormatter {
 	 * @return a stream of formatted files that have edits
 	 */
 	public Stream<FileEdit> formatFiles(Iterable<File> files, Charset encoding) {
-		return formatFiles(StreamSupport.stream(files.spliterator(), false), encoding);
+		return formatFiles(files, encoding, Formatter.DEFAULT_LINE_SEPARATOR);
+	}
+
+	/**
+	 * Format the given source files and provide a {@link Stream} of {@link FileEdit}
+	 * instances.
+	 * @param files the files to format
+	 * @param encoding the source encoding
+	 * @param lineSeparator the line separator
+	 * @return a stream of formatted files that have edits
+	 */
+	public Stream<FileEdit> formatFiles(Iterable<File> files, Charset encoding, String lineSeparator) {
+		return formatFiles(StreamSupport.stream(files.spliterator(), false), encoding, lineSeparator);
 	}
 
 	/**
@@ -67,7 +79,19 @@ public class FileFormatter {
 	 * @return a stream of formatted files that have edits
 	 */
 	public Stream<FileEdit> formatFiles(Stream<File> files, Charset encoding) {
-		return files.map((file) -> formatFile(file, encoding));
+		return formatFiles(files, encoding, Formatter.DEFAULT_LINE_SEPARATOR);
+	}
+
+	/**
+	 * Format the given source files and provide a {@link Stream} of {@link FileEdit}
+	 * instances.
+	 * @param files the files to format
+	 * @param encoding the source encoding
+	 * @param lineSeparator the line separator
+	 * @return a stream of formatted files that have edits
+	 */
+	public Stream<FileEdit> formatFiles(Stream<File> files, Charset encoding, String lineSeparator) {
+		return files.map((file) -> formatFile(file, encoding, lineSeparator));
 	}
 
 	/**
@@ -77,9 +101,20 @@ public class FileFormatter {
 	 * @return a formatted file
 	 */
 	public FileEdit formatFile(File file, Charset encoding) {
+		return formatFile(file, encoding, Formatter.DEFAULT_LINE_SEPARATOR);
+	}
+
+	/**
+	 * Format the the given source file and return a {@link FileEdit} instance.
+	 * @param file the file to format
+	 * @param encoding the source encoding
+	 * @param lineSeparator the line separator
+	 * @return a formatted file
+	 */
+	public FileEdit formatFile(File file, Charset encoding, String lineSeparator) {
 		try {
 			String content = new String(Files.readAllBytes(file.toPath()), encoding);
-			TextEdit edit = this.formatter.format(content);
+			TextEdit edit = this.formatter.format(content, lineSeparator);
 			return new FileEdit(file, encoding, content, edit);
 		}
 		catch (Exception ex) {

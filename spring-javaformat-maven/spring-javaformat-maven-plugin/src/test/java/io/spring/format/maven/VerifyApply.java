@@ -35,8 +35,18 @@ public class VerifyApply {
 	private static final String JAVA_FILE = "src/main/java/simple/Simple.java";
 
 	public void verify(File base) throws IOException {
-		String formated = new String(Files.readAllBytes(base.toPath().resolve(JAVA_FILE)), StandardCharsets.UTF_8);
-		assertThat(formated).contains("Simple." + LF + " *" + LF + " * @author").contains("public class Simple {");
+		verify(base, LF);
 	}
 
+	public void verify(File base, String lineSeparator) throws IOException {
+		String formated = new String(Files.readAllBytes(base.toPath().resolve(JAVA_FILE)), StandardCharsets.UTF_8);
+		assertThat(formated).contains("Simple." + lineSeparator + " *" + lineSeparator + " * @author")
+				.contains("public class Simple {");
+	}
+
+	public static void main(String[] args) throws IOException {
+		new VerifyApply().verify(new File(
+				"/Users/pwebb/projects/spring-javaformat/code/spring-javaformat-maven/spring-javaformat-maven-plugin/target/it/apply-line-separator"),
+				"\r");
+	}
 }
