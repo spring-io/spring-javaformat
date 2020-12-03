@@ -19,10 +19,11 @@
  * @param <T> this is a valid param
  * @author Sushant Kumar Singh
  */
-public class JavaDocWhiteSpace<T> {
+public class JavadocMethodEmptyLineBeforeTag<T> {
+
 	/**
 	 * Do something.
-	 * 
+	 *
 	 * @param something a lovely thing
 	 */
 	public void test(String something) {
