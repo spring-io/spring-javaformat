@@ -25,11 +25,11 @@ import com.intellij.ide.plugins.PluginManagerCore;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.PluginDescriptor;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.serviceContainer.ComponentManagerImpl;
 import org.picocontainer.MutablePicoContainer;
@@ -42,15 +42,17 @@ import io.spring.format.formatter.intellij.codestyle.monitor.Monitors;
 import io.spring.format.formatter.intellij.codestyle.monitor.Trigger.State;
 
 /**
- * {@link ProjectComponent} to add Spring Java Format IntelliJ support.
+ * Spring Java Format IntelliJ support added to a {@link Project}.
  *
  * @author Phillip Webb
  */
-public class SpringFormatComponent implements ProjectComponent {
+public class SpringFormat {
 
 	private static final String CODE_STYLE_MANAGER_KEY = CodeStyleManager.class.getName();
 
-	private static final String ACTIVE_PROPERTY = SpringFormatComponent.class.getName() + ".ACTIVE";
+	private static final String ACTIVE_PROPERTY = SpringFormat.class.getName() + ".ACTIVE";
+
+	private static final Logger logger = Logger.getInstance(SpringFormat.class);
 
 	private final Project project;
 
@@ -60,27 +62,21 @@ public class SpringFormatComponent implements ProjectComponent {
 
 	private Monitors monitors;
 
-	private static final Logger logger = Logger.getInstance(SpringFormatComponent.class);
-
 	private PropertiesComponent properties;
 
-	protected SpringFormatComponent(Project project) {
+	protected SpringFormat(Project project) {
 		this.project = project;
 		this.statusIndicator = new StatusIndicator(project);
 		this.properties = PropertiesComponent.getInstance(project);
-	}
-
-	@Override
-	public void initComponent() {
 		if (this.properties.getBoolean(ACTIVE_PROPERTY, false)) {
 			update(State.ACTIVE);
 		}
 		this.monitors = new Monitors(this.project, this::update, FileMonitor.factory(), MavenMonitor.factory(),
 				GradleMonitor.factory());
+		Disposer.register(project, this::dispose);
 	}
 
-	@Override
-	public void disposeComponent() {
+	private void dispose() {
 		if (this.monitors != null) {
 			this.monitors.stop();
 			this.monitors = null;
@@ -158,4 +154,5 @@ public class SpringFormatComponent implements ProjectComponent {
 			throw new IllegalStateException(ex);
 		}
 	}
+
 }

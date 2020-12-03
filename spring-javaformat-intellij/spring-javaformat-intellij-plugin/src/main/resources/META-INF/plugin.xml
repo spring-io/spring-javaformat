@@ -8,10 +8,7 @@
 	<vendor url="https://spring.io">Spring Team</vendor>
 	<depends>org.jetbrains.idea.maven</depends>
 	<depends>org.jetbrains.plugins.gradle</depends>
-	<project-components>
-		<component>
-			<implementation-class>io.spring.format.formatter.intellij.SpringFormatComponent</implementation-class>
-			<loadForDefaultProject/>
-		</component>
-	</project-components>
+	<extensions defaultExtensionNs="com.intellij">
+		<postStartupActivity implementation="io.spring.format.formatter.intellij.SpringFormatStartupActivity" />
+	</extensions>
 </idea-plugin>
