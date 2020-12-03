@@ -31,9 +31,8 @@
 		<main.basedir>${basedir}</main.basedir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
-		<eclipse.repository>https://download.eclipse.org/releases/2020-03/202003181000/</eclipse.repository>
-		<eclipse.java14.repository>https://download.eclipse.org/eclipse/updates/4.15-P-builds/</eclipse.java14.repository>
-		<eclipse.checkstyle.repository>https://dl.bintray.com/eclipse-cs/eclipse-cs/8.32.0</eclipse.checkstyle.repository>
+		<eclipse.repository>https://download.eclipse.org/releases/2020-09/202009161000/</eclipse.repository>
+		<eclipse.checkstyle.repository>https://dl.bintray.com/eclipse-cs/eclipse-cs/8.35.0</eclipse.checkstyle.repository>
 		<tycho.disableP2Mirrors>true</tycho.disableP2Mirrors>
 		<ant.version>1.8.1</ant.version>
 		<ant-contrib.version>1.0b3</ant-contrib.version>
@@ -570,11 +569,6 @@
 			<id>eclipse</id>
 			<layout>p2</layout>
 			<url>${eclipse.repository}</url>
-		</repository>
-		<repository>
-			<id>eclipse-java14</id>
-			<layout>p2</layout>
-			<url>${eclipse.java14.repository}</url>
 		</repository>
 		<repository>
 			<id>eclipse-checkstyle</id>

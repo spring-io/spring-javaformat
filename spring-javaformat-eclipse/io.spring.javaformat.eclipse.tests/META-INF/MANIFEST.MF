@@ -5,7 +5,7 @@ Bundle-Name: Spring Java Format Tests
 Bundle-SymbolicName: io.spring.javaformat.eclipse.tests
 Automatic-Module-Name: io.spring.javaformat.eclipse.tests
 Bundle-Version: 0.0.26.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.junit;bundle-version="4.12"
 Bundle-ClassPath: .,
  lib/assertj-core.jar,

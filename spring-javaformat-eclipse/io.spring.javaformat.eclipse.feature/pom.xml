@@ -13,5 +13,6 @@
 	<name>Spring JavaFormat Eclipse Feature</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
+		<java.version>11</java.version>
 	</properties>
 </project>
