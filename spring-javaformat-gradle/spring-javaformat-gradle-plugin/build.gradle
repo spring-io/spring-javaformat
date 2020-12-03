@@ -25,6 +25,9 @@ test {
 	}
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 eclipseJdt {
 	inputFile = rootProject.file('../../.eclipse/org.eclipse.jdt.core.prefs')
 	doLast {
