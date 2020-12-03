@@ -17,18 +17,18 @@
 package io.spring.format.formatter.intellij;
 
 import java.awt.event.MouseEvent;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.Icon;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
-import com.intellij.openapi.wm.IdeFrame;
 import com.intellij.openapi.wm.StatusBar;
 import com.intellij.openapi.wm.StatusBarWidget;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.openapi.wm.WindowManagerListener;
 import com.intellij.util.Consumer;
+import com.intellij.util.concurrency.AppExecutorUtil;
 
 import io.spring.format.formatter.intellij.codestyle.monitor.Trigger.State;
 
@@ -51,7 +51,7 @@ class StatusIndicator {
 		WindowManager windowManager = WindowManager.getInstance();
 		final StatusBar statusBar = windowManager.getStatusBar(this.project);
 		if (statusBar == null) {
-			windowManager.addListener(new UpdateOnFrameCreateListener(state));
+			AppExecutorUtil.getAppScheduledExecutorService().schedule(() -> retryUpdate(state), 1, TimeUnit.SECONDS);
 			return;
 		}
 		if (state == State.ACTIVE) {
@@ -60,6 +60,10 @@ class StatusIndicator {
 		else {
 			hide(statusBar);
 		}
+	}
+
+	private void retryUpdate(State state) {
+		ApplicationManager.getApplication().invokeLater(() -> update(state));
 	}
 
 	private void show(StatusBar statusBar) {
@@ -74,30 +78,6 @@ class StatusIndicator {
 			statusBar.removeWidget(this.widget.ID());
 			this.widget = null;
 		}
-	}
-
-	/**
-	 * {@link WindowManagerListener} used to defer setting the status if the IDE frame
-	 * isn't available.
-	 */
-	private class UpdateOnFrameCreateListener implements WindowManagerListener {
-
-		private final State state;
-
-		UpdateOnFrameCreateListener(State state) {
-			this.state = state;
-		}
-
-		@Override
-		public void frameCreated(IdeFrame frame) {
-			WindowManager.getInstance().removeListener(this);
-			ApplicationManager.getApplication().invokeLater(() -> update(this.state));
-		}
-
-		@Override
-		public void beforeFrameReleased(IdeFrame frame) {
-		}
-
 	}
 
 	/**

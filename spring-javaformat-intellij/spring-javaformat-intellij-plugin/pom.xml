@@ -11,6 +11,7 @@
 	<name>Spring JavaFormat IntelliJ IDEA Plugin</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
+		<java.version>11</java.version>
 	</properties>
 	<dependencies>
 		<!-- Compile -->

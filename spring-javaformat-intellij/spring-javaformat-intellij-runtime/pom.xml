@@ -13,9 +13,9 @@
 	<name>Spring JavaFormat IntelliJ IDEA Runtime</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
-		<intellij.binary>https://download.jetbrains.com/idea/ideaIC-2020.2.tar.gz</intellij.binary>
-		<intellij.source>https://github.com/JetBrains/intellij-community/archive/idea/202.6397.94.zip</intellij.source>
-		<intellij.root>idea-IC-202.6397.94</intellij.root>
+		<intellij.binary>https://download.jetbrains.com/idea/ideaIC-2020.3.tar.gz</intellij.binary>
+		<intellij.source>https://github.com/JetBrains/intellij-community/archive/idea/203.5981.155.zip</intellij.source>
+		<intellij.root>idea-IC-203.5981.155</intellij.root>
 	</properties>
 	<build>
 		<plugins>
