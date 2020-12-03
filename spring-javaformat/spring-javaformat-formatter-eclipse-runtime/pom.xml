@@ -156,8 +156,7 @@
 						<configuration>
 							<includeDependency>false</includeDependency>
 							<libs>
-								<lib>${java.home}/lib/rt.jar</lib>
-								<lib>${java.home}/lib/jsse.jar</lib>
+								<lib>${java.home}/jmods</lib>
 							</libs>
 							<options>
 								<option>-dontobfuscate</option>
