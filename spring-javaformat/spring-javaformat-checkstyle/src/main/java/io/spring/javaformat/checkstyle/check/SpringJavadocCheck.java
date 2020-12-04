@@ -18,13 +18,16 @@ package io.spring.javaformat.checkstyle.check;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
+import com.puppycrawl.tools.checkstyle.api.FileContents;
 import com.puppycrawl.tools.checkstyle.api.TextBlock;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
@@ -55,6 +58,8 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 
 	private static final Pattern AT_TAG_PATTERN = Pattern.compile("@\\w+\\s+.*");
 
+	private static final Pattern NON_JAVADOC_COMMENT = Pattern.compile("\\(non-Javadoc\\)", Pattern.CASE_INSENSITIVE);
+
 	private static final Set<Integer> TOP_LEVEL_TYPES;
 	static {
 		Set<Integer> topLevelTypes = new HashSet<Integer>();
@@ -68,6 +73,10 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 	private boolean requireSinceTag;
 
 	private boolean publicOnlySinceTags;
+
+	private boolean allowNonJavadocComments;
+
+	private Map<Integer, TextBlock> blockComments;
 
 	@Override
 	public int[] getDefaultTokens() {
@@ -83,12 +92,37 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 	}
 
 	@Override
+	public void beginTree(DetailAST rootAST) {
+		super.beginTree(rootAST);
+		this.blockComments = new HashMap<>();
+		FileContents contents = getFileContents();
+		for (List<TextBlock> blockComments : contents.getBlockComments().values()) {
+			for (TextBlock blockComment : blockComments) {
+				this.blockComments.put(blockComment.getEndLineNo(), blockComment);
+			}
+		}
+	}
+
+	@Override
 	public void visitToken(DetailAST ast) {
 		int lineNumber = ast.getLineNo();
 		TextBlock javadoc = getFileContents().getJavadocBefore(lineNumber);
 		if (javadoc != null) {
 			checkJavadoc(ast, javadoc);
 		}
+		if (!this.allowNonJavadocComments) {
+			checkForNonJavadocComments(javadoc);
+			checkForNonJavadocComments(getBlockCommentBefore(lineNumber));
+		}
+	}
+
+	public TextBlock getBlockCommentBefore(int lineNoBefore) {
+		FileContents contents = getFileContents();
+		int lineNo = lineNoBefore - 1;
+		while (lineNo > 0 && (contents.lineIsBlank(lineNo) || contents.lineIsComment(lineNo))) {
+			lineNo--;
+		}
+		return this.blockComments.get(lineNo);
 	}
 
 	private void checkJavadoc(DetailAST ast, TextBlock javadoc) {
@@ -167,12 +201,28 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 		return description.length() > 0 && Character.isUpperCase(description.charAt(0));
 	}
 
+	private void checkForNonJavadocComments(TextBlock block) {
+		if (block == null) {
+			return;
+		}
+		String[] text = block.getText();
+		for (int i = 0; i < text.length; i++) {
+			if (NON_JAVADOC_COMMENT.matcher(text[i]).find()) {
+				log(block.getStartLineNo() + i - 1, 0, "javadoc.nonJavadocComment");
+			}
+		}
+	}
+
 	public void setRequireSinceTag(boolean requireSinceTag) {
 		this.requireSinceTag = requireSinceTag;
 	}
 
 	public void setPublicOnlySinceTags(boolean publicOnlySinceTags) {
 		this.publicOnlySinceTags = publicOnlySinceTags;
+	}
+
+	public void setAllowNonJavadocComments(boolean allowNonJavadocComments) {
+		this.allowNonJavadocComments = allowNonJavadocComments;
 	}
 
 	private DetailAST getInterfaceDef(DetailAST ast) {

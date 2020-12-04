@@ -1,0 +1,3 @@
++23:1: Comments should not include "(non-Javadoc)"
++30:1: Comments should not include "(non-Javadoc)"
++2 errors
