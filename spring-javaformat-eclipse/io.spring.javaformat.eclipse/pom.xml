@@ -10,7 +10,7 @@
 	</parent>
 	<artifactId>io.spring.javaformat.eclipse</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<name>Spring JavaFormat Eclipse Parent</name>
+	<name>Spring JavaFormat Eclipse</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
 	</properties>
