@@ -11,7 +11,7 @@ resource_types:
 resources:
 - name: git-repo
   type: git
-  icon: github-circle
+  icon: github
   source:
     uri: ((github-repo))
     username: ((github-username))
@@ -204,11 +204,11 @@ jobs:
       BINTRAY_USERNAME: ((bintray-username))
       BINTRAY_API_KEY: ((bintray-api-key))
 groups:
-- name: "Build"
+- name: "builds"
   jobs: ["build"]
-- name: "Release"
+- name: "releases"
   jobs: ["stage-release", "promote-release", "sync-to-maven-central", "publish-eclipse-update-site"]
-- name: "CI Images"
+- name: "ci-images"
   jobs: ["build-spring-javaformat-ci-images"]
-- name: "Build Pull Requests"
+- name: "pull-requests"
   jobs: ["build-pull-requests"]
