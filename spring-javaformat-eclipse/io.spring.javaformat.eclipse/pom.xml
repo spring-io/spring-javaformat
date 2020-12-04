@@ -29,4 +29,15 @@
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<sourceFileExcludes>**/*SpringCodeFormatter.java</sourceFileExcludes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
