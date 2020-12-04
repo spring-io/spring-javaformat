@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,6 +77,8 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 
 	private URI packageInfoHeaderFile;
 
+	private boolean blankLineAfter = true;
+
 	private HeaderCheck check;
 
 	private HeaderCheck packageInfoCheck;
@@ -108,7 +110,7 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 
 	@Override
 	protected void processFiltered(File file, FileText fileText) throws CheckstyleException {
-		getCheck(file).run(fileText);
+		getCheck(file).run(fileText, this.blankLineAfter);
 	}
 
 	private HeaderCheck getCheck(File file) {
@@ -145,6 +147,10 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 		this.packageInfoHeaderFile = packageInfoHeaderFile;
 	}
 
+	public void setBlankLineAfter(boolean blankLineAfter) {
+		this.blankLineAfter = blankLineAfter;
+	}
+
 	/**
 	 * Interface used to check for a header.
 	 */
@@ -153,14 +159,15 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 		/**
 		 * Don't run any checks.
 		 */
-		HeaderCheck NONE = (fileText) -> true;
+		HeaderCheck NONE = (fileText, blankLineAfter) -> true;
 
 		/**
 		 * Run the check.
 		 * @param fileText the text to check
+		 * @param blankLineAfter if a blank line should be after the header
 		 * @return {@code true} if the header is valid
 		 */
-		boolean run(FileText fileText);
+		boolean run(FileText fileText, boolean blankLineAfter);
 
 	}
 
@@ -209,7 +216,7 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 		}
 
 		@Override
-		public boolean run(FileText fileText) {
+		public boolean run(FileText fileText, boolean blankLineAfter) {
 			if (this.lines.size() > fileText.size()) {
 				log(1, RegexpHeaderCheck.MSG_HEADER_MISSING);
 				return false;
@@ -220,6 +227,11 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 				if (!pattern.matcher(fileLine).matches()) {
 					log(i + 1, RegexpHeaderCheck.MSG_HEADER_MISMATCH, pattern);
 					return false;
+				}
+			}
+			if (blankLineAfter) {
+				if (fileText.size() <= this.lines.size() || !"".equals(fileText.get(this.lines.size()))) {
+					log(this.lines.size() + 1, "header.blankLine");
 				}
 			}
 			return true;
@@ -233,7 +245,7 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 	private class NoHeaderCheck implements HeaderCheck {
 
 		@Override
-		public boolean run(FileText fileText) {
+		public boolean run(FileText fileText, boolean blankLineAfter) {
 			for (int i = 0; i < fileText.size(); i++) {
 				String fileLine = fileText.get(i);
 				if (fileLine.trim().isEmpty()) {
