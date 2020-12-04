@@ -33,11 +33,11 @@ resources:
     uri: ((github-repo))
     branch: ((branch))
     paths: ["ci/images/*"]
-- name: spring-javaformat-ci-image
+- name: ci-image
   type: docker-image
   icon: docker
   source:
-    repository: ((docker-hub-organization))/spring-javaformat-ci-image
+    repository: ((docker-hub-organization))/ci-image
     username: ((docker-hub-username))
     password: ((docker-hub-password))
     tag: ((branch))
@@ -57,26 +57,26 @@ resources:
     repository: spring-javaformat
     access_token: ((github-ci-release-token))
 jobs:
-- name: build-spring-javaformat-ci-images
+- name: build-ci-images
   plan:
   - get: ci-images-git-repo
     trigger: true
-  - put: spring-javaformat-ci-image
+  - put: ci-image
     params:
       build: ci-images-git-repo/ci/images
-      dockerfile: ci-images-git-repo/ci/images/spring-javaformat-ci-image/Dockerfile
+      dockerfile: ci-images-git-repo/ci/images/ci-image/Dockerfile
 - name: build
   serial: true
   public: true
   plan:
-  - get: spring-javaformat-ci-image
+  - get: ci-image
   - get: git-repo
     trigger: true
   - do:
     - task: build-project
       privileged: true
       timeout: 1h30m
-      image: spring-javaformat-ci-image
+      image: ci-image
       file: git-repo/ci/tasks/build-project.yml
   - put: artifactory-repo
     params: &artifactory-params
@@ -90,7 +90,7 @@ jobs:
   serial: true
   public: true
   plan:
-  - get: spring-javaformat-ci-image
+  - get: ci-image
   - get: git-repo
     resource: git-pull-request
     trigger: true
@@ -102,7 +102,7 @@ jobs:
         status: pending
     - task: build-project
       timeout: 1h30m
-      image: spring-javaformat-ci-image
+      image: ci-image
       file: git-repo/ci/tasks/build-pr-project.yml
     on_success:
       put: git-pull-request
@@ -117,11 +117,11 @@ jobs:
 - name: stage-release
   serial: true
   plan:
-  - get: spring-javaformat-ci-image
+  - get: ci-image
   - get: git-repo
     trigger: false
   - task: stage
-    image: spring-javaformat-ci-image
+    image: ci-image
     file: git-repo/ci/tasks/stage.yml
     params:
       RELEASE_TYPE: RELEASE
@@ -135,7 +135,7 @@ jobs:
 - name: promote-release
   serial: true
   plan:
-  - get: spring-javaformat-ci-image
+  - get: ci-image
   - get: git-repo
     trigger: false
   - get: artifactory-repo
@@ -144,7 +144,7 @@ jobs:
     params:
       save_build_info: true
   - task: promote
-    image: spring-javaformat-ci-image
+    image: ci-image
     file: git-repo/ci/tasks/promote.yml
     params:
       RELEASE_TYPE: RELEASE
@@ -158,7 +158,7 @@ jobs:
 - name: sync-to-maven-central
   serial: true
   plan:
-  - get: spring-javaformat-ci-image
+  - get: ci-image
   - get: git-repo
     trigger: false
   - get: artifactory-repo
@@ -167,7 +167,7 @@ jobs:
     params:
       save_build_info: true
   - task: sync-to-maven-central
-    image: spring-javaformat-ci-image
+    image: ci-image
     file: git-repo/ci/tasks/sync-to-maven-central.yml
     params:
       BINTRAY_USERNAME: ((bintray-username))
@@ -189,7 +189,7 @@ jobs:
 - name: publish-eclipse-update-site
   serial: true
   plan:
-  - get: spring-javaformat-ci-image
+  - get: ci-image
   - get: git-repo
     trigger: false
   - get: artifactory-repo
@@ -198,7 +198,7 @@ jobs:
     params:
       save_build_info: true
   - task: publish-eclipse-update-site
-    image: spring-javaformat-ci-image
+    image: ci-image
     file: git-repo/ci/tasks/publish-eclipse-update-site.yml
     params:
       BINTRAY_USERNAME: ((bintray-username))
@@ -209,6 +209,6 @@ groups:
 - name: "releases"
   jobs: ["stage-release", "promote-release", "sync-to-maven-central", "publish-eclipse-update-site"]
 - name: "ci-images"
-  jobs: ["build-spring-javaformat-ci-images"]
+  jobs: ["build-ci-images"]
 - name: "pull-requests"
   jobs: ["build-pull-requests"]
