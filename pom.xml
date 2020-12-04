@@ -581,7 +581,7 @@
 		<module>spring-javaformat-maven</module>
 		<module>spring-javaformat-gradle</module>
 		<module>spring-javaformat-eclipse</module>
-		<module>spring-javaformat-intellij</module>
+		<module>spring-javaformat-intellij-idea</module>
 	</modules>
 	<profiles>
 		<profile>

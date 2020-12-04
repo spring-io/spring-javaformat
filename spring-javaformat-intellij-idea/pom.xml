@@ -7,7 +7,7 @@
 		<artifactId>spring-javaformat-build</artifactId>
 		<version>0.0.26-SNAPSHOT</version>
 	</parent>
-	<artifactId>spring-javaformat-intellij</artifactId>
+	<artifactId>spring-javaformat-intellij-idea</artifactId>
 	<packaging>pom</packaging>
 	<name>Spring JavaFormat IntelliJ IDEA</name>
 	<properties>
@@ -30,7 +30,7 @@
 		</plugins>
 	</build>
 	<modules>
-		<module>spring-javaformat-intellij-runtime</module>
-		<module>spring-javaformat-intellij-plugin</module>
+		<module>spring-javaformat-intellij-idea-runtime</module>
+		<module>spring-javaformat-intellij-idea-plugin</module>
 	</modules>
 </project>

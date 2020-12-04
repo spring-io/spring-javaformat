@@ -5,10 +5,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>io.spring.javaformat</groupId>
-		<artifactId>spring-javaformat-intellij</artifactId>
+		<artifactId>spring-javaformat-intellij-idea</artifactId>
 		<version>0.0.26-SNAPSHOT</version>
 	</parent>
-	<artifactId>spring-javaformat-intellij-runtime</artifactId>
+	<artifactId>spring-javaformat-intellij-idea-runtime</artifactId>
 	<packaging>pom</packaging>
 	<name>Spring JavaFormat IntelliJ IDEA Runtime</name>
 	<properties>
@@ -152,7 +152,7 @@
 						<configuration>
 							<file>${project.build.directory}/intellij/platform-api.jar</file>
 							<sources>${project.build.directory}/intellij-source/platform-api-sources.zip</sources>
-							<groupId>io.spring.javaformat.intellij</groupId>
+							<groupId>io.spring.javaformat.intellij.idea</groupId>
 							<artifactId>platform-api</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
@@ -169,7 +169,7 @@
 						<configuration>
 							<file>${project.build.directory}/intellij/platform-impl.jar</file>
 							<sources>${project.build.directory}/intellij-source/platform-impl-sources.zip</sources>
-							<groupId>io.spring.javaformat.intellij</groupId>
+							<groupId>io.spring.javaformat.intellij.idea</groupId>
 							<artifactId>platform-impl</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
@@ -186,7 +186,7 @@
 						<configuration>
 							<file>${project.build.directory}/intellij/util.jar</file>
 							<sources>${project.build.directory}/intellij-source/util-sources.zip</sources>
-							<groupId>io.spring.javaformat.intellij</groupId>
+							<groupId>io.spring.javaformat.intellij.idea</groupId>
 							<artifactId>util</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
@@ -203,7 +203,7 @@
 						<configuration>
 							<file>${project.build.directory}/intellij/platform-util-ui.jar</file>
 							<sources>${project.build.directory}/intellij-source/platform-util-ui-sources.zip</sources>
-							<groupId>io.spring.javaformat.intellij</groupId>
+							<groupId>io.spring.javaformat.intellij.idea</groupId>
 							<artifactId>platform-util-ui</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
@@ -220,7 +220,7 @@
 						<configuration>
 							<file>${project.build.directory}/intellij/extensions.jar</file>
 							<sources>${project.build.directory}/intellij-source/extensions-sources.zip</sources>
-							<groupId>io.spring.javaformat.intellij</groupId>
+							<groupId>io.spring.javaformat.intellij.idea</groupId>
 							<artifactId>extensions</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
@@ -237,7 +237,7 @@
 						<configuration>
 							<file>${project.build.directory}/intellij/platform-serviceContainer.jar</file>
 							<sources>${project.build.directory}/intellij-source/platform-service-container-sources.zip</sources>
-							<groupId>io.spring.javaformat.intellij</groupId>
+							<groupId>io.spring.javaformat.intellij.idea</groupId>
 							<artifactId>platform-service-container</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
@@ -253,7 +253,7 @@
 						</goals>
 						<configuration>
 							<file>${project.build.directory}/intellij/idea.jar</file>
-							<groupId>io.spring.javaformat.intellij</groupId>
+							<groupId>io.spring.javaformat.intellij.idea</groupId>
 							<artifactId>idea</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
@@ -270,7 +270,7 @@
 						<configuration>
 							<file>${project.build.directory}/intellij/maven.jar</file>
 							<sources>${project.build.directory}/intellij-source/maven-sources.zip</sources>
-							<groupId>io.spring.javaformat.intellij</groupId>
+							<groupId>io.spring.javaformat.intellij.idea</groupId>
 							<artifactId>maven</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
@@ -286,7 +286,7 @@
 						</goals>
 						<configuration>
 							<file>${project.build.directory}/intellij/maven-server-api.jar</file>
-							<groupId>io.spring.javaformat.intellij</groupId>
+							<groupId>io.spring.javaformat.intellij.idea</groupId>
 							<artifactId>maven-server-api</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
@@ -303,7 +303,7 @@
 						<configuration>
 							<file>${project.build.directory}/intellij/gradle-common.jar</file>
 							<sources>${project.build.directory}/intellij-source/gradle-sources.zip</sources>
-							<groupId>io.spring.javaformat.intellij</groupId>
+							<groupId>io.spring.javaformat.intellij.idea</groupId>
 							<artifactId>gradle</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
@@ -320,7 +320,7 @@
 						<configuration>
 							<file>${project.build.directory}/intellij/gradle-tooling-extension-api.jar</file>
 							<sources>${project.build.directory}/intellij-source/gradle-tooling-extension-api-sources.zip</sources>
-							<groupId>io.spring.javaformat.intellij</groupId>
+							<groupId>io.spring.javaformat.intellij.idea</groupId>
 							<artifactId>gradle-tooling-extension-api</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
@@ -337,7 +337,7 @@
 						<configuration>
 							<file>${project.build.directory}/intellij/gradle-tooling-extension-impl.jar</file>
 							<sources>${project.build.directory}/intellij-source/gradle-tooling-extension-impl-sources.zip</sources>
-							<groupId>io.spring.javaformat.intellij</groupId>
+							<groupId>io.spring.javaformat.intellij.idea</groupId>
 							<artifactId>gradle-tooling-extension-impl</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
