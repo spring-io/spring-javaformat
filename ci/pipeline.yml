@@ -1,11 +1,11 @@
 resource_types:
 - name: artifactory-resource
-  type: docker-image
+  type: registry-image
   source:
     repository: springio/artifactory-resource
     tag: 0.0.8
 - name: pull-request
-  type: docker-image
+  type: registry-image
   source:
     repository: jtarchie/pr
 resources:
@@ -34,7 +34,7 @@ resources:
     branch: ((branch))
     paths: ["ci/images/*"]
 - name: ci-image
-  type: docker-image
+  type: registry-image
   icon: docker
   source:
     repository: ((docker-hub-organization))/ci-image
