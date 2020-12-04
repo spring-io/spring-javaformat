@@ -22,6 +22,7 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
 					<source>8</source>
+					<additionalOptions>-Xdoclint:none</additionalOptions>
 					<detectJavaApiLink>false</detectJavaApiLink>
 				</configuration>
 			</plugin>

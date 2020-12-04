@@ -179,6 +179,7 @@
 					<version>3.2.0</version>
 					<configuration>
 						<source>8</source>
+						<additionalOptions>-Xdoclint:none</additionalOptions>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -314,7 +315,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore/>
+										<ignore />
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -327,7 +328,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore/>
+										<ignore />
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -342,7 +343,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore/>
+										<ignore />
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -355,7 +356,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore/>
+										<ignore />
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
