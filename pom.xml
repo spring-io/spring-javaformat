@@ -31,7 +31,7 @@
 		<main.basedir>${basedir}</main.basedir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
-		<eclipse.repository>https://download.eclipse.org/releases/2020-09/202009161000/</eclipse.repository>
+		<eclipse.repository>https://download.eclipse.org/releases/2020-12/202012161000/</eclipse.repository>
 		<eclipse.checkstyle.repository>https://dl.bintray.com/eclipse-cs/eclipse-cs/8.35.0</eclipse.checkstyle.repository>
 		<tycho.disableP2Mirrors>true</tycho.disableP2Mirrors>
 		<ant.version>1.8.1</ant.version>
