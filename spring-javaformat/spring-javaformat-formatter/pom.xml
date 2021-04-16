@@ -12,6 +12,7 @@
 	<name>Spring JavaFormat Formatter</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
+		<editorconfig.version>0.12.1.Final</editorconfig.version>
 	</properties>
 	<dependencies>
 		<!-- Compile -->
@@ -19,6 +20,11 @@
 			<groupId>io.spring.javaformat</groupId>
 			<artifactId>spring-javaformat-formatter-eclipse</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.standardout.org.editorconfig</groupId>
+			<artifactId>editorconfig-core</artifactId>
+			<version>${editorconfig.version}</version>
 		</dependency>
 		<!-- Provided -->
 		<dependency>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package io.spring.format.formatter.intellij.codestyle;
 
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Supplier;
@@ -24,6 +25,7 @@ import com.intellij.openapi.application.Application;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
@@ -93,6 +95,10 @@ public class SpringReformatterTests {
 
 	@Test
 	public void reformatShouldReformatDocument() throws Exception {
+		VirtualFile vf = mock(VirtualFile.class);
+		given(vf.toNioPath()).willReturn(Path.of("/"));
+		given(this.file.getVirtualFile()).willReturn(vf);
+		given(this.file.getProject()).willReturn(this.project);
 		given(this.file.isWritable()).willReturn(true);
 		Document document = mock(Document.class);
 		String text = "public class Hello {}";

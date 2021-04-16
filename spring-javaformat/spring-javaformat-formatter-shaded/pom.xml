@@ -62,6 +62,7 @@
 					<artifactSet>
 						<includes>
 							<include>io.spring.javaformat:*</include>
+							<include>org.standardout.org.editorconfig:*</include>
 						</includes>
 					</artifactSet>
 					<relocations>
@@ -76,6 +77,10 @@
 						<relocation>
 							<pattern>org.osgi</pattern>
 							<shadedPattern>io.spring.javaformat.org.osgi</shadedPattern>
+						</relocation>
+						<relocation>
+							<pattern>org.editorconfig</pattern>
+							<shadedPattern>io.spring.javaformat.org.editorconfig</shadedPattern>
 						</relocation>
 					</relocations>
 					<transformers>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
@@ -58,7 +59,7 @@ public class Formatter extends CodeFormatter {
 
 	private final Set<FormatterOption> options;
 
-	private CodeFormatter delegate = new DelegateCodeFormatter();
+	private DelegateCodeFormatter delegate = new DelegateCodeFormatter();
 
 	/**
 	 * Create a new formatter instance.
@@ -178,6 +179,10 @@ public class Formatter extends CodeFormatter {
 
 	}
 
+	public void addOrReplaceOption(String key, String value) {
+		this.delegate.addOrReplaceOption(key, value);
+	}
+
 	/**
 	 * Internal delegate code formatter to apply Spring {@literal formatter.prefs} and add
 	 * {@link Preparator Preparators}.
@@ -192,7 +197,7 @@ public class Formatter extends CodeFormatter {
 				Properties properties = new Properties();
 				try (InputStream inputStream = Formatter.class.getResourceAsStream("formatter.prefs")) {
 					properties.load(inputStream);
-					OPTIONS = (Map) Collections.unmodifiableMap(properties);
+					OPTIONS = new HashMap<>((Map) properties);
 				}
 			}
 			catch (IOException ex) {
@@ -210,6 +215,10 @@ public class Formatter extends CodeFormatter {
 			super.setOptions(OPTIONS);
 		}
 
+		public void addOrReplaceOption(String key, String value) {
+			OPTIONS.put(key, value);
+			super.setOptions(OPTIONS);
+		}
 	}
 
 }
