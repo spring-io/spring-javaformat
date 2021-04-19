@@ -15,10 +15,10 @@ curl \
 	--max-time 2700 \
 	-u ${ARTIFACTORY_USERNAME}:${ARTIFACTORY_PASSWORD} \
 	-f \
-	-H "X-Explode-Archive: true"
+	-H "X-Explode-Archive: true" \
 	-X PUT \
 	-T "artifactory-repo/io/spring/javaformat/io.spring.javaformat.eclipse.site/${version}/io.spring.javaformat.eclipse.site-${version}.zip" \
-	"https://repo.spring.io/javaformat-eclipse-update-site/${version}" > /dev/null || { echo "Failed to publish" >&2; exit 1; }
+	"https://repo.spring.io/javaformat-eclipse-update-site/${version}/" > /dev/null || { echo "Failed to publish" >&2; exit 1; }
 
 releasedVersions=$( curl -s -f -X GET https://repo.spring.io/api/storage/javaformat-eclipse-update-site | jq -r '.children[] | .uri' | cut -c 2- | grep '\d.*' | sort -V )
 
@@ -29,7 +29,7 @@ while read -r releasedVersion; do
 done <<< "${releasedVersions}"
 
 pushd git-repo > /dev/null
-sed "s|##respositories##|${respositories}|" ci/scripts/publish-eclipse-update-site-pom-template.xml > publish-eclipse-update-site-pom.xml
+sed "s|##repositories##|${repositories}|" ci/scripts/publish-eclipse-update-site-pom-template.xml > publish-eclipse-update-site-pom.xml
 run_maven -f publish-eclipse-update-site-pom.xml clean package || { echo "Failed to publish" >&2; exit 1; }
 
 curl \
