@@ -40,7 +40,7 @@ curl \
 		-f \
 		-X PUT \
 		-T "target/repository/content.jar" \
-		"https://repo.spring.io/javaformat-eclipse-update-site" > /dev/null || { echo "Failed to publish" >&2; exit 1; }
+		"https://repo.spring.io/javaformat-eclipse-update-site/" > /dev/null || { echo "Failed to publish" >&2; exit 1; }
 
 curl \
 		-s \
@@ -50,7 +50,7 @@ curl \
 		-f \
 		-X PUT \
 		-T "target/repository/artifacts.jar" \
-		"https://repo.spring.io/javaformat-eclipse-update-site" > /dev/null || { echo "Failed to publish" >&2; exit 1; }
+		"https://repo.spring.io/javaformat-eclipse-update-site/" > /dev/null || { echo "Failed to publish" >&2; exit 1; }
 
 popd > /dev/null
 
