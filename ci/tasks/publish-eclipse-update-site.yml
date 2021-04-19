@@ -4,7 +4,7 @@ inputs:
 - name: git-repo
 - name: artifactory-repo
 params:
-  BINTRAY_USERNAME:
-  BINTRAY_API_KEY:
+  ARTIFACTORY_USERNAME: ((artifactory-username))
+  ARTIFACTORY_PASSWORD: ((artifactory-password))
 run:
   path: git-repo/ci/scripts/publish-eclipse-update-site.sh

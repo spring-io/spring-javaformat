@@ -200,9 +200,6 @@ jobs:
   - task: publish-eclipse-update-site
     image: ci-image
     file: git-repo/ci/tasks/publish-eclipse-update-site.yml
-    params:
-      BINTRAY_USERNAME: ((bintray-username))
-      BINTRAY_API_KEY: ((bintray-api-key))
 groups:
 - name: "builds"
   jobs: ["build"]
