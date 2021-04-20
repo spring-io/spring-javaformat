@@ -29,7 +29,7 @@ should also work without issue.
 
 
 === Building From Source
-To build the source you will need to install JDK 1.8.
+To build the source you will need to install JDK 11.
 
 
 
@@ -58,6 +58,104 @@ Once imported, you can apply eclipse settings by running:
 
 NOTE: You'll need to close the `spring-javaformat-formatter-eclipse` and `spring-javaformat-formatter-eclipse-runtime` projects following import since they contain rewritten packages that aren't supported by the IDE
 
+=== Importing into IntelliJ IDEA
+
+You can import the code as a maven project into IntelliJ IDEA.
+
+==== Module dependencies
+
+When IntelliJ IDEA parses `pom.xml`, it automatically creates inter-module dependencies if dependent libraries are coming from other modules within the project.
+However, when dependent modules perform repackaging (e.g. `spring-javaformat-formatter-eclipse-runtime` module), the current module cannot resolve all classes by module dependencies because repackaging(shade & binary manipulation) moves around classes.
+Therefore, you need to manually update the dependencies from the module to the produced jars.
+
+Following modules perform repackaging.
+
+* `spring-javaformat-formatter-eclipse`
+* `spring-javaformat-formatter-eclipse-runtime`
+
+Modules that depend on these modules need jar dependencies instead of module dependencies.
+
+===== Setting up jar dependencies
+
+The following steps define jar-based project libraries on IDE and add them to the modules that need jar dependencies.
+
+*Add a jar file-based project library*
+
+* "Project Settings" -> "Libraries"
+* Click "+" sign, then select "Java"
+* Specify the jar file +
+For example, you can specifie the jar file in the target directory(`<PROJECT>/spring-javaformat/spring-javaformat-formatter-eclipse-runtime/target/spring-javaformat-formatter-eclipse-runtime-0.0.28-SNAPSHOT.jar`)
+or one in the local maven repository(`~/.m2/repository/io/spring/javaformat/spring-javaformat-formatter-eclipse-runtime/0.0.28-SNAPSHOT/spring-javaformat-formatter-eclipse-runtime-0.0.28-SNAPSHOT.jar`).
+
+image::src/asciidoc/images/setup-idea-library.png[Setup IntelliJ IDEA library]
+
+*Add library dependencies to modules*
+
+* "Project Settings" -> "Modules"
+* Select a module that depends on repackaging modules
+* Click "+" sign and "2 Library"
+* "Choose Libraries" and select necessary libraries that have added in the previous step
+* Move up the added libraries higher than the module dependencies (or remove the module dependencies)
+
+image::src/asciidoc/images/setup-idea-dependency.png[Setup IntelliJ IDEA Dependencies]
+
+
+=== Setting up IntelliJ IDEA plugin development
+
+==== Download images
+
+To develop the `spring-javaformat-intellij-idea-plugin` module, you need an IntelliJ IDEA application on your local machine.
+
+* Open the `pom.xml` in `spring-javaformat-intellij-idea/spring-javaformat-intellij-idea-runtime`.
+* Check `intellij.binary` and `intellij.source` properties to find out the appropriate IntelliJ IDEA version.
+* Download the binary from the url in `intellij.binary`.  +
+(For OSX, replace the `.tar.gz` to `.dmg` to download the image file.)
+* Install the image to the local machine
+* Download the source files from github specified in `intellij.source` and unzip it.
+
+==== Setup SDK
+
+* Open "Project Structure" - "Platform Settings" - "SDKs"
+* Click "+" sign, "Add Intellij Platform Plugin SDK..."
+* Specify the installed intellij image.  (`/applications/IntelliJ IDEA CE` for OSX)
+* On the right panel, "Sourcepath", Click "+" sign, specify unzipped intellij source directory
+* Specify "Sandbox Home" directory
+
+image::src/asciidoc/images/setup-idea-plugin-sdk.png[Setup IntelliJ IDEA Plugin SDK]
+
+Please see the https://plugins.jetbrains.com/docs/intellij/setting-up-environment.html[IntelliJ IDEA reference] for how to setup a plugin development in details.
+
+==== Convert to Plugin Module
+
+The imported `spring-javaformat-intellij-idea-plugin` module is recognized as a java module.
+This needs to be converted to a plugin module.
+
+* Open `spring-javaformat-intellij-idea-plugin.iml` in `spring-javaformat-intellij-idea/spring-javaformat-intellij-idea-plugin`
+* Change `type="JAVA_MODULE"` to `type="PLUGIN_MODULE"`
++
+[indent=0,xml]
+----
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="PLUGIN_MODULE" version="4">
+----
++
+Reference https://stackoverflow.com/questions/18278440/how-to-import-and-run-existing-plugins-from-intellij-community-edition-repo[how to convert existing module to a plugin module]
+
+* Open "Project Structure" - "Modules"
+* Check `spring-javaformat-intellij-idea-plugin` icon turns to a plugin icon
+* "Plugin Deployment" - "Path to META-INF/plugin.xml"
+* Specify `<PROJECT>spring-javaformat/spring-javaformat-intellij-idea/spring-javaformat-intellij-idea-plugin/src/main/resources`
+
+image::src/asciidoc/images/setup-idea-plugin-module.png[Setup IntelliJ IDEA Plugin Module]
+
+
+=== Setting up Gradle plugin development
+
+`spring-javaformat-gradle-plugin` module is a gradle plugin and requires gradle related classes.
+
+To add gradle classes, convert this module to a gradle project.
+
+* On the project pain, right-click `build.gradle` in `spring-javaformat-gradle-plugin` module
+* Select "Import Gradle Project"
 
 
 === Importing Into Other IDEs

@@ -221,6 +221,15 @@ You can download the latest version from https://repo.spring.io/release/io/sprin
 
 
 
+==== Enable the Plugin
+The plugin is automatically enabled when one or more of the following conditions match:
+
+* `.springformat` file exists
+* For maven based project, `spring-javaformat-maven-plugin` plugin is defined in `pom.xml`
+* For gradle based project, `io.spring.javaformat` plugin is applied
+
+
+
 === About the Conventions
 Most of the coding conventions and style comes from the Spring Framework and Spring Boot projects.
 Spring Framework manually formats code, where as Spring Boot uses automatic formatting.
