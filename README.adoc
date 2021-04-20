@@ -204,6 +204,13 @@ You can use the standard `code` -> `reformat code` action to format the code.
 To install the plugin use the `spring-javaformat-intellij-idea-plugin` jar file.
 You can download the latest version from https://repo.spring.io/release/io/spring/javaformat/spring-javaformat-intellij-idea-plugin/{release-version}[repo.spring.io].
 
+==== Enable the plugin
+The plugin is automatically enabled when one or more of the following conditions match:
+
+* `.springformat` file exists
+* For maven based project, `spring-javaformat-maven-plugin` plugin is defined in `pom.xml`
+* For gradle based project, `io.spring.javaformat` plugin is applied
+
 === About the conventions
 Most of the coding conventions and style comes from the Spring Framework and Spring Boot projects.
 Spring Framework manually formats code, where as Spring Boot uses automatic formatting.
