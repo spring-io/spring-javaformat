@@ -10,5 +10,7 @@ caches:
 - path: gradle
 params:
   RELEASE_TYPE:
+  DOCKER_HUB_USERNAME: ((docker-hub-username))
+  DOCKER_HUB_PASSWORD: ((docker-hub-password))
 run:
   path: git-repo/ci/scripts/stage.sh

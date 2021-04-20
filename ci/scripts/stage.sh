@@ -13,11 +13,17 @@ git clone git-repo stage-git-repo > /dev/null
 pushd stage-git-repo > /dev/null
 
 snapshotVersion=$( xmllint --xpath '/*[local-name()="project"]/*[local-name()="version"]/text()' pom.xml )
-if [[ ${RELEASE_TYPE} = "RELEASE" ]]; then
-	stageVersion=$( strip_snapshot_suffix $snapshotVersion)
+if [[ $RELEASE_TYPE = "M" ]]; then
+	stageVersion=$( get_next_milestone_release $snapshotVersion)
+	nextVersion=$snapshotVersion
+elif [[ $RELEASE_TYPE = "RC" ]]; then
+	stageVersion=$( get_next_rc_release $snapshotVersion)
+	nextVersion=$snapshotVersion
+elif [[ $RELEASE_TYPE = "RELEASE" ]]; then
+	stageVersion=$( get_next_release $snapshotVersion)
 	nextVersion=$( bump_version_number $snapshotVersion)
 else
-	echo "Unknown release type ${RELEASE_TYPE}" >&2; exit 1;
+	echo "Unknown release type $RELEASE_TYPE" >&2; exit 1;
 fi
 
 echo "Staging ${stageVersion} (next version will be ${nextVersion})"
@@ -33,16 +39,18 @@ git tag -a "v${stageVersion}" -m"Release v${stageVersion}" > /dev/null
 run_maven clean deploy -U -Dfull -DaltDeploymentRepository=distribution::default::file://${repository}
 
 git reset --hard HEAD^ > /dev/null
-echo "Setting next development version (v$nextVersion)"
-run_maven versions:set -DnewVersion=$nextVersion -DgenerateBackupPoms=false
-run_maven org.eclipse.tycho:tycho-versions-plugin:update-eclipse-metadata
-sed -i "s/:release-version:.*/:release-version: ${stageVersion}/g" README.adoc
-sed -i "s/spring-javaformat-gradle-plugin:.*/spring-javaformat-gradle-plugin:${nextVersion}\"\)/g" samples/spring-javaformat-gradle-sample/build.gradle
-sed -i "s/spring-javaformat-checkstyle:.*/spring-javaformat-checkstyle:${nextVersion}\"\)/g" samples/spring-javaformat-gradle-sample/build.gradle
-sed -i "s|<spring-javaformat.version>.*</spring-javaformat.version>|<spring-javaformat.version>${nextVersion}</spring-javaformat.version>|" samples/spring-javaformat-maven-sample/pom.xml
-git add -u . > /dev/null
-git commit -m"Next development version (v${nextVersion})" > /dev/null
-
-echo "DONE"
+if [[ $nextVersion != $snapshotVersion ]]; then
+	echo "Setting next development version (v$nextVersion)"
+	run_maven versions:set -DnewVersion=$nextVersion -DgenerateBackupPoms=false
+	run_maven org.eclipse.tycho:tycho-versions-plugin:update-eclipse-metadata
+	sed -i "s/:release-version:.*/:release-version: ${stageVersion}/g" README.adoc
+	sed -i "s/spring-javaformat-gradle-plugin:.*/spring-javaformat-gradle-plugin:${nextVersion}\"\)/g" samples/spring-javaformat-gradle-sample/build.gradle
+	sed -i "s/spring-javaformat-checkstyle:.*/spring-javaformat-checkstyle:${nextVersion}\"\)/g" samples/spring-javaformat-gradle-sample/build.gradle
+	sed -i "s|<spring-javaformat.version>.*</spring-javaformat.version>|<spring-javaformat.version>${nextVersion}</spring-javaformat.version>|" samples/spring-javaformat-maven-sample/pom.xml
+	git add -u . > /dev/null
+	git commit -m"Next development version (v${nextVersion})" > /dev/null
+fi;
 
 popd > /dev/null
+
+echo "Staging Complete"

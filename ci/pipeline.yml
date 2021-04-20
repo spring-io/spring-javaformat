@@ -1,46 +1,73 @@
+anchors:
+  github-release-source: &github-release-source
+    owner: ((github-owner))
+    repository: ((github-repository))
+    access_token: ((github-ci-release-token))
+  artifactory-repo-put-params: &artifactory-repo-put-params
+    signing_key: ((signing-key))
+    signing_passphrase: ((signing-passphrase))
+    repo: libs-snapshot-local
+    folder: distribution-repository
+    build_uri: https://ci.spring.io/teams/${BUILD_TEAM_NAME}/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
+    build_number: ${BUILD_PIPELINE_NAME}-${BUILD_JOB_NAME}-${BUILD_NAME}
+    disable_checksum_uploads: true
+    threads: 8
 resource_types:
 - name: artifactory-resource
   type: registry-image
   source:
     repository: springio/artifactory-resource
-    tag: 0.0.8
+    tag: "0.0.14"
 - name: pull-request
   type: registry-image
   source:
-    repository: jtarchie/pr
+    repository: teliaoss/github-pr-resource
 resources:
 - name: git-repo
   type: git
   icon: github
   source:
-    uri: ((github-repo))
+    uri: https://github.com/((github-owner))/((github-repository)).git
     username: ((github-username))
     password: ((github-password))
     branch: ((branch))
-    ignore_paths: ["ci/images/*"]
 - name: git-pull-request
   type: pull-request
   icon: source-pull
   source:
     access_token: ((github-ci-pull-request-token))
-    repo: ((github-repo-name))
-    base: ((branch))
+    repository: ((github-owner))/((github-repository))
+    base_branch: ((branch))
     ignore_paths: ["ci/*"]
+- name: github-pre-release
+  type: github-release
+  icon: briefcase-download-outline
+  source:
+    <<: *github-release-source
+    pre_release: true
+    release: false
+- name: github-release
+  type: github-release
+  icon: briefcase-download
+  source:
+    <<: *github-release-source
+    pre_release: false
+    release: true
 - name: ci-images-git-repo
   type: git
-  icon: github-circle
+  icon: github
   source:
-    uri: ((github-repo))
+    uri: https://github.com/((github-owner))/((github-repository)).git
     branch: ((branch))
     paths: ["ci/images/*"]
 - name: ci-image
   type: registry-image
   icon: docker
   source:
-    repository: ((docker-hub-organization))/ci-image
     username: ((docker-hub-username))
     password: ((docker-hub-password))
-    tag: ((branch))
+    tag: ((milestone))
+    repository: ((docker-hub-ci-organization))/((ci-image))
 - name: artifactory-repo
   type: artifactory-resource
   icon: package-variant
@@ -49,22 +76,20 @@ resources:
     username: ((artifactory-username))
     password: ((artifactory-password))
     build_name: ((build-name))
-- name: github-release
-  type: github-release
-  icon: briefcase-download
-  source:
-    owner: spring-io
-    repository: spring-javaformat
-    access_token: ((github-ci-release-token))
 jobs:
 - name: build-ci-images
   plan:
   - get: ci-images-git-repo
     trigger: true
+  - get: git-repo
+  - task: build-ci-image
+    privileged: true
+    file: git-repo/ci/tasks/build-ci-image.yml
+    output_mapping:
+      image: ci-image
   - put: ci-image
     params:
-      build: ci-images-git-repo/ci/images
-      dockerfile: ci-images-git-repo/ci/images/ci-image/Dockerfile
+      image: ci-image/image.tar
 - name: build
   serial: true
   public: true
@@ -72,20 +97,18 @@ jobs:
   - get: ci-image
   - get: git-repo
     trigger: true
-  - do:
-    - task: build-project
-      privileged: true
-      timeout: 1h30m
-      image: ci-image
-      file: git-repo/ci/tasks/build-project.yml
+  - task: build-project
+    image: ci-image
+    privileged: true
+    timeout: ((task-timeout))
+    file: git-repo/ci/tasks/build-project.yml
+    params:
+      BRANCH: ((branch))
   - put: artifactory-repo
-    params: &artifactory-params
-      repo: libs-snapshot-local
-      build_number: "${BUILD_ID}"
-      folder: distribution-repository
-      build_uri: "https://ci.spring.io/teams/${BUILD_TEAM_NAME}/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}"
-      build_number: "${BUILD_PIPELINE_NAME}-${BUILD_JOB_NAME}-${BUILD_NAME}"
-      disable_checksum_uploads: true
+    params:
+      <<: *artifactory-repo-put-params
+    get_params:
+      threads: 8
 - name: build-pull-requests
   serial: true
   public: true
@@ -101,9 +124,9 @@ jobs:
         path: git-repo
         status: pending
     - task: build-project
-      timeout: 1h30m
       image: ci-image
       file: git-repo/ci/tasks/build-pr-project.yml
+      timeout: ((task-timeout))
     on_success:
       put: git-pull-request
       params:
@@ -114,6 +137,42 @@ jobs:
       params:
         path: git-repo
         status: failure
+- name: stage-milestone
+  serial: true
+  plan:
+  - get: ci-image
+  - get: git-repo
+    trigger: false
+  - task: stage
+    image: ci-image
+    file: git-repo/ci/tasks/stage.yml
+    params:
+      RELEASE_TYPE: M
+  - put: artifactory-repo
+    params:
+      <<: *artifactory-repo-put-params
+      repo: libs-staging-local
+  - put: git-repo
+    params:
+      repository: stage-git-repo
+- name: stage-rc
+  serial: true
+  plan:
+  - get: ci-image
+  - get: git-repo
+    trigger: false
+  - task: stage
+    image: ci-image
+    file: git-repo/ci/tasks/stage.yml
+    params:
+      RELEASE_TYPE: RC
+  - put: artifactory-repo
+    params:
+      <<: *artifactory-repo-put-params
+      repo: libs-staging-local
+  - put: git-repo
+    params:
+      repository: stage-git-repo
 - name: stage-release
   serial: true
   plan:
@@ -127,11 +186,63 @@ jobs:
       RELEASE_TYPE: RELEASE
   - put: artifactory-repo
     params:
-      <<: *artifactory-params
+      <<: *artifactory-repo-put-params
       repo: libs-staging-local
   - put: git-repo
     params:
       repository: stage-git-repo
+- name: promote-milestone
+  serial: true
+  plan:
+  - get: ci-image
+  - get: git-repo
+    trigger: false
+  - get: artifactory-repo
+    trigger: false
+    passed: [stage-milestone]
+    params:
+      download_artifacts: false
+      save_build_info: true
+  - task: promote
+    image: ci-image
+    file: git-repo/ci/tasks/promote.yml
+    params:
+      RELEASE_TYPE: M
+  - task: generate-changelog
+    file: git-repo/ci/tasks/generate-changelog.yml
+    params:
+      RELEASE_TYPE: M
+  - put: github-pre-release
+    params:
+      name: generated-changelog/tag
+      tag: generated-changelog/tag
+      body: generated-changelog/changelog.md
+- name: promote-rc
+  serial: true
+  plan:
+  - get: ci-image
+  - get: git-repo
+    trigger: false
+  - get: artifactory-repo
+    trigger: false
+    passed: [stage-rc]
+    params:
+      download_artifacts: false
+      save_build_info: true
+  - task: promote
+    image: ci-image
+    file: git-repo/ci/tasks/promote.yml
+    params:
+      RELEASE_TYPE: RC
+  - task: generate-changelog
+    file: git-repo/ci/tasks/generate-changelog.yml
+    params:
+      RELEASE_TYPE: RC
+  - put: github-pre-release
+    params:
+      name: generated-changelog/tag
+      tag: generated-changelog/tag
+      body: generated-changelog/changelog.md
 - name: promote-release
   serial: true
   plan:
@@ -142,20 +253,36 @@ jobs:
     trigger: false
     passed: [stage-release]
     params:
+      download_artifacts: true
       save_build_info: true
   - task: promote
     image: ci-image
     file: git-repo/ci/tasks/promote.yml
     params:
       RELEASE_TYPE: RELEASE
-      ARTIFACTORY_SERVER: ((artifactory-server))
-      ARTIFACTORY_USERNAME: ((artifactory-username))
-      ARTIFACTORY_PASSWORD: ((artifactory-password))
-      BINTRAY_USERNAME: ((bintray-username))
-      BINTRAY_API_KEY: ((bintray-api-key))
-      BINTRAY_SUBJECT: ((bintray-subject))
-      BINTRAY_REPO: ((bintray-repo))
-- name: sync-to-maven-central
+      SONATYPE_USER_TOKEN: ((sonatype-username))
+      SONATYPE_PASSWORD_TOKEN: ((sonatype-password))
+- name: create-github-release
+  serial: true
+  plan:
+  - get: ci-image
+  - get: git-repo
+  - get: artifactory-repo
+    trigger: true
+    passed: [promote-release]
+    params:
+      download_artifacts: false
+      save_build_info: true
+  - task: generate-changelog
+    file: git-repo/ci/tasks/generate-changelog.yml
+    params:
+      RELEASE_TYPE: "RELEASE"
+  - put: github-release
+    params:
+      name: generated-changelog/tag
+      tag: generated-changelog/tag
+      body: generated-changelog/changelog.md
+- name: publish-eclipse-update-site
   serial: true
   plan:
   - get: ci-image
@@ -166,46 +293,15 @@ jobs:
     passed: [promote-release]
     params:
       save_build_info: true
-  - task: sync-to-maven-central
-    image: ci-image
-    file: git-repo/ci/tasks/sync-to-maven-central.yml
-    params:
-      BINTRAY_USERNAME: ((bintray-username))
-      BINTRAY_API_KEY: ((bintray-api-key))
-      BINTRAY_SUBJECT: ((bintray-subject))
-      BINTRAY_REPO: ((bintray-repo))
-      SONATYPE_USER_TOKEN: ((sonatype-user-token))
-      SONATYPE_PASSWORD_TOKEN: ((sonatype-user-token-password))
-  - task: generate-release-notes
-    file: git-repo/ci/tasks/generate-release-notes.yml
-    params:
-      GITHUB_USERNAME: ((github-username))
-      GITHUB_TOKEN: ((github-ci-release-token))
-  - put: github-release
-    params:
-      name: generated-release-notes/tag
-      tag: generated-release-notes/tag
-      body: generated-release-notes/release-notes.md
-- name: publish-eclipse-update-site
-  serial: true
-  plan:
-  - get: ci-image
-  - get: git-repo
-    trigger: false
-  - get: artifactory-repo
-    trigger: false
-    passed: [sync-to-maven-central]
-    params:
-      save_build_info: true
   - task: publish-eclipse-update-site
     image: ci-image
     file: git-repo/ci/tasks/publish-eclipse-update-site.yml
 groups:
-- name: "builds"
-  jobs: ["build"]
-- name: "releases"
-  jobs: ["stage-release", "promote-release", "sync-to-maven-central", "publish-eclipse-update-site"]
-- name: "ci-images"
-  jobs: ["build-ci-images"]
-- name: "pull-requests"
-  jobs: ["build-pull-requests"]
+- name: builds
+  jobs: [build]
+- name: releases
+  jobs: [stage-milestone, stage-rc, stage-release, promote-milestone, promote-rc, promote-release, create-github-release, publish-eclipse-update-site]
+- name: ci-images
+  jobs: [build-ci-images]
+- name: pull-requests
+  jobs: [build-pull-requests]
