@@ -8,34 +8,28 @@
 			name="Spring">
 		</javaFormatter>
 	</extension>
- <extension
-       point="org.eclipse.m2e.core.projectConfigurators">
-    <configurator
-          class="io.spring.javaformat.eclipse.m2e.MavenProjectSettingsConfigurator"
-          id="io.spring.javaformat.eclipse.m2e.configurator"
-          runsAfter="org.eclipse.m2e.jdt.javaConfigurator">
-    </configurator>
- </extension>
- <extension
-       point="org.eclipse.m2e.core.lifecycleMappingMetadataSource">
- </extension>
- <extension
-       point="net.sf.eclipsecs.core.checkstyleAddonProvider">
- </extension>
- <extension
-       id="id2"
-       point="net.sf.eclipsecs.core.configurations">
-    <check-configuration
-          description="Spring Built-in configuration"
-          location="io/spring/javaformat/checkstyle/checkstyle.xml"
-          name="Spring Built-in Checks">
-    </check-configuration>
- </extension>
- <extension
-       point="org.eclipse.buildship.core.projectconfigurators">
-       <configurator
-             id="io.spring.javaformat.eclipse.gradle.ProjectSettingsConfigurator"
-             class="io.spring.javaformat.eclipse.gradle.GradleProjectSettingsConfigurator">
-       </configurator>
+	 <extension point="org.eclipse.m2e.core.projectConfigurators">
+		<configurator 
+			class="io.spring.javaformat.eclipse.m2e.MavenProjectSettingsConfigurator"
+			id="io.spring.javaformat.eclipse.m2e.configurator"
+			runsAfter="org.eclipse.m2e.jdt.javaConfigurator">
+		</configurator>
+	</extension>
+	<extension point="org.eclipse.m2e.core.lifecycleMappingMetadataSource">
+	</extension>
+	<extension point="net.sf.eclipsecs.core.checkstyleAddonProvider">
+	</extension>
+	<extension id="spring-javaformat-eclipsecs" point="net.sf.eclipsecs.core.configurations">
+		<check-configuration
+			description="Spring Built-in configuration"
+			location="io/spring/javaformat/checkstyle/checkstyle.xml"
+			name="Spring Built-in Checks">
+		</check-configuration>
+	</extension>
+	<extension point="org.eclipse.buildship.core.projectconfigurators">
+		<configurator
+			id="io.spring.javaformat.eclipse.gradle.ProjectSettingsConfigurator"
+			class="io.spring.javaformat.eclipse.gradle.GradleProjectSettingsConfigurator">
+		</configurator>
  </extension>
 </plugin>
