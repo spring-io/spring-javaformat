@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -76,14 +77,20 @@ public class GradleProjectSettingsConfigurator implements ProjectConfigurator {
 		Optional<GradleBuild> build = workspace.getBuild(project);
 		if (build.isPresent()) {
 			ModelProvider modelProvider = ((InternalGradleBuild) build.get()).getModelProvider();
-			Collection<EclipseProject> rootProjects = modelProvider.fetchModels(EclipseProject.class,
-					FetchStrategy.FORCE_RELOAD, this.tokenSource, monitor);
+			Collection<EclipseProject> rootProjects = getRootProjects(monitor, modelProvider);
 			EclipseProject eclipseProject = findProjectByName(rootProjects, project.getName());
 			if (hasSpringFormatPlugin(eclipseProject)) {
 				ProjectSettingsFilesLocator locator = new ProjectSettingsFilesLocator(getSearchFolders(rootProjects));
 				locator.locateSettingsFiles().applyToProject(project, monitor);
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private Collection<EclipseProject> getRootProjects(IProgressMonitor monitor, ModelProvider modelProvider) {
+		Object models = modelProvider.fetchModels(EclipseProject.class,
+				FetchStrategy.FORCE_RELOAD, this.tokenSource, monitor);
+		return (Collection<EclipseProject>) ((models instanceof Map) ? ((Map<?, ?>) models).values() : models);
 	}
 
 	private EclipseProject findProjectByName(Iterable<? extends EclipseProject> candidates, String name) {
