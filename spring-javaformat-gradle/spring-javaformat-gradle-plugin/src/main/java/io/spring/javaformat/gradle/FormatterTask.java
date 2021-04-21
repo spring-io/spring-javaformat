@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.SourceTask;
 
+import io.spring.javaformat.config.JavaFormatConfig;
 import io.spring.javaformat.formatter.FileEdit;
 import io.spring.javaformat.formatter.FileFormatter;
 
@@ -58,7 +59,8 @@ abstract class FormatterTask extends SourceTask {
 	 * @return the file edits
 	 */
 	protected final Stream<FileEdit> formatFiles() {
-		FileFormatter formatter = new FileFormatter();
+		JavaFormatConfig javaFormatConfig = JavaFormatConfig.findFrom(getProject().getProjectDir());
+		FileFormatter formatter = new FileFormatter(javaFormatConfig);
 		Charset encoding = (getEncoding() != null ? Charset.forName(getEncoding()) : Charset.defaultCharset());
 		return formatter.formatFiles(getSource().getFiles(), encoding);
 	}

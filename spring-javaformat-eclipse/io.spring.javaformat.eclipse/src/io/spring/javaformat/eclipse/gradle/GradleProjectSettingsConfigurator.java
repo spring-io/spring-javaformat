@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,8 +88,8 @@ public class GradleProjectSettingsConfigurator implements ProjectConfigurator {
 
 	@SuppressWarnings("unchecked")
 	private Collection<EclipseProject> getRootProjects(IProgressMonitor monitor, ModelProvider modelProvider) {
-		Object models = modelProvider.fetchModels(EclipseProject.class,
-				FetchStrategy.FORCE_RELOAD, this.tokenSource, monitor);
+		Object models = modelProvider.fetchModels(EclipseProject.class, FetchStrategy.FORCE_RELOAD, this.tokenSource,
+				monitor);
 		return (Collection<EclipseProject>) ((models instanceof Map) ? ((Map<?, ?>) models).values() : models);
 	}
 

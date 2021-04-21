@@ -3,9 +3,14 @@
 <plugin>
 	<extension point="org.eclipse.jdt.core.javaFormatter">
 		<javaFormatter
-			class="io.spring.javaformat.eclipse.formatter.SpringCodeFormatter"
+			class="io.spring.javaformat.eclipse.formatter.SpringCodeFormatterTabs"
 			id="io.spring.javaformat.eclipse.formatter"
-			name="Spring">
+			name="Spring (tab indented)">
+		</javaFormatter>
+		<javaFormatter
+			class="io.spring.javaformat.eclipse.formatter.SpringCodeFormatterSpaces"
+			id="io.spring.javaformat.eclipse.formatter.spaces"
+			name="Spring (space indented)">
 		</javaFormatter>
 	</extension>
 	 <extension point="org.eclipse.m2e.core.projectConfigurators">

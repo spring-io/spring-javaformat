@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,16 +22,21 @@ import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.text.edits.TextEdit;
 
+import io.spring.javaformat.config.JavaFormatConfig;
 import io.spring.javaformat.formatter.Formatter;
 
 /**
- * Eclipse {@link CodeFormatter} for Spring formatting.
+ * Eclipse {@link CodeFormatter} base class for Spring formatting.
  *
  * @author Phillip Webb
  */
-public class SpringCodeFormatter extends CodeFormatter {
+public abstract class SpringCodeFormatter extends CodeFormatter {
 
-	private Formatter delegate = new Formatter();
+	private final Formatter delegate;
+
+	public SpringCodeFormatter(JavaFormatConfig javaFormatConfig) {
+		this.delegate = new Formatter(javaFormatConfig);
+	}
 
 	@Override
 	public TextEdit format(int kind, String source, int offset, int length, int indentationLevel,

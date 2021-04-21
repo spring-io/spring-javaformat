@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.text.edits.TextEdit;
 
+import io.spring.javaformat.config.JavaFormatConfig;
 import io.spring.javaformat.formatter.Formatter;
 
 /**
@@ -101,8 +102,9 @@ class SpringReformatter {
 	}
 
 	private void reformat(PsiFile file, Collection<TextRange> ranges, Document document) {
-		if (document != null) {
-			Formatter formatter = new Formatter();
+		if (document != null && file.getVirtualFile() != null) {
+			JavaFormatConfig javaFormatConfig = JavaFormatConfig.findFrom(file.getVirtualFile().toNioPath());
+			Formatter formatter = new Formatter(javaFormatConfig);
 			String source = document.getText();
 			IRegion[] regions = EclipseRegionAdapter.asArray(ranges);
 			TextEdit edit = formatter.format(source, regions, NORMALIZED_LINE_SEPARATOR);

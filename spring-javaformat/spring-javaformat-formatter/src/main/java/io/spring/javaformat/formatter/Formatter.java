@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,8 @@ import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.text.edits.TextEdit;
 
+import io.spring.javaformat.config.IndentationStyle;
+import io.spring.javaformat.config.JavaFormatConfig;
 import io.spring.javaformat.formatter.eclipse.ExtendedCodeFormatter;
 import io.spring.javaformat.formatter.eclipse.Preparator;
 import io.spring.javaformat.formatter.preparator.Preparators;
@@ -56,15 +58,17 @@ public class Formatter extends CodeFormatter {
 	 */
 	public static final String DEFAULT_LINE_SEPARATOR = null;
 
+	private static final FormatterOption[] EMPTY_OPTIONS = {};
+
 	private final Set<FormatterOption> options;
 
-	private CodeFormatter delegate = new DelegateCodeFormatter();
+	private final CodeFormatter delegate;
 
 	/**
 	 * Create a new formatter instance.
 	 */
 	public Formatter() {
-		this.options = Collections.emptySet();
+		this(JavaFormatConfig.DEFAULT, EMPTY_OPTIONS);
 	}
 
 	/**
@@ -72,6 +76,16 @@ public class Formatter extends CodeFormatter {
 	 * @param options formatter options
 	 */
 	public Formatter(FormatterOption... options) {
+		this(JavaFormatConfig.DEFAULT, options);
+	}
+
+	/**
+	 * Create a new formatter instance.
+	 * @param javaFormatConfig the java format config to use
+	 * @param options formatter options
+	 */
+	public Formatter(JavaFormatConfig javaFormatConfig, FormatterOption... options) {
+		this.delegate = new DelegateCodeFormatter(javaFormatConfig);
 		this.options = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(options)));
 	}
 
@@ -185,29 +199,41 @@ public class Formatter extends CodeFormatter {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static class DelegateCodeFormatter extends ExtendedCodeFormatter {
 
-		static Map<String, String> OPTIONS;
+		private final Map<String, String> appliedOptions;
 
-		static {
+		DelegateCodeFormatter(JavaFormatConfig javaFormatConfig) {
+			this(loadOptions(javaFormatConfig));
+		}
+
+		DelegateCodeFormatter(Map<String, String> options) {
+			super(options);
+			this.appliedOptions = options;
+			Preparators.forEach(this::addPreparator);
+		}
+
+		@Override
+		public void setOptions(Map<String, String> options) {
+			super.setOptions(this.appliedOptions);
+		}
+
+		private static Map<String, String> loadOptions(JavaFormatConfig javaFormatConfig) {
 			try {
 				Properties properties = new Properties();
 				try (InputStream inputStream = Formatter.class.getResourceAsStream("formatter.prefs")) {
 					properties.load(inputStream);
-					OPTIONS = (Map) Collections.unmodifiableMap(properties);
 				}
+				applyConfig(properties, javaFormatConfig);
+				return (Map) Collections.unmodifiableMap(properties);
 			}
 			catch (IOException ex) {
 				throw new IllegalStateException(ex);
 			}
 		}
 
-		DelegateCodeFormatter() {
-			super(OPTIONS);
-			Preparators.forEach(this::addPreparator);
-		}
-
-		@Override
-		public void setOptions(Map<String, String> options) {
-			super.setOptions(OPTIONS);
+		private static void applyConfig(Properties properties, JavaFormatConfig javaFormatConfig) {
+			if (javaFormatConfig.getIndentationStyle() == IndentationStyle.SPACES) {
+				properties.put("org.eclipse.jdt.core.formatter.tabulation.char", "space");
+			}
 		}
 
 	}

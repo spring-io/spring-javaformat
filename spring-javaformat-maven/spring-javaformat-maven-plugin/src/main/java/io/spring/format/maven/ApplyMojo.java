@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
 import io.spring.javaformat.formatter.FileEdit;
-import io.spring.javaformat.formatter.FileFormatter;
 import io.spring.javaformat.formatter.FileFormatterException;
 
 /**
@@ -41,8 +40,7 @@ public class ApplyMojo extends FormatMojo {
 	protected void execute(List<File> files, Charset encoding, String lineSeparator)
 			throws MojoExecutionException, MojoFailureException {
 		try {
-			FileFormatter formatter = new FileFormatter();
-			formatter.formatFiles(files, encoding, lineSeparator).filter(FileEdit::hasEdits).forEach(this::save);
+			getFormatter().formatFiles(files, encoding, lineSeparator).filter(FileEdit::hasEdits).forEach(this::save);
 		}
 		catch (FileFormatterException ex) {
 			throw new MojoExecutionException("Unable to format file " + ex.getFile(), ex);

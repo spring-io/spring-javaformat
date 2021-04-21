@@ -31,6 +31,7 @@
 		</plugins>
 	</build>
 	<modules>
+		<module>spring-javaformat-config</module>
 		<module>spring-javaformat-checkstyle</module>
 		<module>spring-javaformat-formatter-eclipse-rewriter</module>
 		<module>spring-javaformat-formatter-eclipse-runtime</module>

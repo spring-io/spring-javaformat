@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import com.intellij.openapi.application.Application;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
@@ -62,11 +63,15 @@ public class SpringReformatterTests {
 	@Mock
 	private PsiFile file;
 
+	@Mock
+	VirtualFile virtualFile;
+
 	private Collection<TextRange> ranges = Arrays.asList(new TextRange(10, 20));
 
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
+		given(this.file.getVirtualFile()).willReturn(this.virtualFile);
 		this.reformatter = new TestSpringReformatter(() -> this.project, () -> this.application,
 				() -> this.documentManager);
 	}

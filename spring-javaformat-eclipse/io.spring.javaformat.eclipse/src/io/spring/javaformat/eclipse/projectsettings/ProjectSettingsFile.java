@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,18 @@
 
 package io.spring.javaformat.eclipse.projectsettings;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.function.BiFunction;
+
+import io.spring.javaformat.config.JavaFormatConfig;
 
 /**
  * A project settings file that can be copied to the project {@code .settings} folder.
@@ -32,7 +40,7 @@ final class ProjectSettingsFile {
 
 	private final ContentSupplier contentSupplier;
 
-	private ProjectSettingsFile(String name, ContentSupplier contentSupplier) {
+	ProjectSettingsFile(String name, ContentSupplier contentSupplier) {
 		this.name = name;
 		this.contentSupplier = contentSupplier;
 	}
@@ -48,11 +56,34 @@ final class ProjectSettingsFile {
 	/**
 	 * Return a new {@link InputStream} that can be used to access the content of the
 	 * file.
+	 * @param javaFormatConfig the java format config to apply
 	 * @return the file contents
 	 * @throws IOException if the file cannot be opened
 	 */
-	public InputStream getContent() throws IOException {
-		return this.contentSupplier.getContent();
+	public InputStream getContent(JavaFormatConfig javaFormatConfig) throws IOException {
+		return this.contentSupplier.getContent(javaFormatConfig);
+	}
+
+	/**
+	 * Return a new {@link ProjectSettingsFile} where the original content is updated by
+	 * the given operation.
+	 * @param operation the operation to update the content
+	 * @return a new {@link ProjectSettingsFile} instance
+	 */
+	public ProjectSettingsFile withUpdatedContent(BiFunction<JavaFormatConfig, String, String> operation) {
+		return new ProjectSettingsFile(this.name, (javaFormatConfig) -> {
+			try (BufferedReader reader = new BufferedReader(
+					new InputStreamReader(this.contentSupplier.getContent(javaFormatConfig)))) {
+				StringWriter writer = new StringWriter();
+				char[] buffer = new char[4096];
+				int read = 0;
+				while ((read = reader.read(buffer)) >= 0) {
+					writer.write(buffer, 0, read);
+				}
+				String content = operation.apply(javaFormatConfig, writer.toString());
+				return new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
+			}
+		});
 	}
 
 	/**
@@ -61,7 +92,7 @@ final class ProjectSettingsFile {
 	 * @return a new {@link ProjectSettingsFile}
 	 */
 	public static ProjectSettingsFile fromFile(File file) {
-		return new ProjectSettingsFile(file.getName(), () -> new FileInputStream(file));
+		return new ProjectSettingsFile(file.getName(), (javaFormatConfig) -> new FileInputStream(file));
 	}
 
 	/**
@@ -71,13 +102,13 @@ final class ProjectSettingsFile {
 	 * @return a new {@link ProjectSettingsFile}
 	 */
 	public static ProjectSettingsFile fromClasspath(Class<?> sourceClass, String name) {
-		return new ProjectSettingsFile(name, () -> sourceClass.getResourceAsStream(name));
+		return new ProjectSettingsFile(name, (javaFormatConfig) -> sourceClass.getResourceAsStream(name));
 	}
 
 	@FunctionalInterface
-	private interface ContentSupplier {
+	interface ContentSupplier {
 
-		InputStream getContent() throws IOException;
+		InputStream getContent(JavaFormatConfig javaFormatConfig) throws IOException;
 
 	}
 

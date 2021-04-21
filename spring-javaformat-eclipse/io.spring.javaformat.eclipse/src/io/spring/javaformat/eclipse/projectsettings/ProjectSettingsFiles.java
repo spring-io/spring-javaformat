@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package io.spring.javaformat.eclipse.projectsettings;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -28,7 +29,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+
+import io.spring.javaformat.config.JavaFormatConfig;
 
 /**
  * A collection of {@link ProjectSettingsFile project setting files}.
@@ -64,9 +68,11 @@ public class ProjectSettingsFiles implements Iterable<ProjectSettingsFile> {
 	 * @throws CoreException on eclipse file creation failure
 	 */
 	public void applyToProject(IProject project, IProgressMonitor monitor) throws IOException, CoreException {
+		JavaFormatConfig javaFormatConfig = getJavaFormatConfig(project);
 		for (ProjectSettingsFile file : this) {
+			file = this.projectProperties.getModifiedContent(file);
 			IFile destination = project.getFile(".settings/" + file.getName());
-			try (InputStream content = this.projectProperties.getModifiedContent(file)) {
+			try (InputStream content = file.getContent(javaFormatConfig)) {
 				if (!destination.exists()) {
 					destination.create(new BufferedInputStream(content), true, monitor);
 				}
@@ -74,6 +80,17 @@ public class ProjectSettingsFiles implements Iterable<ProjectSettingsFile> {
 					destination.setContents(new BufferedInputStream(content), IResource.FORCE, monitor);
 				}
 			}
+		}
+	}
+
+	private JavaFormatConfig getJavaFormatConfig(IProject project) {
+		try {
+			IPath location = project.getLocation();
+			File file = (location != null) ? location.toFile() : null;
+			return JavaFormatConfig.findFrom(file);
+		}
+		catch (Exception ex) {
+			return JavaFormatConfig.DEFAULT;
 		}
 	}
 

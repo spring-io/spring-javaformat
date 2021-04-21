@@ -227,6 +227,20 @@ Spring Framework manually formats code, where as Spring Boot uses automatic form
 
 
 
+=== Indenting With Spaces
+By default tabs are used for indenting formatted code.
+We strongly recommend that this default is not changed, especially for official Spring projects.
+If, however, you feel that you can't live with tabs then switching to spaces is the one configuration option that we do support.
+
+To use spaces rather than tabs, add a file called `.springjavaformatconfig` to the root of your project with the following content:
+
+[source,properties]
+----
+indentation-style=spaces
+----
+
+
+
 === Tips
 Formatting and Checkstyle alone are not enough to produce truly consistent code.
 Here are some tips that we've found useful when developing Spring Boot.

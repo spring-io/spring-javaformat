@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package io.spring.javaformat.formatter;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -25,7 +26,11 @@ import java.util.Collection;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import io.spring.javaformat.config.JavaFormatConfig;
+
 /**
+ * Base class for formatter tests.
+ *
  * @author Phillip Webb
  */
 @RunWith(Parameterized.class)
@@ -35,9 +40,12 @@ public abstract class AbstractFormatterTests {
 
 	private final File expected;
 
-	public AbstractFormatterTests(File source, File expected) {
+	private final JavaFormatConfig config;
+
+	public AbstractFormatterTests(File source, File expected, File config) throws IOException {
 		this.source = source;
 		this.expected = expected;
+		this.config = (!config.exists()) ? JavaFormatConfig.DEFAULT : JavaFormatConfig.load(config);
 	}
 
 	protected final File getSource() {
@@ -46,6 +54,10 @@ public abstract class AbstractFormatterTests {
 
 	protected final File getExpected() {
 		return this.expected;
+	}
+
+	protected final JavaFormatConfig getConfig() {
+		return this.config;
 	}
 
 	protected final void print(String name, String content) {
@@ -66,13 +78,15 @@ public abstract class AbstractFormatterTests {
 		Collection<Object[]> files = new ArrayList<>();
 		File sourceDir = new File("src/test/resources/source");
 		File expectedDir = new File("src/test/resources/expected");
+		File configDir = new File("src/test/resources/config");
 		File expectedOverrideDir = new File("src/test/resources/" + expectedOverride);
 		for (File source : sourceDir.listFiles((dir, name) -> !name.startsWith("."))) {
 			File expected = new File(expectedOverrideDir, source.getName());
 			if (!expected.exists()) {
 				expected = new File(expectedDir, source.getName());
 			}
-			files.add(new Object[] { source, expected });
+			File config = new File(configDir, source.getName());
+			files.add(new Object[] { source, expected, config });
 		}
 		return files;
 	}

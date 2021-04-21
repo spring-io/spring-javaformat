@@ -18,6 +18,12 @@
 		<!-- Runtime -->
 		<dependency>
 			<groupId>io.spring.javaformat</groupId>
+			<artifactId>spring-javaformat-config</artifactId>
+			<scope>runtime</scope>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.spring.javaformat</groupId>
 			<artifactId>spring-javaformat-formatter</artifactId>
 			<scope>runtime</scope>
 			<version>${project.version}</version>

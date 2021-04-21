@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,9 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import io.spring.javaformat.config.IndentationStyle;
+import io.spring.javaformat.config.JavaFormatConfig;
+
 /**
  * Locates project settings files to be applied to projects.
  *
@@ -29,9 +32,11 @@ import java.util.Map;
  */
 public class ProjectSettingsFilesLocator {
 
+	private static final String JDT_CORE_PREFS = "org.eclipse.jdt.core.prefs";
+
 	private static final String[] SOURCE_FOLDERS = { "eclipse", ".eclipse" };
 
-	private static final String[] DEFAULT_FILES = { "org.eclipse.jdt.core.prefs", "org.eclipse.jdt.ui.prefs" };
+	private static final String[] DEFAULT_FILES = { JDT_CORE_PREFS, "org.eclipse.jdt.ui.prefs" };
 
 	private final File[] searchFolders;
 
@@ -52,9 +57,25 @@ public class ProjectSettingsFilesLocator {
 			}
 		}
 		for (String file : DEFAULT_FILES) {
-			putIfAbsent(files, ProjectSettingsFile.fromClasspath(getClass(), file));
+			putIfAbsent(files, getDefaultSettingsFile(file));
 		}
 		return new ProjectSettingsFiles(files.values(), projectProperties);
+	}
+
+	private ProjectSettingsFile getDefaultSettingsFile(String file) {
+		ProjectSettingsFile settingsFile = ProjectSettingsFile.fromClasspath(getClass(), file);
+		if (settingsFile.getName().equals(JDT_CORE_PREFS)) {
+			settingsFile = settingsFile.withUpdatedContent(this::updateFormatter);
+		}
+		return settingsFile;
+	}
+
+	private String updateFormatter(JavaFormatConfig javaFormatConfig, String content) {
+		if (javaFormatConfig.getIndentationStyle() == IndentationStyle.SPACES) {
+			return content.replace("org.eclipse.jdt.core.javaFormatter=io.spring.javaformat.eclipse.formatter",
+					"org.eclipse.jdt.core.javaFormatter=io.spring.javaformat.eclipse.formatter.spaces");
+		}
+		return content;
 	}
 
 	private void add(ProjectProperties projectProperties, Map<String, ProjectSettingsFile> files, File folder)

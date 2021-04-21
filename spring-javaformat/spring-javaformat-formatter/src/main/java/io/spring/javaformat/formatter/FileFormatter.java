@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import java.util.stream.StreamSupport;
 
 import org.eclipse.text.edits.TextEdit;
 
+import io.spring.javaformat.config.JavaFormatConfig;
+
 /**
  * A code formatter designed to work with {@link File Files}.
  *
@@ -41,6 +43,10 @@ public class FileFormatter {
 
 	public FileFormatter(FormatterOption... options) {
 		this(new Formatter(options));
+	}
+
+	public FileFormatter(JavaFormatConfig javaFormatConfig, FormatterOption... options) {
+		this(new Formatter(javaFormatConfig, options));
 	}
 
 	public FileFormatter(Formatter formatter) {

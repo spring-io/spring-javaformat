@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2019 the original author or authors.
+ * Copyright 2012-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,8 @@ import java.util.stream.Collectors;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+
+import io.spring.javaformat.config.JavaFormatConfig;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -75,15 +77,16 @@ public class ProjectPropertiesTests {
 
 	@Test
 	public void getModifiedContentReplacesCopyrightYear() throws IOException {
+		String year = "2016-2020";
 		File folder = this.temp.newFolder();
 		File file = new File(folder, "eclipse.properties");
-		writeProperties(file, "2016-2020");
+		writeProperties(file, year);
 		ProjectProperties properties = new ProjectProperties();
 		properties.addFromFolder(folder);
 		ProjectSettingsFiles files = new ProjectSettingsFilesLocator().locateSettingsFiles();
 		ProjectSettingsFile prefs = getFile(files, "org.eclipse.jdt.ui.prefs");
-		String content = loadContent(properties.getModifiedContent(prefs));
-		assertThat(content).contains("Copyright 2016-2020 the original author or authors");
+		String content = loadContent(properties.getModifiedContent(prefs).getContent(JavaFormatConfig.DEFAULT));
+		assertThat(content).contains("Copyright " + year + " the original author or authors");
 
 	}
 

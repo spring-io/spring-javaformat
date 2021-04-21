@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import io.spring.javaformat.formatter.FileEdit;
-import io.spring.javaformat.formatter.FileFormatter;
 
 /**
  * Validates that source formatting matches the required style.
@@ -51,8 +50,7 @@ public class ValidateMojo extends FormatMojo {
 			getLog().debug("skipping validation as per configuration.");
 			return;
 		}
-		FileFormatter formatter = new FileFormatter();
-		List<File> problems = formatter.formatFiles(files, encoding, lineSeparator).filter(FileEdit::hasEdits)
+		List<File> problems = getFormatter().formatFiles(files, encoding, lineSeparator).filter(FileEdit::hasEdits)
 				.map(FileEdit::getFile).collect(Collectors.toList());
 		if (!problems.isEmpty()) {
 			StringBuilder message = new StringBuilder("Formatting violations found in the following files:\n");

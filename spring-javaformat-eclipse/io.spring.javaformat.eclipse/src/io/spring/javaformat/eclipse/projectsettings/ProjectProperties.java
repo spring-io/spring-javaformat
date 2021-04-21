@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2019 the original author or authors.
+ * Copyright 2012-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,9 @@
 
 package io.spring.javaformat.eclipse.projectsettings;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -74,26 +68,13 @@ class ProjectProperties {
 		});
 	}
 
-	public InputStream getModifiedContent(ProjectSettingsFile file) throws IOException {
+	public ProjectSettingsFile getModifiedContent(ProjectSettingsFile file) throws IOException {
 		if (file.getName().equals("org.eclipse.jdt.ui.prefs")) {
-			String content = loadContent(file);
-			content = content.replace("Copyright the original author or authors",
-					"Copyright " + get(COPYRIGHT_YEAR) + " the original author or authors");
-			return new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
+			return file.withUpdatedContent(
+					(javaFormatConfig, content) -> content.replace("Copyright the original author or authors",
+							"Copyright " + get(COPYRIGHT_YEAR) + " the original author or authors"));
 		}
-		return file.getContent();
-	}
-
-	private String loadContent(ProjectSettingsFile file) throws IOException {
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getContent()))) {
-			StringWriter writer = new StringWriter();
-			char[] buffer = new char[4096];
-			int read = 0;
-			while ((read = reader.read(buffer)) >= 0) {
-				writer.write(buffer, 0, read);
-			}
-			return writer.toString();
-		}
+		return file;
 	}
 
 	String get(String name) {

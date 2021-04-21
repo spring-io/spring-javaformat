@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,17 @@ package io.spring.javaformat.eclipse.projectsettings;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+
+import io.spring.javaformat.config.JavaFormatConfig;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -66,9 +70,43 @@ public class ProjectSettingsFilesLocatorTests {
 		ProjectSettingsFiles files = new ProjectSettingsFilesLocator(folder1, folder2).locateSettingsFiles();
 		Map<String, ProjectSettingsFile> found = new LinkedHashMap<>();
 		files.iterator().forEachRemaining((f) -> found.put(f.getName(), f));
-		assertThat(found.get("foo.prefs").getContent()).hasSameContentAs(new ByteArrayInputStream("foo1".getBytes()));
-		assertThat(found.get("org.eclipse.jdt.core.prefs").getContent())
+		assertThat(found.get("foo.prefs").getContent(JavaFormatConfig.DEFAULT))
+				.hasSameContentAs(new ByteArrayInputStream("foo1".getBytes()));
+		assertThat(found.get("org.eclipse.jdt.core.prefs").getContent(JavaFormatConfig.DEFAULT))
 				.hasSameContentAs(new ByteArrayInputStream("core2".getBytes()));
+	}
+
+	@Test
+	public void jdtCorePrefsFormatterWhenDefaultShouldUseTabs() throws IOException {
+		ProjectSettingsFiles files = new ProjectSettingsFilesLocator().locateSettingsFiles();
+		ProjectSettingsFile file = get(files, "org.eclipse.jdt.core.prefs");
+		try (InputStream content = file.getContent(JavaFormatConfig.DEFAULT)) {
+			Properties properties = new Properties();
+			properties.load(content);
+			assertThat(properties.get("org.eclipse.jdt.core.javaFormatter"))
+					.isEqualTo("io.spring.javaformat.eclipse.formatter");
+		}
+	}
+
+	@Test
+	public void jdtCorePrefsFormatterWhenSpacesShouldUseSpaces() throws IOException {
+		ProjectSettingsFiles files = new ProjectSettingsFilesLocator().locateSettingsFiles();
+		ProjectSettingsFile file = get(files, "org.eclipse.jdt.core.prefs");
+		try (InputStream content = file.getContent(JavaFormatConfig.SPACES)) {
+			Properties properties = new Properties();
+			properties.load(content);
+			assertThat(properties.get("org.eclipse.jdt.core.javaFormatter"))
+					.isEqualTo("io.spring.javaformat.eclipse.formatter.spaces");
+		}
+	}
+
+	private ProjectSettingsFile get(ProjectSettingsFiles files, String name) {
+		for (ProjectSettingsFile file : files) {
+			if (file.getName().equals(name)) {
+				return file;
+			}
+		}
+		return null;
 	}
 
 	private void writeFile(File folder, String name) throws IOException {

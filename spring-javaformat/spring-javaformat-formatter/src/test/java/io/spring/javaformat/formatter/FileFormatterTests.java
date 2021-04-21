@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package io.spring.javaformat.formatter;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,7 +28,7 @@ import org.junit.runners.Parameterized.Parameters;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for FileFormatter.
+ * Tests for {@link FileFormatter}.
  *
  * @author Phillip Webb
  */
@@ -35,28 +36,28 @@ public class FileFormatterTests extends AbstractFormatterTests {
 
 	private static final boolean RUNNING_ON_WINDOWS = System.getProperty("os.name").toLowerCase().contains("win");
 
-	public FileFormatterTests(File source, File expected) {
-		super(source, expected);
+	public FileFormatterTests(File source, File expected, File config) throws IOException {
+		super(source, expected, config);
 	}
 
 	@Test
 	public void formatFilesFromIteratorShouldFormatFile() throws Exception {
-		FileEdit edit = new FileFormatter().formatFiles(Arrays.asList(getSource()), StandardCharsets.UTF_8).findFirst()
-				.get();
+		FileEdit edit = new FileFormatter(getConfig()).formatFiles(Arrays.asList(getSource()), StandardCharsets.UTF_8)
+				.findFirst().get();
 		assertThat(edit.getFormattedContent()).isEqualTo(read(getExpected()));
 	}
 
 	@Test
 	public void formatFilesFromStreamShouldFormatFile() throws Exception {
-		FileEdit edit = new FileFormatter().formatFiles(Arrays.asList(getSource()).stream(), StandardCharsets.UTF_8)
-				.findFirst().get();
+		FileEdit edit = new FileFormatter(getConfig())
+				.formatFiles(Arrays.asList(getSource()).stream(), StandardCharsets.UTF_8).findFirst().get();
 		assertThat(edit.getFormattedContent()).isEqualTo(read(getExpected()));
 	}
 
 	@Test
 	public void formatFileShouldFormatFile() throws Exception {
 		File source = getSource();
-		FileEdit edit = new FileFormatter().formatFile(source, StandardCharsets.UTF_8);
+		FileEdit edit = new FileFormatter(getConfig()).formatFile(source, StandardCharsets.UTF_8);
 		String formattedContent = edit.getFormattedContent();
 		String expected = read(getExpected());
 		if (!RUNNING_ON_WINDOWS) {

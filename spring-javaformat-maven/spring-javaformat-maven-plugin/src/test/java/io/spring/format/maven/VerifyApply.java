@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,10 +38,19 @@ public class VerifyApply {
 		verify(base, LF);
 	}
 
+	public void verify(File base, boolean spaces) throws IOException {
+		verify(base, LF, spaces);
+	}
+
 	public void verify(File base, String lineSeparator) throws IOException {
+		verify(base, lineSeparator, false);
+	}
+
+	public void verify(File base, String lineSeparator, boolean spaces) throws IOException {
 		String formated = new String(Files.readAllBytes(base.toPath().resolve(JAVA_FILE)), StandardCharsets.UTF_8);
+		String indent = (!spaces) ? "	" : "    ";
 		assertThat(formated).contains("Simple." + lineSeparator + " *" + lineSeparator + " * @author")
-				.contains("public class Simple {");
+				.contains("public class Simple {").contains(indent + "public static void main");
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -49,4 +58,5 @@ public class VerifyApply {
 				"/Users/pwebb/projects/spring-javaformat/code/spring-javaformat-maven/spring-javaformat-maven-plugin/target/it/apply-line-separator"),
 				"\r");
 	}
+
 }

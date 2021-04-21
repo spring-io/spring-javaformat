@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package io.spring.javaformat.formatter;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 
 import org.eclipse.jface.text.Document;
@@ -32,8 +33,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class FormatterTests extends AbstractFormatterTests {
 
-	public FormatterTests(File source, File expected) {
-		super(source, expected);
+	public FormatterTests(File source, File expected, File config) throws IOException {
+		super(source, expected, config);
 	}
 
 	@Test
@@ -54,7 +55,7 @@ public class FormatterTests extends AbstractFormatterTests {
 
 	private String format(String sourceContent) throws Exception {
 		IDocument document = new Document(sourceContent);
-		TextEdit textEdit = new Formatter().format(sourceContent);
+		TextEdit textEdit = new Formatter(getConfig()).format(sourceContent);
 		textEdit.apply(document);
 		return document.get();
 	}
