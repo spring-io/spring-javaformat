@@ -3,27 +3,37 @@
 Spring Java Format is released under the Apache 2.0 license.
 If you would like to contribute something, or simply want to hack on the code this document should help you get started.
 
+
+
 == Code of Conduct
 This project adheres to the Contributor Covenant link:CODE_OF_CONDUCT.adoc[code of conduct].
 By participating, you are expected to uphold this code.
 Please report unacceptable behavior to spring-code-of-conduct@pivotal.io.
+
+
 
 == Sign the Contributor License Agreement
 Before we accept a non-trivial patch or pull request we will need you to https://cla.pivotal.io/sign/spring[sign the Contributor License Agreement].
 Signing the contributor's agreement does not grant anyone commit rights to the main repository, but it does mean that we can accept your contributions, and you will get an author credit if we do.
 Active contributors might be asked to join the core team, and given the ability to merge pull requests.
 
-== Working with the code
+
+
+== Working With the Code
 If you don't have an IDE preference we would recommend that you use
 https://spring.io/tools/sts[Spring Tools Suite] or
 https://eclipse.org[Eclipse] when working with the code. We use the
 https://eclipse.org/m2e/[M2Eclipse] eclipse plugin for maven support. Other IDEs and tools
 should also work without issue.
 
-=== Building from source
+
+
+=== Building From Source
 To build the source you will need to install JDK 1.8.
 
-==== Default build
+
+
+==== Default Build
 The project can be built from the root directory using the standard maven command:
 
 [indent=0]
@@ -33,7 +43,9 @@ The project can be built from the root directory using the standard maven comman
 
 NOTE: You may need to increase the amount of memory available to Maven by setting a `MAVEN_OPTS` environment variable with the value `-Xmx512m`
 
-=== Importing into eclipse
+
+
+=== Importing Into Eclipse
 You can import the code into any Eclipse based distribution as long as it had the https://eclipse.org/m2e/[M2Eclipse] eclipse plugin.
 If you don't already have m2eclipse installed it is available from the "Eclipse marketplace".
 
@@ -46,10 +58,14 @@ Once imported, you can apply eclipse settings by running:
 
 NOTE: You'll need to close the `spring-javaformat-formatter-eclipse` and `spring-javaformat-formatter-eclipse-runtime` projects following import since they contain rewritten packages that aren't supported by the IDE
 
-=== Importing into other IDEs
+
+
+=== Importing Into Other IDEs
 Maven is well supported by most Java IDEs. Refer to your vendor documentation.
 
-== Understanding the code
+
+
+== Understanding the Code
 There are quite a few moving parts to this project and the build is quite complex.
 At the top level there are 5 projects:
 
