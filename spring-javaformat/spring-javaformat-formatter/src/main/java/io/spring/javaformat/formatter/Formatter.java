@@ -18,13 +18,9 @@ package io.spring.javaformat.formatter;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
-import java.util.function.Supplier;
 
 import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jface.text.IRegion;
@@ -58,35 +54,21 @@ public class Formatter extends CodeFormatter {
 	 */
 	public static final String DEFAULT_LINE_SEPARATOR = null;
 
-	private static final FormatterOption[] EMPTY_OPTIONS = {};
-
-	private final Set<FormatterOption> options;
-
 	private final CodeFormatter delegate;
 
 	/**
 	 * Create a new formatter instance.
 	 */
 	public Formatter() {
-		this(JavaFormatConfig.DEFAULT, EMPTY_OPTIONS);
-	}
-
-	/**
-	 * Create a new formatter instance.
-	 * @param options formatter options
-	 */
-	public Formatter(FormatterOption... options) {
-		this(JavaFormatConfig.DEFAULT, options);
+		this(JavaFormatConfig.DEFAULT);
 	}
 
 	/**
 	 * Create a new formatter instance.
 	 * @param javaFormatConfig the java format config to use
-	 * @param options formatter options
 	 */
-	public Formatter(JavaFormatConfig javaFormatConfig, FormatterOption... options) {
+	public Formatter(JavaFormatConfig javaFormatConfig) {
 		this.delegate = new DelegateCodeFormatter(javaFormatConfig);
-		this.options = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(options)));
 	}
 
 	/**
@@ -134,9 +116,7 @@ public class Formatter extends CodeFormatter {
 	@Override
 	public TextEdit format(int kind, String source, int offset, int length, int indentationLevel,
 			String lineSeparator) {
-		return nlsSafe(() -> {
-			return this.delegate.format(kind, source, offset, length, indentationLevel, lineSeparator);
-		});
+		return this.delegate.format(kind, source, offset, length, indentationLevel, lineSeparator);
 	}
 
 	/**
@@ -162,7 +142,7 @@ public class Formatter extends CodeFormatter {
 
 	@Override
 	public TextEdit format(int kind, String source, IRegion[] regions, int indentationLevel, String lineSeparator) {
-		return nlsSafe(() -> this.delegate.format(kind, source, regions, indentationLevel, lineSeparator));
+		return this.delegate.format(kind, source, regions, indentationLevel, lineSeparator);
 	}
 
 	@Override
@@ -173,23 +153,6 @@ public class Formatter extends CodeFormatter {
 	@Override
 	public void setOptions(Map<String, String> options) {
 		this.delegate.setOptions(options);
-	}
-
-	private <T> T nlsSafe(Supplier<T> formatted) {
-		if (this.options.contains(FormatterOption.SHOW_NLS_WARNINGS)) {
-			return formatted.get();
-		}
-		String nlsWarnings = System.getProperty("osgi.nls.warnings");
-		try {
-			System.setProperty("osgi.nls.warnings", "ignore");
-			return formatted.get();
-		}
-		finally {
-			if (nlsWarnings != null) {
-				System.setProperty("osgi.nls.warnings", nlsWarnings);
-			}
-		}
-
 	}
 
 	/**

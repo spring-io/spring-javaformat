@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
@@ -72,20 +73,30 @@ public final class EclipseRewriter {
 	}
 
 	private void rewrite(FileSystem zip) throws IOException {
-		Path path = zip.getPath("org/eclipse/jdt/internal/formatter/DefaultCodeFormatter.class");
-		ClassWriter writer = new ClassWriter(0);
+		rewrite(zip, "org/eclipse/jdt/internal/formatter/DefaultCodeFormatter.class",
+				DefaultCodeFormatterManipulator::new);
+		rewrite(zip, "org/eclipse/osgi/util/NLS$1.class", NlsManipulator::new);
+	}
+
+	private void rewrite(FileSystem zip, String name, Function<ClassWriter, ClassVisitor> manipulator)
+			throws IOException {
+		ClassWriter classWriter = new ClassWriter(0);
+		Path path = zip.getPath(name);
 		try (InputStream in = Files.newInputStream(path)) {
-			DefaultCodeFormatterManipulator manipulator = new DefaultCodeFormatterManipulator(writer);
 			ClassReader reader = new ClassReader(in);
-			reader.accept(manipulator, 0);
+			reader.accept(manipulator.apply(classWriter), 0);
 		}
-		Files.copy(new ByteArrayInputStream(writer.toByteArray()), path, StandardCopyOption.REPLACE_EXISTING);
+		Files.copy(new ByteArrayInputStream(classWriter.toByteArray()), path, StandardCopyOption.REPLACE_EXISTING);
 	}
 
 	public static void main(String[] args) throws Exception {
 		new EclipseRewriter().rewrite(args[0]);
 	}
 
+	/**
+	 * {@link ClassVisitor} to make some fields and methods from
+	 * {@code DefaultCodeFormatter} public.
+	 */
 	private static class DefaultCodeFormatterManipulator extends ClassVisitor {
 
 		DefaultCodeFormatterManipulator(ClassVisitor visitor) {
@@ -111,6 +122,10 @@ public final class EclipseRewriter {
 
 	}
 
+	/**
+	 * {@link MethodVisitor} to make some fields and methods from
+	 * {@code DefaultCodeFormatter} public.
+	 */
 	private static class DefaultCodeFormatterMethodManipulator extends MethodVisitor {
 
 		DefaultCodeFormatterMethodManipulator(MethodVisitor mv) {
@@ -123,6 +138,51 @@ public final class EclipseRewriter {
 				opcode = Opcodes.INVOKEVIRTUAL;
 			}
 			super.visitMethodInsn(opcode, owner, name, desc, itf);
+		}
+
+	}
+
+	/**
+	 * {@link ClassVisitor} to update the {@code NLS} class so it doesn't use a System
+	 * property to disable warning messages.
+	 */
+	private static class NlsManipulator extends ClassVisitor {
+
+		NlsManipulator(ClassVisitor visitor) {
+			super(Opcodes.ASM5, visitor);
+		}
+
+		@Override
+		public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+			if ("run".equals(name) && desc.contains("Boolean")) {
+				return new NslMethodManipulator(super.visitMethod(access, name, desc, signature, exceptions));
+			}
+			return super.visitMethod(access, name, desc, signature, exceptions);
+		}
+
+	}
+
+	/**
+	 * {@link MethodVisitor} to update the {@code NLS} class so it doesn't use a System
+	 * property to disable warning messages.
+	 */
+	private static class NslMethodManipulator extends MethodVisitor {
+
+		private final MethodVisitor methodVisitor;
+
+		NslMethodManipulator(MethodVisitor mv) {
+			super(Opcodes.ASM5, null);
+			this.methodVisitor = mv;
+		}
+
+		@Override
+		public void visitEnd() {
+			MethodVisitor mv = this.methodVisitor;
+			mv.visitCode();
+			mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/Boolean", "TRUE", "Ljava/lang/Boolean;");
+			mv.visitInsn(Opcodes.ARETURN);
+			mv.visitMaxs(1, 1);
+			mv.visitEnd();
 		}
 
 	}

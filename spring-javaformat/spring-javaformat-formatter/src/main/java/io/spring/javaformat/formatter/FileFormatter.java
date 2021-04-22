@@ -41,12 +41,8 @@ public class FileFormatter {
 		this(new Formatter());
 	}
 
-	public FileFormatter(FormatterOption... options) {
-		this(new Formatter(options));
-	}
-
-	public FileFormatter(JavaFormatConfig javaFormatConfig, FormatterOption... options) {
-		this(new Formatter(javaFormatConfig, options));
+	public FileFormatter(JavaFormatConfig javaFormatConfig) {
+		this(new Formatter(javaFormatConfig));
 	}
 
 	public FileFormatter(Formatter formatter) {
