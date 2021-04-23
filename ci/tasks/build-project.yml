@@ -7,8 +7,6 @@ outputs:
 caches:
 - path: maven
 - path: gradle
-params:
-  BRANCH:
 run:
   path: bash
   args:
