@@ -41,7 +41,18 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
-					<sourceFileExcludes>**/*SpringCodeFormatter.java</sourceFileExcludes>
+					<additionalDependencies>
+						<additionalDependency>
+							<groupId>io.spring.javaformat</groupId>
+							<artifactId>spring-javaformat-config</artifactId>
+							<version>${project.version}</version>
+						</additionalDependency>
+						<additionalDependency>
+							<groupId>io.spring.javaformat</groupId>
+							<artifactId>spring-javaformat-formatter</artifactId>
+							<version>${project.version}</version>
+						</additionalDependency>
+					</additionalDependencies>
 				</configuration>
 			</plugin>
 		</plugins>
