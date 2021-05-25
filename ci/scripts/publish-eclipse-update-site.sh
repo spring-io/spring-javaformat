@@ -20,7 +20,7 @@ curl \
 	-T "artifactory-repo/io/spring/javaformat/io.spring.javaformat.eclipse.site/${version}/io.spring.javaformat.eclipse.site-${version}.zip" \
 	"https://repo.spring.io/javaformat-eclipse-update-site/${version}/" > /dev/null || { echo "Failed to publish" >&2; exit 1; }
 
-releasedVersions=$( curl -s -f -X GET https://repo.spring.io/api/storage/javaformat-eclipse-update-site | jq -r '.children[] | .uri' | cut -c 2- | grep '\d.*' | sort -V )
+releasedVersions=$( curl -s -f -X GET https://repo.spring.io/api/storage/javaformat-eclipse-update-site | jq -r '.children[] | .uri' | cut -c 2- | grep '[0-9].*' | sort -V )
 
 repositories=""
 while read -r releasedVersion; do
