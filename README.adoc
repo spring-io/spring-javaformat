@@ -205,9 +205,8 @@ You can also add a `.eclipse/eclipse.properties` file to customize the following
 
 To install the plugin use the `io.spring.javaformat.eclipse.site` zip file.
 You can download the latest version from
-https://repo.spring.io/release/io/spring/javaformat/io.spring.javaformat.eclipse.site/{release-version}[repo.spring.io]
+https://repo1.maven.org/maven2/io/spring/javaformat/io.spring.javaformat.eclipse.site/{release-version}[Maven Central]
 or use the https://repo.spring.io/javaformat-eclipse-update-site/[update site].
-
 
 
 === IntelliJ IDEA
@@ -217,7 +216,7 @@ A Spring Java Format icon (image:spring-javaformat-intellij-idea/spring-javaform
 You can use the standard `code` -> `reformat code` action to format the code.
 
 To install the plugin use the `spring-javaformat-intellij-idea-plugin` jar file.
-You can download the latest version from https://repo.spring.io/release/io/spring/javaformat/spring-javaformat-intellij-idea-plugin/{release-version}[repo.spring.io].
+You can download the latest version from https://repo1.maven.org/maven2/io/spring/javaformat/spring-javaformat-intellij-idea-plugin/{release-version}[Maven Central].
 
 
 
