@@ -42,6 +42,7 @@ import org.objectweb.asm.Opcodes;
  * Internal build utility used to rewrite eclipse runtime classes.
  *
  * @author Phillip Webb
+ * @author Andy Wilkinson
  */
 public final class EclipseRewriter {
 
@@ -75,7 +76,7 @@ public final class EclipseRewriter {
 	private void rewrite(FileSystem zip) throws IOException {
 		rewrite(zip, "org/eclipse/jdt/internal/formatter/DefaultCodeFormatter.class",
 				DefaultCodeFormatterManipulator::new);
-		rewrite(zip, "org/eclipse/osgi/util/NLS$1.class", NlsManipulator::new);
+		rewrite(zip, "org/eclipse/osgi/util/NLS.class", NlsManipulator::new);
 	}
 
 	private void rewrite(FileSystem zip, String name, Function<ClassWriter, ClassVisitor> manipulator)
@@ -100,7 +101,7 @@ public final class EclipseRewriter {
 	private static class DefaultCodeFormatterManipulator extends ClassVisitor {
 
 		DefaultCodeFormatterManipulator(ClassVisitor visitor) {
-			super(Opcodes.ASM5, visitor);
+			super(Opcodes.ASM7, visitor);
 		}
 
 		@Override
@@ -129,7 +130,7 @@ public final class EclipseRewriter {
 	private static class DefaultCodeFormatterMethodManipulator extends MethodVisitor {
 
 		DefaultCodeFormatterMethodManipulator(MethodVisitor mv) {
-			super(Opcodes.ASM5, mv);
+			super(Opcodes.ASM7, mv);
 		}
 
 		@Override
@@ -149,12 +150,12 @@ public final class EclipseRewriter {
 	private static class NlsManipulator extends ClassVisitor {
 
 		NlsManipulator(ClassVisitor visitor) {
-			super(Opcodes.ASM5, visitor);
+			super(Opcodes.ASM7, visitor);
 		}
 
 		@Override
 		public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-			if ("run".equals(name) && desc.contains("Boolean")) {
+			if ("<clinit>".equals(name)) {
 				return new NslMethodManipulator(super.visitMethod(access, name, desc, signature, exceptions));
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions);
@@ -171,7 +172,7 @@ public final class EclipseRewriter {
 		private final MethodVisitor methodVisitor;
 
 		NslMethodManipulator(MethodVisitor mv) {
-			super(Opcodes.ASM5, null);
+			super(Opcodes.ASM7, null);
 			this.methodVisitor = mv;
 		}
 
@@ -179,9 +180,18 @@ public final class EclipseRewriter {
 		public void visitEnd() {
 			MethodVisitor mv = this.methodVisitor;
 			mv.visitCode();
+			mv.visitInsn(Opcodes.ICONST_0);
+			mv.visitTypeInsn(Opcodes.ANEWARRAY, "java/lang/Object");
+			mv.visitFieldInsn(Opcodes.PUTSTATIC, "org/eclipse/osgi/util/NLS", "EMPTY_ARGS", "[Ljava/lang/Object;");
 			mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/Boolean", "TRUE", "Ljava/lang/Boolean;");
-			mv.visitInsn(Opcodes.ARETURN);
-			mv.visitMaxs(1, 1);
+			mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue", "()Z", false);
+			mv.visitFieldInsn(Opcodes.PUTSTATIC, "org/eclipse/osgi/util/NLS", "ignoreWarnings", "Z");
+			mv.visitTypeInsn(Opcodes.NEW, "java/lang/Object");
+			mv.visitInsn(Opcodes.DUP);
+			mv.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
+			mv.visitFieldInsn(Opcodes.PUTSTATIC, "org/eclipse/osgi/util/NLS", "ASSIGNED", "Ljava/lang/Object;");
+			mv.visitInsn(Opcodes.RETURN);
+			mv.visitMaxs(2, 0);
 			mv.visitEnd();
 		}
 
