@@ -38,7 +38,7 @@
 		<ant-contrib.version>1.0b3</ant-contrib.version>
 		<asm.version>5.2</asm.version>
 		<assertj.version>3.8.0</assertj.version>
-		<checkstyle.version>8.32</checkstyle.version>
+		<checkstyle.version>8.45.1</checkstyle.version>
 		<gradle.version>3.4</gradle.version>
 		<groovy.version>2.4.21</groovy.version>
 		<maven-core.version>3.5.0</maven-core.version>

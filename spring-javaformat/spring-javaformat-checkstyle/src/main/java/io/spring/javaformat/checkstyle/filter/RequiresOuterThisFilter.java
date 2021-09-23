@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import java.util.Objects;
 
 import com.puppycrawl.tools.checkstyle.TreeWalkerAuditEvent;
 import com.puppycrawl.tools.checkstyle.TreeWalkerFilter;
-import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
+import com.puppycrawl.tools.checkstyle.api.Violation;
 
 /**
  * {@link TreeWalkerFilter} that can used to relax the {@code 'this.'} requirement when
@@ -35,9 +35,9 @@ public class RequiresOuterThisFilter implements TreeWalkerFilter {
 
 	@Override
 	public boolean accept(TreeWalkerAuditEvent event) {
-		LocalizedMessage message = event.getLocalizedMessage();
-		if ("require.this.variable".equals(message.getKey())) {
-			Object[] args = getArgs(message);
+		Violation violation = event.getViolation();
+		if ("require.this.variable".equals(violation.getKey())) {
+			Object[] args = getArgs(violation);
 			String prefex = (args.length > 1 ? Objects.toString(args[1]) : null);
 			if (prefex != null && prefex.length() > 0) {
 				return false;
@@ -46,12 +46,12 @@ public class RequiresOuterThisFilter implements TreeWalkerFilter {
 		return true;
 	}
 
-	private Object[] getArgs(LocalizedMessage message) {
+	private Object[] getArgs(Violation violation) {
 		if (ARGS_FIELD == null) {
 			throw new IllegalStateException("Unable to extract message args");
 		}
 		try {
-			return (Object[]) ARGS_FIELD.get(message);
+			return (Object[]) ARGS_FIELD.get(violation);
 		}
 		catch (Exception ex) {
 			return null;
@@ -60,7 +60,7 @@ public class RequiresOuterThisFilter implements TreeWalkerFilter {
 
 	private static Field getArgsField() {
 		try {
-			Field field = LocalizedMessage.class.getDeclaredField("args");
+			Field field = Violation.class.getDeclaredField("args");
 			field.setAccessible(true);
 			return field;
 		}

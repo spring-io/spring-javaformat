@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ import com.puppycrawl.tools.checkstyle.api.Configuration;
 import com.puppycrawl.tools.checkstyle.api.ExternalResourceHolder;
 import com.puppycrawl.tools.checkstyle.api.FileSetCheck;
 import com.puppycrawl.tools.checkstyle.api.FileText;
-import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
+import com.puppycrawl.tools.checkstyle.api.Violation;
 import com.puppycrawl.tools.checkstyle.filters.SuppressFilterElement;
 
 import io.spring.javaformat.checkstyle.check.SpringHeaderCheck;
@@ -135,11 +135,11 @@ public class SpringChecks extends AbstractFileSetCheck implements ExternalResour
 
 	@Override
 	protected void processFiltered(File file, FileText fileText) throws CheckstyleException {
-		SortedSet<LocalizedMessage> messages = new TreeSet<>();
+		SortedSet<Violation> violations = new TreeSet<>();
 		for (FileSetCheck check : this.checks) {
-			messages.addAll(check.process(file, fileText));
+			violations.addAll(check.process(file, fileText));
 		}
-		addMessages(messages);
+		addViolations(violations);
 	}
 
 	@Override

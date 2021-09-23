@@ -27,8 +27,8 @@ import com.puppycrawl.tools.checkstyle.DefaultLogger;
 import com.puppycrawl.tools.checkstyle.Definitions;
 import com.puppycrawl.tools.checkstyle.api.AuditEvent;
 import com.puppycrawl.tools.checkstyle.api.AuditListener;
-import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
 import com.puppycrawl.tools.checkstyle.api.SeverityLevel;
+import com.puppycrawl.tools.checkstyle.api.Violation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -110,8 +110,8 @@ class AssertionsAuditListener implements AuditListener {
 	}
 
 	private void recordLocalizedMessage(String message, String... args) {
-		recordMessage(new LocalizedMessage(0, Definitions.CHECKSTYLE_BUNDLE, message, args, null,
-				LocalizedMessage.class, null).getMessage());
+		recordMessage(new Violation(0, Definitions.CHECKSTYLE_BUNDLE, message, args, null,
+				Violation.class, null).getViolation());
 	}
 
 	private void recordMessage(String message) {

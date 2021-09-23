@@ -935,8 +935,8 @@ public class SpringApplication {
 	/**
 	 * Returns whether this {@link SpringApplication} is running within a web environment.
 	 * @return {@code true} if running within a web environment, otherwise {@code false}.
-	 * @see #setWebEnvironment(boolean)
 	 * @deprecated since 2.0.0 in favor of {@link #getWebApplicationType()}
+	 * @see #setWebEnvironment(boolean)
 	 */
 	@Deprecated
 	public boolean isWebEnvironment() {

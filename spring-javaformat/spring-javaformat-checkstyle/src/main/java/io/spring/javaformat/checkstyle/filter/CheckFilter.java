@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
 import com.puppycrawl.tools.checkstyle.api.Context;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
-import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
+import com.puppycrawl.tools.checkstyle.api.Violation;
 
 /**
  * Base class for {@link AbstractCheck checks} that act as a filter for a single child.
@@ -100,14 +100,14 @@ public class CheckFilter extends AbstractCheck {
 	}
 
 	@Override
-	public SortedSet<LocalizedMessage> getMessages() {
-		return this.check.getMessages();
+	public SortedSet<Violation> getViolations() {
+		return this.check.getViolations();
 	}
 
 	@Override
 	public void beginTree(DetailAST rootAST) {
 		this.check.setFileContents(getFileContents());
-		this.check.clearMessages();
+		this.check.clearViolations();
 		this.check.beginTree(rootAST);
 	}
 
