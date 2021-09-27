@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,6 +63,8 @@ public class SpringAvoidStaticImportCheck extends AvoidStaticImportCheck {
 		excludes.add("org.springframework.restdocs.operation.preprocess.Preprocessors.*");
 		excludes.add("org.springframework.restdocs.payload.PayloadDocumentation.*");
 		excludes.add("org.springframework.restdocs.request.RequestDocumentation.*");
+		excludes.add("org.springframework.restdocs.restassured.operation.preprocess.RestAssuredPreprocessors.*");
+		excludes.add("org.springframework.restdocs.restassured.RestAssuredRestDocumentation.*");
 		excludes.add("org.springframework.restdocs.restassured3.operation.preprocess.RestAssuredPreprocessors.*");
 		excludes.add("org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.*");
 		excludes.add("org.springframework.restdocs.snippet.Attributes.*");
