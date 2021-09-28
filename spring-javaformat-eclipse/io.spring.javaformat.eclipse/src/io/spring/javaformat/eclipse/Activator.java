@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ package io.spring.javaformat.eclipse;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import io.spring.javaformat.eclipse.jdt.core.JavaCore;
+
 /**
  * The activator class controls the plug-in life cycle.
  *
@@ -33,17 +35,22 @@ public class Activator extends AbstractUIPlugin {
 
 	private static Activator plugin;
 
+	private JavaCore javaCore;
+
 	public Activator() {
+		this.javaCore = new JavaCore();
 	}
 
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		this.javaCore.start(context);
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
+		this.javaCore.stop(context);
 		plugin = null;
 		super.stop(context);
 	}

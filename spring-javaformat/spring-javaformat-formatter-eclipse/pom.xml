@@ -50,14 +50,14 @@
 								<filter>
 									<artifact>io.spring.javaformat:spring-javaformat-formatter-eclipse-runtime</artifact>
 									<includes>
-										<include>org/eclipse/jdt/internal/formatter/**</include>
+										<include>org/eclipse/jdt/**</include>
 									</includes>
 								</filter>
 							</filters>
 							<relocations>
 								<relocation>
-									<pattern>org.eclipse.jdt.internal.formatter</pattern>
-									<shadedPattern>io.spring.javaformat.formatter.eclipse</shadedPattern>
+									<pattern>org.eclipse.jdt</pattern>
+									<shadedPattern>io.spring.javaformat.eclipse.jdt</shadedPattern>
 								</relocation>
 							</relocations>
 							<createDependencyReducedPom>false</createDependencyReducedPom>

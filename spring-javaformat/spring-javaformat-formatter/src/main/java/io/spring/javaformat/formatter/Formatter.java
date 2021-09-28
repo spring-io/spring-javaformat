@@ -22,14 +22,14 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 
-import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.text.edits.TextEdit;
 
 import io.spring.javaformat.config.IndentationStyle;
 import io.spring.javaformat.config.JavaFormatConfig;
-import io.spring.javaformat.formatter.eclipse.ExtendedCodeFormatter;
-import io.spring.javaformat.formatter.eclipse.Preparator;
+import io.spring.javaformat.eclipse.jdt.core.formatter.CodeFormatter;
+import io.spring.javaformat.eclipse.jdt.internal.formatter.ExtendedCodeFormatter;
+import io.spring.javaformat.eclipse.jdt.internal.formatter.Preparator;
 import io.spring.javaformat.formatter.preparator.Preparators;
 
 /**
@@ -195,7 +195,7 @@ public class Formatter extends CodeFormatter {
 
 		private static void applyConfig(Properties properties, JavaFormatConfig javaFormatConfig) {
 			if (javaFormatConfig.getIndentationStyle() == IndentationStyle.SPACES) {
-				properties.put("org.eclipse.jdt.core.formatter.tabulation.char", "space");
+				properties.put("io.spring.javaformat.eclipse.jdt.core.formatter.tabulation.char", "space");
 			}
 		}
 

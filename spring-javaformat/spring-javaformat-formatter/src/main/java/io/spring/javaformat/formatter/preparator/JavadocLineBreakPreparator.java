@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,20 +20,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.Comment;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.Javadoc;
-import org.eclipse.jdt.core.dom.TagElement;
-import org.eclipse.jdt.core.dom.TextElement;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.jdt.core.formatter.CodeFormatter;
-import org.eclipse.jdt.internal.compiler.parser.TerminalTokens;
-
-import io.spring.javaformat.formatter.eclipse.Preparator;
-import io.spring.javaformat.formatter.eclipse.Token;
-import io.spring.javaformat.formatter.eclipse.TokenManager;
+import io.spring.javaformat.eclipse.jdt.core.dom.ASTNode;
+import io.spring.javaformat.eclipse.jdt.core.dom.ASTVisitor;
+import io.spring.javaformat.eclipse.jdt.core.dom.Comment;
+import io.spring.javaformat.eclipse.jdt.core.dom.CompilationUnit;
+import io.spring.javaformat.eclipse.jdt.core.dom.Javadoc;
+import io.spring.javaformat.eclipse.jdt.core.dom.TagElement;
+import io.spring.javaformat.eclipse.jdt.core.dom.TextElement;
+import io.spring.javaformat.eclipse.jdt.core.dom.TypeDeclaration;
+import io.spring.javaformat.eclipse.jdt.core.formatter.CodeFormatter;
+import io.spring.javaformat.eclipse.jdt.internal.compiler.parser.TerminalTokens;
+import io.spring.javaformat.eclipse.jdt.internal.formatter.Preparator;
+import io.spring.javaformat.eclipse.jdt.internal.formatter.Token;
+import io.spring.javaformat.eclipse.jdt.internal.formatter.TokenManager;
 
 /**
  * {@link Preparator} to fine tune Javadoc whitespace.

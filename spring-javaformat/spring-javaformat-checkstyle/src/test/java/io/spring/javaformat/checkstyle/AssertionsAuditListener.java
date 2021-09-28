@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,8 +110,8 @@ class AssertionsAuditListener implements AuditListener {
 	}
 
 	private void recordLocalizedMessage(String message, String... args) {
-		recordMessage(new Violation(0, Definitions.CHECKSTYLE_BUNDLE, message, args, null,
-				Violation.class, null).getViolation());
+		recordMessage(new Violation(0, Definitions.CHECKSTYLE_BUNDLE, message, args, null, Violation.class, null)
+				.getViolation());
 	}
 
 	private void recordMessage(String message) {
