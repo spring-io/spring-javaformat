@@ -50,8 +50,8 @@
 		<picocontainer.version>1.2</picocontainer.version>
 		<system-rules.version>1.16.0</system-rules.version>
 		<trove4j.version>3.0.3</trove4j.version>
-		<tycho.version>2.1.0</tycho.version>
-		<tycho-extras.version>2.1.0</tycho-extras.version>
+		<tycho.version>2.4.0</tycho.version>
+		<tycho-extras.version>2.4.0</tycho-extras.version>
 	</properties>
 	<build>
 		<pluginManagement>
