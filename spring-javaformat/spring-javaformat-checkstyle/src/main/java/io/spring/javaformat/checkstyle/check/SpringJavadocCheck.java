@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,7 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 
 	private static final Pattern SINCE_TAG_PATTERN = Pattern.compile("@since\\s+(.*)");
 
-	private static final Pattern AT_TAG_PATTERN = Pattern.compile("@\\w+\\s+.*");
+	private static final Pattern AT_TAG_PATTERN = Pattern.compile("[^{]@\\w+\\s+.*");
 
 	private static final Pattern NON_JAVADOC_COMMENT = Pattern.compile("\\(non-Javadoc\\)", Pattern.CASE_INSENSITIVE);
 
