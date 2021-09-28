@@ -40,10 +40,8 @@ import com.puppycrawl.tools.checkstyle.ThreadModeSettings;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
 import com.puppycrawl.tools.checkstyle.api.RootModule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.xml.sax.InputSource;
 
 /**
@@ -51,7 +49,6 @@ import org.xml.sax.InputSource;
  *
  * @author Phillip Webb
  */
-@RunWith(Parameterized.class)
 public class SpringChecksTests {
 
 	private static final boolean RUNNING_ON_WINDOWS = System.getProperty("os.name").toLowerCase().contains("win");
@@ -64,20 +61,15 @@ public class SpringChecksTests {
 
 	private static final File DEFAULT_CONFIG = new File(CONFIGS_DIR, "default-checkstyle-configuration.xml");
 
-	private final Parameter parameter;
-
-	public SpringChecksTests(Parameter parameter) throws Exception {
-		this.parameter = parameter;
-	}
-
-	@Test
-	public void processHasExpectedResults() throws Exception {
+	@ParameterizedTest
+	@MethodSource("paramaters")
+	public void processHasExpectedResults(Parameter parameter) throws Exception {
 		Locale previousLocale = Locale.getDefault();
 		Locale.setDefault(Locale.ENGLISH);
-		Configuration configuration = loadConfiguration();
+		Configuration configuration = loadConfiguration(parameter);
 		RootModule rootModule = createRootModule(configuration);
 		try {
-			processAndCheckResults(rootModule);
+			processAndCheckResults(parameter, rootModule);
 		}
 		finally {
 			rootModule.destroy();
@@ -85,8 +77,8 @@ public class SpringChecksTests {
 		}
 	}
 
-	private Configuration loadConfiguration() throws Exception {
-		try (InputStream inputStream = new FileInputStream(this.parameter.getConfigFile())) {
+	private Configuration loadConfiguration(Parameter parameter) throws Exception {
+		try (InputStream inputStream = new FileInputStream(parameter.getConfigFile())) {
 			Configuration configuration = ConfigurationLoader.loadConfiguration(new InputSource(inputStream),
 					new PropertiesExpander(new Properties()), IgnoredModulesOptions.EXECUTE,
 					ThreadModeSettings.SINGLE_THREAD_MODE_INSTANCE);
@@ -103,12 +95,12 @@ public class SpringChecksTests {
 		return rootModule;
 	}
 
-	private void processAndCheckResults(RootModule rootModule) throws CheckstyleException {
-		rootModule.addListener(this.parameter.getAssertionsListener());
+	private void processAndCheckResults(Parameter parameter, RootModule rootModule) throws CheckstyleException {
+		rootModule.addListener(parameter.getAssertionsListener());
 		if (!RUNNING_ON_WINDOWS) {
-			printDebugInfo(this.parameter.getSourceFile());
+			printDebugInfo(parameter.getSourceFile());
 		}
-		rootModule.process(Arrays.asList(this.parameter.getSourceFile()));
+		rootModule.process(Arrays.asList(parameter.getSourceFile()));
 	}
 
 	private void printDebugInfo(File file) throws CheckstyleException {
@@ -119,8 +111,7 @@ public class SpringChecksTests {
 		}
 	}
 
-	@Parameters(name = "{0}")
-	public static Collection<Parameter> files() throws IOException {
+	public static Collection<Parameter> paramaters() throws IOException {
 		return Arrays.stream(SOURCES_DIR.list((dir, name) -> !name.startsWith("."))).sorted().map(Parameter::new)
 				.collect(Collectors.toList());
 	}

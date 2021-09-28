@@ -6,7 +6,8 @@ Bundle-SymbolicName: io.spring.javaformat.eclipse.tests
 Automatic-Module-Name: io.spring.javaformat.eclipse.tests
 Bundle-Version: 0.0.29.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Require-Bundle: org.junit;bundle-version="4.12"
+Require-Bundle: org.junit,
+ org.junit.jupiter.api
 Bundle-ClassPath: .,
  lib/assertj-core.jar,
  lib/byte-buddy-agent.jar,

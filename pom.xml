@@ -45,7 +45,7 @@
 		<maven-plugin-api.version>${maven-core.version}</maven-plugin-api.version>
 		<maven-plugin-annotations.version>3.5</maven-plugin-annotations.version>
 		<mockito.version>3.6.28</mockito.version>
-		<junit.version>4.13.1</junit.version>
+		<junit.version>5.8.1</junit.version>
 		<javassist.version>3.21.0-GA</javassist.version>
 		<picocontainer.version>1.2</picocontainer.version>
 		<system-rules.version>1.16.0</system-rules.version>
@@ -445,8 +445,8 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter</artifactId>
 				<version>${junit.version}</version>
 			</dependency>
 			<dependency>
@@ -550,8 +550,8 @@
 	<dependencies>
 		<!-- Test -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

@@ -17,14 +17,10 @@
 package io.spring.javaformat.formatter;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
-
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 
 import io.spring.javaformat.config.JavaFormatConfig;
 
@@ -33,32 +29,7 @@ import io.spring.javaformat.config.JavaFormatConfig;
  *
  * @author Phillip Webb
  */
-@RunWith(Parameterized.class)
 public abstract class AbstractFormatterTests {
-
-	private final File source;
-
-	private final File expected;
-
-	private final JavaFormatConfig config;
-
-	public AbstractFormatterTests(File source, File expected, File config) throws IOException {
-		this.source = source;
-		this.expected = expected;
-		this.config = (!config.exists()) ? JavaFormatConfig.DEFAULT : JavaFormatConfig.load(config);
-	}
-
-	protected final File getSource() {
-		return this.source;
-	}
-
-	protected final File getExpected() {
-		return this.expected;
-	}
-
-	protected final JavaFormatConfig getConfig() {
-		return this.config;
-	}
 
 	protected final void print(String name, String content) {
 		System.out.println(name + ":");
@@ -74,8 +45,8 @@ public abstract class AbstractFormatterTests {
 		return new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
 	}
 
-	protected static Collection<Object[]> files(String expectedOverride) {
-		Collection<Object[]> files = new ArrayList<>();
+	protected static Item[] items(String expectedOverride) {
+		Collection<Item> files = new ArrayList<>();
 		File sourceDir = new File("src/test/resources/source");
 		File expectedDir = new File("src/test/resources/expected");
 		File configDir = new File("src/test/resources/config");
@@ -86,9 +57,42 @@ public abstract class AbstractFormatterTests {
 				expected = new File(expectedDir, source.getName());
 			}
 			File config = new File(configDir, source.getName());
-			files.add(new Object[] { source, expected, config });
+			files.add(new Item(source, expected, config));
 		}
-		return files;
+		return files.toArray(new Item[0]);
+	}
+
+	static class Item {
+
+		private final File source;
+
+		private final File expected;
+
+		private final JavaFormatConfig config;
+
+		Item(File source, File expected, File config) {
+			this.source = source;
+			this.expected = expected;
+			this.config = (!config.exists()) ? JavaFormatConfig.DEFAULT : JavaFormatConfig.load(config);
+		}
+
+		public File getSource() {
+			return this.source;
+		}
+
+		public File getExpected() {
+			return this.expected;
+		}
+
+		public JavaFormatConfig getConfig() {
+			return this.config;
+		}
+
+		@Override
+		public String toString() {
+			return this.source.getName();
+		}
+
 	}
 
 }

@@ -22,10 +22,11 @@ import java.nio.file.Files;
 
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.TaskOutcome;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import io.spring.javaformat.gradle.testkit.GradleBuild;
+import io.spring.javaformat.gradle.testkit.GradleBuildExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,10 +35,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Phillip Webb
  */
+@ExtendWith(GradleBuildExtension.class)
 public class FormatTaskTests {
 
-	@Rule
-	public final GradleBuild gradleBuild = new GradleBuild();
+	public GradleBuild gradleBuild;
 
 	@Test
 	public void checkOk() throws IOException {

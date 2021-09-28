@@ -21,9 +21,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import io.spring.javaformat.config.JavaFormatConfig;
 
@@ -36,12 +35,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class ProjectSettingsFileTests {
 
-	@Rule
-	public TemporaryFolder temp = new TemporaryFolder();
+	@TempDir
+	public File temp;
 
 	@Test
 	public void fromFileAdaptsFile() throws Exception {
-		File file = this.temp.newFile();
+		File file = new File(this.temp, "file");
 		writeText(file, "test");
 		ProjectSettingsFile projectSettingsFile = ProjectSettingsFile.fromFile(file);
 		assertThat(projectSettingsFile.getName()).isEqualTo(file.getName());

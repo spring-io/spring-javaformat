@@ -16,15 +16,15 @@
 
 package io.spring.javaformat.eclipse.projectsettings;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.Collections;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,19 +40,21 @@ import static org.mockito.Mockito.verify;
  */
 public class ProjectSettingsFilesTests {
 
-	@Rule
-	public TemporaryFolder temp = new TemporaryFolder();
+	@TempDir
+	public File temp;
 
 	@Test
 	public void iteratorIteratesFiles() throws Exception {
-		ProjectSettingsFile file = ProjectSettingsFile.fromFile(this.temp.newFile());
+		ProjectSettingsFile file = ProjectSettingsFile.fromFile(new File(this.temp, "file.prefs"));
 		ProjectSettingsFiles files = new ProjectSettingsFiles(Collections.singleton(file), new ProjectProperties());
 		assertThat(files).containsOnly(file);
 	}
 
 	@Test
 	public void applyToProjectCopiesToDotSettings() throws Exception {
-		ProjectSettingsFile file = ProjectSettingsFile.fromFile(this.temp.newFile("foo.prefs"));
+		File prefsFile = new File(this.temp, "foo.prefs");
+		prefsFile.createNewFile();
+		ProjectSettingsFile file = ProjectSettingsFile.fromFile(prefsFile);
 		ProjectSettingsFiles files = new ProjectSettingsFiles(Collections.singleton(file), new ProjectProperties());
 		IProject project = mock(IProject.class);
 		IProgressMonitor monitor = mock(IProgressMonitor.class);

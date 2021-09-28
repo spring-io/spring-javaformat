@@ -28,7 +28,7 @@ import com.puppycrawl.tools.checkstyle.PropertyResolver;
 import com.puppycrawl.tools.checkstyle.TreeWalker;
 import com.puppycrawl.tools.checkstyle.api.FileSetCheck;
 import org.assertj.core.extractor.Extractors;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.spring.javaformat.checkstyle.check.SpringHeaderCheck;
 import io.spring.javaformat.checkstyle.check.SpringImportOrderCheck;

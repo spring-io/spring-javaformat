@@ -28,13 +28,12 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -45,9 +44,6 @@ import static org.mockito.Mockito.verify;
  * @author Phillip Webb
  */
 public class SpringReformatterTests {
-
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
 
 	@Mock
 	private Project project;
@@ -68,7 +64,7 @@ public class SpringReformatterTests {
 
 	private Collection<TextRange> ranges = Arrays.asList(new TextRange(10, 20));
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		given(this.file.getVirtualFile()).willReturn(this.virtualFile);
@@ -92,8 +88,8 @@ public class SpringReformatterTests {
 
 	@Test
 	public void reformatWhenFileIsNotWriteableShouldThrow() throws Exception {
-		this.thrown.expect(IncorrectOperationException.class);
-		this.reformatter.reformat(this.file, this.ranges);
+		assertThatExceptionOfType(IncorrectOperationException.class)
+				.isThrownBy(() -> this.reformatter.reformat(this.file, this.ranges));
 	}
 
 	@Test

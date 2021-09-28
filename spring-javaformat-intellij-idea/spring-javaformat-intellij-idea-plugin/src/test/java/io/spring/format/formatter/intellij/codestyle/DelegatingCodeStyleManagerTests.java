@@ -29,8 +29,8 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.ChangedRangesInfo;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.util.ThrowableRunnable;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -76,8 +76,7 @@ public class DelegatingCodeStyleManagerTests {
 	@Mock
 	private ChangedRangesInfo changedRangesInfo;
 
-	@Before
-	@Test
+	@BeforeEach
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		this.delegating = new DelegatingCodeStyleManager(this.delegate);

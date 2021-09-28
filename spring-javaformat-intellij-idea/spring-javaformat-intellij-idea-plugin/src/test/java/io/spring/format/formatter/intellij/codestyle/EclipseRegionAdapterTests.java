@@ -21,7 +21,7 @@ import java.util.List;
 
 import com.intellij.openapi.util.TextRange;
 import org.eclipse.jface.text.IRegion;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

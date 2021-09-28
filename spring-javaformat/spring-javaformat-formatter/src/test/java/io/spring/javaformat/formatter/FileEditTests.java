@@ -24,10 +24,9 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
 import org.eclipse.text.edits.TextEdit;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,8 +39,8 @@ public class FileEditTests {
 
 	private static final Charset UTF_8 = StandardCharsets.UTF_8;
 
-	@Rule
-	public TemporaryFolder temp = new TemporaryFolder();
+	@TempDir
+	public File temp;
 
 	private File source;
 
@@ -51,10 +50,10 @@ public class FileEditTests {
 
 	private FileEdit fileEdit;
 
-	@Before
+	@BeforeEach
 	public void setup() throws IOException {
-		this.source = this.temp.newFile("source.txt");
-		this.expected = this.temp.newFile("expected.txt");
+		this.source = new File(this.temp, "source.txt");
+		this.expected = new File(this.temp, "expected.txt");
 		Files.copy(new File("src/test/resources/source/javadoc-top.txt").toPath(), this.source.toPath(),
 				StandardCopyOption.REPLACE_EXISTING);
 		Files.copy(new File("src/test/resources/expected/javadoc-top.txt").toPath(), this.expected.toPath(),

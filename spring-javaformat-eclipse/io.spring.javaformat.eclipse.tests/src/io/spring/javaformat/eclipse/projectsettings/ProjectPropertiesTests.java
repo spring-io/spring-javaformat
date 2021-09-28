@@ -26,9 +26,8 @@ import java.time.LocalDate;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import io.spring.javaformat.config.JavaFormatConfig;
 
@@ -41,36 +40,36 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class ProjectPropertiesTests {
 
-	@Rule
-	public TemporaryFolder temp = new TemporaryFolder();
+	@TempDir
+	public File temp;
 
 	@Test
 	public void addFromFolderAddsEclipseProperties() throws IOException {
-		File folder = this.temp.newFolder();
-		File file = new File(folder, "eclipse.properties");
+		File file = new File(this.temp, "eclipse.properties");
 		writeProperties(file, "2018");
 		ProjectProperties properties = new ProjectProperties();
-		properties.addFromFolder(folder);
+		properties.addFromFolder(this.temp);
 		assertThat(properties.get("copyright-year")).isEqualTo("2018");
 	}
 
 	@Test
 	public void addFromFolderWhenAlreadySetDoesNotOverwrite() throws IOException {
 		ProjectProperties properties = new ProjectProperties();
-		File folder = this.temp.newFolder();
-		writeProperties(new File(folder, "eclipse.properties"), "2018");
-		properties.addFromFolder(folder);
-		folder = this.temp.newFolder();
-		writeProperties(new File(folder, "eclipse.properties"), "2017");
-		properties.addFromFolder(folder);
+		File folder1 = new File(this.temp, "1");
+		folder1.mkdirs();
+		writeProperties(new File(folder1, "eclipse.properties"), "2018");
+		properties.addFromFolder(folder1);
+		File folder2 = new File(this.temp, "2");
+		folder2.mkdirs();
+		writeProperties(new File(folder2, "eclipse.properties"), "2017");
+		properties.addFromFolder(folder2);
 		assertThat(properties.get("copyright-year")).isEqualTo("2018");
 	}
 
 	@Test
 	public void addFromEmptyFolderUsesDefaults() throws IOException {
 		ProjectProperties properties = new ProjectProperties();
-		File folder = this.temp.newFolder();
-		properties.addFromFolder(folder);
+		properties.addFromFolder(this.temp);
 		String currentYear = String.valueOf(LocalDate.now().getYear());
 		assertThat(properties.get("copyright-year")).isEqualTo(currentYear);
 	}
@@ -78,11 +77,10 @@ public class ProjectPropertiesTests {
 	@Test
 	public void getModifiedContentReplacesCopyrightYear() throws IOException {
 		String year = "2016-2020";
-		File folder = this.temp.newFolder();
-		File file = new File(folder, "eclipse.properties");
+		File file = new File(this.temp, "eclipse.properties");
 		writeProperties(file, year);
 		ProjectProperties properties = new ProjectProperties();
-		properties.addFromFolder(folder);
+		properties.addFromFolder(this.temp);
 		ProjectSettingsFiles files = new ProjectSettingsFilesLocator().locateSettingsFiles();
 		ProjectSettingsFile prefs = getFile(files, "org.eclipse.jdt.ui.prefs");
 		String content = loadContent(properties.getModifiedContent(prefs).getContent(JavaFormatConfig.DEFAULT));

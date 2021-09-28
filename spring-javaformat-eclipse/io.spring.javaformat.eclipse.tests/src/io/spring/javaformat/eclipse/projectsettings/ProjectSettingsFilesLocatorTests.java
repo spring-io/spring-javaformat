@@ -25,9 +25,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import io.spring.javaformat.config.JavaFormatConfig;
 
@@ -40,8 +39,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class ProjectSettingsFilesLocatorTests {
 
-	@Rule
-	public TemporaryFolder temp = new TemporaryFolder();
+	@TempDir
+	public File temp;
 
 	@Test
 	public void locateSettingsFilesWhenNoFoldersShouldReturnDefault() throws IOException {
@@ -52,19 +51,18 @@ public class ProjectSettingsFilesLocatorTests {
 
 	@Test
 	public void locateSettingsFilesOnlyFindPrefs() throws Exception {
-		File folder = this.temp.newFolder();
-		writeFile(folder, "foo.prefs");
-		writeFile(folder, "bar.notprefs");
-		ProjectSettingsFiles files = new ProjectSettingsFilesLocator(folder).locateSettingsFiles();
+		writeFile(this.temp, "foo.prefs");
+		writeFile(this.temp, "bar.notprefs");
+		ProjectSettingsFiles files = new ProjectSettingsFilesLocator(this.temp).locateSettingsFiles();
 		assertThat(files.iterator()).extracting(ProjectSettingsFile::getName).containsOnly("org.eclipse.jdt.core.prefs",
 				"org.eclipse.jdt.ui.prefs", "foo.prefs");
 	}
 
 	@Test
 	public void locateSettingsFilesWhenMultipleFoldersFindsInEarliest() throws Exception {
-		File folder1 = this.temp.newFolder();
+		File folder1 = new File(this.temp, "1");
 		writeFile(folder1, "foo.prefs", "foo1");
-		File folder2 = this.temp.newFolder();
+		File folder2 = new File(this.temp, "2");
 		writeFile(folder2, "foo.prefs", "foo2");
 		writeFile(folder2, "org.eclipse.jdt.core.prefs", "core2");
 		ProjectSettingsFiles files = new ProjectSettingsFilesLocator(folder1, folder2).locateSettingsFiles();

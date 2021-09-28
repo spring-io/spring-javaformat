@@ -16,15 +16,13 @@
 
 package io.spring.javaformat.formatter;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.TextEdit;
-import org.junit.Test;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import io.spring.javaformat.config.JavaFormatConfig;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,36 +31,32 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class FormatterTests extends AbstractFormatterTests {
 
-	public FormatterTests(File source, File expected, File config) throws IOException {
-		super(source, expected, config);
-	}
-
-	@Test
-	public void format() throws Exception {
-		String sourceContent = read(getSource());
-		String expectedContent = read(getExpected());
-		String formattedContent = format(sourceContent);
+	@ParameterizedTest
+	@MethodSource("items")
+	public void format(Item item) throws Exception {
+		String sourceContent = read(item.getSource());
+		String expectedContent = read(item.getExpected());
+		String formattedContent = format(item.getConfig(), sourceContent);
 		if (!expectedContent.equals(formattedContent)) {
-			System.out.println("Formatted " + getSource() + " does not match " + getExpected());
-			print("Source " + getSource(), sourceContent);
-			print("Expected +" + getExpected(), expectedContent);
+			System.out.println("Formatted " + item.getSource() + " does not match " + item.getExpected());
+			print("Source " + item.getSource(), sourceContent);
+			print("Expected +" + item.getExpected(), expectedContent);
 			print("Got", formattedContent);
 			System.out.println("========================================");
 			assertThat(expectedContent).isEqualTo(formattedContent)
-					.describedAs("Formatted content does not match for " + getSource());
+					.describedAs("Formatted content does not match for " + item.getSource());
 		}
 	}
 
-	private String format(String sourceContent) throws Exception {
+	private String format(JavaFormatConfig config, String sourceContent) throws Exception {
 		IDocument document = new Document(sourceContent);
-		TextEdit textEdit = new Formatter(getConfig()).format(sourceContent);
+		TextEdit textEdit = new Formatter(config).format(sourceContent);
 		textEdit.apply(document);
 		return document.get();
 	}
 
-	@Parameters(name = "{0}")
-	public static Collection<Object[]> files() {
-		return AbstractFormatterTests.files("FormatterTests-expected");
+	public static Item[] items() {
+		return items("FormatterTests-expected");
 	}
 
 }

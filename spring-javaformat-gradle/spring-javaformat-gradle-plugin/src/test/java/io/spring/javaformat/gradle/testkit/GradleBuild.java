@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,13 @@ package io.spring.javaformat.gradle.testkit;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -31,28 +33,25 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
-import org.gradle.internal.impldep.com.google.common.base.Charsets;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
-import org.junit.rules.TemporaryFolder;
-import org.junit.rules.TestRule;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
+import org.gradle.util.GradleVersion;
 import org.xml.sax.InputSource;
 
+import io.spring.javaformat.eclipse.jdt.core.formatter.CodeFormatter;
 import io.spring.javaformat.eclipse.jdt.internal.formatter.Preparator;
 import io.spring.javaformat.formatter.Formatter;
-import io.spring.javaformat.org.eclipse.jdt.core.formatter.CodeFormatter;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * A {@link TestRule} for running a Gradle build using {@link GradleRunner}.
+ * A {@code GradleBuild} is used to run a Gradle build using {@link GradleRunner}.
  *
  * @author Andy Wilkinson
+ * @author Scott Frederick
  * @author Phillip Webb
  */
-public class GradleBuild implements TestRule {
-
-	private final TemporaryFolder temp = new TemporaryFolder();
+public class GradleBuild {
 
 	private File source;
 
@@ -60,44 +59,15 @@ public class GradleBuild implements TestRule {
 
 	private String gradleVersion;
 
-	@Override
-	public Statement apply(Statement base, Description description) {
-		return this.temp.apply(new Statement() {
+	private GradleVersion expectDeprecationWarnings;
 
-			@Override
-			public void evaluate() throws Throwable {
-				before();
-				try {
-					base.evaluate();
-				}
-				finally {
-					after();
-				}
-			}
-
-		}, description);
+	void before() throws IOException {
+		this.projectDir = Files.createTempDirectory("gradle-").toFile();
 	}
 
-	private void before() throws IOException {
-		this.projectDir = this.temp.newFolder();
-	}
-
-	private void after() {
-		GradleBuild.this.source = null;
-	}
-
-	private String getPluginClasspath() {
-		return absolutePath("build/classes/java/main") + "," + absolutePath("build/resources/main") + ","
-				+ pathOfJarContaining(Formatter.class) + "," + pathOfJarContaining(Preparator.class) + ","
-				+ pathOfJarContaining(CodeFormatter.class);
-	}
-
-	private String absolutePath(String path) {
-		return new File(path).getAbsolutePath();
-	}
-
-	private String pathOfJarContaining(Class<?> type) {
-		return type.getProtectionDomain().getCodeSource().getLocation().getPath();
+	void after() throws IOException {
+		this.source = null;
+		Files.walk(this.projectDir.toPath()).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
 	}
 
 	public GradleBuild source(String source) {
@@ -114,7 +84,12 @@ public class GradleBuild implements TestRule {
 
 	public BuildResult build(String... arguments) {
 		try {
-			return prepareRunner(arguments).build();
+			BuildResult result = prepareRunner(arguments).build();
+			if (this.expectDeprecationWarnings == null || (this.gradleVersion != null
+					&& this.expectDeprecationWarnings.compareTo(GradleVersion.version(this.gradleVersion)) > 0)) {
+				assertThat(result.getOutput()).doesNotContain("Deprecated").doesNotContain("deprecated");
+			}
+			return result;
 		}
 		catch (Exception ex) {
 			throw new RuntimeException(ex);
@@ -135,7 +110,7 @@ public class GradleBuild implements TestRule {
 		File buildFile = new File(this.projectDir, "build.gradle");
 		String scriptContent = new String(Files.readAllBytes(buildFile.toPath())).replace("{version}",
 				getSpringFormatVersion());
-		Files.write(buildFile.toPath(), scriptContent.getBytes(Charsets.UTF_8));
+		Files.write(buildFile.toPath(), scriptContent.getBytes(StandardCharsets.UTF_8));
 		GradleRunner gradleRunner = GradleRunner.create().withProjectDir(this.projectDir).withDebug(true);
 		if (this.gradleVersion != null) {
 			gradleRunner.withGradleVersion(this.gradleVersion);
@@ -146,6 +121,20 @@ public class GradleBuild implements TestRule {
 		allArguments.add("--stacktrace");
 		allArguments.addAll(Arrays.asList(arguments));
 		return gradleRunner.withArguments(allArguments);
+	}
+
+	private String getPluginClasspath() {
+		return absolutePath("build/classes/java/main") + "," + absolutePath("build/resources/main") + ","
+				+ pathOfJarContaining(Formatter.class) + "," + pathOfJarContaining(Preparator.class) + ","
+				+ pathOfJarContaining(CodeFormatter.class);
+	}
+
+	private String absolutePath(String path) {
+		return new File(path).getAbsolutePath();
+	}
+
+	private String pathOfJarContaining(Class<?> type) {
+		return type.getProtectionDomain().getCodeSource().getLocation().getPath();
 	}
 
 	private void copyFolder(Path source, Path target) throws IOException {

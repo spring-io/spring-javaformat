@@ -17,13 +17,11 @@
 package io.spring.javaformat.formatter;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.Collection;
 
-import org.junit.Test;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,30 +34,29 @@ public class FileFormatterTests extends AbstractFormatterTests {
 
 	private static final boolean RUNNING_ON_WINDOWS = System.getProperty("os.name").toLowerCase().contains("win");
 
-	public FileFormatterTests(File source, File expected, File config) throws IOException {
-		super(source, expected, config);
+	@ParameterizedTest
+	@MethodSource("items")
+	public void formatFilesFromIteratorShouldFormatFile(Item files) throws Exception {
+		FileEdit edit = new FileFormatter(files.getConfig())
+				.formatFiles(Arrays.asList(files.getSource()), StandardCharsets.UTF_8).findFirst().get();
+		assertThat(edit.getFormattedContent()).isEqualTo(read(files.getExpected()));
 	}
 
-	@Test
-	public void formatFilesFromIteratorShouldFormatFile() throws Exception {
-		FileEdit edit = new FileFormatter(getConfig()).formatFiles(Arrays.asList(getSource()), StandardCharsets.UTF_8)
-				.findFirst().get();
-		assertThat(edit.getFormattedContent()).isEqualTo(read(getExpected()));
+	@ParameterizedTest
+	@MethodSource("items")
+	public void formatFilesFromStreamShouldFormatFile(Item item) throws Exception {
+		FileEdit edit = new FileFormatter(item.getConfig())
+				.formatFiles(Arrays.asList(item.getSource()).stream(), StandardCharsets.UTF_8).findFirst().get();
+		assertThat(edit.getFormattedContent()).isEqualTo(read(item.getExpected()));
 	}
 
-	@Test
-	public void formatFilesFromStreamShouldFormatFile() throws Exception {
-		FileEdit edit = new FileFormatter(getConfig())
-				.formatFiles(Arrays.asList(getSource()).stream(), StandardCharsets.UTF_8).findFirst().get();
-		assertThat(edit.getFormattedContent()).isEqualTo(read(getExpected()));
-	}
-
-	@Test
-	public void formatFileShouldFormatFile() throws Exception {
-		File source = getSource();
-		FileEdit edit = new FileFormatter(getConfig()).formatFile(source, StandardCharsets.UTF_8);
+	@ParameterizedTest
+	@MethodSource("items")
+	public void formatFileShouldFormatFile(Item item) throws Exception {
+		File source = item.getSource();
+		FileEdit edit = new FileFormatter(item.getConfig()).formatFile(source, StandardCharsets.UTF_8);
 		String formattedContent = edit.getFormattedContent();
-		String expected = read(getExpected());
+		String expected = read(item.getExpected());
 		if (!RUNNING_ON_WINDOWS) {
 			System.out.println(source);
 			System.out.println("----- got");
@@ -71,9 +68,8 @@ public class FileFormatterTests extends AbstractFormatterTests {
 		assertThat(formattedContent).isEqualTo(expected);
 	}
 
-	@Parameters(name = "{0}")
-	public static Collection<Object[]> files() {
-		return AbstractFormatterTests.files(null);
+	public static Item[] items() {
+		return items(null);
 	}
 
 }

@@ -27,11 +27,12 @@ import java.util.stream.Stream;
 
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.TaskOutcome;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 
 import io.spring.javaformat.gradle.testkit.GradleBuild;
+import io.spring.javaformat.gradle.testkit.GradleBuildExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,13 +41,13 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Phillip Webb
  */
+@ExtendWith(GradleBuildExtension.class)
 public class CheckTaskTests {
 
-	@Rule
-	public final GradleBuild gradleBuild = new GradleBuild();
+	@TempDir
+	public File temp;
 
-	@Rule
-	public final TemporaryFolder temp = new TemporaryFolder();
+	public GradleBuild gradleBuild;
 
 	@Test
 	public void checkOk() throws IOException {
@@ -65,11 +66,11 @@ public class CheckTaskTests {
 
 	@Test
 	public void whenFirstInvocationSucceedsAndSourceIsModifiedThenSecondInvocationSucceeds() throws IOException {
-		copyFolder(new File("src/test/resources/check-ok").toPath(), this.temp.getRoot().toPath());
-		GradleBuild gradleBuild = this.gradleBuild.source(this.temp.getRoot());
+		copyFolder(new File("src/test/resources/check-ok").toPath(), this.temp.toPath());
+		GradleBuild gradleBuild = this.gradleBuild.source(this.temp);
 		BuildResult result = gradleBuild.build("check");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
-		Files.write(new File(this.temp.getRoot(), "src/main/java/simple/Simple.java").toPath(),
+		Files.write(new File(this.temp, "src/main/java/simple/Simple.java").toPath(),
 				Collections.singletonList("// A change to the file"), StandardOpenOption.APPEND);
 		result = gradleBuild.build("--debug", "check");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
