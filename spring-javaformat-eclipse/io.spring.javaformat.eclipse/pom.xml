@@ -52,6 +52,11 @@
 							<artifactId>spring-javaformat-formatter</artifactId>
 							<version>${project.version}</version>
 						</additionalDependency>
+						<additionalDependency>
+							<groupId>io.spring.javaformat</groupId>
+							<artifactId>spring-javaformat-formatter-eclipse</artifactId>
+							<version>${project.version}</version>
+						</additionalDependency>
 					</additionalDependencies>
 				</configuration>
 			</plugin>
