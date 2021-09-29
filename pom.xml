@@ -41,6 +41,7 @@
 		<checkstyle.version>8.45.1</checkstyle.version>
 		<gradle.version>3.4</gradle.version>
 		<groovy.version>2.4.21</groovy.version>
+		<log4j.version>2.14.1</log4j.version>
 		<maven-core.version>3.5.0</maven-core.version>
 		<maven-plugin-api.version>${maven-core.version}</maven-plugin-api.version>
 		<maven-plugin-annotations.version>3.5</maven-plugin-annotations.version>
@@ -49,6 +50,7 @@
 		<javassist.version>3.21.0-GA</javassist.version>
 		<picocontainer.version>1.2</picocontainer.version>
 		<system-rules.version>1.16.0</system-rules.version>
+		<testcontainers.version>1.16.0</testcontainers.version>
 		<trove4j.version>3.0.3</trove4j.version>
 		<tycho.version>2.4.0</tycho.version>
 		<tycho-extras.version>2.4.0</tycho-extras.version>
@@ -445,9 +447,26 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.junit.jupiter</groupId>
-				<artifactId>junit-jupiter</artifactId>
-				<version>${junit.version}</version>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-api</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-core</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-slf4j-impl</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.junit</groupId>
+				<artifactId>junit-bom</artifactId>
+				<version>5.8.1</version>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.puppycrawl.tools</groupId>
@@ -544,6 +563,16 @@
 				<groupId>org.picocontainer</groupId>
 				<artifactId>picocontainer</artifactId>
 				<version>${picocontainer.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>testcontainers</artifactId>
+				<version>${testcontainers.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>junit-jupiter</artifactId>
+				<version>${testcontainers.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
