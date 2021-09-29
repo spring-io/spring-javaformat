@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import java.util.function.Supplier;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.codeStyle.ChangedRangesInfo;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
 
@@ -51,16 +52,16 @@ public class SpringCodeStyleManager extends DelegatingCodeStyleManager {
 	}
 
 	@Override
-	public void reformatText(PsiFile file, Collection<TextRange> ranges) throws IncorrectOperationException {
+	public void reformatText(PsiFile file, Collection<? extends TextRange> ranges) throws IncorrectOperationException {
 		reformat(file, () -> ranges, () -> super.reformatText(file, ranges));
 	}
 
 	@Override
-	public void reformatTextWithContext(PsiFile file, Collection<TextRange> ranges) throws IncorrectOperationException {
-		reformat(file, () -> ranges, () -> super.reformatTextWithContext(file, ranges));
+	public void reformatTextWithContext(PsiFile file, ChangedRangesInfo info) throws IncorrectOperationException {
+		reformat(file, () -> info.allChangedRanges, () -> super.reformatTextWithContext(file, info));
 	}
 
-	private void reformat(PsiFile file, Supplier<Collection<TextRange>> ranges, Runnable delegate) {
+	private void reformat(PsiFile file, Supplier<Collection<? extends TextRange>> ranges, Runnable delegate) {
 		if (this.springReformatter.canReformat(file)) {
 			this.springReformatter.reformat(file, ranges.get());
 		}

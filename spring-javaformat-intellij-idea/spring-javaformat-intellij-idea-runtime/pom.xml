@@ -13,9 +13,9 @@
 	<name>Spring JavaFormat IntelliJ IDEA Runtime</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
-		<intellij.binary>https://download.jetbrains.com/idea/ideaIC-2020.3.tar.gz</intellij.binary>
-		<intellij.source>https://github.com/JetBrains/intellij-community/archive/idea/203.5981.155.zip</intellij.source>
-		<intellij.root>idea-IC-203.5981.155</intellij.root>
+		<intellij.binary>https://download.jetbrains.com/idea/ideaIC-2021.2.tar.gz</intellij.binary>
+		<intellij.source>https://github.com/JetBrains/intellij-community/archive/idea/212.4746.92.zip</intellij.source>
+		<intellij.root>idea-IC-212.4746.92</intellij.root>
 	</properties>
 	<build>
 		<plugins>
@@ -113,15 +113,6 @@
 									destfile="${project.build.directory}/intellij-source/util-sources.zip"
 									basedir="${project.build.directory}/intellij-source/platform/util/src" />
 								<zip
-									destfile="${project.build.directory}/intellij-source/platform-util-ui-sources.zip"
-									basedir="${project.build.directory}/intellij-source/platform/util/ui/src" />
-								<zip
-									destfile="${project.build.directory}/intellij-source/extensions-sources.zip"
-									basedir="${project.build.directory}/intellij-source/platform/extensions/src" />
-								<zip
-									destfile="${project.build.directory}/intellij-source/platform-service-container-sources.zip"
-									basedir="${project.build.directory}/intellij-source/platform/service-container/src" />
-								<zip
 									destfile="${project.build.directory}/intellij-source/maven-sources.zip"
 									basedir="${project.build.directory}/intellij-source/plugins/maven/src" />
 								<zip
@@ -194,57 +185,6 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>install-intellij-platform-util-ui</id>
-						<phase>install</phase>
-						<inherited>false</inherited>
-						<goals>
-							<goal>install-file</goal>
-						</goals>
-						<configuration>
-							<file>${project.build.directory}/intellij/platform-util-ui.jar</file>
-							<sources>${project.build.directory}/intellij-source/platform-util-ui-sources.zip</sources>
-							<groupId>io.spring.javaformat.intellij.idea</groupId>
-							<artifactId>platform-util-ui</artifactId>
-							<version>${project.version}</version>
-							<packaging>jar</packaging>
-							<generatePom>true</generatePom>
-						</configuration>
-					</execution>
-					<execution>
-						<id>install-intellij-extensions</id>
-						<phase>install</phase>
-						<inherited>false</inherited>
-						<goals>
-							<goal>install-file</goal>
-						</goals>
-						<configuration>
-							<file>${project.build.directory}/intellij/extensions.jar</file>
-							<sources>${project.build.directory}/intellij-source/extensions-sources.zip</sources>
-							<groupId>io.spring.javaformat.intellij.idea</groupId>
-							<artifactId>extensions</artifactId>
-							<version>${project.version}</version>
-							<packaging>jar</packaging>
-							<generatePom>true</generatePom>
-						</configuration>
-					</execution>
-					<execution>
-						<id>install-intellij-platform-service-container</id>
-						<phase>install</phase>
-						<inherited>false</inherited>
-						<goals>
-							<goal>install-file</goal>
-						</goals>
-						<configuration>
-							<file>${project.build.directory}/intellij/platform-serviceContainer.jar</file>
-							<sources>${project.build.directory}/intellij-source/platform-service-container-sources.zip</sources>
-							<groupId>io.spring.javaformat.intellij.idea</groupId>
-							<artifactId>platform-service-container</artifactId>
-							<version>${project.version}</version>
-							<packaging>jar</packaging>
-							<generatePom>true</generatePom>
-						</configuration>
-					</execution>
-					<execution>
 						<id>install-intellij-idea</id>
 						<phase>install</phase>
 						<inherited>false</inherited>
@@ -301,7 +241,7 @@
 							<goal>install-file</goal>
 						</goals>
 						<configuration>
-							<file>${project.build.directory}/intellij/gradle-common.jar</file>
+							<file>${project.build.directory}/intellij/gradle.jar</file>
 							<sources>${project.build.directory}/intellij-source/gradle-sources.zip</sources>
 							<groupId>io.spring.javaformat.intellij.idea</groupId>
 							<artifactId>gradle</artifactId>

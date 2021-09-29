@@ -75,7 +75,7 @@ class SpringReformatter {
 		return JAVA_FILE_TYPE.equals(file.getFileType());
 	}
 
-	public void reformat(PsiFile file, Collection<TextRange> ranges) {
+	public void reformat(PsiFile file, Collection<? extends TextRange> ranges) {
 		this.application.get().assertWriteAccessAllowed();
 		this.documentManager.get().commitAllDocuments();
 		if (!file.isWritable()) {
@@ -101,7 +101,7 @@ class SpringReformatter {
 				CoreBundle.message("cannot.modify.a.read.only.file", virtualFile.getPresentableUrl()));
 	}
 
-	private void reformat(PsiFile file, Collection<TextRange> ranges, Document document) {
+	private void reformat(PsiFile file, Collection<? extends TextRange> ranges, Document document) {
 		if (document != null && file.getVirtualFile() != null) {
 			JavaFormatConfig javaFormatConfig = JavaFormatConfig.findFrom(file.getVirtualFile().toNioPath());
 			Formatter formatter = new Formatter(javaFormatConfig);

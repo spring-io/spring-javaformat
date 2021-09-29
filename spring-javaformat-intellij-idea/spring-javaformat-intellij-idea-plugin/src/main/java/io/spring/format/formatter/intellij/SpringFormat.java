@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,6 +65,7 @@ public class SpringFormat {
 	private PropertiesComponent properties;
 
 	protected SpringFormat(Project project) {
+		logger.info("Initializing Spring Format for project " + project.getName());
 		this.project = project;
 		this.statusIndicator = new StatusIndicator(project);
 		this.properties = PropertiesComponent.getInstance(project);
@@ -84,6 +85,7 @@ public class SpringFormat {
 	}
 
 	private void update(State state) {
+		logger.info("Updating state of " + this.project.getName() + " to " + state);
 		this.lock.lock();
 		try {
 			CodeStyleManager manager = CodeStyleManager.getInstance(this.project);

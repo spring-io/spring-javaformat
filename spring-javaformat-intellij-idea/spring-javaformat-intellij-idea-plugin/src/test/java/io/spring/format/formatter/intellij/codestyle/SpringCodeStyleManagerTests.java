@@ -23,13 +23,17 @@ import java.util.Set;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.codeStyle.ChangedRangesInfo;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -96,7 +100,9 @@ public class SpringCodeStyleManagerTests {
 		given(this.springReformatter.canReformat(any())).willReturn(false);
 		Collection<TextRange> ranges = Arrays.asList(new TextRange(10, 20));
 		this.styleManager.reformatTextWithContext(this.file, ranges);
-		verify(this.delegate).reformatTextWithContext(this.file, ranges);
+		ArgumentCaptor<ChangedRangesInfo> changedRanges  = ArgumentCaptor.forClass(ChangedRangesInfo.class);
+		verify(this.delegate).reformatTextWithContext(eq(this.file), changedRanges.capture());
+		assertThat(changedRanges.getValue().allChangedRanges).containsExactlyElementsOf(ranges);
 	}
 
 	@Test

@@ -31,10 +31,12 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.util.ThrowableRunnable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -133,7 +135,9 @@ public class DelegatingCodeStyleManagerTests {
 	@Test
 	public void reformatTextWithContextShouldCallDelegate() throws Exception {
 		this.delegating.reformatTextWithContext(this.file, this.ranges);
-		verify(this.delegate).reformatTextWithContext(this.file, this.ranges);
+		ArgumentCaptor<ChangedRangesInfo> changedRanges = ArgumentCaptor.forClass(ChangedRangesInfo.class);
+		verify(this.delegate).reformatTextWithContext(eq(this.file), changedRanges.capture());
+		assertThat(changedRanges.getValue().allChangedRanges).containsExactlyElementsOf(this.ranges);
 	}
 
 	@Test

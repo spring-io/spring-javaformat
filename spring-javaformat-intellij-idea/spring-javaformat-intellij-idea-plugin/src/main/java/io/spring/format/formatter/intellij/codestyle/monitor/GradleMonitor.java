@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package io.spring.format.formatter.intellij.codestyle.monitor;
 import java.util.Collection;
 
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.externalSystem.model.DataNode;
 import com.intellij.openapi.externalSystem.model.ExternalProjectInfo;
 import com.intellij.openapi.externalSystem.model.task.TaskData;
@@ -38,6 +39,8 @@ import io.spring.format.formatter.intellij.codestyle.monitor.Trigger.State;
  */
 public class GradleMonitor extends Monitor {
 
+	private static final Logger logger = Logger.getInstance(GradleMonitor.class);
+
 	private static final String FORMAT_TASK = "io.spring.javaformat.gradle.FormatTask";
 
 	public GradleMonitor(Project project, Trigger trigger) {
@@ -47,6 +50,7 @@ public class GradleMonitor extends Monitor {
 	}
 
 	private void check() {
+		logger.info("Checking " + getProject().getName() + " for use of Spring Java Format");
 		ProjectDataManager projectDataManager = ServiceManager.getService(ProjectDataManager.class);
 		boolean hasFormatPlugin = hasFormatPlugin(
 				projectDataManager.getExternalProjectsData(getProject(), GradleConstants.SYSTEM_ID));
@@ -56,6 +60,7 @@ public class GradleMonitor extends Monitor {
 	private boolean hasFormatPlugin(Collection<ExternalProjectInfo> projectInfos) {
 		for (ExternalProjectInfo projectInfo : projectInfos) {
 			if (hasFormatPlugin(projectInfo.getExternalProjectStructure())) {
+				logger.info(projectInfo + " uses Spring Java Format");
 				return true;
 			}
 		}

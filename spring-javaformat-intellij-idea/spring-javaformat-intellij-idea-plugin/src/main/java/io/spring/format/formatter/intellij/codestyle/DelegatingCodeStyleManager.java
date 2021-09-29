@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -105,13 +105,8 @@ public class DelegatingCodeStyleManager extends CodeStyleManager implements Form
 	}
 
 	@Override
-	public void reformatText(PsiFile file, Collection<TextRange> ranges) throws IncorrectOperationException {
+	public void reformatText(PsiFile file, Collection<? extends TextRange> ranges) throws IncorrectOperationException {
 		this.delegate.reformatText(file, ranges);
-	}
-
-	@Override
-	public void reformatTextWithContext(PsiFile file, Collection<TextRange> ranges) throws IncorrectOperationException {
-		this.delegate.reformatTextWithContext(file, ranges);
 	}
 
 	@Override
