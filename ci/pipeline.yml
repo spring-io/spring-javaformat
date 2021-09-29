@@ -21,6 +21,9 @@ anchors:
     ARTIFACTORY_SERVER: ((artifactory-server))
     ARTIFACTORY_USERNAME: ((artifactory-username))
     ARTIFACTORY_PASSWORD: ((artifactory-password))
+  docker-hub-task-params: &docker-hub-task-params
+    DOCKER_HUB_USERNAME: ((docker-hub-username))
+    DOCKER_HUB_PASSWORD: ((docker-hub-password))
 resource_types:
 - name: artifactory-resource
   type: registry-image
@@ -114,6 +117,7 @@ jobs:
     timeout: ((task-timeout))
     file: git-repo/ci/tasks/build-project.yml
     params:
+      <<: *docker-hub-task-params
       BRANCH: ((branch))
   - put: artifactory-repo
     params:
@@ -158,6 +162,7 @@ jobs:
     image: ci-image
     file: git-repo/ci/tasks/stage.yml
     params:
+      <<: *docker-hub-task-params
       RELEASE_TYPE: M
   - put: artifactory-repo
     params:
@@ -176,6 +181,7 @@ jobs:
     image: ci-image
     file: git-repo/ci/tasks/stage.yml
     params:
+      <<: *docker-hub-task-params
       RELEASE_TYPE: RC
   - put: artifactory-repo
     params:
@@ -194,6 +200,7 @@ jobs:
     image: ci-image
     file: git-repo/ci/tasks/stage.yml
     params:
+      <<: *docker-hub-task-params
       RELEASE_TYPE: RELEASE
   - put: artifactory-repo
     params:
