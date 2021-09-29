@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Spring Java Format
+Bundle-Name: Spring Java Format Plugin
 Bundle-SymbolicName: io.spring.javaformat.eclipse;singleton:=true
 Automatic-Module-Name: io.spring.javaformat.eclipse
 Bundle-Version: 0.0.29.qualifier

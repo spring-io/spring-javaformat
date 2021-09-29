@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Fragment-Host: io.spring.javaformat.eclipse
 Bundle-ManifestVersion: 2
-Bundle-Name: Spring Java Format Tests
+Bundle-Name: Spring Java Format Plugin Tests
 Bundle-SymbolicName: io.spring.javaformat.eclipse.tests
 Automatic-Module-Name: io.spring.javaformat.eclipse.tests
 Bundle-Version: 0.0.29.qualifier
