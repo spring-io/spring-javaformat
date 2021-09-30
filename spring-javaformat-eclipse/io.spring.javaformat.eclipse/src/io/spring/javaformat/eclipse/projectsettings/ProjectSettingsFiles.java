@@ -17,13 +17,22 @@
 package io.spring.javaformat.eclipse.projectsettings;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -77,9 +86,27 @@ public class ProjectSettingsFiles implements Iterable<ProjectSettingsFile> {
 					destination.create(new BufferedInputStream(content), true, monitor);
 				}
 				else {
-					destination.setContents(new BufferedInputStream(content), IResource.FORCE, monitor);
+					Properties properties = new OrderedProperties();
+					try (InputStream existingContent = destination.getContents(true)) {
+						if (existingContent != null) {
+							properties.load(existingContent);
+						}
+					}
+					properties.load(content);
+					destination.setContents(
+							new ByteArrayInputStream(stripTimestamp(properties).getBytes(StandardCharsets.UTF_8)),
+							IResource.FORCE, monitor);
 				}
 			}
+		}
+	}
+
+	private String stripTimestamp(Properties properties) throws IOException {
+		try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+			properties.store(output, null);
+			String string = output.toString(StandardCharsets.UTF_8);
+			String separator = System.getProperty("line.separator");
+			return string.substring(string.indexOf(separator) + separator.length());
 		}
 	}
 
@@ -92,6 +119,30 @@ public class ProjectSettingsFiles implements Iterable<ProjectSettingsFile> {
 		catch (Exception ex) {
 			return JavaFormatConfig.DEFAULT;
 		}
+	}
+
+	static class OrderedProperties extends Properties {
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public Set<Map.Entry<Object, Object>> entrySet() {
+			Set<Map.Entry<Object, Object>> set = new TreeSet<Map.Entry<Object, Object>>(new MapEntryKeyComparator());
+			set.addAll(super.entrySet());
+			return set;
+		};
+
+	}
+
+	private static class MapEntryKeyComparator implements Comparator<Map.Entry<Object, Object>> {
+
+		@Override
+		public int compare(Entry<Object, Object> o1, Entry<Object, Object> o2) {
+			Object k1 = o1.getKey();
+			Object k2 = o2.getKey();
+			return String.valueOf(k1).compareTo(String.valueOf(k2));
+		}
+
 	}
 
 }

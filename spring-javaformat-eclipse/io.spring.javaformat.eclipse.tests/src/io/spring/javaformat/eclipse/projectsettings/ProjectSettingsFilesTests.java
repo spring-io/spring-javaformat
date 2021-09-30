@@ -16,8 +16,13 @@
 
 package io.spring.javaformat.eclipse.projectsettings;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Collections;
 
 import org.eclipse.core.resources.IFile;
@@ -28,8 +33,11 @@ import org.junit.jupiter.api.io.TempDir;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.will;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -51,18 +59,50 @@ public class ProjectSettingsFilesTests {
 	}
 
 	@Test
-	public void applyToProjectCopiesToDotSettings() throws Exception {
-		File prefsFile = new File(this.temp, "foo.prefs");
-		prefsFile.createNewFile();
-		ProjectSettingsFile file = ProjectSettingsFile.fromFile(prefsFile);
+	public void applyToProjectWithoutFileCopiesToDotSettings() throws Exception {
+		ProjectSettingsFile file = createPrefsFile();
+		ProjectSettingsFiles files = new ProjectSettingsFiles(Collections.singleton(file), new ProjectProperties());
+		IProject project = mock(IProject.class);
+		IProgressMonitor monitor = mock(IProgressMonitor.class);
+		IFile projectFile = mock(IFile.class);
+		given(project.getFile(".settings/foo.prefs")).willReturn(projectFile);
+		given(projectFile.exists()).willReturn(false);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		will((invocation) -> {
+			invocation.getArgument(0, InputStream.class).transferTo(out);
+			return null;
+		}).given(projectFile).create(any(), anyBoolean(), any());
+		files.applyToProject(project, monitor);
+		verify(projectFile).create(any(), eq(true), any());
+		assertThat(out.toString(StandardCharsets.UTF_8)).isEqualTo("y=z\n");
+	}
+
+	@Test
+	public void applyToProjectWithFileMergesToDotSettings() throws Exception {
+		ProjectSettingsFile file = createPrefsFile();
 		ProjectSettingsFiles files = new ProjectSettingsFiles(Collections.singleton(file), new ProjectProperties());
 		IProject project = mock(IProject.class);
 		IProgressMonitor monitor = mock(IProgressMonitor.class);
 		IFile projectFile = mock(IFile.class);
 		given(project.getFile(".settings/foo.prefs")).willReturn(projectFile);
 		given(projectFile.exists()).willReturn(true);
+		given(projectFile.getContents(true))
+				.willReturn(new ByteArrayInputStream("a=b\n".getBytes(StandardCharsets.UTF_8)));
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		will((invocation) -> {
+			invocation.getArgument(0, InputStream.class).transferTo(out);
+			return null;
+		}).given(projectFile).setContents((InputStream) any(), anyInt(), any());
 		files.applyToProject(project, monitor);
 		verify(projectFile).setContents((InputStream) any(), eq(1), eq(monitor));
+		assertThat(out.toString(StandardCharsets.UTF_8)).isEqualTo("a=b\ny=z\n");
+	}
+
+	private ProjectSettingsFile createPrefsFile() throws IOException {
+		File prefsFile = new File(this.temp, "foo.prefs");
+		Files.copy(new ByteArrayInputStream("y=z\n".getBytes(StandardCharsets.UTF_8)), prefsFile.toPath());
+		ProjectSettingsFile file = ProjectSettingsFile.fromFile(prefsFile);
+		return file;
 	}
 
 }
