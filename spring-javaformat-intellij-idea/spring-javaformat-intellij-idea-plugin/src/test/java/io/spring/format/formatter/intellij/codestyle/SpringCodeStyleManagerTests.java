@@ -100,7 +100,7 @@ public class SpringCodeStyleManagerTests {
 		given(this.springReformatter.canReformat(any())).willReturn(false);
 		Collection<TextRange> ranges = Arrays.asList(new TextRange(10, 20));
 		this.styleManager.reformatTextWithContext(this.file, ranges);
-		ArgumentCaptor<ChangedRangesInfo> changedRanges  = ArgumentCaptor.forClass(ChangedRangesInfo.class);
+		ArgumentCaptor<ChangedRangesInfo> changedRanges = ArgumentCaptor.forClass(ChangedRangesInfo.class);
 		verify(this.delegate).reformatTextWithContext(eq(this.file), changedRanges.capture());
 		assertThat(changedRanges.getValue().allChangedRanges).containsExactlyElementsOf(ranges);
 	}
