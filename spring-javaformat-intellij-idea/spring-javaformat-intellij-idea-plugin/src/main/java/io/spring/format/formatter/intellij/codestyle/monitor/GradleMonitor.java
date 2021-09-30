@@ -41,7 +41,7 @@ public class GradleMonitor extends Monitor {
 
 	private static final Logger logger = Logger.getInstance(GradleMonitor.class);
 
-	private static final String FORMAT_TASK = "io.spring.javaformat.gradle.FormatTask";
+	private static final String FORMAT_TASK = "io.spring.javaformat.gradle.tasks.Format";
 
 	public GradleMonitor(Project project, Trigger trigger) {
 		super(project, trigger);
