@@ -134,6 +134,22 @@
 				<artifactId>maven-install-plugin</artifactId>
 				<executions>
 					<execution>
+						<id>install-intellij-annotations</id>
+						<phase>install</phase>
+						<inherited>false</inherited>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.build.directory}/intellij/annotations.jar</file>
+							<groupId>io.spring.javaformat.intellij.idea</groupId>
+							<artifactId>annotations</artifactId>
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+					<execution>
 						<id>install-intellij-platform-api</id>
 						<phase>install</phase>
 						<inherited>false</inherited>

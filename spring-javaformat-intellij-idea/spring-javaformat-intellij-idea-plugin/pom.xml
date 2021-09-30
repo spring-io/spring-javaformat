@@ -42,7 +42,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.spring.javaformat.intellij.idea</groupId>
-			<artifactId>extensions</artifactId>
+			<artifactId>annotations</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
@@ -55,18 +55,6 @@
 		<dependency>
 			<groupId>io.spring.javaformat.intellij.idea</groupId>
 			<artifactId>platform-impl</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.spring.javaformat.intellij.idea</groupId>
-			<artifactId>platform-util-ui</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.spring.javaformat.intellij.idea</groupId>
-			<artifactId>platform-service-container</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
