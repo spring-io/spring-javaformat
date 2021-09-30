@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.spring.javaformat.gradle;
+package io.spring.javaformat.gradle.tasks;
 
 import java.nio.charset.Charset;
 import java.util.stream.Stream;
@@ -32,9 +32,12 @@ import io.spring.javaformat.formatter.FileFormatter;
  *
  * @author Phillip Webb
  */
-abstract class FormatterTask extends SourceTask {
+public abstract class FormatterTask extends SourceTask {
 
 	private String encoding;
+
+	FormatterTask() {
+	}
 
 	/**
 	 * Get the file encoding in use.

@@ -31,13 +31,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 
+import io.spring.javaformat.gradle.tasks.CheckFormat;
 import io.spring.javaformat.gradle.testkit.GradleBuild;
 import io.spring.javaformat.gradle.testkit.GradleBuildExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for {@link CheckTask}.
+ * Tests for {@link CheckFormat}.
  *
  * @author Phillip Webb
  */

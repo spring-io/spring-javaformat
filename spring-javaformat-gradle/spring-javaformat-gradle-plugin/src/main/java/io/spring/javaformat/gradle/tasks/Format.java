@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.spring.javaformat.gradle;
+package io.spring.javaformat.gradle.tasks;
 
 import java.io.IOException;
 
@@ -29,7 +29,7 @@ import io.spring.javaformat.formatter.FileFormatterException;
  *
  * @author Phillip Webb
  */
-public class FormatTask extends FormatterTask {
+public class Format extends FormatterTask {
 
 	/**
 	 * The name of the task.

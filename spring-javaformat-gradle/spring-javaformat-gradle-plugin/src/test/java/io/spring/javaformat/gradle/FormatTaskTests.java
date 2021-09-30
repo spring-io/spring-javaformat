@@ -25,13 +25,14 @@ import org.gradle.testkit.runner.TaskOutcome;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import io.spring.javaformat.gradle.tasks.Format;
 import io.spring.javaformat.gradle.testkit.GradleBuild;
 import io.spring.javaformat.gradle.testkit.GradleBuildExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for {@link FormatTask}.
+ * Tests for {@link Format}.
  *
  * @author Phillip Webb
  */

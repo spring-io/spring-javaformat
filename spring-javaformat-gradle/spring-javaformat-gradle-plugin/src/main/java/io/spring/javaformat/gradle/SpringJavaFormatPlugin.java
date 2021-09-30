@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,10 @@ import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.tasks.SourceSet;
 
+import io.spring.javaformat.gradle.tasks.CheckFormat;
+import io.spring.javaformat.gradle.tasks.Format;
+import io.spring.javaformat.gradle.tasks.FormatterTask;
+
 /**
  * Spring Format Gradle Plugin.
  *
@@ -42,10 +46,10 @@ public class SpringJavaFormatPlugin implements Plugin<Project> {
 
 	private void addSourceTasks() {
 		this.project.getPlugins().withType(JavaBasePlugin.class, (plugin) -> {
-			Task formatAll = this.project.task(FormatTask.NAME);
-			formatAll.setDescription(FormatTask.DESCRIPTION);
-			Task checkAll = this.project.task(CheckTask.NAME);
-			checkAll.setDescription(CheckTask.DESCRIPTION);
+			Task formatAll = this.project.task(Format.NAME);
+			formatAll.setDescription(Format.DESCRIPTION);
+			Task checkAll = this.project.task(CheckFormat.NAME);
+			checkAll.setDescription(CheckFormat.DESCRIPTION);
 			this.project.getTasks().getByName(JavaBasePlugin.CHECK_TASK_NAME).dependsOn(checkAll);
 			this.project.getConvention().getPlugin(JavaPluginConvention.class).getSourceSets()
 					.all((sourceSet) -> addSourceTasks(sourceSet, checkAll, formatAll));
@@ -53,17 +57,17 @@ public class SpringJavaFormatPlugin implements Plugin<Project> {
 	}
 
 	private void addSourceTasks(SourceSet sourceSet, Task checkAll, Task formatAll) {
-		CheckTask checkTask = addSourceTask(sourceSet, CheckTask.class, CheckTask.NAME, CheckTask.DESCRIPTION);
+		CheckFormat checkTask = addFormatterTask(sourceSet, CheckFormat.class, CheckFormat.NAME,
+				CheckFormat.DESCRIPTION);
 		checkTask.setReportLocation(
 				new File(this.project.getBuildDir(), "reports/format/" + sourceSet.getName() + "/check-format.txt"));
 		checkAll.dependsOn(checkTask);
-		FormatTask formatSourceSet = addSourceTask(sourceSet, FormatTask.class, FormatTask.NAME,
-				FormatTask.DESCRIPTION);
+		Format formatSourceSet = addFormatterTask(sourceSet, Format.class, Format.NAME, Format.DESCRIPTION);
 		formatSourceSet.conventionMapping("encoding", () -> "UTF-8");
 		formatAll.dependsOn(formatSourceSet);
 	}
 
-	private <T extends FormatterTask> T addSourceTask(SourceSet sourceSet, Class<T> taskType, String name,
+	private <T extends FormatterTask> T addFormatterTask(SourceSet sourceSet, Class<T> taskType, String name,
 			String desc) {
 		String taskName = sourceSet.getTaskName(name, null);
 		T task = this.project.getTasks().create(taskName, taskType);
