@@ -36,7 +36,7 @@
 		<tycho.disableP2Mirrors>true</tycho.disableP2Mirrors>
 		<ant.version>1.8.1</ant.version>
 		<ant-contrib.version>1.0b3</ant-contrib.version>
-		<asm.version>5.2</asm.version>
+		<asm.version>7.3.1</asm.version>
 		<assertj.version>3.8.0</assertj.version>
 		<checkstyle.version>8.45.1</checkstyle.version>
 		<gradle.version>3.4</gradle.version>

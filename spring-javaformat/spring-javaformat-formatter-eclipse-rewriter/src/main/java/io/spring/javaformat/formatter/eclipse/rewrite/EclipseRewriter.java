@@ -100,7 +100,7 @@ public final class EclipseRewriter {
 	private static class DefaultCodeFormatterManipulator extends ClassVisitor {
 
 		DefaultCodeFormatterManipulator(ClassVisitor visitor) {
-			super(Opcodes.ASM5, visitor);
+			super(Opcodes.ASM7, visitor);
 		}
 
 		@Override
@@ -129,7 +129,7 @@ public final class EclipseRewriter {
 	private static class DefaultCodeFormatterMethodManipulator extends MethodVisitor {
 
 		DefaultCodeFormatterMethodManipulator(MethodVisitor mv) {
-			super(Opcodes.ASM5, mv);
+			super(Opcodes.ASM7, mv);
 		}
 
 		@Override
@@ -143,13 +143,13 @@ public final class EclipseRewriter {
 	}
 
 	/**
-	 * {@link ClassVisitor} to update the {@code NLS} class so it doesn't use a System
-	 * property to disable warning messages.
+	 * {@link ClassVisitor} to update the {@code NLS} class so it doesn't use a
+	 * System property to disable warning messages.
 	 */
 	private static class NlsManipulator extends ClassVisitor {
 
 		NlsManipulator(ClassVisitor visitor) {
-			super(Opcodes.ASM5, visitor);
+			super(Opcodes.ASM7, visitor);
 		}
 
 		@Override
@@ -163,15 +163,15 @@ public final class EclipseRewriter {
 	}
 
 	/**
-	 * {@link MethodVisitor} to update the {@code NLS} class so it doesn't use a System
-	 * property to disable warning messages.
+	 * {@link MethodVisitor} to update the {@code NLS} class so it doesn't use a
+	 * System property to disable warning messages.
 	 */
 	private static class NslMethodManipulator extends MethodVisitor {
 
 		private final MethodVisitor methodVisitor;
 
 		NslMethodManipulator(MethodVisitor mv) {
-			super(Opcodes.ASM5, null);
+			super(Opcodes.ASM7, null);
 			this.methodVisitor = mv;
 		}
 
