@@ -15,6 +15,18 @@
 		<main.basedir>${basedir}/..</main.basedir>
 		<java.version>11</java.version>
 	</properties>
+	<repositories>
+		<repository>
+			<id>eclipse-jdk8</id>
+			<layout>p2</layout>
+			<url>${eclipse.jdk8.repository}</url>
+		</repository>
+		<repository>
+			<id>eclipse-checkstyle</id>
+			<layout>p2</layout>
+			<url>${eclipse.checkstyle.repository}</url>
+		</repository>
+	</repositories>
 	<build>
 		<plugins>
 			<plugin>

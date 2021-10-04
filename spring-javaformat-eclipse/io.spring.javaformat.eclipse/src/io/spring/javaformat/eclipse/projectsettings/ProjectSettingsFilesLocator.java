@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import io.spring.javaformat.config.IndentationStyle;
 import io.spring.javaformat.config.JavaFormatConfig;
 
 /**
@@ -71,11 +70,19 @@ public class ProjectSettingsFilesLocator {
 	}
 
 	private String updateFormatter(JavaFormatConfig javaFormatConfig, String content) {
-		if (javaFormatConfig.getIndentationStyle() == IndentationStyle.SPACES) {
-			return content.replace("org.eclipse.jdt.core.javaFormatter=io.spring.javaformat.eclipse.formatter",
-					"org.eclipse.jdt.core.javaFormatter=io.spring.javaformat.eclipse.formatter.spaces");
+		String formatterId = getFormatterId(javaFormatConfig);
+		if (formatterId != null) {
+			return content.replace(
+					"org.eclipse.jdt.core.javaFormatter=io.spring.javaformat.eclipse.formatter.jdk11.tabs",
+					"org.eclipse.jdt.core.javaFormatter=" + formatterId);
 		}
 		return content;
+	}
+
+	private String getFormatterId(JavaFormatConfig config) {
+		String jdk = config.getJavaBaseline().name().substring(1);
+		String indentation = config.getIndentationStyle().name().toLowerCase();
+		return "io.spring.javaformat.eclipse.formatter.jdk" + jdk + "." + indentation;
 	}
 
 	private void add(ProjectProperties projectProperties, Map<String, ProjectSettingsFile> files, File folder)

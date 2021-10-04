@@ -54,7 +54,7 @@
 						</additionalDependency>
 						<additionalDependency>
 							<groupId>io.spring.javaformat</groupId>
-							<artifactId>spring-javaformat-formatter-eclipse</artifactId>
+							<artifactId>spring-javaformat-formatter-eclipse-jdt-jdk8</artifactId>
 							<version>${project.version}</version>
 						</additionalDependency>
 					</additionalDependencies>

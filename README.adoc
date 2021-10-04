@@ -188,6 +188,19 @@ Your `checkstyle.xml` file should look then like this:
 
 
 
+=== Java 8 Support
+By default, the formatter requires Java 11.
+If you are working on an older project, you can use a variation of the formatter based off Eclipse 2021-03 (the latest Eclipse JDT version built with Java 8).
+
+To use the Java 8 version, add a file called `.springjavaformatconfig` to the root of your project with the following content:
+
+[source,properties]
+----
+java-baseline=8
+----
+
+
+
 === Eclipse
 The Eclipse plugin provides a custom formatter implementation and automatically applies project specific settings.
 The plugin is automatically activated whenever the Maven or Gradle plugins are discovered in a project build script.

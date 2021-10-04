@@ -30,19 +30,15 @@ import java.nio.file.Path;
 public interface JavaFormatConfig {
 
 	/**
-	 * {@link JavaFormatConfig} using {@link IndentationStyle#TABS}.
-	 */
-	JavaFormatConfig TABS = new DefaultJavaFormatConfig(IndentationStyle.TABS);
-
-	/**
-	 * {@link JavaFormatConfig} using {@link IndentationStyle#SPACES}.
-	 */
-	JavaFormatConfig SPACES = new DefaultJavaFormatConfig(IndentationStyle.SPACES);
-
-	/**
 	 * The default {@link JavaFormatConfig}.
 	 */
-	JavaFormatConfig DEFAULT = TABS;
+	JavaFormatConfig DEFAULT = of(JavaBaseline.V11, IndentationStyle.TABS);
+
+	/**
+	 * Java JDK baseline version expected be used when formatting.
+	 * @return the JDK version
+	 */
+	JavaBaseline getJavaBaseline();
 
 	/**
 	 * Return the indentation style that should be used with the project.
@@ -110,6 +106,16 @@ public interface JavaFormatConfig {
 		catch (IOException ex) {
 			throw new IllegalStateException(ex);
 		}
+	}
+
+	/**
+	 * Factory method to create a {@link JavaFormatConfig} with specific settings.
+	 * @param javaBaseline The baseline JDK version
+	 * @param indentationStyle the indentation style
+	 * @return a {@link JavaFormatConfig} instance
+	 */
+	static JavaFormatConfig of(JavaBaseline javaBaseline, IndentationStyle indentationStyle) {
+		return new DefaultJavaFormatConfig(javaBaseline, indentationStyle);
 	}
 
 }

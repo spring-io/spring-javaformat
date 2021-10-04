@@ -33,10 +33,15 @@
 	<modules>
 		<module>spring-javaformat-config</module>
 		<module>spring-javaformat-checkstyle</module>
-		<module>spring-javaformat-formatter-eclipse-rewriter</module>
-		<module>spring-javaformat-formatter-eclipse-runtime</module>
-		<module>spring-javaformat-formatter-eclipse</module>
 		<module>spring-javaformat-formatter</module>
+		<module>spring-javaformat-formatter-test-support</module>
+		<module>spring-javaformat-formatter-tests</module>
+		<module>spring-javaformat-formatter-eclipse-rewriter</module>
+		<module>spring-javaformat-formatter-eclipse-jdk8</module>
+		<module>spring-javaformat-formatter-eclipse-jdk11</module>
+		<module>spring-javaformat-formatter-eclipse-jdt-jdk8</module>
+		<module>spring-javaformat-formatter-eclipse-jdt-jdk11</module>
+		<module>spring-javaformat-formatter-eclipse-runtime</module>
 		<module>spring-javaformat-formatter-shader</module>
 		<module>spring-javaformat-formatter-shaded</module>
 	</modules>

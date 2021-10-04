@@ -23,10 +23,18 @@ package io.spring.javaformat.config;
  */
 class DefaultJavaFormatConfig implements JavaFormatConfig {
 
+	private final JavaBaseline javaBaseline;
+
 	private final IndentationStyle indentationStyle;
 
-	DefaultJavaFormatConfig(IndentationStyle indentationStyle) {
+	DefaultJavaFormatConfig(JavaBaseline javaBaseline, IndentationStyle indentationStyle) {
+		this.javaBaseline = javaBaseline;
 		this.indentationStyle = indentationStyle;
+	}
+
+	@Override
+	public JavaBaseline getJavaBaseline() {
+		return this.javaBaseline;
 	}
 
 	@Override

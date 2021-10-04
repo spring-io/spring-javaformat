@@ -31,7 +31,8 @@
 		<main.basedir>${basedir}</main.basedir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
-		<eclipse.repository>https://download.eclipse.org/releases/2021-03/202103171000/</eclipse.repository>
+		<eclipse.jdk8.repository>https://download.eclipse.org/releases/2021-03/202103171000/</eclipse.jdk8.repository>
+		<eclipse.jdk11.repository>https://download.eclipse.org/releases/2021-09/202109151000/</eclipse.jdk11.repository>
 		<eclipse.checkstyle.repository>https://checkstyle.org/eclipse-cs-update-site/</eclipse.checkstyle.repository>
 		<tycho.disableP2Mirrors>true</tycho.disableP2Mirrors>
 		<ant.version>1.8.1</ant.version>
@@ -594,18 +595,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<repositories>
-		<repository>
-			<id>eclipse</id>
-			<layout>p2</layout>
-			<url>${eclipse.repository}</url>
-		</repository>
-		<repository>
-			<id>eclipse-checkstyle</id>
-			<layout>p2</layout>
-			<url>${eclipse.checkstyle.repository}</url>
-		</repository>
-	</repositories>
 	<modules>
 		<module>spring-javaformat</module>
 		<module>spring-javaformat-maven</module>

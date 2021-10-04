@@ -28,6 +28,8 @@ import java.util.Properties;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import io.spring.javaformat.config.IndentationStyle;
+import io.spring.javaformat.config.JavaBaseline;
 import io.spring.javaformat.config.JavaFormatConfig;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -82,7 +84,7 @@ public class ProjectSettingsFilesLocatorTests {
 			Properties properties = new Properties();
 			properties.load(content);
 			assertThat(properties.get("org.eclipse.jdt.core.javaFormatter"))
-					.isEqualTo("io.spring.javaformat.eclipse.formatter");
+					.isEqualTo("io.spring.javaformat.eclipse.formatter.jdk11.tabs");
 		}
 	}
 
@@ -90,11 +92,11 @@ public class ProjectSettingsFilesLocatorTests {
 	public void jdtCorePrefsFormatterWhenSpacesShouldUseSpaces() throws IOException {
 		ProjectSettingsFiles files = new ProjectSettingsFilesLocator().locateSettingsFiles();
 		ProjectSettingsFile file = get(files, "org.eclipse.jdt.core.prefs");
-		try (InputStream content = file.getContent(JavaFormatConfig.SPACES)) {
+		try (InputStream content = file.getContent(JavaFormatConfig.of(JavaBaseline.V8, IndentationStyle.SPACES))) {
 			Properties properties = new Properties();
 			properties.load(content);
 			assertThat(properties.get("org.eclipse.jdt.core.javaFormatter"))
-					.isEqualTo("io.spring.javaformat.eclipse.formatter.spaces");
+					.isEqualTo("io.spring.javaformat.eclipse.formatter.jdk8.spaces");
 		}
 	}
 

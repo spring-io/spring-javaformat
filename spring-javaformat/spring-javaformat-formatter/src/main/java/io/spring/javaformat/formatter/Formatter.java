@@ -16,33 +16,40 @@
 
 package io.spring.javaformat.formatter;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Collections;
 import java.util.Map;
-import java.util.Properties;
 
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.text.edits.TextEdit;
 
-import io.spring.javaformat.config.IndentationStyle;
+import io.spring.javaformat.config.JavaBaseline;
 import io.spring.javaformat.config.JavaFormatConfig;
-import io.spring.javaformat.eclipse.jdt.core.formatter.CodeFormatter;
-import io.spring.javaformat.eclipse.jdt.internal.formatter.ExtendedCodeFormatter;
-import io.spring.javaformat.eclipse.jdt.internal.formatter.Preparator;
-import io.spring.javaformat.formatter.preparator.Preparators;
+import io.spring.javaformat.formatter.eclipse.EclipseCodeFormatter;
+import io.spring.javaformat.formatter.jdk11.eclipse.EclipseJdk11CodeFormatter;
+import io.spring.javaformat.formatter.jdk8.eclipse.EclipseJdk8CodeFormatter;
 
 /**
- * A {@link CodeFormatter} that applies Spring formatting conventions.
+ * A code formatter that applies Spring formatting conventions.
  *
  * @author Phillip Webb
  */
-public class Formatter extends CodeFormatter {
+public class Formatter {
+
+	/**
+	 * Kind used to format a compilation unit. See Eclipse {@code CodeFormatter}
+	 * constants.
+	 */
+	private static final int K_COMPILATION_UNIT = 0x08;
+
+	/**
+	 * Flag used to include the comments during the formatting of the code snippet. See
+	 * Eclipse {@code CodeFormatter} constants.
+	 */
+	private static final int F_INCLUDE_COMMENTS = 0x1000;
 
 	/**
 	 * The components that will be formatted by default.
 	 */
-	private static final int DEFAULT_COMPONENTS = CodeFormatter.K_COMPILATION_UNIT | CodeFormatter.F_INCLUDE_COMMENTS;
+	private static final int DEFAULT_COMPONENTS = K_COMPILATION_UNIT | F_INCLUDE_COMMENTS;
 
 	/**
 	 * The default indentation level.
@@ -54,7 +61,7 @@ public class Formatter extends CodeFormatter {
 	 */
 	public static final String DEFAULT_LINE_SEPARATOR = null;
 
-	private final CodeFormatter delegate;
+	private final EclipseCodeFormatter delegate;
 
 	/**
 	 * Create a new formatter instance.
@@ -68,7 +75,8 @@ public class Formatter extends CodeFormatter {
 	 * @param javaFormatConfig the java format config to use
 	 */
 	public Formatter(JavaFormatConfig javaFormatConfig) {
-		this.delegate = new DelegateCodeFormatter(javaFormatConfig);
+		this.delegate = javaFormatConfig.getJavaBaseline() == JavaBaseline.V8
+				? new EclipseJdk8CodeFormatter(javaFormatConfig) : new EclipseJdk11CodeFormatter(javaFormatConfig);
 	}
 
 	/**
@@ -113,7 +121,6 @@ public class Formatter extends CodeFormatter {
 		return format(DEFAULT_COMPONENTS, source, offset, length, DEFAULT_INDENTATION_LEVEL, lineSeparator);
 	}
 
-	@Override
 	public TextEdit format(int kind, String source, int offset, int length, int indentationLevel,
 			String lineSeparator) {
 		return this.delegate.format(kind, source, offset, length, indentationLevel, lineSeparator);
@@ -140,65 +147,16 @@ public class Formatter extends CodeFormatter {
 		return format(DEFAULT_COMPONENTS, source, regions, DEFAULT_INDENTATION_LEVEL, lineSeparator);
 	}
 
-	@Override
 	public TextEdit format(int kind, String source, IRegion[] regions, int indentationLevel, String lineSeparator) {
 		return this.delegate.format(kind, source, regions, indentationLevel, lineSeparator);
 	}
 
-	@Override
 	public String createIndentationString(int indentationLevel) {
 		return this.delegate.createIndentationString(indentationLevel);
 	}
 
-	@Override
 	public void setOptions(Map<String, String> options) {
 		this.delegate.setOptions(options);
-	}
-
-	/**
-	 * Internal delegate code formatter to apply Spring {@literal formatter.prefs} and add
-	 * {@link Preparator Preparators}.
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static class DelegateCodeFormatter extends ExtendedCodeFormatter {
-
-		private final Map<String, String> appliedOptions;
-
-		DelegateCodeFormatter(JavaFormatConfig javaFormatConfig) {
-			this(loadOptions(javaFormatConfig));
-		}
-
-		DelegateCodeFormatter(Map<String, String> options) {
-			super(options);
-			this.appliedOptions = options;
-			Preparators.forEach(this::addPreparator);
-		}
-
-		@Override
-		public void setOptions(Map<String, String> options) {
-			super.setOptions(this.appliedOptions);
-		}
-
-		private static Map<String, String> loadOptions(JavaFormatConfig javaFormatConfig) {
-			try {
-				Properties properties = new Properties();
-				try (InputStream inputStream = Formatter.class.getResourceAsStream("formatter.prefs")) {
-					properties.load(inputStream);
-				}
-				applyConfig(properties, javaFormatConfig);
-				return (Map) Collections.unmodifiableMap(properties);
-			}
-			catch (IOException ex) {
-				throw new IllegalStateException(ex);
-			}
-		}
-
-		private static void applyConfig(Properties properties, JavaFormatConfig javaFormatConfig) {
-			if (javaFormatConfig.getIndentationStyle() == IndentationStyle.SPACES) {
-				properties.put("io.spring.javaformat.eclipse.jdt.core.formatter.tabulation.char", "space");
-			}
-		}
-
 	}
 
 }

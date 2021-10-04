@@ -64,18 +64,23 @@ public final class EclipseRewriter {
 	private EclipseRewriter() {
 	}
 
-	public void rewrite(String file) throws IOException {
+	public void rewrite(JdkVersion jdkVersion, String file) throws IOException {
 		System.out.println("Rewriting classes in " + file);
 		URI uri = URI.create("jar:file:" + Paths.get(file).toUri().getPath());
 		try (FileSystem zip = FileSystems.newFileSystem(uri, Collections.singletonMap("create", "true"))) {
-			rewrite(zip);
+			rewrite(jdkVersion, zip);
 		}
 	}
 
-	private void rewrite(FileSystem zip) throws IOException {
+	private void rewrite(JdkVersion jdkVersion, FileSystem zip) throws IOException {
 		rewrite(zip, "org/eclipse/jdt/internal/formatter/DefaultCodeFormatter.class",
 				DefaultCodeFormatterManipulator::new);
-		rewrite(zip, "org/eclipse/osgi/util/NLS$1.class", NlsManipulator::new);
+		if (jdkVersion == JdkVersion.V8) {
+			rewrite(zip, "org/eclipse/osgi/util/NLS$1.class", NlsJdk8Manipulator::new);
+		}
+		else {
+			rewrite(zip, "org/eclipse/osgi/util/NLS.class", NlsJdk11Manipulator::new);
+		}
 	}
 
 	private void rewrite(FileSystem zip, String name, Function<ClassWriter, ClassVisitor> manipulator)
@@ -90,7 +95,7 @@ public final class EclipseRewriter {
 	}
 
 	public static void main(String[] args) throws Exception {
-		new EclipseRewriter().rewrite(args[0]);
+		new EclipseRewriter().rewrite(JdkVersion.valueOf("V" + args[0]), args[1]);
 	}
 
 	/**
@@ -143,19 +148,19 @@ public final class EclipseRewriter {
 	}
 
 	/**
-	 * {@link ClassVisitor} to update the {@code NLS} class so it doesn't use a
-	 * System property to disable warning messages.
+	 * {@link ClassVisitor} to update the {@code NLS} class in the JDK 8 version so it
+	 * doesn't use a System property to disable warning messages.
 	 */
-	private static class NlsManipulator extends ClassVisitor {
+	private static class NlsJdk8Manipulator extends ClassVisitor {
 
-		NlsManipulator(ClassVisitor visitor) {
+		NlsJdk8Manipulator(ClassVisitor visitor) {
 			super(Opcodes.ASM7, visitor);
 		}
 
 		@Override
 		public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
 			if ("run".equals(name) && desc.contains("Boolean")) {
-				return new NslMethodManipulator(super.visitMethod(access, name, desc, signature, exceptions));
+				return new NslJdk8MethodManipulator(super.visitMethod(access, name, desc, signature, exceptions));
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions);
 		}
@@ -163,14 +168,14 @@ public final class EclipseRewriter {
 	}
 
 	/**
-	 * {@link MethodVisitor} to update the {@code NLS} class so it doesn't use a
-	 * System property to disable warning messages.
+	 * {@link MethodVisitor} to update the {@code NLS} class in the JDK 8 version so it
+	 * doesn't use a System property to disable warning messages.
 	 */
-	private static class NslMethodManipulator extends MethodVisitor {
+	private static class NslJdk8MethodManipulator extends MethodVisitor {
 
 		private final MethodVisitor methodVisitor;
 
-		NslMethodManipulator(MethodVisitor mv) {
+		NslJdk8MethodManipulator(MethodVisitor mv) {
 			super(Opcodes.ASM7, null);
 			this.methodVisitor = mv;
 		}
@@ -184,6 +189,66 @@ public final class EclipseRewriter {
 			mv.visitMaxs(1, 1);
 			mv.visitEnd();
 		}
+
+	}
+
+	/**
+	 * {@link ClassVisitor} to update the {@code NLS} class in the JDK 8 version so it
+	 * doesn't use a System property to disable warning messages.
+	 */
+	private static class NlsJdk11Manipulator extends ClassVisitor {
+
+		NlsJdk11Manipulator(ClassVisitor visitor) {
+			super(Opcodes.ASM7, visitor);
+		}
+
+		@Override
+		public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+			if ("<clinit>".equals(name)) {
+				return new NslJdk11MethodManipulator(super.visitMethod(access, name, desc, signature, exceptions));
+			}
+			return super.visitMethod(access, name, desc, signature, exceptions);
+		}
+
+	}
+
+	/**
+	 * {@link MethodVisitor} to update the {@code NLS} class in the JDK 8 version so it
+	 * doesn't use a System property to disable warning messages.
+	 */
+	private static class NslJdk11MethodManipulator extends MethodVisitor {
+
+		private final MethodVisitor methodVisitor;
+
+		NslJdk11MethodManipulator(MethodVisitor mv) {
+			super(Opcodes.ASM7, null);
+			this.methodVisitor = mv;
+		}
+
+		@Override
+		public void visitEnd() {
+			MethodVisitor mv = this.methodVisitor;
+			mv.visitCode();
+			mv.visitInsn(Opcodes.ICONST_0);
+			mv.visitTypeInsn(Opcodes.ANEWARRAY, "java/lang/Object");
+			mv.visitFieldInsn(Opcodes.PUTSTATIC, "org/eclipse/osgi/util/NLS", "EMPTY_ARGS", "[Ljava/lang/Object;");
+			mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/Boolean", "TRUE", "Ljava/lang/Boolean;");
+			mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue", "()Z", false);
+			mv.visitFieldInsn(Opcodes.PUTSTATIC, "org/eclipse/osgi/util/NLS", "ignoreWarnings", "Z");
+			mv.visitTypeInsn(Opcodes.NEW, "java/lang/Object");
+			mv.visitInsn(Opcodes.DUP);
+			mv.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
+			mv.visitFieldInsn(Opcodes.PUTSTATIC, "org/eclipse/osgi/util/NLS", "ASSIGNED", "Ljava/lang/Object;");
+			mv.visitInsn(Opcodes.RETURN);
+			mv.visitMaxs(2, 0);
+			mv.visitEnd();
+		}
+
+	}
+
+	enum JdkVersion {
+
+		V8, V11
 
 	}
 

@@ -9,181 +9,58 @@
 		<version>0.0.30-SNAPSHOT</version>
 	</parent>
 	<artifactId>spring-javaformat-formatter-eclipse-runtime</artifactId>
-	<packaging>eclipse-plugin</packaging>
 	<name>Spring JavaFormat Eclipse Runtime</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
-		<sourceartifacts>org.eclipse.jdt.core.source,org.eclipse.jface.source,org.eclipse.text.source</sourceartifacts>
 	</properties>
-	<licenses>
-		<license>
-			<name>Eclipse Public License, Version 1.0</name>
-			<url>https://www.eclipse.org/legal/epl-v10.html</url>
-		</license>
-	</licenses>
+	<dependencies>
+		<dependency>
+			<groupId>io.spring.javaformat</groupId>
+			<artifactId>spring-javaformat-formatter-eclipse-jdk8</artifactId>
+			<version>${project.version}</version>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<dependencies>
-					<dependency>
-						<groupId>io.spring.javaformat</groupId>
-						<artifactId>spring-javaformat-formatter-eclipse-rewriter</artifactId>
-						<version>${project.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>ant-contrib</groupId>
-						<artifactId>ant-contrib</artifactId>
-						<version>${ant-contrib.version}</version>
-						<exclusions>
-							<exclusion>
-								<groupId>ant</groupId>
-								<artifactId>ant</artifactId>
-							</exclusion>
-						</exclusions>
-					</dependency>
-					<dependency>
-						<groupId>org.apache.ant</groupId>
-						<artifactId>ant-nodeps</artifactId>
-						<version>${ant.version}</version>
-					</dependency>
-				</dependencies>
+				<artifactId>maven-source-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>rewrite-bytecode</id>
+						<id>attach-source</id>
 						<phase>package</phase>
 						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<java
-									classname="io.spring.javaformat.formatter.eclipse.rewrite.EclipseRewriter"
-									failonerror="true">
-									<arg
-										value="${project.build.directory}${file.separator}${project.artifactId}-${project.version}.jar" />
-								</java>
-							</target>
-						</configuration>
-					</execution>
-					<execution>
-						<id>repackage-source</id>
-						<phase>package</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<zip
-									destfile="${project.build.directory}/${project.build.finalName}-sources.jar"
-									basedir="${project.build.directory}/sources" />
-								<attachartifact
-									file="${project.build.directory}/${project.build.finalName}-sources.jar"
-									classifier="sources" type="jar" />
-							</target>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-packaging-plugin</artifactId>
-				<configuration>
-					<strictVersions>false</strictVersions>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>target-platform-configuration</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-versions-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>update-eclipse-version</id>
-						<phase>initialize</phase>
-						<goals>
-							<goal>update-eclipse-metadata</goal>
+							<goal>jar</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
+				<artifactId>maven-shade-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>unpack-dependencies</id>
-						<goals>
-							<goal>unpack-dependencies</goal>
-						</goals>
-						<phase>prepare-package</phase>
-						<configuration>
-							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
-							<excludes>META-INF/*,**.dll,**.so,**.java</excludes>
-							<excludeArtifactIds>${sourceartifacts}</excludeArtifactIds>
-						</configuration>
-					</execution>
-					<execution>
-						<id>unpack-source-dependencies</id>
-						<goals>
-							<goal>unpack-dependencies</goal>
-						</goals>
-						<phase>prepare-package</phase>
-						<configuration>
-							<outputDirectory>${project.build.directory}/sources</outputDirectory>
-							<includeArtifactIds>${sourceartifacts}</includeArtifactIds>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.github.wvengen</groupId>
-				<artifactId>proguard-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>reduce-eclipse-runtime</id>
 						<phase>package</phase>
 						<goals>
-							<goal>proguard</goal>
+							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<includeDependency>false</includeDependency>
-							<libs>
-								<lib>${java.home}/jmods</lib>
-							</libs>
-							<options>
-								<option>-dontobfuscate</option>
-								<option>-dontoptimize</option>
-								<option>-keepattributes</option>
-								<option>-keep class org.eclipse.jdt.core.formatter.** {*;}</option>
-								<option>-keep class org.eclipse.jdt.internal.formatter.** {*;}</option>
-								<option>-keep class org.eclipse.jface.text.Document {*;}</option>
-								<option>-keep class
-									org.eclipse.jdt.internal.compiler.parser.TerminalTokens {*;}</option>
-								<option>-keep class org.eclipse.jdt.core.dom.TagElement {*;}</option>
-								<option>-ignorewarnings</option>
-								<option>-dontnote</option>
-								<option>-dontwarn</option>
-							</options>
+							<filters>
+								<filter>
+									<artifact>io.spring.javaformat:spring-javaformat-formatter-eclipse-jdk8</artifact>
+									<excludes>
+										<exclude>org/eclipse/jdt/**</exclude>
+									</excludes>
+								</filter>
+							</filters>
+							<createDependencyReducedPom>false</createDependencyReducedPom>
+							<createSourcesJar>true</createSourcesJar>
+							<shadeSourcesContent>true</shadeSourcesContent>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
-	<dependencies>
-		<dependency>
-			<groupId>io.spring.javaformat</groupId>
-			<artifactId>spring-javaformat-formatter-eclipse-rewriter</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
 </project>

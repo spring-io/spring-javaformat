@@ -36,6 +36,13 @@ class PropertiesJavaFormatConfig implements JavaFormatConfig {
 	}
 
 	@Override
+	public JavaBaseline getJavaBaseline() {
+		Object value = this.properties.get("java-baseline");
+		return (value != null) ? JavaBaseline.valueOf("v" + value.toString().toUpperCase().trim())
+				: DEFAULT.getJavaBaseline();
+	}
+
+	@Override
 	public IndentationStyle getIndentationStyle() {
 		Object value = this.properties.get("indentation-style");
 		return (value != null) ? IndentationStyle.valueOf(value.toString().toUpperCase().trim())

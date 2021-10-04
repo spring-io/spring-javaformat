@@ -3,18 +3,28 @@
 <plugin>
 	<extension point="org.eclipse.jdt.core.javaFormatter">
 		<javaFormatter
-			class="io.spring.javaformat.eclipse.formatter.SpringCodeFormatterTabs"
-			id="io.spring.javaformat.eclipse.formatter"
-			name="Spring (tab indented)">
+			class="io.spring.javaformat.eclipse.formatter.SpringCodeFormatterJdk11Tabs"
+			id="io.spring.javaformat.eclipse.formatter.jdk11.tabs"
+			name="Spring (tabs)">
 		</javaFormatter>
 		<javaFormatter
-			class="io.spring.javaformat.eclipse.formatter.SpringCodeFormatterSpaces"
-			id="io.spring.javaformat.eclipse.formatter.spaces"
-			name="Spring (space indented)">
+			class="io.spring.javaformat.eclipse.formatter.SpringCodeFormatterJdk11Spaces"
+			id="io.spring.javaformat.eclipse.formatter.jdk11.spaces"
+			name="Spring (spaces)">
+		</javaFormatter>
+		<javaFormatter
+			class="io.spring.javaformat.eclipse.formatter.SpringCodeFormatterJdk8Tabs"
+			id="io.spring.javaformat.eclipse.formatter.jdk8.tabs"
+			name="Spring (tabs) [Java 8 baseline]">
+		</javaFormatter>
+		<javaFormatter
+			class="io.spring.javaformat.eclipse.formatter.SpringCodeFormatterJdk8Spaces"
+			id="io.spring.javaformat.eclipse.formatter.jdk8.spaces"
+			name="Spring (spaces) [Java 8 baseline]">
 		</javaFormatter>
 	</extension>
 	 <extension point="org.eclipse.m2e.core.projectConfigurators">
-		<configurator 
+		<configurator
 			class="io.spring.javaformat.eclipse.m2e.MavenProjectSettingsConfigurator"
 			id="io.spring.javaformat.eclipse.m2e.configurator"
 			runsAfter="org.eclipse.m2e.jdt.javaConfigurator">

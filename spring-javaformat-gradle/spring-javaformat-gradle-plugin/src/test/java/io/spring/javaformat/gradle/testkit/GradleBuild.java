@@ -38,8 +38,6 @@ import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.util.GradleVersion;
 import org.xml.sax.InputSource;
 
-import io.spring.javaformat.eclipse.jdt.core.formatter.CodeFormatter;
-import io.spring.javaformat.eclipse.jdt.internal.formatter.Preparator;
 import io.spring.javaformat.formatter.Formatter;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -125,8 +123,7 @@ public class GradleBuild {
 
 	private String getPluginClasspath() {
 		return absolutePath("build/classes/java/main") + "," + absolutePath("build/resources/main") + ","
-				+ pathOfJarContaining(Formatter.class) + "," + pathOfJarContaining(Preparator.class) + ","
-				+ pathOfJarContaining(CodeFormatter.class);
+				+ pathOfJarContaining(Formatter.class);
 	}
 
 	private String absolutePath(String path) {

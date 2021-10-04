@@ -1,0 +1,15 @@
+class MyTest {
+
+	@SpringBootTest(properties = "spring.main.web-application-type=reactive", classes = {
+			WebTestClientSpringBootTestIntegrationTests.TestConfiguration.class, ExampleWebFluxApplication.class })
+	static class One {
+
+	}
+
+	@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = { "spring.jersey.type=filter",
+			"server.servlet.context-path=/app", "server.servlet.register-default-servlet=true" })
+	static class Two {
+
+	}
+
+}
