@@ -24,6 +24,18 @@ anchors:
   docker-hub-task-params: &docker-hub-task-params
     DOCKER_HUB_USERNAME: ((docker-hub-username))
     DOCKER_HUB_PASSWORD: ((docker-hub-password))
+  slack-fail-params: &slack-fail-params
+    text: >
+      :concourse-failed: <!here> <https://ci.spring.io/teams/${BUILD_TEAM_NAME}/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}|${BUILD_PIPELINE_NAME} ${BUILD_JOB_NAME} failed!>
+    silent: true
+    icon_emoji: ":concourse:"
+    username: concourse-ci
+  slack-success-params: &slack-success-params
+    text: >
+      :concourse-succeeded: <https://ci.spring.io/teams/${BUILD_TEAM_NAME}/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}|${BUILD_PIPELINE_NAME} ${BUILD_JOB_NAME} was successful!>
+    silent: true
+    icon_emoji: ":concourse:"
+    username: concourse-ci
 resource_types:
 - name: artifactory-resource
   type: registry-image
@@ -34,6 +46,11 @@ resource_types:
   type: registry-image
   source:
     repository: teliaoss/github-pr-resource
+- name: slack-notification
+  type: registry-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+    tag: latest
 resources:
 - name: git-repo
   type: git
@@ -88,6 +105,11 @@ resources:
     username: ((artifactory-username))
     password: ((artifactory-password))
     build_name: ((build-name))
+- name: slack-alert
+  type: slack-notification
+  icon: slack
+  source:
+    url: ((slack-webhook-url))
 jobs:
 - name: build-ci-images
   plan:
@@ -111,19 +133,33 @@ jobs:
   - get: ci-image
   - get: git-repo
     trigger: true
-  - task: build-project
-    image: ci-image
-    privileged: true
-    timeout: ((task-timeout))
-    file: git-repo/ci/tasks/build-project.yml
-    params:
-      <<: *docker-hub-task-params
-      BRANCH: ((branch))
+  - do:
+    - task: build-project
+      image: ci-image
+      privileged: true
+      timeout: ((task-timeout))
+      file: git-repo/ci/tasks/build-project.yml
+      params:
+        <<: *docker-hub-task-params
+        BRANCH: ((branch))
+    on_failure:
+      do:
+      - put: slack-alert
+        params:
+          <<: *slack-fail-params
   - put: artifactory-repo
     params:
       <<: *artifactory-repo-put-params
     get_params:
       threads: 8
+    on_failure:
+      do:
+      - put: slack-alert
+        params:
+          <<: *slack-fail-params
+  - put: slack-alert
+    params:
+      <<: *slack-success-params
 - name: build-pull-requests
   serial: true
   public: true
