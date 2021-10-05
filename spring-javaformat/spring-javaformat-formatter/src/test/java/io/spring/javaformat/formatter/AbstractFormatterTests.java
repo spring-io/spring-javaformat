@@ -46,7 +46,7 @@ public abstract class AbstractFormatterTests {
 	}
 
 	protected static Item[] items(String expectedOverride) {
-		Collection<Item> files = new ArrayList<>();
+		Collection<Item> items = new ArrayList<>();
 		File sourceDir = new File("src/test/resources/source");
 		File expectedDir = new File("src/test/resources/expected");
 		File configDir = new File("src/test/resources/config");
@@ -57,9 +57,9 @@ public abstract class AbstractFormatterTests {
 				expected = new File(expectedDir, source.getName());
 			}
 			File config = new File(configDir, source.getName());
-			files.add(new Item(source, expected, config));
+			items.add(new Item(source, expected, config));
 		}
-		return files.toArray(new Item[0]);
+		return items.toArray(new Item[0]);
 	}
 
 	static class Item {

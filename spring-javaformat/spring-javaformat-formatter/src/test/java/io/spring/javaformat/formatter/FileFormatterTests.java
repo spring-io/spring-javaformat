@@ -36,10 +36,10 @@ public class FileFormatterTests extends AbstractFormatterTests {
 
 	@ParameterizedTest
 	@MethodSource("items")
-	public void formatFilesFromIteratorShouldFormatFile(Item files) throws Exception {
-		FileEdit edit = new FileFormatter(files.getConfig())
-				.formatFiles(Arrays.asList(files.getSource()), StandardCharsets.UTF_8).findFirst().get();
-		assertThat(edit.getFormattedContent()).isEqualTo(read(files.getExpected()));
+	public void formatFilesFromIteratorShouldFormatFile(Item item) throws Exception {
+		FileEdit edit = new FileFormatter(item.getConfig())
+				.formatFiles(Arrays.asList(item.getSource()), StandardCharsets.UTF_8).findFirst().get();
+		assertThat(edit.getFormattedContent()).isEqualTo(read(item.getExpected()));
 	}
 
 	@ParameterizedTest
