@@ -58,7 +58,7 @@ resources:
   source:
     uri: https://github.com/((github-owner))/((github-repository)).git
     username: ((github-username))
-    password: ((github-password))
+    password: ((github-ci-release-token))
     branch: ((branch))
 - name: git-pull-request
   type: pull-request
