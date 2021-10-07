@@ -19,8 +19,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.buildship.core;resolution:=optional,
  net.sf.eclipsecs.core;resolution:=optional
 Bundle-ClassPath: .,
- lib/spring-javaformat-formatter-eclipse.jar,
  lib/spring-javaformat-config.jar,
  lib/spring-javaformat-formatter.jar,
- lib/spring-javaformat-checkstyle.jar
+ lib/spring-javaformat-checkstyle.jar,
+ lib/spring-javaformat-formatter-eclipse-jdt-jdk11.jar,
+ lib/spring-javaformat-formatter-eclipse-jdt-jdk8.jar
 Bundle-ActivationPolicy: lazy

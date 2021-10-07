@@ -16,10 +16,12 @@
 
 package io.spring.javaformat.eclipse;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.runtime.Plugin;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-
-import io.spring.javaformat.eclipse.jdt.core.JavaCore;
 
 /**
  * The activator class controls the plug-in life cycle.
@@ -35,22 +37,27 @@ public class Activator extends AbstractUIPlugin {
 
 	private static Activator plugin;
 
-	private JavaCore javaCore;
+	private final List<Plugin> javaCorePlugins = new ArrayList<>();
 
 	public Activator() {
-		this.javaCore = new JavaCore();
+		this.javaCorePlugins.add(new io.spring.javaformat.eclipse.jdt.jdk8.core.JavaCore());
+		this.javaCorePlugins.add(new io.spring.javaformat.eclipse.jdt.jdk11.core.JavaCore());
 	}
 
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		this.javaCore.start(context);
+		for (Plugin javaCorePlugin : this.javaCorePlugins) {
+			javaCorePlugin.start(context);
+		}
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		this.javaCore.stop(context);
+		for (Plugin javaCorePlugin : this.javaCorePlugins) {
+			javaCorePlugin.stop(context);
+		}
 		plugin = null;
 		super.stop(context);
 	}
