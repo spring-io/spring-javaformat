@@ -39,7 +39,7 @@ public class SpringImportOrderCheck extends ImportOrderCheck {
 	}
 
 	public void setProjectRootPackage(String projectRootPackage) {
-		setGroups("java", "/^javax?\\./", "/^jakarta?\\./", "*", projectRootPackage);
+		setGroups("java", "/^javax?\\./", "*", projectRootPackage);
 	}
 
 }
