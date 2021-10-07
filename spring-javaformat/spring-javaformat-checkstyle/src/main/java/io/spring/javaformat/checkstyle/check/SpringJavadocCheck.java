@@ -167,7 +167,7 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 		String[] text = javadoc.getText();
 		DetailAST interfaceDef = getInterfaceDef(ast);
 		boolean privateType = !isPublicOrProtected(ast) && (interfaceDef == null || !isPublicOrProtected(interfaceDef));
-		boolean innerType = ast.getParent() != null;
+		boolean innerType = ast.getParent() != null && ast.getParent().getType() != TokenTypes.COMPILATION_UNIT;
 		boolean found = false;
 		for (int i = 0; i < text.length; i++) {
 			Matcher matcher = SINCE_TAG_PATTERN.matcher(text[i]);
