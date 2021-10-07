@@ -38,7 +38,8 @@ public class SpringLambdaCheck extends AbstractSpringCheck {
 
 	@Override
 	public void visitToken(DetailAST ast) {
-		if (ast.getType() == TokenTypes.LAMBDA) {
+		if (ast.getType() == TokenTypes.LAMBDA && ast.getParent() != null
+				&& ast.getParent().getType() != TokenTypes.SWITCH_RULE) {
 			visitLambda(ast);
 		}
 	}
