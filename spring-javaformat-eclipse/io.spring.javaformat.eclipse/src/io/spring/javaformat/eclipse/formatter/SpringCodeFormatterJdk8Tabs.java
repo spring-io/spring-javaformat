@@ -30,7 +30,7 @@ import io.spring.javaformat.config.JavaFormatConfig;
 public class SpringCodeFormatterJdk8Tabs extends SpringCodeFormatter {
 
 	public SpringCodeFormatterJdk8Tabs() {
-		super(JavaFormatConfig.of(JavaBaseline.V8, IndentationStyle.SPACES));
+		super(JavaFormatConfig.of(JavaBaseline.V8, IndentationStyle.TABS));
 	}
 
 }
