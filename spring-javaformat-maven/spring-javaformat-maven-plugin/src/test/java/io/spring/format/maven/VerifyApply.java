@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class VerifyApply {
 
-	private static final String LF = System.lineSeparator();
+	private static final String LF = "\n";
 
 	private static final String JAVA_FILE = "src/main/java/simple/Simple.java";
 

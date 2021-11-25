@@ -95,7 +95,8 @@ public class ProjectSettingsFilesTests {
 		}).given(projectFile).setContents((InputStream) any(), anyInt(), any());
 		files.applyToProject(project, monitor);
 		verify(projectFile).setContents((InputStream) any(), eq(1), eq(monitor));
-		assertThat(out.toString(StandardCharsets.UTF_8)).isEqualTo("a=b\ny=z\n");
+		assertThat(out.toString(StandardCharsets.UTF_8))
+				.isEqualToNormalizingNewlines("a=b\ny=z\n");
 	}
 
 	private ProjectSettingsFile createPrefsFile() throws IOException {

@@ -17,6 +17,8 @@
 package io.spring.javaformat.formatter;
 
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.text.edits.TextEdit;
@@ -55,6 +57,11 @@ public class Formatter {
 	 * The default indentation level.
 	 */
 	private static final int DEFAULT_INDENTATION_LEVEL = 0;
+
+	/**
+	 * Pattern that matches all line separators into named-capturing group "sep".
+	 */
+	private static final Pattern LINE_SEPARATOR_PATTERN = Pattern.compile("(?<sep>(\r\n|\r|\n))");
 
 	/**
 	 * The default line separator.
@@ -123,6 +130,9 @@ public class Formatter {
 
 	public TextEdit format(int kind, String source, int offset, int length, int indentationLevel,
 			String lineSeparator) {
+		if (lineSeparator == null) {
+			lineSeparator = detectLineSeparator(source);
+		}
 		return this.delegate.format(kind, source, offset, length, indentationLevel, lineSeparator);
 	}
 
@@ -148,6 +158,9 @@ public class Formatter {
 	}
 
 	public TextEdit format(int kind, String source, IRegion[] regions, int indentationLevel, String lineSeparator) {
+		if (lineSeparator == null) {
+			lineSeparator = detectLineSeparator(source);
+		}
 		return this.delegate.format(kind, source, regions, indentationLevel, lineSeparator);
 	}
 
@@ -159,4 +172,17 @@ public class Formatter {
 		this.delegate.setOptions(options);
 	}
 
+	private String detectLineSeparator(String contents) {
+		Matcher matcher = LINE_SEPARATOR_PATTERN.matcher(contents);
+		if (!matcher.find()) {
+			return DEFAULT_LINE_SEPARATOR;
+		}
+		String firstMatch = matcher.group("sep");
+		while (matcher.find()) {
+			if (!matcher.group("sep").equals(firstMatch)) {
+				return DEFAULT_LINE_SEPARATOR;
+			}
+		}
+		return firstMatch;
+	}
 }
