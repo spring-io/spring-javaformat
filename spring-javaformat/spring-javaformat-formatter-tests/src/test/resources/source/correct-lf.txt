@@ -1,0 +1,9 @@
+package correct;
+
+public class CorrectLf {
+
+	public static void main(String[] args) throws Exception {
+		// FIXME
+	}
+
+}

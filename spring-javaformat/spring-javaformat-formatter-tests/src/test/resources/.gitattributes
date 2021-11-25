@@ -1,0 +1,4 @@
+# Test resources that need specific eol
+**/correct-crlf.txt eol=crlf
+**/correct-cr.txt   eol=cr
+**/correct-lf.txt   eol=lf
