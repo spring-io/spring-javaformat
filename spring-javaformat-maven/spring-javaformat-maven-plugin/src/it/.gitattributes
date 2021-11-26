@@ -1,0 +1,2 @@
+# Test resources that need a predictable eol
+apply*/src/main/java/simple/Simple.java eol=lf
