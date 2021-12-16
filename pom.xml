@@ -42,7 +42,7 @@
 		<checkstyle.version>9.0.1</checkstyle.version>
 		<gradle.version>3.4</gradle.version>
 		<groovy.version>2.4.21</groovy.version>
-		<log4j.version>2.15.0</log4j.version>
+		<log4j.version>2.16.0</log4j.version>
 		<maven-core.version>3.5.0</maven-core.version>
 		<maven-plugin-api.version>${maven-core.version}</maven-plugin-api.version>
 		<maven-plugin-annotations.version>3.5</maven-plugin-annotations.version>
