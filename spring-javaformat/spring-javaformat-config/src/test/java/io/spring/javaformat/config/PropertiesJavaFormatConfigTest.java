@@ -1,6 +1,7 @@
 package io.spring.javaformat.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -50,5 +51,15 @@ class PropertiesJavaFormatConfigTest {
         JavaBaseline actual = javaFormatConfig.getJavaBaseline();
 
         assertThat(actual).isEqualTo(JavaBaseline.V8);
+    }
+
+    @Test
+    void getJavaBaselineWhenUnrecognisedVersionShouldThrowException() {
+        when(properties.get(anyString()))
+            .thenReturn("Unkown");
+
+        assertThatThrownBy(() -> javaFormatConfig.getJavaBaseline())
+            .hasNoCause()
+            .hasMessage("No enum constant io.spring.javaformat.config.JavaBaseline.VUNKOWN");
     }
 }
