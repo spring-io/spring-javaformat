@@ -240,6 +240,29 @@ The plugin is automatically enabled when one or more of the following conditions
 * For maven based project, `spring-javaformat-maven-plugin` plugin is defined in `pom.xml`
 * For gradle based project, `io.spring.javaformat` plugin is applied
 
+==== IntelliJ IDEA CheckStyle-IDEA plugin
+The https://plugins.jetbrains.com/plugin/1065-checkstyle-idea[CheckStyle-IDEA plugin] provides checkstyle integration to the IntelliJ IDEA.
+
+To configure the plugin, first you need to create your own checkstyle configuration file.
+
+[source,xml,indent=0]
+----
+	<?xml version="1.0"?>
+	<!DOCTYPE module PUBLIC
+			"-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+			"https://checkstyle.org/dtds/configuration_1_3.dtd">
+	<module name="com.puppycrawl.tools.checkstyle.Checker">
+		<module name="io.spring.javaformat.checkstyle.SpringChecks" />
+	</module>
+----
+
+Once configuration file is created:
+
+* Open `Preferences` - `Tools` - `Checkstyle`
+* Add `spring-javaformat-checkstyle-[VERSION].jar` and `spring-javaformat-config-[VERSION].jar` to the `Third-Party Checks`
+* Specify appropriate `Checkstyle version`
+* Add your checkstyle configuration file.
+
 
 
 === About the Conventions
