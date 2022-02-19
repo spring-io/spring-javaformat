@@ -179,8 +179,8 @@ Your `checkstyle.xml` file should look then like this:
 ----
 	<?xml version="1.0"?>
 	<!DOCTYPE module PUBLIC
-    		"-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
-    		"https://checkstyle.org/dtds/configuration_1_3.dtd">
+			"-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+			"https://checkstyle.org/dtds/configuration_1_3.dtd">
 	<module name="com.puppycrawl.tools.checkstyle.Checker">
 		<module name="io.spring.javaformat.checkstyle.SpringChecks" />
 	</module>
@@ -237,13 +237,13 @@ You can download the latest version from https://repo1.maven.org/maven2/io/sprin
 The plugin is automatically enabled when one or more of the following conditions match:
 
 * `.springformat` file exists
-* For maven based project, `spring-javaformat-maven-plugin` plugin is defined in `pom.xml`
-* For gradle based project, `io.spring.javaformat` plugin is applied
+* For a Maven-based project, `spring-javaformat-maven-plugin` plugin is defined in `pom.xml`
+* For a Gradle-based project, `io.spring.javaformat` plugin is applied
 
-==== IntelliJ IDEA CheckStyle-IDEA plugin
-The https://plugins.jetbrains.com/plugin/1065-checkstyle-idea[CheckStyle-IDEA plugin] provides checkstyle integration to the IntelliJ IDEA.
+==== CheckStyle-IDEA plugin
+The https://plugins.jetbrains.com/plugin/1065-checkstyle-idea[CheckStyle-IDEA plugin] provides Checkstyle integration for IntelliJ IDEA.
 
-To configure the plugin, first you need to create your own checkstyle configuration file.
+To configure the plugin, create your own Checkstyle configuration file with the following content:
 
 [source,xml,indent=0]
 ----
@@ -256,12 +256,12 @@ To configure the plugin, first you need to create your own checkstyle configurat
 	</module>
 ----
 
-Once configuration file is created:
+Once the configuration file is created, configure your IDE to use it:
 
 * Open `Preferences` - `Tools` - `Checkstyle`
-* Add `spring-javaformat-checkstyle-[VERSION].jar` and `spring-javaformat-config-[VERSION].jar` to the `Third-Party Checks`
-* Specify appropriate `Checkstyle version`
-* Add your checkstyle configuration file.
+* Add `spring-javaformat-checkstyle-{release-version}.jar` and `spring-javaformat-config-{release-version}.jar` to the `Third-Party Checks`
+* Specify the appropriate `Checkstyle version`
+* Add your Checkstyle configuration file
 
 
 
@@ -298,8 +298,8 @@ If you want most `SpringChecks` but need to exclude one or two, you can do somet
 ----
 	<?xml version="1.0"?>
 	<!DOCTYPE module PUBLIC
-    		"-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
-    		"https://checkstyle.org/dtds/configuration_1_3.dtd">
+			"-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+			"https://checkstyle.org/dtds/configuration_1_3.dtd">
 	<module name="com.puppycrawl.tools.checkstyle.Checker">
 		<module name="io.spring.javaformat.checkstyle.SpringChecks">
 			<property name="excludes" value="io.spring.javaformat.checkstyle.check.SpringAvoidStaticImportCheck" />
