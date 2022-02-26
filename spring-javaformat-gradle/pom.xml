@@ -32,5 +32,6 @@
 	</build>
 	<modules>
 		<module>spring-javaformat-gradle-plugin</module>
+		<module>io.spring.javaformat.gradle.plugin</module>
 	</modules>
 </project>
