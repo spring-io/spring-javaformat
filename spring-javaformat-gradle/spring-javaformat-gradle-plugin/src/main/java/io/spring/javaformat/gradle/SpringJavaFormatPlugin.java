@@ -27,6 +27,7 @@ import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.TaskProvider;
 
+import io.spring.javaformat.config.JavaFormatConfig;
 import io.spring.javaformat.gradle.tasks.CheckFormat;
 import io.spring.javaformat.gradle.tasks.Format;
 import io.spring.javaformat.gradle.tasks.FormatterTask;
@@ -78,6 +79,9 @@ public class SpringJavaFormatPlugin implements Plugin<Project> {
 		provider.configure((task) -> {
 			task.setDescription(desc + " for " + sourceSet.getName());
 			task.setSource(sourceSet.getAllJava());
+			JavaFormatConfig javaFormatConfig = JavaFormatConfig.findFrom(this.project.getProjectDir());
+			task.getJavaBaseline().convention(javaFormatConfig.getJavaBaseline());
+			task.getIndentationStyle().convention(javaFormatConfig.getIndentationStyle());
 		});
 		return provider;
 	}

@@ -19,10 +19,13 @@ package io.spring.javaformat.gradle.tasks;
 import java.nio.charset.Charset;
 import java.util.stream.Stream;
 
+import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.SourceTask;
 
+import io.spring.javaformat.config.IndentationStyle;
+import io.spring.javaformat.config.JavaBaseline;
 import io.spring.javaformat.config.JavaFormatConfig;
 import io.spring.javaformat.formatter.FileEdit;
 import io.spring.javaformat.formatter.FileFormatter;
@@ -36,7 +39,13 @@ public abstract class FormatterTask extends SourceTask {
 
 	private String encoding;
 
+	private final Property<JavaBaseline> javaBaseline;
+
+	private final Property<IndentationStyle> indentationStyle;
+
 	FormatterTask() {
+		this.javaBaseline = getProject().getObjects().property(JavaBaseline.class);
+		this.indentationStyle = getProject().getObjects().property(IndentationStyle.class);
 	}
 
 	/**
@@ -58,11 +67,31 @@ public abstract class FormatterTask extends SourceTask {
 	}
 
 	/**
+	 * The java baseline used for the internal {@link JavaFormatConfig}.
+	 * @return the java baseline property
+	 * @see JavaFormatConfig#getJavaBaseline()
+	 */
+	@Input
+	public Property<JavaBaseline> getJavaBaseline() {
+		return this.javaBaseline;
+	}
+
+	/**
+	 * The java indentation style for the internal {@link JavaFormatConfig}.
+	 * @return the indentation style property
+	 * @see JavaFormatConfig#getIndentationStyle()
+	 */
+	@Input
+	public Property<IndentationStyle> getIndentationStyle() {
+		return this.indentationStyle;
+	}
+
+	/**
 	 * Format the source files and provide a {@link Stream} of {@link FileEdit} instances.
 	 * @return the file edits
 	 */
 	protected final Stream<FileEdit> formatFiles() {
-		JavaFormatConfig javaFormatConfig = JavaFormatConfig.findFrom(getProject().getProjectDir());
+		JavaFormatConfig javaFormatConfig = JavaFormatConfig.of(this.javaBaseline.get(), this.indentationStyle.get());
 		FileFormatter formatter = new FileFormatter(javaFormatConfig);
 		Charset encoding = (getEncoding() != null ? Charset.forName(getEncoding()) : Charset.defaultCharset());
 		return formatter.formatFiles(getSource().getFiles(), encoding);
