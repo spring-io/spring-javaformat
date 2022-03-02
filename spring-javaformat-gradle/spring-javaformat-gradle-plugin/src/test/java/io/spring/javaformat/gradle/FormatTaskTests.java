@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import org.gradle.testkit.runner.BuildResult;
+import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.TaskOutcome;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,6 +49,24 @@ public class FormatTaskTests {
 		File formattedFile = new File(this.gradleBuild.getProjectDir(), "src/main/java/simple/Simple.java");
 		String formattedContent = new String(Files.readAllBytes(formattedFile.toPath()));
 		assertThat(formattedContent).contains("class Simple {").contains("	public static void main");
+	}
+
+	@Test
+	public void checkUpTpDate() throws IOException {
+		GradleRunner runner = this.gradleBuild.source("src/test/resources/format").prepareRunner("format");
+
+		// 1) Actually format the sources.
+		BuildResult result1 = runner.build();
+		assertThat(result1.task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+
+		// 2) No-op reformat the sources
+		// Not up-to-date yet because 1) changed the sources.
+		BuildResult result2 = runner.build();
+		assertThat(result2.task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+
+		// 3) Now we should be up-to-date since 2) was effectively a no-op
+		BuildResult result3 = runner.build();
+		assertThat(result3.task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.UP_TO_DATE);
 	}
 
 	@Test

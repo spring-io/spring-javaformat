@@ -19,6 +19,11 @@ package io.spring.javaformat.gradle.tasks;
 import java.io.IOException;
 
 import org.gradle.api.GradleException;
+import org.gradle.api.file.FileTree;
+import org.gradle.api.tasks.InputFiles;
+import org.gradle.api.tasks.OutputFiles;
+import org.gradle.api.tasks.PathSensitive;
+import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.TaskAction;
 
 import io.spring.javaformat.formatter.FileEdit;
@@ -51,4 +56,15 @@ public class Format extends FormatterTask {
 		}
 	}
 
+	@Override
+	@InputFiles
+	@PathSensitive(PathSensitivity.RELATIVE)
+	public FileTree getSource() {
+		return super.getSource();
+	}
+
+	@OutputFiles
+	public FileTree getOutputFiles() {
+		return super.getSource();
+	}
 }
