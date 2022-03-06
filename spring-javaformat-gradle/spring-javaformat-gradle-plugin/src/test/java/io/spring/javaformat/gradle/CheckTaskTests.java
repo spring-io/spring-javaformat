@@ -23,7 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.gradle.testkit.runner.BuildResult;
@@ -72,8 +72,8 @@ public class CheckTaskTests {
 		GradleBuild gradleBuild = this.gradleBuild.source(this.temp);
 		BuildResult result = gradleBuild.build("check");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
-		Files.write(new File(this.temp, "src/main/java/simple/Simple.java").toPath(),
-				Collections.singletonList("// A change to the file"), StandardOpenOption.APPEND);
+		appendToFileNormalizingNewlines(new File(this.temp, "src/main/java/simple/Simple.java").toPath(),
+				"// A change to the file");
 		result = gradleBuild.build("--debug", "check");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
 	}
@@ -144,6 +144,16 @@ public class CheckTaskTests {
 				}
 			});
 		}
+	}
+
+	/**
+	 * Uses a read/modify/truncate approach to append a line to a file.
+	 * This avoids issues where the standard append option results in mixed line-endings.
+	 */
+	private void appendToFileNormalizingNewlines(Path sourceFilePath, String lineToAppend) throws IOException {
+		List<String> lines = Files.readAllLines(sourceFilePath);
+		lines.add(lineToAppend);
+		Files.write(sourceFilePath, lines, StandardOpenOption.TRUNCATE_EXISTING);
 	}
 
 }
