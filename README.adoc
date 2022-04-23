@@ -236,7 +236,7 @@ You can download the latest version from https://repo1.maven.org/maven2/io/sprin
 ==== Enable the Plugin
 The plugin is automatically enabled when one or more of the following conditions match:
 
-* `.springformat` file exists
+* `.springjavaformatconfig` file exists
 * For a Maven-based project, `spring-javaformat-maven-plugin` plugin is defined in `pom.xml`
 * For a Gradle-based project, `io.spring.javaformat` plugin is applied
 
