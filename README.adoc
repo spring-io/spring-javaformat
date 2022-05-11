@@ -150,7 +150,7 @@ In case you want to exclude a package from being checked, for example if you gen
 
 [source,groovy,indent=0,subs="normal"]
 ----
-tasks.withType(io.spring.javaformat.gradle.CheckTask) {
+tasks.withType(io.spring.javaformat.gradle.tasks.CheckFormat) {
     exclude "package/to/exclude"
 }
 ----
