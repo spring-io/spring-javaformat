@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Stream;
 
@@ -75,6 +76,41 @@ public class CheckTaskTests {
 				Collections.singletonList("// A change to the file"), StandardOpenOption.APPEND);
 		result = gradleBuild.build("--debug", "check");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+	}
+
+	@Test
+	public void whenFirstInvocationSucceedsAndIndentationStyleIsChangedThenSecondInvocationFails() throws IOException {
+		GradleBuild gradleBuild = this.gradleBuild.source("src/test/resources/check-ok");
+		BuildResult result = gradleBuild.build("check");
+		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+		Files.write(new File(this.gradleBuild.getProjectDir(), ".springjavaformatconfig").toPath(),
+				Arrays.asList("indentation-style=spaces"));
+		result = gradleBuild.buildAndFail("check");
+		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.FAILED);
+	}
+
+	@Test
+	public void whenFirstInvocationFailsAndIndentationStyleIsChangedThenSecondInvocationSucceeds() throws IOException {
+		GradleBuild gradleBuild = this.gradleBuild.source("src/test/resources/check-spaces");
+		BuildResult result = gradleBuild.buildAndFail("check");
+		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.FAILED);
+		Files.write(new File(this.gradleBuild.getProjectDir(), ".springjavaformatconfig").toPath(),
+				Arrays.asList("indentation-style=spaces"));
+		result = gradleBuild.build("check");
+		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+	}
+
+	@Test
+	public void whenFirstInvocationSucceedsAndJavaBaselineIsChangedThenSecondInvocationSucceedsAndThirdIsUpToDate() throws IOException {
+		GradleBuild gradleBuild = this.gradleBuild.source("src/test/resources/check-ok");
+		BuildResult result = gradleBuild.build("check");
+		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+		Files.write(new File(this.gradleBuild.getProjectDir(), ".springjavaformatconfig").toPath(),
+				Arrays.asList("java-baseline=8"));
+		result = gradleBuild.build("check");
+		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+		result = gradleBuild.build("check");
+		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.UP_TO_DATE);
 	}
 
 	@Test
