@@ -19,6 +19,7 @@ package io.spring.javaformat.gradle;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
 
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
@@ -52,21 +53,42 @@ public class FormatTaskTests {
 	}
 
 	@Test
-	public void checkUpTpDate() throws IOException {
+	public void checkUpToDate() throws IOException {
 		GradleRunner runner = this.gradleBuild.source("src/test/resources/format").prepareRunner("format");
+		// Format that changes files
+		assertThat(runner.build().task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+		// Format of already formatted files
+		assertThat(runner.build().task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+		// Up-to-date
+		assertThat(runner.build().task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.UP_TO_DATE);
+	}
 
-		// 1) Actually format the sources.
-		BuildResult result1 = runner.build();
-		assertThat(result1.task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+	@Test
+	public void notUpToDateWhenJavaBaselineChanges() throws IOException {
+		GradleRunner runner = this.gradleBuild.source("src/test/resources/format").prepareRunner("format");
+		// Format that changes files
+		assertThat(runner.build().task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+		// Format of already formatted files
+		assertThat(runner.build().task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+		// Up-to-date
+		assertThat(runner.build().task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.UP_TO_DATE);
+		Files.write(new File(this.gradleBuild.getProjectDir(), ".springjavaformatconfig").toPath(),
+				Arrays.asList("java-baseline=8"));
+		assertThat(runner.build().task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+	}
 
-		// 2) No-op reformat the sources
-		// Not up-to-date yet because 1) changed the sources.
-		BuildResult result2 = runner.build();
-		assertThat(result2.task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
-
-		// 3) Now we should be up-to-date since 2) was effectively a no-op
-		BuildResult result3 = runner.build();
-		assertThat(result3.task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.UP_TO_DATE);
+	@Test
+	public void notUpToDateWhenIndentationStyleChanges() throws IOException {
+		GradleRunner runner = this.gradleBuild.source("src/test/resources/format").prepareRunner("format");
+		// Format that changes files
+		assertThat(runner.build().task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+		// Format of already formatted files
+		assertThat(runner.build().task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+		// Up-to-date
+		assertThat(runner.build().task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.UP_TO_DATE);
+		Files.write(new File(this.gradleBuild.getProjectDir(), ".springjavaformatconfig").toPath(),
+				Arrays.asList("indentation-style=spaces"));
+		assertThat(runner.build().task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
 	}
 
 	@Test

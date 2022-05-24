@@ -19,9 +19,13 @@ package io.spring.javaformat.gradle.tasks;
 import java.nio.charset.Charset;
 import java.util.stream.Stream;
 
+import org.gradle.api.file.FileTree;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.InputFiles;
 import org.gradle.api.tasks.Optional;
+import org.gradle.api.tasks.PathSensitive;
+import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.SourceTask;
 
 import io.spring.javaformat.config.IndentationStyle;
@@ -82,6 +86,13 @@ public abstract class FormatterTask extends SourceTask {
 	@Input
 	public Property<JavaBaseline> getJavaBaseline() {
 		return this.javaBaseline;
+	}
+
+	@Override
+	@InputFiles
+	@PathSensitive(PathSensitivity.RELATIVE)
+	public FileTree getSource() {
+		return super.getSource();
 	}
 
 	/**
