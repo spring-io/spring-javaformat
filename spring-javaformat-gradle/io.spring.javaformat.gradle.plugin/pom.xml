@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>io.spring.javaformat</groupId>
-		<artifactId>spring-javaformat-build</artifactId>
+		<artifactId>spring-javaformat-gradle</artifactId>
 		<version>0.0.32-SNAPSHOT</version>
 	</parent>
 	<groupId>io.spring.javaformat</groupId>
