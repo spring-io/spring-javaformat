@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ package io.spring.javaformat.gradle.tasks;
 import java.io.IOException;
 
 import org.gradle.api.GradleException;
+import org.gradle.api.file.FileTree;
+import org.gradle.api.tasks.OutputFiles;
 import org.gradle.api.tasks.TaskAction;
 
 import io.spring.javaformat.formatter.FileEdit;
@@ -49,6 +51,11 @@ public class Format extends FormatterTask {
 		catch (FileFormatterException ex) {
 			throw new GradleException("Unable to format file " + ex.getFile(), ex);
 		}
+	}
+
+	@OutputFiles
+	public FileTree getOutputFiles() {
+		return super.getSource();
 	}
 
 }
