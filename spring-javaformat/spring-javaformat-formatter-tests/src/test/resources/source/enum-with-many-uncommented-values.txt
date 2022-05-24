@@ -1,0 +1,18 @@
+package io.spring.javaformat.formatter;
+
+public enum EnumWithManyUncommentedValues {
+
+	ONE("Long text value to force formatting of the enum's values across multiple lines"),
+	TWO("Long text value to force formatting of the enum's values across multiple lines"),
+	THREE("Long text value to force formatting of the enum's values across multiple lines"),
+	FOUR("Long text value to force formatting of the enum's values across multiple lines"),
+	FIVE("Long text value to force formatting of the enum's values across multiple lines"),
+	SIX("Long text value to force formatting of the enum's values across multiple lines");
+
+	private String text;
+
+	EnumWithManyUncommentedValues(String text) {
+		this.text = text;
+	}
+
+}
