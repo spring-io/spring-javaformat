@@ -12,6 +12,7 @@
 		<property name="headerCopyrightPattern" value="${headerCopyrightPattern}" />
 	</module>
 	<module name="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck" />
+	<module name="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocPackageCheck" />
 
 	<!-- TreeWalker Checks -->
 	<module name="com.puppycrawl.tools.checkstyle.TreeWalker">

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -112,8 +113,14 @@ public class SpringChecksTests {
 	}
 
 	public static Collection<Parameter> paramaters() throws IOException {
-		return Arrays.stream(SOURCES_DIR.list((dir, name) -> !name.startsWith("."))).sorted().map(Parameter::new)
-				.collect(Collectors.toList());
+		ArrayList<Parameter> parameters = Arrays.stream(SOURCES_DIR.listFiles(SpringChecksTests::sourceFile)).sorted()
+				.map(Parameter::new).collect(Collectors.toCollection(ArrayList::new));
+		parameters.add(new Parameter(new File(SOURCES_DIR, "nopackageinfo/NoPackageInfo.java")));
+		return parameters;
+	}
+
+	private static boolean sourceFile(File file) {
+		return file.isFile() && !file.getName().startsWith(".") && !file.getName().equals("package-info.java");
 	}
 
 	private static class Parameter {
@@ -126,7 +133,8 @@ public class SpringChecksTests {
 
 		private final File configFile;
 
-		Parameter(String sourceName) {
+		Parameter(File sourceFile) {
+			String sourceName = sourceFile.getAbsolutePath().substring(SOURCES_DIR.getAbsolutePath().length() + 1);
 			this.name = sourceName.replace(".java", "");
 			this.sourceFile = new File(SOURCES_DIR, sourceName);
 			File configFile = new File(CONFIGS_DIR, this.name + ".xml");
