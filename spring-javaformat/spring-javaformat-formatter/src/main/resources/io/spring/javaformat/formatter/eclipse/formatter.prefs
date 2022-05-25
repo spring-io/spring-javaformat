@@ -41,6 +41,7 @@ core.formatter.alignment_for_throws_clause_in_method_declaration=16
 core.formatter.alignment_for_type_arguments=0
 core.formatter.alignment_for_type_parameters=0
 core.formatter.alignment_for_union_type_in_multicatch=16
+core.formatter.align_selector_in_method_invocation_on_expression_first_line=false
 core.formatter.blank_lines_after_imports=1
 core.formatter.blank_lines_after_package=1
 core.formatter.blank_lines_before_field=0
