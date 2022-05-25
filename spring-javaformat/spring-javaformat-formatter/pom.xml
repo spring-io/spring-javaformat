@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>io.spring.javaformat</groupId>
 		<artifactId>spring-javaformat</artifactId>
-		<version>0.0.32-SNAPSHOT</version>
+		<version>0.0.33-SNAPSHOT</version>
 	</parent>
 	<artifactId>spring-javaformat-formatter</artifactId>
 	<name>Spring JavaFormat Formatter</name>
