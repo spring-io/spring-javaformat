@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,9 @@ public class TernaryInIf {
 	public void test() {
 		boolean a = true;
 		boolean b = false;
-		if ((a != b) ? true : false) {
+		int c = 1;
+		int d = 2;
+		if ((a != b) ? d < c : c >= d) {
 			System.out.println("OK");
 		}
 	}
