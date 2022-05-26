@@ -4,7 +4,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Spring Java Format Plugin Tests
 Bundle-SymbolicName: io.spring.javaformat.eclipse.tests
 Automatic-Module-Name: io.spring.javaformat.eclipse.tests
-Bundle-Version: 0.0.33.qualifier
+Bundle-Version: 0.0.34.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.junit,
  org.junit.jupiter.api
