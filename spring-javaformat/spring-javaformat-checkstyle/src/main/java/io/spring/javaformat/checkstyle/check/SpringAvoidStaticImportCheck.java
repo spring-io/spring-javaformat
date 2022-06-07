@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,6 +85,8 @@ public class SpringAvoidStaticImportCheck extends AvoidStaticImportCheck {
 		excludes.add("org.springframework.web.reactive.function.BodyInserters.*");
 		excludes.add("org.springframework.web.reactive.function.server.RequestPredicates.*");
 		excludes.add("org.springframework.web.reactive.function.server.RouterFunctions.*");
+		excludes.add("org.springframework.web.servlet.function.RequestPredicates.*");
+		excludes.add("org.springframework.web.servlet.function.RouterFunctions.*");
 		excludes.add("org.springframework.ws.test.client.RequestMatchers.*");
 		excludes.add("org.springframework.ws.test.client.ResponseCreators.*");
 		ALWAYS_EXCLUDED = Collections.unmodifiableSet(excludes);
