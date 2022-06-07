@@ -10,7 +10,7 @@
 	<groupId>io.spring.javaformat</groupId>
 	<artifactId>io.spring.javaformat.gradle.plugin</artifactId>
 	<packaging>pom</packaging>
-	<name>io.spring.javaformat Gradle Plugin Marker</name>
+	<name>Spring JavaFormat Gradle Plugin Marker Artifact</name>
 	<dependencies>
 		<dependency>
 			<groupId>io.spring.javaformat</groupId>
