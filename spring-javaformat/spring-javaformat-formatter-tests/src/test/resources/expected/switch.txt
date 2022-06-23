@@ -1,0 +1,14 @@
+public class SwitchExample {
+
+	protected boolean isIncludeBindingErrors(HttpServletRequest request, MediaType produces) {
+		switch (getErrorProperties().getIncludeBindingErrors()) {
+			case ALWAYS:
+				return true;
+			case ON_PARAM:
+				return getErrorsParameter(request);
+			default:
+				return false;
+		}
+	}
+
+}
