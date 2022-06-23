@@ -67,6 +67,8 @@
 									<artifact>io.spring.javaformat:spring-javaformat-formatter-eclipse-jdk8</artifact>
 									<excludes>
 										<exclude>org/eclipse/jdt/**</exclude>
+ 										<exclude>META-INF/ECLIPSE_.SF</exclude>
+										<exclude>META-INF/ECLIPSE_.RSA</exclude>
 									</excludes>
 								</filter>
 							</filters>
