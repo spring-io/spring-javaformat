@@ -1,4 +1,4 @@
-:release-version: 0.0.33
+:release-version: 0.0.34
 :checkstyle-version: 9.3
 == Spring Java Format
 
