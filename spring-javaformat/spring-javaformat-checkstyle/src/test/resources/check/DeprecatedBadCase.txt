@@ -1,0 +1,6 @@
++DeprecatedBadCase.java:22:1: @Deprecated has no since attribute. [SpringDeprecated]
++DeprecatedBadCase.java:25:9: @Deprecated has no since attribute. [SpringDeprecated]
++DeprecatedBadCase.java:28:9: @Deprecated has an empty since attribute. [SpringDeprecated]
++DeprecatedBadCase.java:33:9: @Deprecated has no since attribute. [SpringDeprecated]
++DeprecatedBadCase.java:36:17: @Deprecated has an empty since attribute. [SpringDeprecated]
++5 errors
