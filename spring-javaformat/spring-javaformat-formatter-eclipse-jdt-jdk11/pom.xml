@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>io.spring.javaformat</groupId>
 		<artifactId>spring-javaformat</artifactId>
-		<version>0.0.35-SNAPSHOT</version>
+		<version>0.0.36-SNAPSHOT</version>
 	</parent>
 	<artifactId>spring-javaformat-formatter-eclipse-jdt-jdk11</artifactId>
 	<name>Spring JavaFormat Eclipse JDT JDK-11</name>
