@@ -22,7 +22,6 @@
 				<artifactId>tycho-packaging-plugin</artifactId>
 				<configuration>
 					<finalName>${project.artifactId}</finalName>
-					<includePackedArtifacts>true</includePackedArtifacts>
 				</configuration>
 			</plugin>
 			<plugin>

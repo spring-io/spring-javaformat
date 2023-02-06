@@ -9,6 +9,8 @@ target
 *.ipr
 *.iws
 spring-javaformat-eclipse/io.spring.javaformat.eclipse/lib
+spring-javaformat-eclipse/io.spring.javaformat.eclipse.feature/lib
+spring-javaformat-eclipse/io.spring.javaformat.eclipse.site/lib
 spring-javaformat-eclipse/io.spring.javaformat.eclipse.tests/lib
 .gradle
 spring-javaformat-gradle/spring-javaformat-gradle-plugin/bin

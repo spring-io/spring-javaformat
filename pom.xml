@@ -53,8 +53,8 @@
 		<system-rules.version>1.16.0</system-rules.version>
 		<testcontainers.version>1.16.0</testcontainers.version>
 		<trove4j.version>3.0.3</trove4j.version>
-		<tycho.version>2.5.0</tycho.version>
-		<tycho-extras.version>2.5.0</tycho-extras.version>
+		<tycho.version>3.0.1</tycho.version>
+		<tycho-extras.version>3.0.1</tycho-extras.version>
 	</properties>
 	<build>
 		<pluginManagement>
@@ -230,9 +230,9 @@
 					<version>${tycho.version}</version>
 					<dependencies>
 						<dependency>
-							<groupId>org.eclipse.tycho.extras</groupId>
+							<groupId>org.eclipse.tycho</groupId>
 							<artifactId>tycho-buildtimestamp-jgit</artifactId>
-							<version>${tycho-extras.version}</version>
+							<version>${tycho.version}</version>
 						</dependency>
 					</dependencies>
 					<configuration>
