@@ -20,3 +20,4 @@ spring-javaformat/spring-javaformat-checkstyle/bin
 spring-javaformat/spring-javaformat-formatter-eclipse-rewriter/bin
 build.log
 pid
+.factorypath
