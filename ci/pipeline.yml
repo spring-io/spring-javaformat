@@ -42,15 +42,20 @@ resource_types:
   source:
     repository: springio/artifactory-resource
     tag: "0.0.18"
+    username: ((docker-hub-username))
+    password: ((docker-hub-password))
 - name: pull-request
   type: registry-image
   source:
     repository: teliaoss/github-pr-resource
+    username: ((docker-hub-username))
+    password: ((docker-hub-password))
 - name: slack-notification
   type: registry-image
   source:
     repository: cfcommunity/slack-notification-resource
-    tag: latest
+    username: ((docker-hub-username))
+    password: ((docker-hub-password))
 resources:
 - name: git-repo
   type: git
