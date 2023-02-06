@@ -1,16 +1,18 @@
 Manifest-Version: 1.0
 Fragment-Host: io.spring.javaformat.eclipse
+Import-Package: org.junit,
+ org.junit.jupiter.api,
+ org.junit.jupiter.api.io
 Bundle-ManifestVersion: 2
 Bundle-Name: Spring Java Format Plugin Tests
 Bundle-SymbolicName: io.spring.javaformat.eclipse.tests
 Automatic-Module-Name: io.spring.javaformat.eclipse.tests
 Bundle-Version: 0.0.36.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Require-Bundle: org.junit,
- org.junit.jupiter.api
 Bundle-ClassPath: .,
  lib/assertj-core.jar,
  lib/byte-buddy-agent.jar,
  lib/byte-buddy.jar,
  lib/mockito-core.jar,
- lib/objenesis.jar
+ lib/objenesis.jar,
+ lib/junit-jupiter-api.jar

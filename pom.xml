@@ -32,7 +32,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 		<eclipse.jdk8.repository>https://download.eclipse.org/releases/2021-03/202103171000/</eclipse.jdk8.repository>
-		<eclipse.jdk11.repository>https://download.eclipse.org/releases/2022-06/202206151000/</eclipse.jdk11.repository>
+		<eclipse.jdk11.repository>https://download.eclipse.org/releases/2022-12/202212071000/</eclipse.jdk11.repository>
 		<eclipse.checkstyle.repository>https://checkstyle.org/eclipse-cs-update-site/</eclipse.checkstyle.repository>
 		<tycho.disableP2Mirrors>true</tycho.disableP2Mirrors>
 		<ant.version>1.8.1</ant.version>
@@ -612,7 +612,7 @@
 				</os>
 			</activation>
 			<properties>
-				<ui.test.vmargs>-Xmx512m -XX:MaxPermSize=256m -XstartOnFirstThread</ui.test.vmargs>
+				<ui.test.vmargs>-Xmx512m -XstartOnFirstThread</ui.test.vmargs>
 			</properties>
 		</profile>
 		<profile>
@@ -624,7 +624,7 @@
 				</os>
 			</activation>
 			<properties>
-				<ui.test.vmargs>-Xmx512m -XX:MaxPermSize=256m</ui.test.vmargs>
+				<ui.test.vmargs>-Xmx512m</ui.test.vmargs>
 			</properties>
 		</profile>
 		<profile>

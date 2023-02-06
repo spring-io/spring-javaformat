@@ -13,13 +13,13 @@
 	<name>Spring JavaFormat Eclipse Parent</name>
 	<properties>
 		<main.basedir>${basedir}/..</main.basedir>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<repositories>
 		<repository>
-			<id>eclipse-jdk8</id>
+			<id>eclipse-jdk11</id>
 			<layout>p2</layout>
-			<url>${eclipse.jdk8.repository}</url>
+			<url>${eclipse.jdk11.repository}</url>
 		</repository>
 		<repository>
 			<id>eclipse-checkstyle</id>

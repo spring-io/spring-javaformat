@@ -43,13 +43,13 @@ public class MavenProjectSettingsConfigurator extends AbstractProjectConfigurato
 		new Executor(Messages.springFormatSettingsImportError).run(() -> {
 			List<File> searchFolders = getSearchFolders(request);
 			ProjectSettingsFiles settingsFiles = new ProjectSettingsFilesLocator(searchFolders).locateSettingsFiles();
-			settingsFiles.applyToProject(request.getProject(), monitor);
+			settingsFiles.applyToProject(request.mavenProjectFacade().getProject(), monitor);
 		});
 	}
 
 	private List<File> getSearchFolders(ProjectConfigurationRequest request) {
 		List<File> files = new ArrayList<>();
-		MavenProject project = request.getMavenProject();
+		MavenProject project = request.mavenProject();
 		while (project != null && project.getBasedir() != null) {
 			files.add(project.getBasedir());
 			project = project.getParent();
