@@ -16,7 +16,7 @@ curl --output /opt/concourse-release-scripts.jar https://repo.spring.io/release/
 ###########################################################
 # JAVA
 ###########################################################
-JDK_URL=$( ./get-jdk-url.sh java11 )
+JDK_URL=https://github.com/bell-sw/Liberica/releases/download/17.0.6+10/bellsoft-jdk17.0.6+10-linux-amd64.tar.gz
 
 mkdir -p /opt/openjdk
 cd /opt/openjdk
