@@ -8,9 +8,9 @@ repositories {
 }
 
 dependencies {
-	compile fileTree(dir: 'target/dependencies/compile', include: '*.jar')
-	testCompile gradleTestKit()
-	testCompile fileTree(dir: 'target/dependencies/test', include: '*.jar')
+	implementation fileTree(dir: 'target/dependencies/compile', include: '*.jar')
+	testImplementation gradleTestKit()
+	testImplementation fileTree(dir: 'target/dependencies/test', include: '*.jar')
 }
 
 jar {
