@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,6 +77,7 @@ public final class EclipseRewriter {
 				DefaultCodeFormatterManipulator::new);
 		if (jdkVersion == JdkVersion.V8) {
 			rewrite(zip, "org/eclipse/osgi/util/NLS$1.class", NlsJdk8Manipulator::new);
+			deleteWrapPreparator(zip);
 		}
 		else {
 			rewrite(zip, "org/eclipse/osgi/util/NLS.class", NlsJdk11Manipulator::new);
@@ -92,6 +93,11 @@ public final class EclipseRewriter {
 			reader.accept(manipulator.apply(classWriter), 0);
 		}
 		Files.copy(new ByteArrayInputStream(classWriter.toByteArray()), path, StandardCopyOption.REPLACE_EXISTING);
+	}
+
+	private void deleteWrapPreparator(FileSystem zip) throws IOException {
+		Path path = zip.getPath("org/eclipse/jdt/internal/formatter/linewrap/WrapPreparator.class");
+		Files.delete(path);
 	}
 
 	public static void main(String[] args) throws Exception {

@@ -12,9 +12,8 @@ public class Simple {
 	public String someMethod() throws MalformedURLException, IOException {
 		String settingsXml = new String(Files.readAllBytes(Paths.get("src", "intTest", "projects", "settings.xml")),
 				StandardCharsets.UTF_8)
-						.replace("@localCentralUrl@",
-								new File("build/int-test-maven-repository").toURI().toURL().toString())
-						.replace("@localRepositoryPath@", new File("build/local-maven-repository").getAbsolutePath());
+			.replace("@localCentralUrl@", new File("build/int-test-maven-repository").toURI().toURL().toString())
+			.replace("@localRepositoryPath@", new File("build/local-maven-repository").getAbsolutePath());
 		return settingsXml;
 	}
 
