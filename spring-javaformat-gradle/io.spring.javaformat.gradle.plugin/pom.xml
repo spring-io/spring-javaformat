@@ -11,6 +11,9 @@
 	<artifactId>io.spring.javaformat.gradle.plugin</artifactId>
 	<packaging>pom</packaging>
 	<name>Spring JavaFormat Gradle Plugin Marker Artifact</name>
+	<properties>
+		<main.basedir>${basedir}/../..</main.basedir>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>io.spring.javaformat</groupId>
