@@ -12,15 +12,10 @@
 	<name>Spring JavaFormat IntelliJ IDEA Plugin</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<!-- Compile -->
-		<dependency>
-			<groupId>io.spring.javaformat</groupId>
-			<artifactId>spring-javaformat-formatter</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>io.spring.javaformat</groupId>
 			<artifactId>spring-javaformat-formatter-eclipse-runtime</artifactId>
@@ -32,6 +27,11 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+			<groupId>io.spring.javaformat</groupId>
+			<artifactId>spring-javaformat-formatter</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- Provided -->
 		<dependency>
 			<groupId>io.spring.javaformat</groupId>
@@ -41,14 +41,20 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.spring.javaformat.intellij.idea</groupId>
+			<groupId>org.jetbrains</groupId>
 			<artifactId>annotations</artifactId>
+			<version>13.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.spring.javaformat.intellij.idea</groupId>
+			<artifactId>app</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.spring.javaformat.intellij.idea</groupId>
-			<artifactId>platform-api</artifactId>
+			<artifactId>jps-model</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
@@ -66,7 +72,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.spring.javaformat.intellij.idea</groupId>
-			<artifactId>idea</artifactId>
+			<artifactId>util_rt</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
@@ -78,7 +84,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.spring.javaformat.intellij.idea</groupId>
-			<artifactId>maven-server-api</artifactId>
+			<artifactId>maven-server</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
@@ -108,6 +114,18 @@
 		<dependency>
 			<groupId>org.picocontainer</groupId>
 			<artifactId>picocontainer</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains.kotlinx</groupId>
+			<artifactId>kotlinx-coroutines-core</artifactId>
+			<version>1.6.4</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>it.unimi.dsi</groupId>
+			<artifactId>fastutil</artifactId>
+			<version>8.5.11</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

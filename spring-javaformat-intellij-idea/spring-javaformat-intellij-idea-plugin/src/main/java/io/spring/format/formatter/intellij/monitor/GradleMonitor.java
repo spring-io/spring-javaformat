@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package io.spring.format.formatter.intellij.codestyle.monitor;
+package io.spring.format.formatter.intellij.monitor;
 
 import java.util.Collection;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.externalSystem.model.DataNode;
 import com.intellij.openapi.externalSystem.model.ExternalProjectInfo;
@@ -27,13 +26,14 @@ import com.intellij.openapi.externalSystem.service.project.ProjectDataManager;
 import com.intellij.openapi.externalSystem.service.project.manage.ProjectDataImportListener;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.messages.MessageBusConnection;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.gradle.util.GradleConstants;
 
-import io.spring.format.formatter.intellij.codestyle.monitor.Trigger.State;
+import io.spring.format.formatter.intellij.state.State;
 
 /**
- * {@link Monitor} that looks for a {@code spring-javaformat-gradle-plugin} declaration in
- * the build.gradle file.
+ * {@link Monitor} that looks for a {@code spring-javaformat-gradle-plugin}
+ * declaration in the build.gradle file.
  *
  * @author Phillip Webb
  */
@@ -46,12 +46,19 @@ public class GradleMonitor extends Monitor {
 	public GradleMonitor(Project project, Trigger trigger) {
 		super(project, trigger);
 		MessageBusConnection messageBus = project.getMessageBus().connect();
-		messageBus.subscribe(ProjectDataImportListener.TOPIC, (path) -> check());
+		messageBus.subscribe(ProjectDataImportListener.TOPIC, new ProjectDataImportListener() {
+
+			@Override
+			public void onImportFinished(@Nullable String projectPath) {
+				check();
+			}
+
+		});
 	}
 
 	private void check() {
 		logger.info("Checking " + getProject().getName() + " for use of Spring Java Format");
-		ProjectDataManager projectDataManager = ServiceManager.getService(ProjectDataManager.class);
+		ProjectDataManager projectDataManager = getProject().getService(ProjectDataManager.class);
 		boolean hasFormatPlugin = hasFormatPlugin(
 				projectDataManager.getExternalProjectsData(getProject(), GradleConstants.SYSTEM_ID));
 		getTrigger().updateState(hasFormatPlugin ? State.ACTIVE : State.NOT_ACTIVE);

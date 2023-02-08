@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package io.spring.format.formatter.intellij.codestyle;
+package io.spring.format.formatter.intellij.formatting;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.intellij.openapi.util.TextRange;
@@ -29,15 +28,15 @@ import org.eclipse.jface.text.Region;
  *
  * @author Phillip Webb
  */
-public class EclipseRegionAdapter extends Region {
+class EclipseRegionAdapter extends Region {
 
 	private static final IRegion[] NO_REGIONS = {};
 
-	public EclipseRegionAdapter(TextRange range) {
+	EclipseRegionAdapter(TextRange range) {
 		super(range.getStartOffset(), range.getLength());
 	}
 
-	public static IRegion[] asArray(Collection<? extends TextRange> ranges) {
+	static IRegion[] asArray(List<TextRange> ranges) {
 		if (ranges == null) {
 			return NO_REGIONS;
 		}

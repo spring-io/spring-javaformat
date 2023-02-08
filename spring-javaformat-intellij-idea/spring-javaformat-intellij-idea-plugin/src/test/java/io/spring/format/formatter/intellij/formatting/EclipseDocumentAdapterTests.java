@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.spring.format.formatter.intellij.codestyle;
+package io.spring.format.formatter.intellij.formatting;
 
 import com.intellij.openapi.editor.Document;
 import org.junit.jupiter.api.Test;
@@ -29,10 +29,10 @@ import static org.mockito.Mockito.verify;
  *
  * @author Phillip Webb
  */
-public class EclipseDocumentAdapterTests {
+class EclipseDocumentAdapterTests {
 
 	@Test
-	public void createShouldUseDocumentText() throws Exception {
+	void createUsesDocumentText() throws Exception {
 		Document intellijDocument = mock(Document.class);
 		given(intellijDocument.getText()).willReturn("hello");
 		EclipseDocumentAdapter adapter = new EclipseDocumentAdapter(intellijDocument);
@@ -40,7 +40,7 @@ public class EclipseDocumentAdapterTests {
 	}
 
 	@Test
-	public void replaceShouldApplyToIntellijDocument() throws Exception {
+	void replaceAppliesToIntellijDocument() throws Exception {
 		Document intellijDocument = mock(Document.class);
 		given(intellijDocument.getText()).willReturn("hello");
 		EclipseDocumentAdapter adapter = new EclipseDocumentAdapter(intellijDocument);
@@ -48,5 +48,4 @@ public class EclipseDocumentAdapterTests {
 		assertThat(adapter.get()).isEqualTo("help");
 		verify(intellijDocument).replaceString(3, 5, "p");
 	}
-
 }

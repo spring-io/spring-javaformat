@@ -9,6 +9,7 @@
 	<depends>org.jetbrains.idea.maven</depends>
 	<depends>org.jetbrains.plugins.gradle</depends>
 	<extensions defaultExtensionNs="com.intellij">
-		<postStartupActivity implementation="io.spring.format.formatter.intellij.SpringFormatStartupActivity" />
+		<postStartupActivity implementation="io.spring.format.formatter.intellij.startup.SpringJavaFormatStartupActivity" />
+		<formattingService implementation="io.spring.format.formatter.intellij.formatting.SpringJavaFormatFormattingService"/>
 	</extensions>
 </idea-plugin>

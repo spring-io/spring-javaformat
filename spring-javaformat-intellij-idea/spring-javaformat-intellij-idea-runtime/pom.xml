@@ -13,9 +13,10 @@
 	<name>Spring JavaFormat IntelliJ IDEA Runtime</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
-		<intellij.binary>https://download.jetbrains.com/idea/ideaIC-2021.2.tar.gz</intellij.binary>
-		<intellij.source>https://github.com/JetBrains/intellij-community/archive/idea/212.4746.92.zip</intellij.source>
-		<intellij.root>idea-IC-212.4746.92</intellij.root>
+		<intellij.binary>https://download.jetbrains.com/idea/ideaIC-2022.3.2.tar.gz</intellij.binary>
+		<intellij.source>https://github.com/JetBrains/intellij-community/archive/idea/223.8617.56.zip</intellij.source>
+		<intellij.source.directory>${project.build.directory}/intellij-source</intellij.source.directory>
+		<intellij.root>idea-IC-223.8617.56</intellij.root>
 	</properties>
 	<build>
 		<plugins>
@@ -66,64 +67,71 @@
 						</goals>
 						<configuration>
 							<target>
-								<gunzip src="${project.build.directory}/intellij.tar.gz"/>
+								<gunzip src="${project.build.directory}/intellij.tar.gz" />
 								<untar src="${project.build.directory}/intellij.tar"
-										dest="${project.build.directory}/intellij">
+									dest="${project.build.directory}/intellij">
 									<patternset>
 										<include name="${intellij.root}/lib/*.jar" />
 										<include name="${intellij.root}/plugins/maven/lib/*.jar" />
+										<include name="${intellij.root}/plugins/maven-server/lib/*.jar" />
 										<include name="${intellij.root}/plugins/gradle/lib/*.jar" />
 									</patternset>
 									<mapper type="flatten" />
 								</untar>
 								<unzip
-									src="${project.build.directory}/intellij-source.zip"
-									dest="${project.build.directory}/intellij-source">
+									src="${intellij.source.directory}.zip"
+									dest="${intellij.source.directory}">
 									<patternset>
-										<include
-											name="*/platform/core-api/src/**" />
-										<include
-											name="*/platform/platform-impl/src/**" />
-										<include
-											name="*/platform/util/src/**" />
-										<include
-											name="*/platform/util/ui/src/**" />
-										<include
-											name="*/platform/extensions/src/**" />
-										<include
-											name="*/platform/service-container/src/**" />
-										<include
-											name="*/plugins/maven/src/**" />
-										<include
-											name="*/plugins/gradle/src/**" />
-										<include
-											name="*/plugins/gradle/tooling-extension-api/src/**" />
-										<include
-											name="*/plugins/gradle/tooling-extension-impl/src/**" />
+										<include name="*/platform/core-api/src/**" />
+										<include name="*/platform/core-impl/src/**" />
+										<include name="*/platform/code-style-api/src/**" />
+										<include name="*/platform/extensions/src/**" />
+										<include name="*/platform/platform-impl/src/**" />
+										<include name="*/platform/service-container/src/**" />
+										<include name="*/platform/util/base/src/**" />
+										<include name="*/platform/util/src/**" />
+										<include name="*/platform/util/ui/src/**" />
+										<include name="*/platform/util-rt/src/**" />
+										<include name="*/plugins/maven/src/**" />
+										<include name="*/plugins/maven-server-api/src/**" />
+										<include name="*/plugins/gradle/src/**" />
+										<include name="*/plugins/gradle/tooling-extension-api/src/**" />
+										<include name="*/plugins/gradle/tooling-extension-impl/src/**" />
+										<include name="*/jps/model-serialization/src/**" />
 									</patternset>
-									<cutdirsmapper dirs="1"/>
+									<cutdirsmapper dirs="1" />
 								</unzip>
-								<zip
-									destfile="${project.build.directory}/intellij-source/platform-api-sources.zip"
-									basedir="${project.build.directory}/intellij-source/platform/core-api/src" />
-								<zip
-									destfile="${project.build.directory}/intellij-source/platform-impl-sources.zip"
-									basedir="${project.build.directory}/intellij-source/platform/platform-impl/src" />
-								<zip
-									destfile="${project.build.directory}/intellij-source/util-sources.zip"
-									basedir="${project.build.directory}/intellij-source/platform/util/src" />
-								<zip
-									destfile="${project.build.directory}/intellij-source/maven-sources.zip"
-									basedir="${project.build.directory}/intellij-source/plugins/maven/src" />
-								<zip
-									destfile="${project.build.directory}/intellij-source/gradle-sources.zip"
-									basedir="${project.build.directory}/intellij-source/plugins/gradle/src" />
-								<zip
-									destfile="${project.build.directory}/intellij-source/gradle-tooling-extension-api-sources.zip"
-									basedir="${project.build.directory}/intellij-source/plugins/gradle/tooling-extension-api/src" />
-								<zip
-									destfile="${project.build.directory}/intellij-source/gradle-tooling-extension-impl-sources.zip"
-									basedir="${project.build.directory}/intellij-source/plugins/gradle/tooling-extension-impl/src" />
+								<zip destfile="${intellij.source.directory}/app-sources.zip">
+									<fileset dir="${intellij.source.directory}/platform/core-api/src" />
+									<fileset dir="${intellij.source.directory}/platform/core-impl/src" />
+									<fileset dir="${intellij.source.directory}/platform/code-style-api/src" />
+								</zip>
+								<zip destfile="${intellij.source.directory}/util-sources.zip">
+									<fileset dir="${intellij.source.directory}/platform/core-api/src" />
+									<fileset dir="${intellij.source.directory}/platform/core-impl/src" />
+									<fileset dir="${intellij.source.directory}/platform/util/src" />
+								</zip>
+								<zip destfile="${intellij.source.directory}/util_rt-sources.zip">
+									<fileset dir="${intellij.source.directory}/platform/util-rt/src" />
+								</zip>
+								<zip destfile="${intellij.source.directory}/maven-sources.zip">
+									<fileset dir="${intellij.source.directory}/plugins/maven/src" />
+								</zip>
+								<zip destfile="${intellij.source.directory}/maven-server-sources.zip">
+									<fileset dir="${intellij.source.directory}/plugins/maven-server-api/src" />
+								</zip>
+								<zip destfile="${intellij.source.directory}/gradle-sources.zip">
+									<fileset dir="${intellij.source.directory}/plugins/gradle/src" />
+								</zip>
+								<zip destfile="${intellij.source.directory}/gradle-tooling-extension-api-sources.zip">
+									<fileset dir="${intellij.source.directory}/plugins/gradle/tooling-extension-api/src" />
+								</zip>
+								<zip destfile="${intellij.source.directory}/gradle-tooling-extension-impl-sources.zip">
+									<fileset dir="${intellij.source.directory}/plugins/gradle/tooling-extension-impl/src" />
+								</zip>
+								<zip destfile="${intellij.source.directory}/jps-model-sources.zip">
+									<fileset dir="${intellij.source.directory}/jps/model-serialization/src" />
+								</zip>
 							</target>
 						</configuration>
 					</execution>
@@ -134,56 +142,6 @@
 				<artifactId>maven-install-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>install-intellij-annotations</id>
-						<phase>install</phase>
-						<inherited>false</inherited>
-						<goals>
-							<goal>install-file</goal>
-						</goals>
-						<configuration>
-							<file>${project.build.directory}/intellij/annotations.jar</file>
-							<groupId>io.spring.javaformat.intellij.idea</groupId>
-							<artifactId>annotations</artifactId>
-							<version>${project.version}</version>
-							<packaging>jar</packaging>
-							<generatePom>true</generatePom>
-						</configuration>
-					</execution>
-					<execution>
-						<id>install-intellij-platform-api</id>
-						<phase>install</phase>
-						<inherited>false</inherited>
-						<goals>
-							<goal>install-file</goal>
-						</goals>
-						<configuration>
-							<file>${project.build.directory}/intellij/platform-api.jar</file>
-							<sources>${project.build.directory}/intellij-source/platform-api-sources.zip</sources>
-							<groupId>io.spring.javaformat.intellij.idea</groupId>
-							<artifactId>platform-api</artifactId>
-							<version>${project.version}</version>
-							<packaging>jar</packaging>
-							<generatePom>true</generatePom>
-						</configuration>
-					</execution>
-					<execution>
-						<id>install-intellij-platform-impl</id>
-						<phase>install</phase>
-						<inherited>false</inherited>
-						<goals>
-							<goal>install-file</goal>
-						</goals>
-						<configuration>
-							<file>${project.build.directory}/intellij/platform-impl.jar</file>
-							<sources>${project.build.directory}/intellij-source/platform-impl-sources.zip</sources>
-							<groupId>io.spring.javaformat.intellij.idea</groupId>
-							<artifactId>platform-impl</artifactId>
-							<version>${project.version}</version>
-							<packaging>jar</packaging>
-							<generatePom>true</generatePom>
-						</configuration>
-					</execution>
-					<execution>
 						<id>install-intellij-util</id>
 						<phase>install</phase>
 						<inherited>false</inherited>
@@ -192,7 +150,7 @@
 						</goals>
 						<configuration>
 							<file>${project.build.directory}/intellij/util.jar</file>
-							<sources>${project.build.directory}/intellij-source/util-sources.zip</sources>
+							<sources>${intellij.source.directory}/util-sources.zip</sources>
 							<groupId>io.spring.javaformat.intellij.idea</groupId>
 							<artifactId>util</artifactId>
 							<version>${project.version}</version>
@@ -201,16 +159,34 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>install-intellij-idea</id>
+						<id>install-intellij-util_rt</id>
 						<phase>install</phase>
 						<inherited>false</inherited>
 						<goals>
 							<goal>install-file</goal>
 						</goals>
 						<configuration>
-							<file>${project.build.directory}/intellij/idea.jar</file>
+							<file>${project.build.directory}/intellij/util_rt.jar</file>
+							<sources>${intellij.source.directory}/util_rt-sources.zip</sources>
 							<groupId>io.spring.javaformat.intellij.idea</groupId>
-							<artifactId>idea</artifactId>
+							<artifactId>util_rt</artifactId>
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+					<execution>
+						<id>install-intellij-app</id>
+						<phase>install</phase>
+						<inherited>false</inherited>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.build.directory}/intellij/app.jar</file>
+							<sources>${intellij.source.directory}/app-sources.zip</sources>
+							<groupId>io.spring.javaformat.intellij.idea</groupId>
+							<artifactId>app</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
 							<generatePom>true</generatePom>
@@ -225,7 +201,7 @@
 						</goals>
 						<configuration>
 							<file>${project.build.directory}/intellij/maven.jar</file>
-							<sources>${project.build.directory}/intellij-source/maven-sources.zip</sources>
+							<sources>${intellij.source.directory}/maven-sources.zip</sources>
 							<groupId>io.spring.javaformat.intellij.idea</groupId>
 							<artifactId>maven</artifactId>
 							<version>${project.version}</version>
@@ -234,16 +210,17 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>install-intellij-maven-server-api</id>
+						<id>install-intellij-maven-server</id>
 						<phase>install</phase>
 						<inherited>false</inherited>
 						<goals>
 							<goal>install-file</goal>
 						</goals>
 						<configuration>
-							<file>${project.build.directory}/intellij/maven-server-api.jar</file>
+							<file>${project.build.directory}/intellij/maven-server.jar</file>
+							<sources>${intellij.source.directory}/maven-server-sources.zip</sources>
 							<groupId>io.spring.javaformat.intellij.idea</groupId>
-							<artifactId>maven-server-api</artifactId>
+							<artifactId>maven-server</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
 							<generatePom>true</generatePom>
@@ -258,7 +235,7 @@
 						</goals>
 						<configuration>
 							<file>${project.build.directory}/intellij/gradle.jar</file>
-							<sources>${project.build.directory}/intellij-source/gradle-sources.zip</sources>
+							<sources>${intellij.source.directory}/gradle-sources.zip</sources>
 							<groupId>io.spring.javaformat.intellij.idea</groupId>
 							<artifactId>gradle</artifactId>
 							<version>${project.version}</version>
@@ -275,9 +252,26 @@
 						</goals>
 						<configuration>
 							<file>${project.build.directory}/intellij/gradle-tooling-extension-api.jar</file>
-							<sources>${project.build.directory}/intellij-source/gradle-tooling-extension-api-sources.zip</sources>
+							<sources>${intellij.source.directory}/gradle-tooling-extension-api-sources.zip</sources>
 							<groupId>io.spring.javaformat.intellij.idea</groupId>
 							<artifactId>gradle-tooling-extension-api</artifactId>
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+					<execution>
+						<id>install-intellij-jps-model</id>
+						<phase>install</phase>
+						<inherited>false</inherited>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.build.directory}/intellij/jps-model.jar</file>
+							<sources>${intellij.source.directory}/jps-model-sources.zip</sources>
+							<groupId>io.spring.javaformat.intellij.idea</groupId>
+							<artifactId>jps-model</artifactId>
 							<version>${project.version}</version>
 							<packaging>jar</packaging>
 							<generatePom>true</generatePom>
@@ -292,7 +286,7 @@
 						</goals>
 						<configuration>
 							<file>${project.build.directory}/intellij/gradle-tooling-extension-impl.jar</file>
-							<sources>${project.build.directory}/intellij-source/gradle-tooling-extension-impl-sources.zip</sources>
+							<sources>${intellij.source.directory}/gradle-tooling-extension-impl-sources.zip</sources>
 							<groupId>io.spring.javaformat.intellij.idea</groupId>
 							<artifactId>gradle-tooling-extension-impl</artifactId>
 							<version>${project.version}</version>

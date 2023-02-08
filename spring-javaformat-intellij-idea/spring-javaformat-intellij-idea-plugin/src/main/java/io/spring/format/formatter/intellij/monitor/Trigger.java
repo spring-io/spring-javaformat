@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-package io.spring.format.formatter.intellij;
+package io.spring.format.formatter.intellij.monitor;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.startup.StartupActivity;
+import io.spring.format.formatter.intellij.state.State;
 
 /**
- * {@link StartupActivity} hook for {@link SpringFormat}.
+ * Trigger used to to update the state for this monitor. Triggers are thread safe and can
+ * be called from any active thread.
  *
  * @author Phillip Webb
  */
-public class SpringFormatStartupActivity implements StartupActivity {
+public interface Trigger {
 
-	@Override
-	public void runActivity(Project project) {
-		new SpringFormat(project);
-	}
+	/**
+	 * Update the state of the monitor.
+	 * @param state the updated state
+	 */
+	void updateState(State state);
 
 }

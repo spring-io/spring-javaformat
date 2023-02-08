@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.spring.format.formatter.intellij.codestyle.monitor;
+package io.spring.format.formatter.intellij.monitor;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -24,16 +24,16 @@ import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.VirtualFileMoveEvent;
 import com.intellij.openapi.vfs.VirtualFilePropertyEvent;
 
-import io.spring.format.formatter.intellij.codestyle.monitor.Trigger.State;
+import io.spring.format.formatter.intellij.state.State;
 
 /**
- * {@link Monitor} that looks for a {@literal .springformat} file.
+ * {@link Monitor} that looks for a {@literal .springjavaformatconfig} file.
  *
  * @author Phillip Webb
  */
 public class FileMonitor extends Monitor {
 
-	private static final String TRIGGER_FILE = ".springformat";
+	private static final String TRIGGER_FILE = ".springjavaformatconfig";
 
 	private final VirtualFileManager fileManager;
 

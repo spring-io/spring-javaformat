@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.spring.format.formatter.intellij.codestyle;
+package io.spring.format.formatter.intellij.formatting;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,25 +33,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class EclipseRegionAdapterTests {
 
 	@Test
-	public void getOffsetShouldReturnStartOffset() throws Exception {
+	void getOffsetReturnsStartOffset() throws Exception {
 		IRegion region = new EclipseRegionAdapter(new TextRange(10, 20));
 		assertThat(region.getOffset()).isEqualTo(10);
 	}
 
 	@Test
-	public void getLengthShouldReturnLength() throws Exception {
+	void getLengthReturnsLength() throws Exception {
 		IRegion region = new EclipseRegionAdapter(new TextRange(10, 20));
 		assertThat(region.getLength()).isEqualTo(10);
 	}
 
 	@Test
-	public void asArrayWhenCollectionIsNullShouldReturnEmptyArray() throws Exception {
+	void asArrayWhenCollectionIsNullReturnsEmptyArray() throws Exception {
 		IRegion[] regions = EclipseRegionAdapter.asArray(null);
 		assertThat(regions).isNotNull().isEmpty();
 	}
 
 	@Test
-	public void asArrayShouldReturnArray() throws Exception {
+	void asArrayReturnsArray() throws Exception {
 		List<TextRange> ranges = Arrays.asList(new TextRange(10, 20), new TextRange(30, 35));
 		IRegion[] regions = EclipseRegionAdapter.asArray(ranges);
 		assertThat(regions).hasSize(2);
