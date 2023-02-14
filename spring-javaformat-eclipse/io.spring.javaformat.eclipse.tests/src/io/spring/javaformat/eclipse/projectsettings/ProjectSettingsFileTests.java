@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,21 +39,21 @@ public class ProjectSettingsFileTests {
 	public File temp;
 
 	@Test
-	public void fromFileAdaptsFile() throws Exception {
+	void fromFileAdaptsFile() throws Exception {
 		File file = new File(this.temp, "file");
 		writeText(file, "test");
 		ProjectSettingsFile projectSettingsFile = ProjectSettingsFile.fromFile(file);
 		assertThat(projectSettingsFile.getName()).isEqualTo(file.getName());
 		assertThat(projectSettingsFile.getContent(JavaFormatConfig.DEFAULT))
-				.hasSameContentAs(new ByteArrayInputStream("test".getBytes()));
+			.hasSameContentAs(new ByteArrayInputStream("test".getBytes()));
 	}
 
 	@Test
-	public void fromClasspathResourceAdaptsResource() throws Exception {
+	void fromClasspathResourceAdaptsResource() throws Exception {
 		ProjectSettingsFile projectSettingsFile = ProjectSettingsFile.fromClasspath(getClass(), "test.txt");
 		assertThat(projectSettingsFile.getName()).isEqualTo("test.txt");
 		assertThat(projectSettingsFile.getContent(JavaFormatConfig.DEFAULT))
-				.hasSameContentAs(new ByteArrayInputStream("test".getBytes()));
+			.hasSameContentAs(new ByteArrayInputStream("test".getBytes()));
 	}
 
 	private void writeText(File file, String s) throws FileNotFoundException {

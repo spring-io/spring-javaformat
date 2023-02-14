@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ public class FileEditTests {
 	private FileEdit fileEdit;
 
 	@BeforeEach
-	public void setup() throws IOException {
+	void setup() throws IOException {
 		this.source = new File(this.temp, "source.txt");
 		this.expected = new File(this.temp, "expected.txt");
 		Files.copy(new File("src/test/resources/source/javadoc-top.txt").toPath(), this.source.toPath(),
@@ -64,17 +64,17 @@ public class FileEditTests {
 	}
 
 	@Test
-	public void getFileShouldReturnFile() throws Exception {
+	void getFileReturnsFile() throws Exception {
 		assertThat(this.fileEdit.getFile()).isEqualTo(this.source);
 	}
 
 	@Test
-	public void hasEditsWhenHasEditsShouldReturnTrue() throws Exception {
+	void hasEditsWhenHasEditsReturnsTrue() throws Exception {
 		assertThat(this.fileEdit.hasEdits()).isTrue();
 	}
 
 	@Test
-	public void hasEditsWhenHasNoEditsShouldReturnFalse() throws Exception {
+	void hasEditsWhenHasNoEditsReturnsFalse() throws Exception {
 		String content = read(this.expected);
 		this.textEdit = new Formatter().format(content);
 		this.fileEdit = new FileEdit(this.source, UTF_8, content, this.textEdit);
@@ -82,7 +82,7 @@ public class FileEditTests {
 	}
 
 	@Test
-	public void saveShouldSaveContent() throws Exception {
+	void saveSavesContent() throws Exception {
 		String expected = read(this.expected);
 		assertThat(read(this.source)).isNotEqualTo(expected);
 		this.fileEdit.save();
@@ -90,7 +90,7 @@ public class FileEditTests {
 	}
 
 	@Test
-	public void getFormattedContentShouldReturnFormattedContent() throws Exception {
+	void getFormattedContentReturnsFormattedContent() throws Exception {
 		String expected = read(this.expected);
 		assertThat(this.fileEdit.getFormattedContent()).isEqualTo(expected);
 	}

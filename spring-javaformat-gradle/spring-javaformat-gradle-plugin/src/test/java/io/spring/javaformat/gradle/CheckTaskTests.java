@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,13 +52,13 @@ public class CheckTaskTests {
 	public File temp;
 
 	@Test
-	public void checkOk() throws IOException {
+	void checkOk() throws IOException {
 		BuildResult result = this.gradleBuild.source("src/test/resources/check-ok").build("check");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
 	}
 
 	@Test
-	public void whenFirstInvocationSucceedsThenSecondInvocationIsUpToDate() throws IOException {
+	void whenFirstInvocationSucceedsThenSecondInvocationIsUpToDate() throws IOException {
 		GradleBuild gradleBuild = this.gradleBuild.source("src/test/resources/check-ok");
 		BuildResult result = gradleBuild.build("check");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
@@ -67,7 +67,7 @@ public class CheckTaskTests {
 	}
 
 	@Test
-	public void whenFirstInvocationSucceedsAndSourceIsModifiedThenSecondInvocationSucceeds() throws IOException {
+	void whenFirstInvocationSucceedsAndSourceIsModifiedThenSecondInvocationSucceeds() throws IOException {
 		copyFolder(new File("src/test/resources/check-ok").toPath(), this.temp.toPath());
 		GradleBuild gradleBuild = this.gradleBuild.source(this.temp);
 		BuildResult result = gradleBuild.build("check");
@@ -79,7 +79,7 @@ public class CheckTaskTests {
 	}
 
 	@Test
-	public void whenFirstInvocationSucceedsAndIndentationStyleIsChangedThenSecondInvocationFails() throws IOException {
+	void whenFirstInvocationSucceedsAndIndentationStyleIsChangedThenSecondInvocationFails() throws IOException {
 		GradleBuild gradleBuild = this.gradleBuild.source("src/test/resources/check-ok");
 		BuildResult result = gradleBuild.build("check");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
@@ -90,7 +90,7 @@ public class CheckTaskTests {
 	}
 
 	@Test
-	public void whenFirstInvocationFailsAndIndentationStyleIsChangedThenSecondInvocationSucceeds() throws IOException {
+	void whenFirstInvocationFailsAndIndentationStyleIsChangedThenSecondInvocationSucceeds() throws IOException {
 		GradleBuild gradleBuild = this.gradleBuild.source("src/test/resources/check-spaces");
 		BuildResult result = gradleBuild.buildAndFail("check");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.FAILED);
@@ -101,7 +101,8 @@ public class CheckTaskTests {
 	}
 
 	@Test
-	public void whenFirstInvocationSucceedsAndJavaBaselineIsChangedThenSecondInvocationSucceedsAndThirdIsUpToDate() throws IOException {
+	void whenFirstInvocationSucceedsAndJavaBaselineIsChangedThenSecondInvocationSucceedsAndThirdIsUpToDate()
+			throws IOException {
 		GradleBuild gradleBuild = this.gradleBuild.source("src/test/resources/check-ok");
 		BuildResult result = gradleBuild.build("check");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
@@ -114,13 +115,13 @@ public class CheckTaskTests {
 	}
 
 	@Test
-	public void checkBad() throws IOException {
+	void checkBad() throws IOException {
 		BuildResult result = this.gradleBuild.source("src/test/resources/check-bad").buildAndFail("check");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.FAILED);
 	}
 
 	@Test
-	public void whenFirstInvocationFailsThenSecondInvocationFails() throws IOException {
+	void whenFirstInvocationFailsThenSecondInvocationFails() throws IOException {
 		GradleBuild gradleBuild = this.gradleBuild.source("src/test/resources/check-bad");
 		BuildResult result = gradleBuild.buildAndFail("check");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.FAILED);

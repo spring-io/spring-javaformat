@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,23 +36,27 @@ public class FileFormatterTests extends AbstractFormatterTests {
 
 	@ParameterizedTest
 	@MethodSource("items")
-	public void formatFilesFromIteratorShouldFormatFile(Item item) throws Exception {
+	void formatFilesFromIteratorFormatsFile(Item item) throws Exception {
 		FileEdit edit = new FileFormatter(item.getConfig())
-				.formatFiles(Arrays.asList(item.getSource()), StandardCharsets.UTF_8).findFirst().get();
+			.formatFiles(Arrays.asList(item.getSource()), StandardCharsets.UTF_8)
+			.findFirst()
+			.get();
 		assertThat(edit.getFormattedContent()).isEqualTo(read(item.getExpected()));
 	}
 
 	@ParameterizedTest
 	@MethodSource("items")
-	public void formatFilesFromStreamShouldFormatFile(Item item) throws Exception {
+	void formatFilesFromStreamFormatsFile(Item item) throws Exception {
 		FileEdit edit = new FileFormatter(item.getConfig())
-				.formatFiles(Arrays.asList(item.getSource()).stream(), StandardCharsets.UTF_8).findFirst().get();
+			.formatFiles(Arrays.asList(item.getSource()).stream(), StandardCharsets.UTF_8)
+			.findFirst()
+			.get();
 		assertThat(edit.getFormattedContent()).isEqualTo(read(item.getExpected()));
 	}
 
 	@ParameterizedTest
 	@MethodSource("items")
-	public void formatFileShouldFormatFile(Item item) throws Exception {
+	void formatFileFormatsFile(Item item) throws Exception {
 		File source = item.getSource();
 		FileEdit edit = new FileFormatter(item.getConfig()).formatFile(source, StandardCharsets.UTF_8);
 		String formattedContent = edit.getFormattedContent();
@@ -68,7 +72,7 @@ public class FileFormatterTests extends AbstractFormatterTests {
 		assertThat(formattedContent).isEqualTo(expected);
 	}
 
-	public static Item[] items() {
+	static Item[] items() {
 		return items(null);
 	}
 

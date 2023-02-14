@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2021 the original author or authors.
+ * Copyright 2012-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ public class ProjectPropertiesTests {
 	public File temp;
 
 	@Test
-	public void addFromFolderAddsEclipseProperties() throws IOException {
+	void addFromFolderAddsEclipseProperties() throws IOException {
 		File file = new File(this.temp, "eclipse.properties");
 		writeProperties(file, "2018");
 		ProjectProperties properties = new ProjectProperties();
@@ -53,7 +53,7 @@ public class ProjectPropertiesTests {
 	}
 
 	@Test
-	public void addFromFolderWhenAlreadySetDoesNotOverwrite() throws IOException {
+	void addFromFolderWhenAlreadySetDoesNotOverwrite() throws IOException {
 		ProjectProperties properties = new ProjectProperties();
 		File folder1 = new File(this.temp, "1");
 		folder1.mkdirs();
@@ -67,7 +67,7 @@ public class ProjectPropertiesTests {
 	}
 
 	@Test
-	public void addFromEmptyFolderUsesDefaults() throws IOException {
+	void addFromEmptyFolderUsesDefaults() throws IOException {
 		ProjectProperties properties = new ProjectProperties();
 		properties.addFromFolder(this.temp);
 		String currentYear = String.valueOf(LocalDate.now().getYear());
@@ -75,7 +75,7 @@ public class ProjectPropertiesTests {
 	}
 
 	@Test
-	public void getModifiedContentReplacesCopyrightYear() throws IOException {
+	void getModifiedContentReplacesCopyrightYear() throws IOException {
 		String year = "2016-2020";
 		File file = new File(this.temp, "eclipse.properties");
 		writeProperties(file, year);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,14 +52,14 @@ public class ProjectSettingsFilesTests {
 	public File temp;
 
 	@Test
-	public void iteratorIteratesFiles() throws Exception {
+	void iteratorIteratesFiles() throws Exception {
 		ProjectSettingsFile file = ProjectSettingsFile.fromFile(new File(this.temp, "file.prefs"));
 		ProjectSettingsFiles files = new ProjectSettingsFiles(Collections.singleton(file), new ProjectProperties());
 		assertThat(files).containsOnly(file);
 	}
 
 	@Test
-	public void applyToProjectWithoutFileCopiesToDotSettings() throws Exception {
+	void applyToProjectWithoutFileCopiesToDotSettings() throws Exception {
 		ProjectSettingsFile file = createPrefsFile();
 		ProjectSettingsFiles files = new ProjectSettingsFiles(Collections.singleton(file), new ProjectProperties());
 		IProject project = mock(IProject.class);
@@ -78,7 +78,7 @@ public class ProjectSettingsFilesTests {
 	}
 
 	@Test
-	public void applyToProjectWithFileMergesToDotSettings() throws Exception {
+	void applyToProjectWithFileMergesToDotSettings() throws Exception {
 		ProjectSettingsFile file = createPrefsFile();
 		ProjectSettingsFiles files = new ProjectSettingsFiles(Collections.singleton(file), new ProjectProperties());
 		IProject project = mock(IProject.class);
@@ -87,7 +87,7 @@ public class ProjectSettingsFilesTests {
 		given(project.getFile(".settings/foo.prefs")).willReturn(projectFile);
 		given(projectFile.exists()).willReturn(true);
 		given(projectFile.getContents(true))
-				.willReturn(new ByteArrayInputStream("a=b\n".getBytes(StandardCharsets.UTF_8)));
+			.willReturn(new ByteArrayInputStream("a=b\n".getBytes(StandardCharsets.UTF_8)));
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		will((invocation) -> {
 			invocation.getArgument(0, InputStream.class).transferTo(out);

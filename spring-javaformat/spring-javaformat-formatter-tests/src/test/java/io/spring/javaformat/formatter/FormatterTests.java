@@ -33,7 +33,7 @@ public class FormatterTests extends AbstractFormatterTests {
 
 	@ParameterizedTest
 	@MethodSource("items")
-	public void format(Item item) throws Exception {
+	void format(Item item) throws Exception {
 		String sourceContent = read(item.getSource());
 		String expectedContent = read(item.getExpected());
 		String formattedContent = format(item.getConfig(), sourceContent);
@@ -44,7 +44,7 @@ public class FormatterTests extends AbstractFormatterTests {
 			print("Got", formattedContent);
 			System.out.println("========================================");
 			assertThat(formattedContent).isEqualTo(expectedContent)
-					.describedAs("Formatted content does not match for " + item.getSource());
+				.describedAs("Formatted content does not match for " + item.getSource());
 		}
 	}
 
@@ -55,7 +55,7 @@ public class FormatterTests extends AbstractFormatterTests {
 		return document.get();
 	}
 
-	public static Item[] items() {
+	static Item[] items() {
 		return items("FormatterTests-expected");
 	}
 

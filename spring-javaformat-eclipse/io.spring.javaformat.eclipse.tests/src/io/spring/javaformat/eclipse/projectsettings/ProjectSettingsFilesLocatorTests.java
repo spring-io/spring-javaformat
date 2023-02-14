@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,23 +45,23 @@ public class ProjectSettingsFilesLocatorTests {
 	public File temp;
 
 	@Test
-	public void locateSettingsFilesWhenNoFoldersShouldReturnDefault() throws IOException {
+	void locateSettingsFilesWhenNoFoldersReturnsDefault() throws IOException {
 		ProjectSettingsFiles files = new ProjectSettingsFilesLocator().locateSettingsFiles();
-		assertThat(files.iterator()).extracting(ProjectSettingsFile::getName).containsOnly("org.eclipse.jdt.core.prefs",
-				"org.eclipse.jdt.ui.prefs");
+		assertThat(files.iterator()).extracting(ProjectSettingsFile::getName)
+			.containsOnly("org.eclipse.jdt.core.prefs", "org.eclipse.jdt.ui.prefs");
 	}
 
 	@Test
-	public void locateSettingsFilesOnlyFindPrefs() throws Exception {
+	void locateSettingsFilesOnlyFindPrefs() throws Exception {
 		writeFile(this.temp, "foo.prefs");
 		writeFile(this.temp, "bar.notprefs");
 		ProjectSettingsFiles files = new ProjectSettingsFilesLocator(this.temp).locateSettingsFiles();
-		assertThat(files.iterator()).extracting(ProjectSettingsFile::getName).containsOnly("org.eclipse.jdt.core.prefs",
-				"org.eclipse.jdt.ui.prefs", "foo.prefs");
+		assertThat(files.iterator()).extracting(ProjectSettingsFile::getName)
+			.containsOnly("org.eclipse.jdt.core.prefs", "org.eclipse.jdt.ui.prefs", "foo.prefs");
 	}
 
 	@Test
-	public void locateSettingsFilesWhenMultipleFoldersFindsInEarliest() throws Exception {
+	void locateSettingsFilesWhenMultipleFoldersFindsInEarliest() throws Exception {
 		File folder1 = new File(this.temp, "1");
 		writeFile(folder1, "foo.prefs", "foo1");
 		File folder2 = new File(this.temp, "2");
@@ -71,32 +71,32 @@ public class ProjectSettingsFilesLocatorTests {
 		Map<String, ProjectSettingsFile> found = new LinkedHashMap<>();
 		files.iterator().forEachRemaining((f) -> found.put(f.getName(), f));
 		assertThat(found.get("foo.prefs").getContent(JavaFormatConfig.DEFAULT))
-				.hasSameContentAs(new ByteArrayInputStream("foo1".getBytes()));
+			.hasSameContentAs(new ByteArrayInputStream("foo1".getBytes()));
 		assertThat(found.get("org.eclipse.jdt.core.prefs").getContent(JavaFormatConfig.DEFAULT))
-				.hasSameContentAs(new ByteArrayInputStream("core2".getBytes()));
+			.hasSameContentAs(new ByteArrayInputStream("core2".getBytes()));
 	}
 
 	@Test
-	public void jdtCorePrefsFormatterWhenDefaultShouldUseTabs() throws IOException {
+	void jdtCorePrefsFormatterWhenDefaultUsesTabs() throws IOException {
 		ProjectSettingsFiles files = new ProjectSettingsFilesLocator().locateSettingsFiles();
 		ProjectSettingsFile file = get(files, "org.eclipse.jdt.core.prefs");
 		try (InputStream content = file.getContent(JavaFormatConfig.DEFAULT)) {
 			Properties properties = new Properties();
 			properties.load(content);
 			assertThat(properties.get("org.eclipse.jdt.core.javaFormatter"))
-					.isEqualTo("io.spring.javaformat.eclipse.formatter.jdk11.tabs");
+				.isEqualTo("io.spring.javaformat.eclipse.formatter.jdk11.tabs");
 		}
 	}
 
 	@Test
-	public void jdtCorePrefsFormatterWhenSpacesShouldUseSpaces() throws IOException {
+	void jdtCorePrefsFormatterWhenSpacesUsesSpaces() throws IOException {
 		ProjectSettingsFiles files = new ProjectSettingsFilesLocator().locateSettingsFiles();
 		ProjectSettingsFile file = get(files, "org.eclipse.jdt.core.prefs");
 		try (InputStream content = file.getContent(JavaFormatConfig.of(JavaBaseline.V8, IndentationStyle.SPACES))) {
 			Properties properties = new Properties();
 			properties.load(content);
 			assertThat(properties.get("org.eclipse.jdt.core.javaFormatter"))
-					.isEqualTo("io.spring.javaformat.eclipse.formatter.jdk8.spaces");
+				.isEqualTo("io.spring.javaformat.eclipse.formatter.jdk8.spaces");
 		}
 	}
 

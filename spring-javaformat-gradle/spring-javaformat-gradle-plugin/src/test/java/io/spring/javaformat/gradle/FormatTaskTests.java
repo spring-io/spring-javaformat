@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ public class FormatTaskTests {
 	private final GradleBuild gradleBuild = new GradleBuild();
 
 	@Test
-	public void checkOk() throws IOException {
+	void checkOk() throws IOException {
 		BuildResult result = this.gradleBuild.source("src/test/resources/format").build("format");
 		assertThat(result.task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
 		File formattedFile = new File(this.gradleBuild.getProjectDir(), "src/main/java/simple/Simple.java");
@@ -53,7 +53,7 @@ public class FormatTaskTests {
 	}
 
 	@Test
-	public void checkUpToDate() throws IOException {
+	void checkUpToDate() throws IOException {
 		GradleRunner runner = this.gradleBuild.source("src/test/resources/format").prepareRunner("format");
 		// Format that changes files
 		assertThat(runner.build().task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
@@ -64,7 +64,7 @@ public class FormatTaskTests {
 	}
 
 	@Test
-	public void notUpToDateWhenJavaBaselineChanges() throws IOException {
+	void notUpToDateWhenJavaBaselineChanges() throws IOException {
 		GradleRunner runner = this.gradleBuild.source("src/test/resources/format").prepareRunner("format");
 		// Format that changes files
 		assertThat(runner.build().task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
@@ -78,7 +78,7 @@ public class FormatTaskTests {
 	}
 
 	@Test
-	public void notUpToDateWhenIndentationStyleChanges() throws IOException {
+	void notUpToDateWhenIndentationStyleChanges() throws IOException {
 		GradleRunner runner = this.gradleBuild.source("src/test/resources/format").prepareRunner("format");
 		// Format that changes files
 		assertThat(runner.build().task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
@@ -92,7 +92,7 @@ public class FormatTaskTests {
 	}
 
 	@Test
-	public void checkSpacesOk() throws IOException {
+	void checkSpacesOk() throws IOException {
 		BuildResult result = this.gradleBuild.source("src/test/resources/format-spaces").build("format");
 		assertThat(result.task(":formatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
 		File formattedFile = new File(this.gradleBuild.getProjectDir(), "src/main/java/simple/Simple.java");
