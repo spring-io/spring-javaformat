@@ -222,6 +222,7 @@ https://repo1.maven.org/maven2/io/spring/javaformat/io.spring.javaformat.eclipse
 or use the https://repo.spring.io/javaformat-eclipse-update-site/[update site].
 
 
+
 === IntelliJ IDEA
 The IntelliJ IDEA plugin provides custom formatter support for IntelliJ IDEA.
 The plugin is automatically activated whenever the Maven or Gradle plugins are discovered in a project build script or if a `.springjavaformatconfig` file.
@@ -239,6 +240,8 @@ The plugin is automatically enabled when one or more of the following conditions
 * `.springjavaformatconfig` file exists
 * For a Maven-based project, `spring-javaformat-maven-plugin` plugin is defined in `pom.xml`
 * For a Gradle-based project, `io.spring.javaformat` plugin is applied
+
+
 
 ==== CheckStyle-IDEA plugin
 The https://plugins.jetbrains.com/plugin/1065-checkstyle-idea[CheckStyle-IDEA plugin] provides Checkstyle integration for IntelliJ IDEA.
