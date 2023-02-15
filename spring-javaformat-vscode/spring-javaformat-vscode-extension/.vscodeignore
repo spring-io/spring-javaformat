@@ -1,0 +1,17 @@
+.gitignore
+.prettierrc
+.project
+.classpath
+.vscode/**
+.vscode-test/**
+.settings/**
+out/test/**
+**/tsconfig.json
+**/tslint.json
+**/*.map
+**/*.ts
+target/**
+node/**
+src/**
+README.md
+**pom.xml

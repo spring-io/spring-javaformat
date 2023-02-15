@@ -268,6 +268,16 @@ Once the configuration file is created, configure your IDE to use it:
 
 
 
+=== Visual Studio Code
+The Visual Studio Code extension provides custom formatter support for Microsoft Visual Studio Code.
+The extension using the [`DocumentFormattingEditProvider`](https://code.visualstudio.com/api/references/vscode-api#DocumentFormattingEditProvider) API.
+Once installed it may be activated by using the "`Format Document`" action available in the editor context menu or from the Command Palette.
+
+To install the extension select "`Install from VSIX`" in the extensions panel and choose the `spring-javaformat-vscode-extension` vsix file.
+You can download the latest version from https://repo1.maven.org/maven2/io/spring/javaformat/spring-javaformat-vscode-extension/{release-version}[Maven Central].
+
+
+
 === About the Conventions
 Most of the coding conventions and style comes from the Spring Framework and Spring Boot projects.
 Spring Framework manually formats code, where as Spring Boot uses automatic formatting.

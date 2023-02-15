@@ -167,6 +167,20 @@ To add gradle classes, convert this module to a gradle project.
 
 
 
+=== Setting up Visual Studio Code Extension Development
+The `spring-javaformat-vscode-extension` extension consists of a formatter written in Java and an extension written in TypeScript.
+If you want to work on the TypeScript code it can opened directly with Visual Studio Code.
+
+Maven delegates to `npm run package` to actually generate the extension.
+
+Code is formatted with prettier.
+If you need to reform the code you can run `npx prettier --write .`
+
+There is a basic test included with the project, but since it needs UI elements it doesn't run as part of the regular build.
+If you make changes to the extension, you should run "`Extension Tests`" from vscode.
+
+
+
 === Importing Into Other IDEs
 Maven is well supported by most Java IDEs. Refer to your vendor documentation.
 
@@ -174,13 +188,14 @@ Maven is well supported by most Java IDEs. Refer to your vendor documentation.
 
 == Understanding the Code
 There are quite a few moving parts to this project and the build is quite complex.
-At the top level there are 5 projects:
+At the top level there are 6 projects:
 
 * `spring-javaformat` - The main formatter project
 * `spring-javaformat-eclipse` - The Eclipse plugin
 * `spring-javaformat-gradle` - The Gradle plugin
 * `spring-javaformat-intellij` - The IntelliJ IDEA plugin
 * `spring-javaformat-maven` - The Maven plugin
+* `spring-javaformat-vscode` - The Visual Studo Code extension
 
 Under `spring-javaformat` the following projects are defined:
 

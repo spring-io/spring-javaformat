@@ -60,6 +60,11 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
+					<groupId>com.github.eirslett</groupId>
+					<artifactId>frontend-maven-plugin</artifactId>
+					<version>1.12.1</version>
+				</plugin>
+				<plugin>
 					<groupId>com.github.wvengen</groupId>
 					<artifactId>proguard-maven-plugin</artifactId>
 					<version>2.6.0</version>
@@ -362,6 +367,25 @@
 										<ignore />
 									</action>
 								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.github.eirslett
+										</groupId>
+										<artifactId>
+											frontend-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.12.1,)
+										</versionRange>
+										<goals>
+											<goal>npx</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
@@ -597,10 +621,11 @@
 	</dependencies>
 	<modules>
 		<module>spring-javaformat</module>
-		<module>spring-javaformat-maven</module>
-		<module>spring-javaformat-gradle</module>
 		<module>spring-javaformat-eclipse</module>
+		<module>spring-javaformat-gradle</module>
 		<module>spring-javaformat-intellij-idea</module>
+		<module>spring-javaformat-maven</module>
+		<module>spring-javaformat-vscode</module>
 	</modules>
 	<profiles>
 		<profile>
