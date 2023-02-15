@@ -1,0 +1,7 @@
+out
+runtime
+dist
+node
+node_modules
+.vscode-test/
+*.vsix

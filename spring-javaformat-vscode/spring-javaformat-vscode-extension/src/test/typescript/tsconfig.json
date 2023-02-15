@@ -1,0 +1,7 @@
+{
+  "extends": "../../../tsconfig-base.json",
+  "compilerOptions": {
+    "outDir": "../../../out/test",
+    "rootDirs": ["../../main/typescript", "."]
+  }
+}
