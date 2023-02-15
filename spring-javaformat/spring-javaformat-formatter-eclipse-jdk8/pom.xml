@@ -173,6 +173,7 @@
 								<option>-keep class org.eclipse.jdt.core.formatter.** {*;}</option>
 								<option>-keep class org.eclipse.jdt.internal.formatter.** {*;}</option>
 								<option>-keep class org.eclipse.jface.text.Document {*;}</option>
+								<option>-keep class org.eclipse.jface.text.TextUtilities {*;}</option>
 								<option>-keep class
 									org.eclipse.jdt.internal.compiler.parser.TerminalTokens {*;}</option>
 								<option>-keep class org.eclipse.jdt.core.dom.TagElement {*;}</option>
