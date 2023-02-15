@@ -108,6 +108,7 @@ image::.github/images/setup-idea-dependency.png[Setup IntelliJ IDEA Dependencies
 === Setting up IntelliJ IDEA Plugin Development
 
 
+
 ==== Download Images
 To develop the `spring-javaformat-intellij-idea-plugin` module, you need an IntelliJ IDEA application on your local machine.
 
@@ -185,7 +186,14 @@ Under `spring-javaformat` the following projects are defined:
 
 * `spring-javaformat-checkstyle` - The checkstyle plugin
 * `spring-javaformat-formatter` - The main formatter code
-* `spring-javaformat-formatter-eclipse` - The eclipse formatter (repackaged and slightly adapted)
+* `spring-javaformat-formatter-test-support` - Support classes for tests
+* `spring-javaformat-formatter-tests` - Tests for the formatter (external so that they we can test Java 8 and 11)
+* `spring-javaformat-formatter-shader` - Shader support classes
+* `spring-javaformat-formatter-shaded` - A shaded version of the formatter with all dependencies included
+* `spring-javaformat-formatter-eclipse-jdk8` - The eclipse JDK 8 formatter (repackaged and slightly adapted)
+* `spring-javaformat-formatter-eclipse-jdk11` - The eclipse JDK 11 formatter (repackaged and slightly adapted)
+* `spring-javaformat-formatter-eclipse-jdt-jdk8` - The eclipse JDT import for JDK 8
+* `spring-javaformat-formatter-eclipse-jdt-jdk11` - The eclipse JDT import for JDK 8
 * `spring-javaformat-formatter-eclipse-rewriter` - Internal utility used to modify eclipse code
 * `spring-javaformat-formatter-eclipse-runtime` - Eclipse runtime JAR for use when running outside of Eclipse
 
