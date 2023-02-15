@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,42 +20,28 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
-import java.util.regex.Pattern;
 
-import org.eclipse.jface.text.Document;
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.TextEdit;
 
 /**
- * An Edit that can be applied to a File.
+ * An {@link Edit} that can be applied to a {@link File}.
  *
  * @author Phillip Webb
  */
-public class FileEdit {
-
-	private static final Pattern TRAILING_WHITESPACE = Pattern.compile(" +$", Pattern.MULTILINE);
+public class FileEdit extends Edit {
 
 	private final File file;
 
 	private final Charset encoding;
 
-	private final String originalContent;
-
-	private final TextEdit edit;
-
-	FileEdit(File file, Charset encoding, String originalContent, TextEdit edit) {
+	FileEdit(File file, Charset encoding, String originalContent, TextEdit textEdit) {
+		super(originalContent, textEdit);
 		this.file = file;
 		this.encoding = encoding;
-		this.originalContent = originalContent;
-		this.edit = edit;
 	}
 
 	public File getFile() {
 		return this.file;
-	}
-
-	public boolean hasEdits() {
-		return (this.edit.hasChildren() || this.edit.getLength() > 0);
 	}
 
 	public void save() {
@@ -69,20 +55,14 @@ public class FileEdit {
 		}
 	}
 
-	public String getFormattedContent() throws Exception {
+	@Override
+	protected String getFormattedContent() throws Exception {
 		try {
-			IDocument document = new Document(this.originalContent);
-			this.edit.apply(document);
-			String formattedContent = document.get();
-			return trimTrailingWhitespace(formattedContent);
+			return super.getFormattedContent();
 		}
 		catch (Exception ex) {
 			throw FileFormatterException.wrap(this.file, ex);
 		}
-	}
-
-	private String trimTrailingWhitespace(String content) {
-		return TRAILING_WHITESPACE.matcher(content).replaceAll("");
 	}
 
 }

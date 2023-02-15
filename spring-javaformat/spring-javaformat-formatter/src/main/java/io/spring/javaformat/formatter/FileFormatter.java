@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ public class FileFormatter {
 	 * instances.
 	 * @param files the files to format
 	 * @param encoding the source encoding
-	 * @return a stream of formatted files that have edits
+	 * @return a stream of file edits
 	 */
 	public Stream<FileEdit> formatFiles(Iterable<File> files, Charset encoding) {
 		return formatFiles(files, encoding, Formatter.DEFAULT_LINE_SEPARATOR);
@@ -67,7 +67,7 @@ public class FileFormatter {
 	 * @param files the files to format
 	 * @param encoding the source encoding
 	 * @param lineSeparator the line separator
-	 * @return a stream of formatted files that have edits
+	 * @return a stream of file edits
 	 */
 	public Stream<FileEdit> formatFiles(Iterable<File> files, Charset encoding, String lineSeparator) {
 		return formatFiles(StreamSupport.stream(files.spliterator(), false), encoding, lineSeparator);
@@ -78,7 +78,7 @@ public class FileFormatter {
 	 * instances.
 	 * @param files the files to format
 	 * @param encoding the source encoding
-	 * @return a stream of formatted files that have edits
+	 * @return a stream of file edits
 	 */
 	public Stream<FileEdit> formatFiles(Stream<File> files, Charset encoding) {
 		return formatFiles(files, encoding, Formatter.DEFAULT_LINE_SEPARATOR);
@@ -90,28 +90,28 @@ public class FileFormatter {
 	 * @param files the files to format
 	 * @param encoding the source encoding
 	 * @param lineSeparator the line separator
-	 * @return a stream of formatted files that have edits
+	 * @return a stream of file edits
 	 */
 	public Stream<FileEdit> formatFiles(Stream<File> files, Charset encoding, String lineSeparator) {
 		return files.map((file) -> formatFile(file, encoding, lineSeparator));
 	}
 
 	/**
-	 * Format the the given source file and return a {@link FileEdit} instance.
+	 * Format the given source file and return a {@link FileEdit} instance.
 	 * @param file the file to format
 	 * @param encoding the source encoding
-	 * @return a formatted file
+	 * @return a file edit
 	 */
 	public FileEdit formatFile(File file, Charset encoding) {
 		return formatFile(file, encoding, Formatter.DEFAULT_LINE_SEPARATOR);
 	}
 
 	/**
-	 * Format the the given source file and return a {@link FileEdit} instance.
+	 * Format the given source file and return a {@link FileEdit} instance.
 	 * @param file the file to format
 	 * @param encoding the source encoding
 	 * @param lineSeparator the line separator
-	 * @return a formatted file
+	 * @return a file edit
 	 */
 	public FileEdit formatFile(File file, Charset encoding, String lineSeparator) {
 		try {
