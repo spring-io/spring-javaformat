@@ -59,21 +59,21 @@
 				<executions>
 					<execution>
 						<id>install-node-and-npm</id>
-						<phase>generate-resources</phase>
+						<phase>initialize</phase>
 						<goals>
 							<goal>install-node-and-npm</goal>
 						</goals>
 					</execution>
 					<execution>
 						<id>npm-install</id>
-						<phase>generate-resources</phase>
+						<phase>initialize</phase>
 						<goals>
 							<goal>npm</goal>
 						</goals>
 					</execution>
 					<execution>
 						<id>prettier-check</id>
-						<phase>validate</phase>
+						<phase>compile</phase>
 						<goals>
 							<goal>npx</goal>
 						</goals>
