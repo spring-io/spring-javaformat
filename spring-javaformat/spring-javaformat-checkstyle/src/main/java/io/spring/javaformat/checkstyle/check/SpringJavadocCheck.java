@@ -166,7 +166,8 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 		}
 		String[] text = javadoc.getText();
 		DetailAST interfaceOrAnnotationDef = getInterfaceOrAnnotationDef(ast);
-		boolean privateType = !isPublicOrProtected(ast) && (interfaceOrAnnotationDef == null || !isPublicOrProtected(interfaceOrAnnotationDef));
+		boolean privateType = !isPublicOrProtected(ast)
+				&& (interfaceOrAnnotationDef == null || !isPublicOrProtected(interfaceOrAnnotationDef));
 		boolean innerType = ast.getParent() != null && ast.getParent().getType() != TokenTypes.COMPILATION_UNIT;
 		boolean found = false;
 		for (int i = 0; i < text.length; i++) {
@@ -231,7 +232,7 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 
 	private DetailAST findParent(DetailAST ast, int... classDefs) {
 		while (ast != null) {
-			for (int classDef: classDefs) {
+			for (int classDef : classDefs) {
 				if (ast.getType() == classDef) {
 					return ast;
 				}

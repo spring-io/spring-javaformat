@@ -50,7 +50,8 @@ public class VerifyApply {
 		String formated = new String(Files.readAllBytes(base.toPath().resolve(JAVA_FILE)), StandardCharsets.UTF_8);
 		String indent = (!spaces) ? "	" : "    ";
 		assertThat(formated).contains("Simple." + lineSeparator + " *" + lineSeparator + " * @author")
-				.contains("public class Simple {").contains(indent + "public static void main");
+			.contains("public class Simple {")
+			.contains(indent + "public static void main");
 	}
 
 	public static void main(String[] args) throws IOException {

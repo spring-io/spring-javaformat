@@ -33,7 +33,7 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 public class SpringMethodOrderCheck extends AbstractSpringCheck {
 
 	private static final List<String> EXPECTED_ORDER = Collections
-			.unmodifiableList(Arrays.asList("equals", "hashCode", "toString"));
+		.unmodifiableList(Arrays.asList("equals", "hashCode", "toString"));
 
 	@Override
 	public int[] getAcceptableTokens() {

@@ -50,8 +50,10 @@ public class ValidateMojo extends FormatMojo {
 			getLog().debug("skipping validation as per configuration.");
 			return;
 		}
-		List<File> problems = getFormatter().formatFiles(files, encoding, lineSeparator).filter(FileEdit::hasEdits)
-				.map(FileEdit::getFile).collect(Collectors.toList());
+		List<File> problems = getFormatter().formatFiles(files, encoding, lineSeparator)
+			.filter(FileEdit::hasEdits)
+			.map(FileEdit::getFile)
+			.collect(Collectors.toList());
 		if (!problems.isEmpty()) {
 			StringBuilder message = new StringBuilder("Formatting violations found in the following files:\n");
 			problems.stream().forEach((f) -> message.append(" * " + f + "\n"));

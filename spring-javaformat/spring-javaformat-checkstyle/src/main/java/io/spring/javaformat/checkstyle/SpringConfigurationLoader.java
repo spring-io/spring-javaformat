@@ -52,8 +52,10 @@ class SpringConfigurationLoader {
 		System.out.println(getClass().getResource("spring-checkstyle.xml"));
 		Configuration config = loadConfiguration(getClass().getResourceAsStream("spring-checkstyle.xml"),
 				propertyResolver);
-		return Arrays.stream(config.getChildren()).filter(this.moduleFactory::nonFiltered).map(this::load)
-				.collect(Collectors.toList());
+		return Arrays.stream(config.getChildren())
+			.filter(this.moduleFactory::nonFiltered)
+			.map(this::load)
+			.collect(Collectors.toList());
 	}
 
 	private Configuration loadConfiguration(InputStream inputStream, PropertyResolver propertyResolver) {

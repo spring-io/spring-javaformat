@@ -130,8 +130,9 @@ public abstract class FormatMojo extends AbstractMojo {
 	}
 
 	private Stream<File> resolve(List<String> directories) {
-		return directories.stream().map(directory -> FileUtils.resolveFile(this.project.getBasedir(), directory))
-				.filter(this::include);
+		return directories.stream()
+			.map(directory -> FileUtils.resolveFile(this.project.getBasedir(), directory))
+			.filter(this::include);
 	}
 
 	private boolean include(File file) {
@@ -168,8 +169,10 @@ public abstract class FormatMojo extends AbstractMojo {
 		scanner.setCaseSensitive(false);
 		scanner.setFollowSymlinks(false);
 		scanner.scan();
-		return Arrays.asList(scanner.getIncludedFiles()).stream().map(name -> new File(directory, name))
-				.collect(Collectors.toList());
+		return Arrays.asList(scanner.getIncludedFiles())
+			.stream()
+			.map(name -> new File(directory, name))
+			.collect(Collectors.toList());
 	}
 
 	private boolean hasLength(Object[] array) {

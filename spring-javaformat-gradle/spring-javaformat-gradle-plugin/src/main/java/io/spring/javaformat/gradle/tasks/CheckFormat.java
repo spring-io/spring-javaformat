@@ -53,8 +53,9 @@ public class CheckFormat extends FormatterTask {
 
 	@TaskAction
 	public void checkFormatting() throws IOException, InterruptedException {
-		List<File> problems = formatFiles().filter(FileEdit::hasEdits).map(FileEdit::getFile)
-				.collect(Collectors.toList());
+		List<File> problems = formatFiles().filter(FileEdit::hasEdits)
+			.map(FileEdit::getFile)
+			.collect(Collectors.toList());
 		this.reportLocation.getParentFile().mkdirs();
 		if (!problems.isEmpty()) {
 			StringBuilder message = new StringBuilder("Formatting violations found in the following files:\n");

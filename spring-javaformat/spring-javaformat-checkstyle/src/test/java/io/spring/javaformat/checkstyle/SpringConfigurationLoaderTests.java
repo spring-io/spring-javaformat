@@ -54,7 +54,7 @@ public class SpringConfigurationLoaderTests {
 	@Test
 	public void loadWithExcludeShouldExcludeChecks() {
 		Set<String> excludes = Collections
-				.singleton("com.puppycrawl.tools.checkstyle.checks.whitespace.MethodParamPadCheck");
+			.singleton("com.puppycrawl.tools.checkstyle.checks.whitespace.MethodParamPadCheck");
 		Collection<FileSetCheck> checks = load(excludes);
 		assertThat(checks).hasSize(4);
 		TreeWalker treeWalker = (TreeWalker) checks.toArray()[3];
@@ -75,7 +75,7 @@ public class SpringConfigurationLoaderTests {
 				new PackageObjectFactory(getClass().getPackage().getName(), getClass().getClassLoader()), excludes);
 		context.add("moduleFactory", filteredModuleFactory);
 		Collection<FileSetCheck> checks = new SpringConfigurationLoader(context, filteredModuleFactory)
-				.load(getPropertyResolver());
+			.load(getPropertyResolver());
 		return checks;
 	}
 

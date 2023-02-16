@@ -107,8 +107,9 @@ public class ExtendedCodeFormatter extends DefaultCodeFormatter {
 	}
 
 	private void applyPreparators(Phase preWrapping, int kind, ASTNode astRoot, TokenManager tokenManager) {
-		this.preparators.stream().filter((preparator) -> preparator.getPhase() == preWrapping)
-				.forEach((preparator) -> preparator.apply(kind, tokenManager, astRoot));
+		this.preparators.stream()
+			.filter((preparator) -> preparator.getPhase() == preWrapping)
+			.forEach((preparator) -> preparator.apply(kind, tokenManager, astRoot));
 	}
 
 	@SuppressWarnings("unchecked")

@@ -63,7 +63,7 @@ public class FormatterIntegrationTests {
 	@ValueSource(strings = "8")
 	void formatCodeWithV11BaselineCannotFormatOn8(String version) throws Exception {
 		assertThatExceptionOfType(ContainerLaunchException.class)
-				.isThrownBy(() -> runFormatter(JavaBaseline.V11, version));
+			.isThrownBy(() -> runFormatter(JavaBaseline.V11, version));
 	}
 
 	private void runFormatter(JavaBaseline baseline, String version) throws IOException, Exception {

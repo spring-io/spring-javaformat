@@ -113,8 +113,10 @@ public class SpringChecksTests {
 	}
 
 	public static Collection<Parameter> paramaters() throws IOException {
-		ArrayList<Parameter> parameters = Arrays.stream(SOURCES_DIR.listFiles(SpringChecksTests::sourceFile)).sorted()
-				.map(Parameter::new).collect(Collectors.toCollection(ArrayList::new));
+		ArrayList<Parameter> parameters = Arrays.stream(SOURCES_DIR.listFiles(SpringChecksTests::sourceFile))
+			.sorted()
+			.map(Parameter::new)
+			.collect(Collectors.toCollection(ArrayList::new));
 		parameters.add(new Parameter(new File(SOURCES_DIR, "nopackageinfo/NoPackageInfo.java")));
 		return parameters;
 	}

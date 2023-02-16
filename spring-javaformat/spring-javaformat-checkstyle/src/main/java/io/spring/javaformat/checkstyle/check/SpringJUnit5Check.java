@@ -97,11 +97,11 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 	@Override
 	public void visitToken(DetailAST ast) {
 		switch (ast.getType()) {
-		case TokenTypes.METHOD_DEF:
-			visitMethodDef(ast);
-		case TokenTypes.IMPORT:
-			visitImport(ast);
-			break;
+			case TokenTypes.METHOD_DEF:
+				visitMethodDef(ast);
+			case TokenTypes.IMPORT:
+				visitImport(ast);
+				break;
 		}
 	}
 
@@ -172,8 +172,8 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 	}
 
 	public void setUnlessImports(String unlessImports) {
-		this.unlessImports = Collections.unmodifiableList(
-				Arrays.stream(unlessImports.split(",")).map(String::trim).collect(Collectors.toList()));
+		this.unlessImports = Collections
+			.unmodifiableList(Arrays.stream(unlessImports.split(",")).map(String::trim).collect(Collectors.toList()));
 	}
 
 }

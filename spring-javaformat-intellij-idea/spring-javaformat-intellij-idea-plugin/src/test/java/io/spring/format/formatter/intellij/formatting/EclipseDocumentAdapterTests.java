@@ -48,4 +48,5 @@ class EclipseDocumentAdapterTests {
 		assertThat(adapter.get()).isEqualTo("help");
 		verify(intellijDocument).replaceString(3, 5, "p");
 	}
+
 }

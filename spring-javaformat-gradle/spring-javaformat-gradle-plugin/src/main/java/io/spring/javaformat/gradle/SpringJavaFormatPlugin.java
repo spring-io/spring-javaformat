@@ -56,24 +56,28 @@ public class SpringJavaFormatPlugin implements Plugin<Project> {
 			TaskProvider<Task> checkAllProvider = tasks.register(CheckFormat.NAME);
 			checkAllProvider.configure((checkAll) -> checkAll.setDescription(CheckFormat.DESCRIPTION));
 			tasks.named(JavaBasePlugin.CHECK_TASK_NAME).configure((check) -> check.dependsOn(checkAllProvider));
-			this.project.getConvention().getPlugin(JavaPluginConvention.class).getSourceSets()
-					.all((sourceSet) -> addSourceTasks(sourceSet, checkAllProvider, formatAllProvider));
+			this.project.getConvention()
+				.getPlugin(JavaPluginConvention.class)
+				.getSourceSets()
+				.all((sourceSet) -> addSourceTasks(sourceSet, checkAllProvider, formatAllProvider));
 		});
 	}
 
-	private void addSourceTasks(SourceSet sourceSet, TaskProvider<Task> checkAllProvider, TaskProvider<Task> formatAllProvider) {
+	private void addSourceTasks(SourceSet sourceSet, TaskProvider<Task> checkAllProvider,
+			TaskProvider<Task> formatAllProvider) {
 		TaskProvider<CheckFormat> checkTaskProvider = addFormatterTask(sourceSet, CheckFormat.class, CheckFormat.NAME,
 				CheckFormat.DESCRIPTION);
 		checkTaskProvider.configure((checkTask) -> checkTask.setReportLocation(
 				new File(this.project.getBuildDir(), "reports/format/" + sourceSet.getName() + "/check-format.txt")));
 		checkAllProvider.configure((checkAll) -> checkAll.dependsOn(checkTaskProvider));
-		TaskProvider<Format> formatTaskProvider = addFormatterTask(sourceSet, Format.class, Format.NAME, Format.DESCRIPTION);
+		TaskProvider<Format> formatTaskProvider = addFormatterTask(sourceSet, Format.class, Format.NAME,
+				Format.DESCRIPTION);
 		formatTaskProvider.configure((format) -> format.conventionMapping("encoding", () -> "UTF-8"));
 		formatAllProvider.configure((formatAll) -> formatAll.dependsOn(formatTaskProvider));
 	}
 
-	private <T extends FormatterTask> TaskProvider<T> addFormatterTask(SourceSet sourceSet, Class<T> taskType, String name,
-			String desc) {
+	private <T extends FormatterTask> TaskProvider<T> addFormatterTask(SourceSet sourceSet, Class<T> taskType,
+			String name, String desc) {
 		String taskName = sourceSet.getTaskName(name, null);
 		TaskProvider<T> provider = this.project.getTasks().register(taskName, taskType);
 		provider.configure((task) -> {

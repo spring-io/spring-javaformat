@@ -61,9 +61,9 @@ public class SpringTernaryCheck extends AbstractSpringCheck {
 	private boolean requiresParens(DetailAST expression) {
 		if (expression != null && expression.getChildCount() > 1) {
 			switch (expression.getType()) {
-			case TokenTypes.METHOD_CALL:
-			case TokenTypes.DOT:
-				return false;
+				case TokenTypes.METHOD_CALL:
+				case TokenTypes.DOT:
+					return false;
 			}
 			return true;
 		}
@@ -86,13 +86,13 @@ public class SpringTernaryCheck extends AbstractSpringCheck {
 
 	private boolean isEqualsTestAllowed(DetailAST ast) {
 		switch (this.equalsTest) {
-		case ANY:
-			return true;
-		case NEVER:
-			return false;
-		case NEVER_FOR_NULLS:
-			DetailAST equal = ast.findFirstToken(TokenTypes.EQUAL);
-			return equal.findFirstToken(TokenTypes.LITERAL_NULL) == null;
+			case ANY:
+				return true;
+			case NEVER:
+				return false;
+			case NEVER_FOR_NULLS:
+				DetailAST equal = ast.findFirstToken(TokenTypes.EQUAL);
+				return equal.findFirstToken(TokenTypes.LITERAL_NULL) == null;
 		}
 		throw new IllegalStateException("Unsupported equals test " + this.equalsTest);
 	}

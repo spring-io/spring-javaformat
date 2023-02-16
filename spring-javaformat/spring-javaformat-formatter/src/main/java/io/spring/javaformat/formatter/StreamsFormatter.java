@@ -121,4 +121,5 @@ public class StreamsFormatter {
 		}
 		return result.toString();
 	}
+
 }

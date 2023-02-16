@@ -32,8 +32,8 @@ import org.jetbrains.plugins.gradle.util.GradleConstants;
 import io.spring.format.formatter.intellij.state.State;
 
 /**
- * {@link Monitor} that looks for a {@code spring-javaformat-gradle-plugin}
- * declaration in the build.gradle file.
+ * {@link Monitor} that looks for a {@code spring-javaformat-gradle-plugin} declaration in
+ * the build.gradle file.
  *
  * @author Phillip Webb
  */

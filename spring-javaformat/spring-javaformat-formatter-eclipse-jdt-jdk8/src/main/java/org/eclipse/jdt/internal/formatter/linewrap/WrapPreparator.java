@@ -1684,4 +1684,5 @@ public class WrapPreparator extends ASTVisitor {
 	}
 
 	// @formatter:on
+
 }

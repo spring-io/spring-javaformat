@@ -111,7 +111,7 @@ class AssertionsAuditListener implements AuditListener {
 
 	private void recordLocalizedMessage(String message, String... args) {
 		recordMessage(new Violation(0, Definitions.CHECKSTYLE_BUNDLE, message, args, null, Violation.class, null)
-				.getViolation());
+			.getViolation());
 	}
 
 	private void recordMessage(String message) {

@@ -39,8 +39,9 @@ public class SpringHideUtilityClassConstructor extends HideUtilityClassConstruct
 		annotations.add("org.springframework.context.annotation.Configuration");
 		annotations.add("org.springframework.boot.autoconfigure.SpringBootApplication");
 		annotations.add("org.springframework.boot.autoconfigure.EnableAutoConfiguration");
-		Set<String> shortNames = annotations.stream().map((name) -> name.substring(name.lastIndexOf(".") + 1))
-				.collect(Collectors.toSet());
+		Set<String> shortNames = annotations.stream()
+			.map((name) -> name.substring(name.lastIndexOf(".") + 1))
+			.collect(Collectors.toSet());
 		annotations.addAll(shortNames);
 		BYPASS_ANNOTATIONS = Collections.unmodifiableSet(annotations);
 	}
