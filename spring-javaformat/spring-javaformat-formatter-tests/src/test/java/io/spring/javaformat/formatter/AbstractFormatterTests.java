@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,11 @@
 package io.spring.javaformat.formatter;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import io.spring.javaformat.config.JavaBaseline;
 import io.spring.javaformat.config.JavaFormatConfig;
@@ -47,7 +48,7 @@ public abstract class AbstractFormatterTests {
 	}
 
 	protected static Item[] items(String expectedOverride) {
-		Collection<Item> items = new ArrayList<>();
+		List<Item> items = new ArrayList<>();
 		File sourceDir = new File("src/test/resources/source");
 		File expectedDir = new File("src/test/resources/expected");
 		File configDir = new File("src/test/resources/config");
@@ -59,11 +60,51 @@ public abstract class AbstractFormatterTests {
 			}
 			File config = new File(configDir, source.getName());
 			for (JavaBaseline javaBaseline : JavaBaseline.values()) {
-				items.add(new Item(javaBaseline, source, expected, config));
+				addItem(items, javaBaseline, source, expected, config);
 			}
 		}
 		return items.toArray(new Item[0]);
 	}
+
+	private static void addItem(List<Item> items, JavaBaseline javaBaseline, File source, File expected, File config) {
+		if (source.getName().contains("lineendings")) {
+			items.add(new Item(javaBaseline, copy(source, LineEnding.CR), copy(expected, LineEnding.CR), config));
+			items.add(new Item(javaBaseline, copy(source, LineEnding.LF), copy(expected, LineEnding.LF), config));
+			items.add(new Item(javaBaseline, copy(source, LineEnding.CRLF), copy(expected, LineEnding.CRLF), config));
+		}
+		else {
+			items.add(new Item(javaBaseline, source, expected, config));
+		}
+	}
+
+	private static File copy(File file, LineEnding lineEnding) {
+		try {
+			String[] name = file.getName().split("\\.");
+			File result = File.createTempFile(name[0] + "_" + lineEnding + "_", "." + name[1]);
+			String content = Files.readString(file.toPath());
+			content = content.replace("\r\n", "\n").replace('\r', '\n').replace("\n", lineEnding.ending());
+			Files.writeString(result.toPath(), content);
+			return result;
+		}
+		catch (IOException ex) {
+			throw new IllegalStateException(ex);
+		}
+	}
+
+	enum LineEnding {
+
+		CR("\r"), LF("\n"), CRLF("\r\n");
+
+		private final String ending;
+
+		LineEnding(String ending) {
+			this.ending = ending;
+		}
+
+		String ending() {
+			return this.ending;
+		}
+	};
 
 	static class Item {
 

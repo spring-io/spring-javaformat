@@ -18,12 +18,11 @@ package io.spring.javaformat.gradle;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 
 import org.gradle.testkit.runner.BuildResult;
@@ -68,12 +67,12 @@ public class CheckTaskTests {
 
 	@Test
 	void whenFirstInvocationSucceedsAndSourceIsModifiedThenSecondInvocationSucceeds() throws IOException {
-		copyFolder(new File("src/test/resources/check-ok").toPath(), this.temp.toPath());
+		copyNormalizedFolder(new File("src/test/resources/check-ok").toPath(), this.temp.toPath());
 		GradleBuild gradleBuild = this.gradleBuild.source(this.temp);
 		BuildResult result = gradleBuild.build("check");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
-		appendToFileNormalizingNewlines(new File(this.temp, "src/main/java/simple/Simple.java").toPath(),
-				"// A change to the file");
+		Files.write(new File(this.temp, "src/main/java/simple/Simple.java").toPath(),
+				"// A change to the file\n".getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
 		result = gradleBuild.build("--debug", "check");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
 	}
@@ -129,14 +128,17 @@ public class CheckTaskTests {
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.FAILED);
 	}
 
-	private void copyFolder(Path source, Path target) throws IOException {
+	private void copyNormalizedFolder(Path source, Path target) throws IOException {
 		try (Stream<Path> stream = Files.walk(source)) {
 			stream.forEach((child) -> {
 				try {
 					Path relative = source.relativize(child);
 					Path destination = target.resolve(relative);
-					if (!destination.toFile().isDirectory()) {
-						Files.copy(child, destination, StandardCopyOption.REPLACE_EXISTING);
+					if (!Files.isDirectory(child)) {
+						String content = new String(Files.readAllBytes(child), StandardCharsets.UTF_8);
+						String normalized = content.replace("\n\r", "\n").replace('\r', '\n');
+						Files.createDirectories(destination.getParent());
+						Files.write(destination, normalized.getBytes(StandardCharsets.UTF_8));
 					}
 				}
 				catch (Exception ex) {
@@ -144,16 +146,6 @@ public class CheckTaskTests {
 				}
 			});
 		}
-	}
-
-	/**
-	 * Uses a read/modify/truncate approach to append a line to a file.
-	 * This avoids issues where the standard append option results in mixed line-endings.
-	 */
-	private void appendToFileNormalizingNewlines(Path sourceFilePath, String lineToAppend) throws IOException {
-		List<String> lines = Files.readAllLines(sourceFilePath);
-		lines.add(lineToAppend);
-		Files.write(sourceFilePath, lines, StandardOpenOption.TRUNCATE_EXISTING);
 	}
 
 }

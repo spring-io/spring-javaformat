@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,16 +30,14 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class VerifyApply {
 
-	private static final String LF = "\n";
-
 	private static final String JAVA_FILE = "src/main/java/simple/Simple.java";
 
 	public void verify(File base) throws IOException {
-		verify(base, LF);
+		verify(base, null);
 	}
 
 	public void verify(File base, boolean spaces) throws IOException {
-		verify(base, LF, spaces);
+		verify(base, null, spaces);
 	}
 
 	public void verify(File base, String lineSeparator) throws IOException {
@@ -48,16 +46,14 @@ public class VerifyApply {
 
 	public void verify(File base, String lineSeparator, boolean spaces) throws IOException {
 		String formated = new String(Files.readAllBytes(base.toPath().resolve(JAVA_FILE)), StandardCharsets.UTF_8);
+		if (lineSeparator == null) {
+			formated = formated.replace("\r\n", "\n").replace('\r', '\n');
+			lineSeparator = "\n";
+		}
 		String indent = (!spaces) ? "	" : "    ";
 		assertThat(formated).contains("Simple." + lineSeparator + " *" + lineSeparator + " * @author")
 			.contains("public class Simple {")
 			.contains(indent + "public static void main");
-	}
-
-	public static void main(String[] args) throws IOException {
-		new VerifyApply().verify(new File(
-				"/Users/pwebb/projects/spring-javaformat/code/spring-javaformat-maven/spring-javaformat-maven-plugin/target/it/apply-line-separator"),
-				"\r");
 	}
 
 }

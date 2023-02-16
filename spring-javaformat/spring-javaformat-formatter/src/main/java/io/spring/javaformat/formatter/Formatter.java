@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@
 package io.spring.javaformat.formatter;
 
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.text.edits.TextEdit;
@@ -57,11 +55,6 @@ public class Formatter {
 	 * The default indentation level.
 	 */
 	private static final int DEFAULT_INDENTATION_LEVEL = 0;
-
-	/**
-	 * Pattern that matches all line separators into named-capturing group "sep".
-	 */
-	private static final Pattern LINE_SEPARATOR_PATTERN = Pattern.compile("(?<sep>(\r\n|\r|\n))");
 
 	/**
 	 * The default line separator.
@@ -130,9 +123,7 @@ public class Formatter {
 
 	public TextEdit format(int kind, String source, int offset, int length, int indentationLevel,
 			String lineSeparator) {
-		if (lineSeparator == null) {
-			lineSeparator = detectLineSeparator(source);
-		}
+		lineSeparator = (lineSeparator != null) ? lineSeparator : detectLineSeparator(source);
 		return this.delegate.format(kind, source, offset, length, indentationLevel, lineSeparator);
 	}
 
@@ -158,9 +149,7 @@ public class Formatter {
 	}
 
 	public TextEdit format(int kind, String source, IRegion[] regions, int indentationLevel, String lineSeparator) {
-		if (lineSeparator == null) {
-			lineSeparator = detectLineSeparator(source);
-		}
+		lineSeparator = (lineSeparator != null) ? lineSeparator : detectLineSeparator(source);
 		return this.delegate.format(kind, source, regions, indentationLevel, lineSeparator);
 	}
 
@@ -173,16 +162,17 @@ public class Formatter {
 	}
 
 	private String detectLineSeparator(String contents) {
-		Matcher matcher = LINE_SEPARATOR_PATTERN.matcher(contents);
-		if (!matcher.find()) {
-			return DEFAULT_LINE_SEPARATOR;
-		}
-		String firstMatch = matcher.group("sep");
-		while (matcher.find()) {
-			if (!matcher.group("sep").equals(firstMatch)) {
-				return DEFAULT_LINE_SEPARATOR;
+		int length = contents.length();
+		for (int i = 0; i < length; i++) {
+			char ch = contents.charAt(i);
+			boolean isLastChar = (i + 1) == length;
+			if (ch == '\r') {
+				return (isLastChar || contents.charAt(i + 1) != '\n') ? "\r" : "\r\n";
+			}
+			if (ch == '\n') {
+				return "\n";
 			}
 		}
-		return firstMatch;
+		return null;
 	}
 }
