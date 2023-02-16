@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -123,6 +123,7 @@ public class Formatter {
 
 	public TextEdit format(int kind, String source, int offset, int length, int indentationLevel,
 			String lineSeparator) {
+		lineSeparator = (lineSeparator != null) ? lineSeparator : detectLineSeparator(source);
 		return this.delegate.format(kind, source, offset, length, indentationLevel, lineSeparator);
 	}
 
@@ -148,6 +149,7 @@ public class Formatter {
 	}
 
 	public TextEdit format(int kind, String source, IRegion[] regions, int indentationLevel, String lineSeparator) {
+		lineSeparator = (lineSeparator != null) ? lineSeparator : detectLineSeparator(source);
 		return this.delegate.format(kind, source, regions, indentationLevel, lineSeparator);
 	}
 
@@ -159,4 +161,18 @@ public class Formatter {
 		this.delegate.setOptions(options);
 	}
 
+	private String detectLineSeparator(String contents) {
+		int length = contents.length();
+		for (int i = 0; i < length; i++) {
+			char ch = contents.charAt(i);
+			boolean isLastChar = (i + 1) == length;
+			if (ch == '\r') {
+				return (isLastChar || contents.charAt(i + 1) != '\n') ? "\r" : "\r\n";
+			}
+			if (ch == '\n') {
+				return "\n";
+			}
+		}
+		return null;
+	}
 }
