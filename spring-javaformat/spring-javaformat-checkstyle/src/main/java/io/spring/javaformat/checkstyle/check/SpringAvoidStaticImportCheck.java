@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ public class SpringAvoidStaticImportCheck extends AvoidStaticImportCheck {
 		excludes.add("org.springframework.boot.configurationprocessor.ConfigurationMetadataMatchers.*");
 		excludes.add("org.springframework.boot.configurationprocessor.TestCompiler.*");
 		excludes.add("org.springframework.boot.test.autoconfigure.AutoConfigurationImportedCondition.*");
-		excludes.add("org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo");
+		excludes.add("org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*");
 		excludes.add("org.springframework.restdocs.headers.HeaderDocumentation.*");
 		excludes.add("org.springframework.restdocs.hypermedia.HypermediaDocumentation.*");
 		excludes.add("org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*");
