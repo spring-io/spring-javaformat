@@ -76,6 +76,9 @@ NOTE: The source formatter does not fundamentally change your code.
 For example, it will not change the order of import statements.
 It is effectively limited to adding or removing whitespace and line feeds.
 
+TIP: You can use `-Dspring-javaformat.validate.skip=true` or `-Dspring-javaformat.apply.skip=true` command line arguments to temporarily skip the validation or format goals.
+If you want to skip both, you can use `-Dspring-javaformat.skip=true`.
+
 
 
 === Checkstyle

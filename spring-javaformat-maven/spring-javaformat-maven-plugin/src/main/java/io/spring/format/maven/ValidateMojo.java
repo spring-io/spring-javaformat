@@ -40,14 +40,14 @@ public class ValidateMojo extends FormatMojo {
 	/**
 	 * Skip the execution.
 	 */
-	@Parameter(property = "spring-javaformat.skip", defaultValue = "false")
+	@Parameter(property = "spring-javaformat.validate.skip", defaultValue = "false")
 	private boolean skip;
 
 	@Override
 	protected void execute(List<File> files, Charset encoding, String lineSeparator)
 			throws MojoExecutionException, MojoFailureException {
-		if (this.skip) {
-			getLog().debug("skipping validation as per configuration.");
+		if (this.skip || skipGlobally()) {
+			getLog().debug("skipping format validate as per configuration.");
 			return;
 		}
 		List<File> problems = getFormatter().formatFiles(files, encoding, lineSeparator)

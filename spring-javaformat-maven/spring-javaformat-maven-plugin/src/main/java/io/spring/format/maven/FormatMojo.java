@@ -26,9 +26,11 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -67,6 +69,12 @@ public abstract class FormatMojo extends AbstractMojo {
 	 */
 	@Parameter(defaultValue = "${project}", readonly = true, required = true)
 	protected MavenProject project;
+
+	/**
+	 * The Maven Session Object.
+	 */
+	@Parameter(defaultValue = "${session}", readonly = true, required = true)
+	protected MavenSession session;
 
 	/**
 	 * Specifies the location of the source directories to use.
@@ -193,6 +201,18 @@ public abstract class FormatMojo extends AbstractMojo {
 	protected final FileFormatter getFormatter() {
 		JavaFormatConfig javaFormatConfig = JavaFormatConfig.findFrom(this.project.getBasedir());
 		return new FileFormatter(javaFormatConfig);
+	}
+
+	protected boolean skipGlobally() {
+		boolean result = false;
+		result = result || skipGlobally(this.session.getUserProperties());
+		result = result || skipGlobally(this.session.getSystemProperties());
+		result = result || skipGlobally(this.project.getProperties());
+		return result;
+	}
+
+	private boolean skipGlobally(Properties properties) {
+		return Boolean.valueOf(properties.getProperty("spring-javaformat.skip"));
 	}
 
 }

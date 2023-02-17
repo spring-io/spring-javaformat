@@ -24,6 +24,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 import io.spring.javaformat.formatter.FileEdit;
 import io.spring.javaformat.formatter.FileFormatterException;
@@ -36,9 +37,19 @@ import io.spring.javaformat.formatter.FileFormatterException;
 @Mojo(name = "apply", defaultPhase = LifecyclePhase.PROCESS_SOURCES, threadSafe = true)
 public class ApplyMojo extends FormatMojo {
 
+	/**
+	 * Skip the execution.
+	 */
+	@Parameter(property = "spring-javaformat.format.skip", defaultValue = "false")
+	private boolean skip;
+
 	@Override
 	protected void execute(List<File> files, Charset encoding, String lineSeparator)
 			throws MojoExecutionException, MojoFailureException {
+		if (this.skip || skipGlobally()) {
+			getLog().debug("skipping format apply as per configuration.");
+			return;
+		}
 		try {
 			getFormatter().formatFiles(files, encoding, lineSeparator).filter(FileEdit::hasEdits).forEach(this::save);
 		}

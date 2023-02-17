@@ -56,4 +56,10 @@ public class VerifyApply {
 			.contains(indent + "public static void main");
 	}
 
+	public void verifyNoApply(File base) throws IOException {
+		String formated = new String(Files.readAllBytes(base.toPath().resolve(JAVA_FILE)), StandardCharsets.UTF_8);
+		formated = formated.replace("\r\n", "\n").replace('\r', '\n');
+		assertThat(formated).contains("Simple         {");
+	}
+
 }
