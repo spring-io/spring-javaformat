@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,6 +42,7 @@ import com.puppycrawl.tools.checkstyle.ThreadModeSettings;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
 import com.puppycrawl.tools.checkstyle.api.RootModule;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.xml.sax.InputSource;
@@ -61,6 +63,9 @@ public class SpringChecksTests {
 	private static final File CONFIGS_DIR = new File("src/test/resources/config");
 
 	private static final File DEFAULT_CONFIG = new File(CONFIGS_DIR, "default-checkstyle-configuration.xml");
+
+	@TempDir
+	public Path temp;
 
 	@ParameterizedTest
 	@MethodSource("paramaters")
@@ -118,6 +123,8 @@ public class SpringChecksTests {
 			.map(Parameter::new)
 			.collect(Collectors.toCollection(ArrayList::new));
 		parameters.add(new Parameter(new File(SOURCES_DIR, "nopackageinfo/NoPackageInfo.java")));
+		parameters.add(new Parameter(new File(SOURCES_DIR, "src/test/java/NamedTest.java")));
+		parameters.add(new Parameter(new File(SOURCES_DIR, "src/test/java/NamedTests.java")));
 		return parameters;
 	}
 

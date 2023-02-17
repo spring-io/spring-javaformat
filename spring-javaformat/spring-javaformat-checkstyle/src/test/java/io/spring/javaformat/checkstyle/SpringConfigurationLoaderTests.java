@@ -45,8 +45,8 @@ public class SpringConfigurationLoaderTests {
 	@Test
 	public void loadShouldLoadChecks() {
 		Collection<FileSetCheck> checks = load(null);
-		assertThat(checks).hasSize(4);
-		TreeWalker treeWalker = (TreeWalker) checks.toArray()[3];
+		assertThat(checks).hasSize(5);
+		TreeWalker treeWalker = (TreeWalker) checks.toArray()[4];
 		Set<?> ordinaryChecks = (Set<?>) Extractors.byName("ordinaryChecks").extract(treeWalker);
 		assertThat(ordinaryChecks).hasSize(60);
 	}
@@ -56,8 +56,8 @@ public class SpringConfigurationLoaderTests {
 		Set<String> excludes = Collections
 			.singleton("com.puppycrawl.tools.checkstyle.checks.whitespace.MethodParamPadCheck");
 		Collection<FileSetCheck> checks = load(excludes);
-		assertThat(checks).hasSize(4);
-		TreeWalker treeWalker = (TreeWalker) checks.toArray()[3];
+		assertThat(checks).hasSize(5);
+		TreeWalker treeWalker = (TreeWalker) checks.toArray()[4];
 		Set<?> ordinaryChecks = (Set<?>) Extractors.byName("ordinaryChecks").extract(treeWalker);
 		assertThat(ordinaryChecks).hasSize(59);
 	}
@@ -66,7 +66,7 @@ public class SpringConfigurationLoaderTests {
 	public void loadWithExcludeHeaderShouldExcludeChecks() {
 		Set<String> excludes = Collections.singleton("io.spring.javaformat.checkstyle.check.SpringHeaderCheck");
 		Object[] checks = load(excludes).stream().toArray();
-		assertThat(checks).hasSize(3);
+		assertThat(checks).hasSize(4);
 	}
 
 	private Collection<FileSetCheck> load(Set<String> excludes) {
