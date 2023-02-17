@@ -56,7 +56,7 @@ public class FileEdit extends Edit {
 	}
 
 	@Override
-	protected String getFormattedContent() throws Exception {
+	public String getFormattedContent() throws Exception {
 		try {
 			return super.getFormattedContent();
 		}

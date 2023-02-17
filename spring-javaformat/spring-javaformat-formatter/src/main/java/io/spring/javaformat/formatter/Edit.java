@@ -45,7 +45,7 @@ public abstract class Edit {
 		return (this.textEdit.hasChildren() || this.textEdit.getLength() > 0);
 	}
 
-	protected String getFormattedContent() throws Exception {
+	public String getFormattedContent() throws Exception {
 		IDocument document = new Document(this.originalContent);
 		this.textEdit.apply(document);
 		String formattedContent = document.get();
