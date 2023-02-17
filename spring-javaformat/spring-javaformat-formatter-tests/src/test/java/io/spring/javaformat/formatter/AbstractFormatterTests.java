@@ -104,6 +104,7 @@ public abstract class AbstractFormatterTests {
 		String ending() {
 			return this.ending;
 		}
+
 	};
 
 	static class Item {
