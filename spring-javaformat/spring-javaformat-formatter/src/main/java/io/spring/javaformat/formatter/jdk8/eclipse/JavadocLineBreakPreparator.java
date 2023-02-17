@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,12 @@ import java.util.List;
 
 import io.spring.javaformat.eclipse.jdt.jdk8.core.dom.ASTNode;
 import io.spring.javaformat.eclipse.jdt.jdk8.core.dom.ASTVisitor;
+import io.spring.javaformat.eclipse.jdt.jdk8.core.dom.AbstractTypeDeclaration;
 import io.spring.javaformat.eclipse.jdt.jdk8.core.dom.Comment;
 import io.spring.javaformat.eclipse.jdt.jdk8.core.dom.CompilationUnit;
 import io.spring.javaformat.eclipse.jdt.jdk8.core.dom.Javadoc;
 import io.spring.javaformat.eclipse.jdt.jdk8.core.dom.TagElement;
 import io.spring.javaformat.eclipse.jdt.jdk8.core.dom.TextElement;
-import io.spring.javaformat.eclipse.jdt.jdk8.core.dom.TypeDeclaration;
 import io.spring.javaformat.eclipse.jdt.jdk8.core.formatter.CodeFormatter;
 import io.spring.javaformat.eclipse.jdt.jdk8.internal.compiler.parser.TerminalTokens;
 import io.spring.javaformat.eclipse.jdt.jdk8.internal.formatter.Preparator;
@@ -35,7 +35,7 @@ import io.spring.javaformat.eclipse.jdt.jdk8.internal.formatter.Token;
 import io.spring.javaformat.eclipse.jdt.jdk8.internal.formatter.TokenManager;
 
 /**
- * {@link Preparator} to fine tune Javadoc whitespace.
+ * {@link Preparator} to finetune Javadoc whitespace.
  *
  * @author Phillip Webb
  */
@@ -112,15 +112,15 @@ class JavadocLineBreakPreparator implements Preparator {
 				int startIndex = this.commentTokenManager.findIndex(node.getStartPosition(), -1, false);
 				Token token = this.commentTokenManager.get(startIndex);
 				token.clearLineBreaksBefore();
-				token.putLineBreaksBefore(
-						this.declaration instanceof TypeDeclaration && this.firstTagElement && this.hasText ? 2 : 1);
+				boolean isTypeDeclaration = this.declaration instanceof AbstractTypeDeclaration;
+				token.putLineBreaksBefore(isTypeDeclaration && this.firstTagElement && this.hasText ? 2 : 1);
 				this.firstTagElement = false;
 			}
 			return true;
 		}
 
 		private boolean isSquashRequired(TagElement node, ASTNode declaration) {
-			if (declaration instanceof TypeDeclaration) {
+			if (declaration instanceof AbstractTypeDeclaration) {
 				String tagName = node.getTagName();
 				return (!node.isNested() && tagName != null && tagName.startsWith("@"));
 			}

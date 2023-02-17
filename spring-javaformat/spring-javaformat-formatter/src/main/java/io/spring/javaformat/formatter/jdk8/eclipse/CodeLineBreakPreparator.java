@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import io.spring.javaformat.eclipse.jdt.jdk8.internal.formatter.Token;
 import io.spring.javaformat.eclipse.jdt.jdk8.internal.formatter.TokenManager;
 
 /**
- * {@link Preparator} to fine tune curly-brace line breaks.
+ * {@link Preparator} to finetune curly-brace line breaks.
  *
  * @author Phillip Webb
  */

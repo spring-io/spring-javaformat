@@ -1,0 +1,16 @@
+package simple;
+
+/**
+ * Settings that can be applied when creating a {@link ClientHttpRequestFactory}.
+ * 
+ * @param connectTimeout the connect timeout
+ * @param readTimeout the read timeout
+ * @param bufferRequestBody if request body buffering is used
+ * @author Andy Wilkinson
+ * @author Phillip Webb
+ * @since 3.0.0
+ * @see ClientHttpRequestFactories
+ */
+public record Simple(String name) {
+
+}
