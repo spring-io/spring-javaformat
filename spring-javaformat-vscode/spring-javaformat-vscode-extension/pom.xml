@@ -138,11 +138,19 @@
 			</plugin>
 		</plugins>
 	</build>
-	<dependencies>
-		<dependency>
-			<groupId>io.spring.javaformat</groupId>
-			<artifactId>spring-javaformat-formatter-shaded</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-	</dependencies>
+	<profiles>
+		<profile>
+			<id>formatter-dependencies</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>io.spring.javaformat</groupId>
+					<artifactId>spring-javaformat-formatter-shaded</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 </project>
