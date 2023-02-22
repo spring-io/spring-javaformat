@@ -1,0 +1,8 @@
+package simple;
+
+/**
+ * gh-363.
+ */
+public class UnresolvedGenericProperties<B extends Number, C> extends AbstractGenericProperties<String, B, C> {
+
+}

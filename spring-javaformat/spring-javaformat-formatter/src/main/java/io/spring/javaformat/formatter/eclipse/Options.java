@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import io.spring.javaformat.config.IndentationStyle;
-import io.spring.javaformat.config.JavaBaseline;
 import io.spring.javaformat.config.JavaFormatConfig;
 
 /**
@@ -67,9 +66,6 @@ public class Options {
 		String coreFormatter = this.prefix + ".core.formatter.";
 		if (javaFormatConfig.getIndentationStyle() == IndentationStyle.SPACES) {
 			properties.put(coreFormatter + "tabulation.char", "space");
-		}
-		if (javaFormatConfig.getJavaBaseline() == JavaBaseline.V8) {
-			properties.put(coreFormatter + "insert_space_after_closing_angle_bracket_in_type_parameters", "insert");
 		}
 	}
 
