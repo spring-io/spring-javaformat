@@ -54,16 +54,25 @@ public abstract class AbstractFormatterTests {
 		File configDir = new File("src/test/resources/config");
 		File expectedOverrideDir = new File("src/test/resources/" + expectedOverride);
 		for (File source : sourceDir.listFiles((dir, name) -> !name.startsWith("."))) {
-			File expected = new File(expectedOverrideDir, source.getName());
-			if (!expected.exists()) {
-				expected = new File(expectedDir, source.getName());
-			}
 			File config = new File(configDir, source.getName());
 			for (JavaBaseline javaBaseline : JavaBaseline.values()) {
+				File expected = getExpected(source, javaBaseline, expectedOverrideDir, expectedDir);
 				addItem(items, javaBaseline, source, expected, config);
 			}
 		}
 		return items.toArray(new Item[0]);
+	}
+
+	private static File getExpected(File source, JavaBaseline javaBaseline, File... expectedDirs) {
+		for (File expectedDir : expectedDirs) {
+			File versionSpecificExpectedDir = new File(expectedDir, javaBaseline.toString().toLowerCase());
+			File expected = new File(versionSpecificExpectedDir, source.getName());
+			expected = (!expected.exists()) ? new File(expectedDir, source.getName()) : expected;
+			if (expected.exists()) {
+				return expected;
+			}
+		}
+		throw new IllegalStateException("Unable to find expected file");
 	}
 
 	private static void addItem(List<Item> items, JavaBaseline javaBaseline, File source, File expected, File config) {

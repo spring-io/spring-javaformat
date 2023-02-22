@@ -1,0 +1,11 @@
+package simple;
+
+/**
+ * Record with generic.
+ *
+ * @author Andy Wilkinson
+ * @since 1.0.0
+ */
+public record SomeRecord<T> (T item) {
+
+}

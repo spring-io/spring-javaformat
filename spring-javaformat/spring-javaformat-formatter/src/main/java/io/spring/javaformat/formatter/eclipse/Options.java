@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import io.spring.javaformat.config.IndentationStyle;
+import io.spring.javaformat.config.JavaBaseline;
 import io.spring.javaformat.config.JavaFormatConfig;
 
 /**
@@ -63,8 +64,12 @@ public class Options {
 	}
 
 	private void applyConfig(Map<String, String> properties, JavaFormatConfig javaFormatConfig) {
+		String coreFormatter = this.prefix + ".core.formatter.";
 		if (javaFormatConfig.getIndentationStyle() == IndentationStyle.SPACES) {
-			properties.put(this.prefix + ".core.formatter.tabulation.char", "space");
+			properties.put(coreFormatter + "tabulation.char", "space");
+		}
+		if (javaFormatConfig.getJavaBaseline() == JavaBaseline.V8) {
+			properties.put(coreFormatter + "insert_space_after_closing_angle_bracket_in_type_parameters", "insert");
 		}
 	}
 

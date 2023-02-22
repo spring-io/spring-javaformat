@@ -1,0 +1,8 @@
+package simple;
+
+/**
+ * gh-363.
+ */
+class SpectatorToDoubleGauge<T> extends AbstractMeter<T> implements Gauge {
+
+}
