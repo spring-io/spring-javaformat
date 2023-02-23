@@ -47,7 +47,7 @@ public class ValidateMojo extends FormatMojo {
 	protected void execute(List<File> files, Charset encoding, String lineSeparator)
 			throws MojoExecutionException, MojoFailureException {
 		if (this.skip || skipGlobally()) {
-			getLog().debug("skipping format validate as per configuration.");
+			getLog().info("skipping format validate as per configuration.");
 			return;
 		}
 		List<File> problems = getFormatter().formatFiles(files, encoding, lineSeparator)

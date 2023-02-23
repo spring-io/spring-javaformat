@@ -40,14 +40,14 @@ public class ApplyMojo extends FormatMojo {
 	/**
 	 * Skip the execution.
 	 */
-	@Parameter(property = "spring-javaformat.format.skip", defaultValue = "false")
+	@Parameter(property = "spring-javaformat.apply.skip", defaultValue = "false")
 	private boolean skip;
 
 	@Override
 	protected void execute(List<File> files, Charset encoding, String lineSeparator)
 			throws MojoExecutionException, MojoFailureException {
 		if (this.skip || skipGlobally()) {
-			getLog().debug("skipping format apply as per configuration.");
+			getLog().info("skipping format apply as per configuration.");
 			return;
 		}
 		try {
