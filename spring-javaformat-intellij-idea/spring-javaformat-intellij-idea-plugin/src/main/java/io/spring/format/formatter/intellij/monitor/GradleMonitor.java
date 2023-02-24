@@ -58,7 +58,7 @@ public class GradleMonitor extends Monitor {
 
 	private void check() {
 		logger.info("Checking " + getProject().getName() + " for use of Spring Java Format");
-		ProjectDataManager projectDataManager = getProject().getService(ProjectDataManager.class);
+		ProjectDataManager projectDataManager = ProjectDataManager.getInstance();
 		boolean hasFormatPlugin = hasFormatPlugin(
 				projectDataManager.getExternalProjectsData(getProject(), GradleConstants.SYSTEM_ID));
 		getTrigger().updateState(hasFormatPlugin ? State.ACTIVE : State.NOT_ACTIVE);
