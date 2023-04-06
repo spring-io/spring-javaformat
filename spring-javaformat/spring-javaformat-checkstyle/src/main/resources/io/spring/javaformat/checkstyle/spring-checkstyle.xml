@@ -162,5 +162,6 @@
 		<module name="io.spring.javaformat.checkstyle.check.SpringMethodOrderCheck" />
 		<module name="io.spring.javaformat.checkstyle.check.SpringMethodVisibilityCheck" />
 		<module name="io.spring.javaformat.checkstyle.check.SpringParenPadCheck" />
+		<module name="io.spring.javaformat.checkstyle.check.IllegalImportCheck" />
 	</module>
 </module>
