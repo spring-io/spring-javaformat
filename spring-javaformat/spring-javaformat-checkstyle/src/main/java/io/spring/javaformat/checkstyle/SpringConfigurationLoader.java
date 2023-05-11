@@ -49,7 +49,6 @@ class SpringConfigurationLoader {
 	}
 
 	public Collection<FileSetCheck> load(PropertyResolver propertyResolver) {
-		System.out.println(getClass().getResource("spring-checkstyle.xml"));
 		Configuration config = loadConfiguration(getClass().getResourceAsStream("spring-checkstyle.xml"),
 				propertyResolver);
 		return Arrays.stream(config.getChildren())
