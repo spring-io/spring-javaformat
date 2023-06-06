@@ -400,6 +400,11 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
+					<compilerArgument>-Werror</compilerArgument>
+					<compilerArgument>-Xlint:deprecation</compilerArgument>
+					<compilerArgument>-Xlint:rawtypes</compilerArgument>
+					<compilerArgument>-Xlint:unchecked</compilerArgument>
+					<compilerArgument>-Xlint:varargs</compilerArgument>
 				</configuration>
 			</plugin>
 			<plugin>
