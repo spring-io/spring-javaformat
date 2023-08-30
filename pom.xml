@@ -40,7 +40,6 @@
 		<asm.version>7.3.1</asm.version>
 		<assertj.version>3.8.0</assertj.version>
 		<checkstyle.version>9.3</checkstyle.version>
-		<gradle.version>3.4</gradle.version>
 		<groovy.version>2.4.21</groovy.version>
 		<log4j.version>2.17.1</log4j.version>
 		<maven-core.version>3.8.8</maven-core.version>
@@ -534,46 +533,6 @@
 				<groupId>org.codehaus.groovy</groupId>
 				<artifactId>groovy</artifactId>
 				<version>${groovy.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.gradle</groupId>
-				<artifactId>gradle-base-services</artifactId>
-				<version>${gradle.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.gradle</groupId>
-				<artifactId>gradle-base-services-groovy</artifactId>
-				<version>${gradle.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.gradle</groupId>
-				<artifactId>gradle-core</artifactId>
-				<version>${gradle.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.gradle</groupId>
-				<artifactId>gradle-language-java</artifactId>
-				<version>${gradle.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.gradle</groupId>
-				<artifactId>gradle-language-jvm</artifactId>
-				<version>${gradle.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.gradle</groupId>
-				<artifactId>gradle-platform-jvm</artifactId>
-				<version>${gradle.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.gradle</groupId>
-				<artifactId>gradle-plugins</artifactId>
-				<version>${gradle.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.gradle</groupId>
-				<artifactId>gradle-tooling-api</artifactId>
-				<version>${gradle.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.javassist</groupId>
