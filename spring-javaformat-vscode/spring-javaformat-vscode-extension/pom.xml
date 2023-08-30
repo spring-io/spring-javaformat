@@ -103,6 +103,15 @@
 							<arguments>run package</arguments>
 						</configuration>
 					</execution>
+					<execution>
+						<id>update-package-lock</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>install --package-lock-only</arguments>
+						</configuration>
+					</execution>
 				</executions>
 				<configuration>
 					<nodeVersion>v19.6.0</nodeVersion>

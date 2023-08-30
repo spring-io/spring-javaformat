@@ -29,7 +29,7 @@ fi
 echo "Staging ${stageVersion} (next version will be ${nextVersion})"
 run_maven versions:set -DnewVersion=${stageVersion} -DgenerateBackupPoms=false
 run_maven org.eclipse.tycho:tycho-versions-plugin:update-eclipse-metadata
-run_maven --projects io.spring.javaformat:spring-javaformat-vscode-extension -P '!formatter-dependencies' antrun:run@update-version
+run_maven --projects io.spring.javaformat:spring-javaformat-vscode-extension -P '!formatter-dependencies' antrun:run@update-version frontend:npm@update-package-lock
 
 git config user.name "Spring Builds" > /dev/null
 git config user.email "spring-builds@users.noreply.github.com" > /dev/null
@@ -44,7 +44,7 @@ if [[ $nextVersion != $snapshotVersion ]]; then
 	echo "Setting next development version (v$nextVersion)"
 	run_maven versions:set -DnewVersion=$nextVersion -DgenerateBackupPoms=false
 	run_maven org.eclipse.tycho:tycho-versions-plugin:update-eclipse-metadata
-	run_maven --projects io.spring.javaformat:spring-javaformat-vscode-extension -P '!formatter-dependencies' antrun:run@update-version
+	run_maven --projects io.spring.javaformat:spring-javaformat-vscode-extension -P '!formatter-dependencies' antrun:run@update-version frontend:npm@update-package-lock
 	sed -i "s/:release-version:.*/:release-version: ${stageVersion}/g" README.adoc
 	sed -i "s/spring-javaformat-gradle-plugin:.*/spring-javaformat-gradle-plugin:${nextVersion}\"\)/g" samples/spring-javaformat-gradle-sample/build.gradle
 	sed -i "s/spring-javaformat-checkstyle:.*/spring-javaformat-checkstyle:${nextVersion}\"\)/g" samples/spring-javaformat-gradle-sample/build.gradle
