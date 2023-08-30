@@ -27,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
           scheme: 'file',
         },
       ],
-      new SpringDocumentFormattingEditProvider()
-    )
+      new SpringDocumentFormattingEditProvider(),
+    ),
   )
 }

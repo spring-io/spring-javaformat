@@ -24,7 +24,7 @@ export default class SpringDocumentFormattingEditProvider implements vscode.Docu
   provideDocumentFormattingEdits(
     document: vscode.TextDocument,
     options: vscode.FormattingOptions,
-    token: vscode.CancellationToken
+    token: vscode.CancellationToken,
   ): vscode.ProviderResult<vscode.TextEdit[]> {
     if (vscode.window.visibleTextEditors.every((editor) => editor.document.fileName !== document.fileName)) {
       return []
@@ -36,7 +36,7 @@ export default class SpringDocumentFormattingEditProvider implements vscode.Docu
           console.log(err)
           return Promise.reject(`Check the console in dev tools to find errors when formatting spring-javaformat`)
         }
-      }
+      },
     )
   }
 
