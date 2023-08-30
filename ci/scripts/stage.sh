@@ -44,6 +44,7 @@ if [[ $nextVersion != $snapshotVersion ]]; then
 	echo "Setting next development version (v$nextVersion)"
 	run_maven versions:set -DnewVersion=$nextVersion -DgenerateBackupPoms=false
 	run_maven org.eclipse.tycho:tycho-versions-plugin:update-eclipse-metadata
+	run_maven --projects io.spring.javaformat:spring-javaformat-vscode-extension -P '!formatter-dependencies' antrun:run@update-version
 	sed -i "s/:release-version:.*/:release-version: ${stageVersion}/g" README.adoc
 	sed -i "s/spring-javaformat-gradle-plugin:.*/spring-javaformat-gradle-plugin:${nextVersion}\"\)/g" samples/spring-javaformat-gradle-sample/build.gradle
 	sed -i "s/spring-javaformat-checkstyle:.*/spring-javaformat-checkstyle:${nextVersion}\"\)/g" samples/spring-javaformat-gradle-sample/build.gradle
