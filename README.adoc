@@ -264,10 +264,12 @@ To configure the plugin, create your own Checkstyle configuration file with the 
 
 Once the configuration file is created, configure your IDE to use it:
 
+* Download `spring-javaformat-checkstyle-{release-version}.jar` from https://repo1.maven.org/maven2/io/spring/javaformat/spring-javaformat-checkstyle/{release-version}[Maven Central].
+* Download `spring-javaformat-config-{release-version}.jar` from https://repo1.maven.org/maven2/io/spring/javaformat/spring-javaformat-config/{release-version}[Maven Central].
 * Open `Preferences` - `Tools` - `Checkstyle`
 * Add `spring-javaformat-checkstyle-{release-version}.jar` and `spring-javaformat-config-{release-version}.jar` to the `Third-Party Checks`
 * Specify the appropriate `Checkstyle version`
-* Add your Checkstyle configuration file
+* Add and enable your Checkstyle configuration file
 
 
 
