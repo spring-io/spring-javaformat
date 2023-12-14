@@ -19,12 +19,14 @@ package io.spring.javaformat.checkstyle.check;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.FullIdent;
@@ -38,33 +40,33 @@ import com.puppycrawl.tools.checkstyle.utils.AnnotationUtil;
  */
 public class SpringJUnit5Check extends AbstractSpringCheck {
 
-	private static final String JUNIT4_TEST_ANNOTATION = "org.junit.Test";
+	private static final String JUNIT4_TEST_ANNOTATION_NAME = "org.junit.Test";
 
-	private static final List<String> TEST_ANNOTATIONS;
+	private static final List<Annotation> TEST_ANNOTATIONS;
 	static {
-		Set<String> annotations = new LinkedHashSet<>();
-		annotations.add("RepeatedTest");
-		annotations.add("Test");
-		annotations.add("TestFactory");
-		annotations.add("TestTemplate");
-		annotations.add("ParameterizedTest");
+		Set<Annotation> annotations = new LinkedHashSet<>();
+		annotations.add(new Annotation("org.junit.jupiter.api", "RepeatedTest"));
+		annotations.add(new Annotation("org.junit.jupiter.api", "Test"));
+		annotations.add(new Annotation("org.junit.jupiter.api", "TestFactory"));
+		annotations.add(new Annotation("org.junit.jupiter.api", "TestTemplate"));
+		annotations.add(new Annotation("org.junit.jupiter.api", "ParameterizedTest"));
 		TEST_ANNOTATIONS = Collections.unmodifiableList(new ArrayList<>(annotations));
 	}
 
-	private static final List<String> LIFECYCLE_ANNOTATIONS;
+	private static final List<Annotation> LIFECYCLE_ANNOTATIONS;
 	static {
-		Set<String> annotations = new LinkedHashSet<>();
-		annotations.add("BeforeAll");
-		annotations.add("BeforeEach");
-		annotations.add("AfterAll");
-		annotations.add("AfterEach");
+		Set<Annotation> annotations = new LinkedHashSet<>();
+		annotations.add(new Annotation("org.junit.jupiter.api", "BeforeAll"));
+		annotations.add(new Annotation("org.junit.jupiter.api", "BeforeEach"));
+		annotations.add(new Annotation("org.junit.jupiter.api", "AfterAll"));
+		annotations.add(new Annotation("org.junit.jupiter.api", "AfterEach"));
 		LIFECYCLE_ANNOTATIONS = Collections.unmodifiableList(new ArrayList<>(annotations));
 	}
 
 	private static final Set<String> BANNED_IMPORTS;
 	static {
 		Set<String> bannedImports = new LinkedHashSet<>();
-		bannedImports.add(JUNIT4_TEST_ANNOTATION);
+		bannedImports.add(JUNIT4_TEST_ANNOTATION_NAME);
 		bannedImports.add("org.junit.After");
 		bannedImports.add("org.junit.AfterClass");
 		bannedImports.add("org.junit.Before");
@@ -106,11 +108,30 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 	}
 
 	private void visitMethodDef(DetailAST ast) {
-		if (AnnotationUtil.containsAnnotation(ast, TEST_ANNOTATIONS)) {
+		if (containsAnnotation(ast, TEST_ANNOTATIONS)) {
 			this.testMethods.add(ast);
 		}
-		if (AnnotationUtil.containsAnnotation(ast, LIFECYCLE_ANNOTATIONS)) {
+		if (containsAnnotation(ast, LIFECYCLE_ANNOTATIONS)) {
 			this.lifecycleMethods.add(ast);
+		}
+	}
+
+	private boolean containsAnnotation(DetailAST ast, List<Annotation> annotations) {
+		List<String> annotationNames = annotations.stream().flatMap((annotation) ->
+				Stream.of(annotation.simpleName, annotation.fullyQualifiedName())).collect(Collectors.toList());
+		try {
+			return AnnotationUtil.containsAnnotation(ast, annotationNames);
+		}
+		catch (NoSuchMethodError ex) {
+			// Checkstyle >= 10.3 (https://github.com/checkstyle/checkstyle/issues/14134)
+			Set<String> annotationNamesSet = new HashSet<>(annotationNames);
+			try {
+				return (boolean) AnnotationUtil.class.getMethod("containsAnnotation",  DetailAST.class, Set.class)
+						.invoke(null, ast, annotationNamesSet);
+			}
+			catch (Exception ex2) {
+				throw new RuntimeException("containsAnnotation failed", ex2);
+			}
 		}
 	}
 
@@ -146,7 +167,7 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 			}
 		}
 		for (DetailAST testMethod : this.testMethods) {
-			if (AnnotationUtil.containsAnnotation(testMethod, JUNIT4_TEST_ANNOTATION)) {
+			if (AnnotationUtil.containsAnnotation(testMethod, JUNIT4_TEST_ANNOTATION_NAME)) {
 				log(testMethod, "junit5.bannedTestAnnotation");
 			}
 		}
@@ -174,6 +195,23 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 	public void setUnlessImports(String unlessImports) {
 		this.unlessImports = Collections
 			.unmodifiableList(Arrays.stream(unlessImports.split(",")).map(String::trim).collect(Collectors.toList()));
+	}
+
+	private static final class Annotation {
+
+		private final String packageName;
+
+		private final String simpleName;
+
+		private Annotation(String packageName, String simpleName) {
+			this.packageName = packageName;
+			this.simpleName = simpleName;
+		}
+
+		private String fullyQualifiedName() {
+			return this.packageName + "." + this.simpleName;
+		}
+
 	}
 
 }

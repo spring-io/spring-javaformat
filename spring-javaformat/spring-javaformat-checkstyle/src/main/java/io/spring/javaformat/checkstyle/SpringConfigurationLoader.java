@@ -24,10 +24,11 @@ import java.util.stream.Collectors;
 import com.puppycrawl.tools.checkstyle.ConfigurationLoader;
 import com.puppycrawl.tools.checkstyle.ConfigurationLoader.IgnoredModulesOptions;
 import com.puppycrawl.tools.checkstyle.PropertyResolver;
-import com.puppycrawl.tools.checkstyle.api.AutomaticBean;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
+import com.puppycrawl.tools.checkstyle.api.Configurable;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
 import com.puppycrawl.tools.checkstyle.api.Context;
+import com.puppycrawl.tools.checkstyle.api.Contextualizable;
 import com.puppycrawl.tools.checkstyle.api.FileSetCheck;
 import org.xml.sax.InputSource;
 
@@ -79,9 +80,7 @@ class SpringConfigurationLoader {
 		String name = configuration.getName();
 		try {
 			Object module = this.moduleFactory.createModule(name);
-			if (module instanceof AutomaticBean) {
-				initialize(configuration, (AutomaticBean) module);
-			}
+			initialize(configuration, module);
 			return module;
 		}
 		catch (CheckstyleException ex) {
@@ -89,9 +88,13 @@ class SpringConfigurationLoader {
 		}
 	}
 
-	private void initialize(Configuration configuration, AutomaticBean bean) throws CheckstyleException {
-		bean.contextualize(this.context);
-		bean.configure(configuration);
+	private void initialize(Configuration configuration, Object module) throws CheckstyleException {
+		if (module instanceof Contextualizable) {
+			((Contextualizable) module).contextualize(this.context);
+		}
+		if (module instanceof Configurable) {
+			((Configurable) module).configure(configuration);
+		}
 	}
 
 }
