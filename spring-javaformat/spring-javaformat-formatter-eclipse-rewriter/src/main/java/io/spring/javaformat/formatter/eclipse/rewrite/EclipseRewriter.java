@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2023 the original author or authors.
+ * Copyright 2017-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,7 +111,7 @@ public final class EclipseRewriter {
 	private static class DefaultCodeFormatterManipulator extends ClassVisitor {
 
 		DefaultCodeFormatterManipulator(ClassVisitor visitor) {
-			super(Opcodes.ASM7, visitor);
+			super(Opcodes.ASM9, visitor);
 		}
 
 		@Override
@@ -140,7 +140,7 @@ public final class EclipseRewriter {
 	private static class DefaultCodeFormatterMethodManipulator extends MethodVisitor {
 
 		DefaultCodeFormatterMethodManipulator(MethodVisitor mv) {
-			super(Opcodes.ASM7, mv);
+			super(Opcodes.ASM9, mv);
 		}
 
 		@Override
@@ -160,7 +160,7 @@ public final class EclipseRewriter {
 	private static class NlsJdk8Manipulator extends ClassVisitor {
 
 		NlsJdk8Manipulator(ClassVisitor visitor) {
-			super(Opcodes.ASM7, visitor);
+			super(Opcodes.ASM9, visitor);
 		}
 
 		@Override
@@ -182,7 +182,7 @@ public final class EclipseRewriter {
 		private final MethodVisitor methodVisitor;
 
 		NslJdk8MethodManipulator(MethodVisitor mv) {
-			super(Opcodes.ASM7, null);
+			super(Opcodes.ASM9, null);
 			this.methodVisitor = mv;
 		}
 
@@ -205,7 +205,7 @@ public final class EclipseRewriter {
 	private static class NlsJdk11Manipulator extends ClassVisitor {
 
 		NlsJdk11Manipulator(ClassVisitor visitor) {
-			super(Opcodes.ASM7, visitor);
+			super(Opcodes.ASM9, visitor);
 		}
 
 		@Override
@@ -227,7 +227,7 @@ public final class EclipseRewriter {
 		private final MethodVisitor methodVisitor;
 
 		NslJdk11MethodManipulator(MethodVisitor mv) {
-			super(Opcodes.ASM7, null);
+			super(Opcodes.ASM9, null);
 			this.methodVisitor = mv;
 		}
 
