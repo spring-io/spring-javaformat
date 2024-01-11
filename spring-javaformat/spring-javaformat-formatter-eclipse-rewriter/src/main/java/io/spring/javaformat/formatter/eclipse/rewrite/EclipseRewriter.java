@@ -116,7 +116,7 @@ public final class EclipseRewriter {
 
 		@Override
 		public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-			if (access == Opcodes.ACC_PRIVATE && UPDATED_FIELDS.contains(name)) {
+			if ((access & Opcodes.ACC_PRIVATE) != 0 && UPDATED_FIELDS.contains(name)) {
 				access = Opcodes.ACC_PROTECTED;
 			}
 			return super.visitField(access, name, desc, signature, value);
@@ -124,7 +124,7 @@ public final class EclipseRewriter {
 
 		@Override
 		public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-			if (access == Opcodes.ACC_PRIVATE && UPDATED_METHODS.contains(name)) {
+			if ((access & Opcodes.ACC_PRIVATE) != 0 && UPDATED_METHODS.contains(name)) {
 				access = Opcodes.ACC_PROTECTED;
 			}
 			return new DefaultCodeFormatterMethodManipulator(
