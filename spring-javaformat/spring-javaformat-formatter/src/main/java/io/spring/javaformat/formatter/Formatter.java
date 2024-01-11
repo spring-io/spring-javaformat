@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2023 the original author or authors.
+ * Copyright 2017-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.eclipse.text.edits.TextEdit;
 import io.spring.javaformat.config.JavaBaseline;
 import io.spring.javaformat.config.JavaFormatConfig;
 import io.spring.javaformat.formatter.eclipse.EclipseCodeFormatter;
-import io.spring.javaformat.formatter.jdk11.eclipse.EclipseJdk11CodeFormatter;
+import io.spring.javaformat.formatter.jdk17.eclipse.EclipseJdk17CodeFormatter;
 import io.spring.javaformat.formatter.jdk8.eclipse.EclipseJdk8CodeFormatter;
 
 /**
@@ -76,7 +76,7 @@ public class Formatter {
 	 */
 	public Formatter(JavaFormatConfig javaFormatConfig) {
 		this.delegate = javaFormatConfig.getJavaBaseline() == JavaBaseline.V8
-				? new EclipseJdk8CodeFormatter(javaFormatConfig) : new EclipseJdk11CodeFormatter(javaFormatConfig);
+				? new EclipseJdk8CodeFormatter(javaFormatConfig) : new EclipseJdk17CodeFormatter(javaFormatConfig);
 	}
 
 	/**

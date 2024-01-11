@@ -17,9 +17,9 @@
 	</properties>
 	<repositories>
 		<repository>
-			<id>eclipse-jdk11</id>
+			<id>eclipse-jdk17</id>
 			<layout>p2</layout>
-			<url>${eclipse.jdk11.repository}</url>
+			<url>${eclipse.jdk17.repository}</url>
 		</repository>
 		<repository>
 			<id>eclipse-checkstyle</id>

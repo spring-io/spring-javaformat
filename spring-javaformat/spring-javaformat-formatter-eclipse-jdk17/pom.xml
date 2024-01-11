@@ -8,9 +8,9 @@
 		<artifactId>spring-javaformat</artifactId>
 		<version>0.0.42-SNAPSHOT</version>
 	</parent>
-	<artifactId>spring-javaformat-formatter-eclipse-jdk11</artifactId>
+	<artifactId>spring-javaformat-formatter-eclipse-jdk17</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<name>Spring JavaFormat Eclipse JDK-11</name>
+	<name>Spring JavaFormat Eclipse JDK-17</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
 		<sourceartifacts>org.eclipse.jdt.core.source,org.eclipse.jface.source,org.eclipse.text.source</sourceartifacts>
@@ -23,9 +23,9 @@
 	</licenses>
 	<repositories>
 		<repository>
-			<id>eclipse-jdk11</id>
+			<id>eclipse-jdk17</id>
 			<layout>p2</layout>
-			<url>${eclipse.jdk11.repository}</url>
+			<url>${eclipse.jdk17.repository}</url>
 		</repository>
 	</repositories>
 	<build>

@@ -38,9 +38,9 @@
 		<module>spring-javaformat-formatter-tests</module>
 		<module>spring-javaformat-formatter-eclipse-rewriter</module>
 		<module>spring-javaformat-formatter-eclipse-jdk8</module>
-		<module>spring-javaformat-formatter-eclipse-jdk11</module>
+		<module>spring-javaformat-formatter-eclipse-jdk17</module>
 		<module>spring-javaformat-formatter-eclipse-jdt-jdk8</module>
-		<module>spring-javaformat-formatter-eclipse-jdt-jdk11</module>
+		<module>spring-javaformat-formatter-eclipse-jdt-jdk17</module>
 		<module>spring-javaformat-formatter-eclipse-runtime</module>
 		<module>spring-javaformat-formatter-shader</module>
 		<module>spring-javaformat-formatter-shaded</module>

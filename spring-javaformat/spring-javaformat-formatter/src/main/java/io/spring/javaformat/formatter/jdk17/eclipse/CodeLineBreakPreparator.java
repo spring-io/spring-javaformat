@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2023 the original author or authors.
+ * Copyright 2017-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.spring.javaformat.formatter.jdk11.eclipse;
+package io.spring.javaformat.formatter.jdk17.eclipse;
 
 import io.spring.javaformat.eclipse.jdt.jdk11.core.dom.ASTNode;
 import io.spring.javaformat.eclipse.jdt.jdk11.core.dom.ASTVisitor;

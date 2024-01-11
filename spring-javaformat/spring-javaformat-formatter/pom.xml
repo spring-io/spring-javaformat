@@ -27,7 +27,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.spring.javaformat</groupId>
-			<artifactId>spring-javaformat-formatter-eclipse-jdt-jdk11</artifactId>
+			<artifactId>spring-javaformat-formatter-eclipse-jdt-jdk17</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- Provided -->

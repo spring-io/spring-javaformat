@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 the original author or authors.
+ * Copyright 2017-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,14 +23,14 @@ import io.spring.javaformat.config.JavaBaseline;
 import io.spring.javaformat.config.JavaFormatConfig;
 
 /**
- * Eclipse {@link CodeFormatter} for Spring formatting with spaces.
+ * Eclipse {@link CodeFormatter} for Spring formatting with tabs.
  *
  * @author Phillip Webb
  */
-public class SpringCodeFormatterJdk11Spaces extends SpringCodeFormatter {
+public class SpringCodeFormatterJdk17Tabs extends SpringCodeFormatter {
 
-	public SpringCodeFormatterJdk11Spaces() {
-		super(JavaFormatConfig.of(JavaBaseline.V11, IndentationStyle.SPACES));
+	public SpringCodeFormatterJdk17Tabs() {
+		super(JavaFormatConfig.of(JavaBaseline.V17, IndentationStyle.TABS));
 	}
 
 }

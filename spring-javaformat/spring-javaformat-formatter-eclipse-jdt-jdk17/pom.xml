@@ -8,15 +8,15 @@
 		<artifactId>spring-javaformat</artifactId>
 		<version>0.0.42-SNAPSHOT</version>
 	</parent>
-	<artifactId>spring-javaformat-formatter-eclipse-jdt-jdk11</artifactId>
-	<name>Spring JavaFormat Eclipse JDT JDK-11</name>
+	<artifactId>spring-javaformat-formatter-eclipse-jdt-jdk17</artifactId>
+	<name>Spring JavaFormat Eclipse JDT JDK-17</name>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>io.spring.javaformat</groupId>
-			<artifactId>spring-javaformat-formatter-eclipse-jdk11</artifactId>
+			<artifactId>spring-javaformat-formatter-eclipse-jdk17</artifactId>
 			<version>${project.version}</version>
 			<optional>true</optional>
 		</dependency>
@@ -48,7 +48,7 @@
 						<configuration>
 							<filters>
 								<filter>
-									<artifact>io.spring.javaformat:spring-javaformat-formatter-eclipse-jdk11</artifact>
+									<artifact>io.spring.javaformat:spring-javaformat-formatter-eclipse-jdk17</artifact>
 									<includes>
 										<include>org/eclipse/jdt/**</include>
 									</includes>

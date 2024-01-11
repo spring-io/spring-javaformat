@@ -21,6 +21,6 @@ Bundle-ClassPath: .,
  lib/spring-javaformat-config.jar,
  lib/spring-javaformat-formatter.jar,
  lib/spring-javaformat-checkstyle.jar,
- lib/spring-javaformat-formatter-eclipse-jdt-jdk11.jar,
+ lib/spring-javaformat-formatter-eclipse-jdt-jdk17.jar,
  lib/spring-javaformat-formatter-eclipse-jdt-jdk8.jar
 Bundle-ActivationPolicy: lazy

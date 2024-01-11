@@ -29,7 +29,7 @@ should also work without issue.
 
 
 === Building From Source
-To build the source you will need to install JDK 11.
+To build the source you will need to install JDK 17.
 
 
 
@@ -206,9 +206,9 @@ Under `spring-javaformat` the following projects are defined:
 * `spring-javaformat-formatter-shader` - Shader support classes
 * `spring-javaformat-formatter-shaded` - A shaded version of the formatter with all dependencies included
 * `spring-javaformat-formatter-eclipse-jdk8` - The eclipse JDK 8 formatter (repackaged and slightly adapted)
-* `spring-javaformat-formatter-eclipse-jdk11` - The eclipse JDK 11 formatter (repackaged and slightly adapted)
+* `spring-javaformat-formatter-eclipse-jdk17` - The eclipse JDK 17 formatter (repackaged and slightly adapted)
 * `spring-javaformat-formatter-eclipse-jdt-jdk8` - The eclipse JDT import for JDK 8
-* `spring-javaformat-formatter-eclipse-jdt-jdk11` - The eclipse JDT import for JDK 8
+* `spring-javaformat-formatter-eclipse-jdt-jdk17` - The eclipse JDT import for JDK 17
 * `spring-javaformat-formatter-eclipse-rewriter` - Internal utility used to modify eclipse code
 * `spring-javaformat-formatter-eclipse-runtime` - Eclipse runtime JAR for use when running outside of Eclipse
 
