@@ -101,4 +101,6 @@ org.eclipse.jdt.core.compiler.problem.unusedParameterWhenOverridingConcrete=disa
 org.eclipse.jdt.core.compiler.problem.unusedPrivateMember=warning
 org.eclipse.jdt.core.compiler.problem.unusedWarningToken=warning
 org.eclipse.jdt.core.compiler.problem.varargsArgumentNeedCast=warning
+org.eclipse.jdt.core.formatter.disabling_tag=@formatter\:off
+org.eclipse.jdt.core.formatter.enabling_tag=@formatter\:on
 org.eclipse.jdt.core.javaFormatter=io.spring.javaformat.eclipse.formatter.jdk17.tabs
