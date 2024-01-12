@@ -80,7 +80,7 @@ public final class EclipseRewriter {
 			deleteWrapPreparator(zip);
 		}
 		else {
-			rewrite(zip, "org/eclipse/osgi/util/NLS.class", NlsJdk11Manipulator::new);
+			rewrite(zip, "org/eclipse/osgi/util/NLS.class", NlsJdk17Manipulator::new);
 		}
 	}
 
@@ -202,16 +202,16 @@ public final class EclipseRewriter {
 	 * {@link ClassVisitor} to update the {@code NLS} class in the JDK 8 version so it
 	 * doesn't use a System property to disable warning messages.
 	 */
-	private static class NlsJdk11Manipulator extends ClassVisitor {
+	private static class NlsJdk17Manipulator extends ClassVisitor {
 
-		NlsJdk11Manipulator(ClassVisitor visitor) {
+		NlsJdk17Manipulator(ClassVisitor visitor) {
 			super(Opcodes.ASM9, visitor);
 		}
 
 		@Override
 		public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
 			if ("<clinit>".equals(name)) {
-				return new NslJdk11MethodManipulator(super.visitMethod(access, name, desc, signature, exceptions));
+				return new NslJdk17MethodManipulator(super.visitMethod(access, name, desc, signature, exceptions));
 			}
 			return super.visitMethod(access, name, desc, signature, exceptions);
 		}
@@ -222,11 +222,11 @@ public final class EclipseRewriter {
 	 * {@link MethodVisitor} to update the {@code NLS} class in the JDK 8 version so it
 	 * doesn't use a System property to disable warning messages.
 	 */
-	private static class NslJdk11MethodManipulator extends MethodVisitor {
+	private static class NslJdk17MethodManipulator extends MethodVisitor {
 
 		private final MethodVisitor methodVisitor;
 
-		NslJdk11MethodManipulator(MethodVisitor mv) {
+		NslJdk17MethodManipulator(MethodVisitor mv) {
 			super(Opcodes.ASM9, null);
 			this.methodVisitor = mv;
 		}

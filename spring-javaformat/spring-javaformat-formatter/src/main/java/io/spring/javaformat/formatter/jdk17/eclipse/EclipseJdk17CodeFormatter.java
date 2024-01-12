@@ -19,8 +19,8 @@ package io.spring.javaformat.formatter.jdk17.eclipse;
 import java.util.Map;
 
 import io.spring.javaformat.config.JavaFormatConfig;
-import io.spring.javaformat.eclipse.jdt.jdk11.internal.formatter.ExtendedCodeFormatter;
-import io.spring.javaformat.eclipse.jdt.jdk11.internal.formatter.Preparator;
+import io.spring.javaformat.eclipse.jdt.jdk17.internal.formatter.ExtendedCodeFormatter;
+import io.spring.javaformat.eclipse.jdt.jdk17.internal.formatter.Preparator;
 import io.spring.javaformat.formatter.eclipse.EclipseCodeFormatter;
 import io.spring.javaformat.formatter.eclipse.Options;
 
@@ -35,7 +35,7 @@ public class EclipseJdk17CodeFormatter extends ExtendedCodeFormatter implements 
 	private final Map<String, String> appliedOptions;
 
 	public EclipseJdk17CodeFormatter(JavaFormatConfig javaFormatConfig) {
-		this(new Options("io.spring.javaformat.eclipse.jdt.jdk11").load(javaFormatConfig));
+		this(new Options("io.spring.javaformat.eclipse.jdt.jdk17").load(javaFormatConfig));
 	}
 
 	EclipseJdk17CodeFormatter(Map<String, String> options) {

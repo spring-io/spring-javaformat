@@ -20,19 +20,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import io.spring.javaformat.eclipse.jdt.jdk11.core.dom.ASTNode;
-import io.spring.javaformat.eclipse.jdt.jdk11.core.dom.ASTVisitor;
-import io.spring.javaformat.eclipse.jdt.jdk11.core.dom.AbstractTypeDeclaration;
-import io.spring.javaformat.eclipse.jdt.jdk11.core.dom.Comment;
-import io.spring.javaformat.eclipse.jdt.jdk11.core.dom.CompilationUnit;
-import io.spring.javaformat.eclipse.jdt.jdk11.core.dom.Javadoc;
-import io.spring.javaformat.eclipse.jdt.jdk11.core.dom.TagElement;
-import io.spring.javaformat.eclipse.jdt.jdk11.core.dom.TextElement;
-import io.spring.javaformat.eclipse.jdt.jdk11.core.formatter.CodeFormatter;
-import io.spring.javaformat.eclipse.jdt.jdk11.internal.compiler.parser.TerminalTokens;
-import io.spring.javaformat.eclipse.jdt.jdk11.internal.formatter.Preparator;
-import io.spring.javaformat.eclipse.jdt.jdk11.internal.formatter.Token;
-import io.spring.javaformat.eclipse.jdt.jdk11.internal.formatter.TokenManager;
+import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.ASTNode;
+import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.ASTVisitor;
+import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.AbstractTypeDeclaration;
+import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.Comment;
+import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.CompilationUnit;
+import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.Javadoc;
+import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.TagElement;
+import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.TextElement;
+import io.spring.javaformat.eclipse.jdt.jdk17.core.formatter.CodeFormatter;
+import io.spring.javaformat.eclipse.jdt.jdk17.internal.compiler.parser.TerminalTokens;
+import io.spring.javaformat.eclipse.jdt.jdk17.internal.formatter.Preparator;
+import io.spring.javaformat.eclipse.jdt.jdk17.internal.formatter.Token;
+import io.spring.javaformat.eclipse.jdt.jdk17.internal.formatter.TokenManager;
 
 /**
  * {@link Preparator} to finetune Javadoc whitespace.

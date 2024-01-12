@@ -41,7 +41,7 @@ public class Activator extends AbstractUIPlugin {
 
 	public Activator() {
 		this.javaCorePlugins.add(new io.spring.javaformat.eclipse.jdt.jdk8.core.JavaCore());
-		this.javaCorePlugins.add(new io.spring.javaformat.eclipse.jdt.jdk11.core.JavaCore());
+		this.javaCorePlugins.add(new io.spring.javaformat.eclipse.jdt.jdk17.core.JavaCore());
 	}
 
 	@Override

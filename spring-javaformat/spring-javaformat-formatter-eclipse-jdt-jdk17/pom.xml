@@ -57,7 +57,7 @@
 							<relocations>
 								<relocation>
 									<pattern>org.eclipse.jdt</pattern>
-									<shadedPattern>io.spring.javaformat.eclipse.jdt.jdk11</shadedPattern>
+									<shadedPattern>io.spring.javaformat.eclipse.jdt.jdk17</shadedPattern>
 								</relocation>
 							</relocations>
 							<createDependencyReducedPom>false</createDependencyReducedPom>

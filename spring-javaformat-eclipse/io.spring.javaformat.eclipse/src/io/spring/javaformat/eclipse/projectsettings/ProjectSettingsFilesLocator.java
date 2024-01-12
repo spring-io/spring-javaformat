@@ -73,7 +73,7 @@ public class ProjectSettingsFilesLocator {
 		String formatterId = getFormatterId(javaFormatConfig);
 		if (formatterId != null) {
 			return content.replace(
-					"org.eclipse.jdt.core.javaFormatter=io.spring.javaformat.eclipse.formatter.jdk11.tabs",
+					"org.eclipse.jdt.core.javaFormatter=io.spring.javaformat.eclipse.formatter.jdk17.tabs",
 					"org.eclipse.jdt.core.javaFormatter=" + formatterId);
 		}
 		return content;
@@ -81,6 +81,7 @@ public class ProjectSettingsFilesLocator {
 
 	private String getFormatterId(JavaFormatConfig config) {
 		String jdk = config.getJavaBaseline().name().substring(1);
+		jdk = (!"11".equals(jdk)) ? jdk : "17";
 		String indentation = config.getIndentationStyle().name().toLowerCase();
 		return "io.spring.javaformat.eclipse.formatter.jdk" + jdk + "." + indentation;
 	}
