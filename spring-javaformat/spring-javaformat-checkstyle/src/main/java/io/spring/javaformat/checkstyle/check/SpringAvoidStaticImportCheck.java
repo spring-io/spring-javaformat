@@ -47,7 +47,6 @@ public class SpringAvoidStaticImportCheck extends AvoidStaticImportCheck {
 		excludes.add("org.junit.internal.matchers.ThrowableMessageMatcher.*");
 		excludes.add("org.junit.jupiter.api.Assertions.*");
 		excludes.add("org.junit.jupiter.api.Assumptions.*");
-		excludes.add("org.junit.jupiter.api.Assertions.*");
 		excludes.add("org.mockito.ArgumentMatchers.*");
 		excludes.add("org.mockito.BDDMockito.*");
 		excludes.add("org.mockito.Matchers.*");
