@@ -65,6 +65,7 @@
 			<property name="validateOnlyOverlapping" value="false" />
 		</module>
 		<module name="com.puppycrawl.tools.checkstyle.checks.coding.OneStatementPerLineCheck" />
+		<module name="com.puppycrawl.tools.checkstyle.checks.coding.UnnecessarySemicolonInEnumerationCheck"/>
 
 		<!-- Imports -->
 		<module name="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck" />
