@@ -54,7 +54,7 @@ public interface Preparator {
 		/**
 		 * Apply the preparator after wrapping.
 		 */
-		POST_WRAPPING;
+		POST_WRAPPING
 
 	}
 
