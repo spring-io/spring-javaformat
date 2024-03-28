@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2023 the original author or authors.
+ * Copyright 2017-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ public class SpringConfigurationLoaderTests {
 		assertThat(checks).hasSize(5);
 		TreeWalker treeWalker = (TreeWalker) checks.toArray()[4];
 		Set<?> ordinaryChecks = (Set<?>) Extractors.byName("ordinaryChecks").extract(treeWalker);
-		assertThat(ordinaryChecks).hasSize(60);
+		assertThat(ordinaryChecks).hasSize(61);
 	}
 
 	@Test
@@ -59,7 +59,7 @@ public class SpringConfigurationLoaderTests {
 		assertThat(checks).hasSize(5);
 		TreeWalker treeWalker = (TreeWalker) checks.toArray()[4];
 		Set<?> ordinaryChecks = (Set<?>) Extractors.byName("ordinaryChecks").extract(treeWalker);
-		assertThat(ordinaryChecks).hasSize(59);
+		assertThat(ordinaryChecks).hasSize(60);
 	}
 
 	@Test
