@@ -138,16 +138,6 @@ jobs:
       - put: slack-alert
         params:
           <<: *slack-fail-params
-  - put: artifactory-repo
-    params:
-      <<: *artifactory-repo-put-params
-    get_params:
-      threads: 8
-    on_failure:
-      do:
-      - put: slack-alert
-        params:
-          <<: *slack-fail-params
   - put: slack-alert
     params:
       <<: *slack-success-params
