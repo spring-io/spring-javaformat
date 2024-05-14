@@ -1,0 +1,23 @@
+name: 'Stage '
+description: 'Stage Code'
+inputs:
+  current-version:
+    required: true
+  release-version:
+    required: true
+  next-version:
+    required: true
+outputs:
+  distribution-repository:
+    value: ${{ steps.stage.outputs.distribution-repository }}
+runs:
+  using: composite
+  steps:
+    - name: Stage
+      id: stage
+      shell: bash
+      run: . ${{ github.action_path }}/stage.sh;
+      env:
+        CURRENT_VERSION: "${{ inputs.current-version }}"
+        RELEASE_VERSION: "${{ inputs.release-version }}"
+        NEXT_VERSION: "${{ inputs.next-version }}"

@@ -1,0 +1,41 @@
+name: Rollback
+run-name: >-
+  Rollback of version ${{ inputs.version }} (build number ${{ inputs.build-number}}) by ${{ github.actor }}
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment
+        type: environment
+        required: true
+      version:
+        description: The version number to roll back
+        type: string
+        required: true
+      build-number:
+        description: The build number to roll back
+        type: string
+        required: true
+jobs:
+  rollback:
+    environment: ${{ inputs.environment }}
+    name: Roll Back
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check Out
+      uses: actions/checkout@v4
+    - name: Set Up JFrog CLI
+      uses: jfrog/setup-jfrog-cli@7c95feb32008765e1b4e626b078dfd897c4340ad # v4.1.2
+      env:
+        JF_ENV_SPRING: ${{ secrets.JF_ARTIFACTORY_SPRING }}
+    - name: Delete Staged Artifacts
+      run: |
+        url=${{ format('libs-staging-local/io/spring/javaformat/spring-javaformat/{0}/spring-javaformat-{0}.pom', inputs.version) }}
+        artifact_count=$( jf rt s ${url} --count )
+        if [ "${artifact_count}" != 1 ]; then
+          echo "Unexpected aretifact count ${artifact_count}"
+          exit 1
+        fi
+        build_name=${{ format('spring-javaformat-{0}', inputs.version)}}
+        build_number=${{ inputs.build-number }}
+        jf rt delete --build ${build_name}/${build_number}

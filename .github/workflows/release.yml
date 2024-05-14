@@ -1,0 +1,58 @@
+name: Release
+run-name: >-
+  Release of '${{ github.ref_name }}' branch to '${{ inputs.environment }}' environment by ${{ github.actor }}
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment
+        type: environment
+        required: true
+jobs:
+  stage:
+    name: Stage
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check Out
+      uses: actions/checkout@v4
+    - name: Set Up
+      uses: ./.github/actions/setup
+    - name: Get Current Version
+      id: get-version
+      run: echo "current-version=$(xmllint --xpath '/*[local-name()="project"]/*[local-name()="version"]/text()' pom.xml)" >> $GITHUB_OUTPUT
+    - name: Deduce Versions
+      id: deduce-versions
+      uses: ./.github/actions/deduce-versions
+      with:
+        current-version: ${{ steps.get-version.outputs.current-version }}
+        release-type: ${{ inputs.environment }}
+    - name: Stage Code
+      id: stage-code
+      uses: ./.github/actions/stage-code
+      with:
+        current-version: ${{ steps.get-version.outputs.current-version }}
+        release-version: ${{ steps.deduce-versions.outputs.release-version }}
+        next-version: ${{ steps.deduce-versions.outputs.next-version }}
+    - name: Deploy to Staging
+      uses: spring-io/artifactory-deploy-action@v0.0.1
+      with:
+        folder: distribution-repository
+        uri: 'https://repo.spring.io'
+        repository: 'libs-staging-local'
+        build-name: ${{ format('spring-javaformat-{0}', steps.deduce-versions.outputs.release-version)}}
+        username: ${{ secrets.ARTIFACTORY_USERNAME }}
+        password: ${{ secrets.ARTIFACTORY_PASSWORD }}
+        signing-key: ${{ secrets.GPG_PRIVATE_KEY }}
+        signing-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+    - name: Push
+      run: git push origin HEAD --tags
+    outputs:
+      release-version: ${{ steps.deduce-versions.outputs.release-version }}
+  promote:
+    name: Promote
+    needs: stage
+    uses: ./.github/workflows/promote.yml
+    with:
+      environment: ${{ inputs.environment }}
+      version: ${{needs.stage.outputs.release-version}}
+      build-number: ${{ github.run_number }}

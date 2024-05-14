@@ -1,0 +1,22 @@
+name: 'Deduce Versions'
+description: 'Deduce the version to stage and the next SNAPSHOT version'
+inputs:
+  current-version:
+    required: true
+  release-type:
+    required: true
+outputs:
+  release-version:
+    value: ${{ steps.deduce-versions.outputs.release-version }}
+  next-version:
+    value: ${{ steps.deduce-versions.outputs.next-version }}
+runs:
+  using: composite
+  steps:
+    - name: Deduce Versions
+      id: deduce-versions
+      shell: bash
+      run: . ${{ github.action_path }}/deduce-versions.sh; deduce_versions
+      env:
+        CURRENT_VERSION: "${{ inputs.current-version }}"
+        RELEASE_TYPE: "${{ inputs.release-type }}"

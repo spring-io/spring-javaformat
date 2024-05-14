@@ -1,0 +1,1 @@
+../.bats/bats/bin/bats test/*.bats

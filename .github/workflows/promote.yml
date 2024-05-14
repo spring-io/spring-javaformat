@@ -1,0 +1,37 @@
+name: Promote
+run-name: >-
+  Promote of version ${{ inputs.version }} (build number ${{ inputs.build-number}}) by ${{ github.actor }} to '${{ inputs.environment }}' environment'
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+      version:
+        type: string
+        required: true
+      build-number:
+        type: string
+        required: true
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment
+        type: environment
+        required: true
+      version:
+        description: The version number to promote
+        type: string
+        required: true
+      build-number:
+        description: The build number to promote
+        type: string
+        required: true
+jobs:
+  promote:
+    environment: ${{ inputs.environment }}
+    name: Promote
+    runs-on: ubuntu-latest
+    steps:
+    - name: Promote
+      run: echo "Promote happens here"

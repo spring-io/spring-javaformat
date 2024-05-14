@@ -1,0 +1,12 @@
+[submodule ".github/actions/.bats/bats"]
+	path = .github/actions/.bats/bats
+	url = https://github.com/bats-core/bats-core.git
+	tag = v1.11.0
+[submodule ".github/actions/.bats/test_helper/bats-support"]
+	path = .github/actions/.bats/test_helper/bats-support
+	url = https://github.com/bats-core/bats-support.git
+	tag = v0.3.0
+[submodule ".github/actions/.bats/test_helper/bats-assert"]
+	path = .github/actions/.bats/test_helper/bats-assert
+	url = https://github.com/bats-core/bats-assert.git
+	tag = v2.1.0

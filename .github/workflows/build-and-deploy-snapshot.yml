@@ -6,29 +6,25 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
 jobs:
-  build:
-    if: ${{ github.repository == 'spring-io/spring-javaformat' }}
+  build-and-deploy-snapshot:
     name: Build and Deploy Snapshot
     runs-on: ubuntu-latest
+    if: ${{ github.repository == 'spring-io/spring-javaformat' }}
     steps:
-      - name: Check Out Code
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-      - name: Set Up Java
-        uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
-        with:
-          distribution: 'liberica'
-          java-version: 17
-          cache: maven
-      - name: Build and Publish
-        run: ./mvnw clean deploy --batch-mode --no-transfer-progress --update-snapshots -Dfull -DaltDeploymentRepository=distribution::file://$(pwd)/distribution-repository
-      - name: Deploy
-        uses: spring-io/artifactory-deploy-action@26bbe925a75f4f863e1e529e85be2d0093cac116 # v0.0.1
-        with:
-          uri: 'https://repo.spring.io'
-          username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          password: ${{ secrets.ARTIFACTORY_PASSWORD }}
-          build-name: spring-javaformat
-          repository: 'libs-snapshot-local'
-          folder: 'distribution-repository'
-          signing-key: ${{ secrets.GPG_PRIVATE_KEY }}
-          signing-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+    - name: Check Out
+      uses: actions/checkout@v4
+    - name: Set Up
+      uses: ./.github/actions/setup
+    - name: Build
+      run: ./mvnw clean deploy --batch-mode --no-transfer-progress --update-snapshots -DaltDeploymentRepository=distribution::file://$(pwd)/distribution-repository
+    - name: Deploy
+      uses: spring-io/artifactory-deploy-action@v0.0.1
+      with:
+        folder: 'distribution-repository'
+        uri: 'https://repo.spring.io'
+        repository: 'libs-snapshot-local'
+        build-name: spring-javaformat
+        username: ${{ secrets.ARTIFACTORY_USERNAME }}
+        password: ${{ secrets.ARTIFACTORY_PASSWORD }}
+        signing-key: ${{ secrets.GPG_PRIVATE_KEY }}
+        signing-passphrase: ${{ secrets.GPG_PASSPHRASE }}
