@@ -32,7 +32,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 		<eclipse.jdk8.repository>https://download.eclipse.org/releases/2021-03/202103171000/</eclipse.jdk8.repository>
-		<eclipse.jdk17.repository>https://download.eclipse.org/releases/2023-12/202312061001/</eclipse.jdk17.repository>
+		<eclipse.jdk17.repository>https://download.eclipse.org/releases/2024-03/202403131000/</eclipse.jdk17.repository>
 		<eclipse.checkstyle.repository>https://checkstyle.org/eclipse-cs-update-site/</eclipse.checkstyle.repository>
 		<tycho.disableP2Mirrors>true</tycho.disableP2Mirrors>
 		<ant.version>1.8.1</ant.version>
