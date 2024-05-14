@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2023 the original author or authors.
+ * Copyright 2017-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -93,7 +93,9 @@ class JavadocLineBreakPreparator implements Preparator {
 		public boolean visit(Javadoc node) {
 			int commentIndex = this.tokenManager.firstIndexIn(node, TerminalTokens.TokenNameCOMMENT_JAVADOC);
 			Token commentToken = this.tokenManager.get(commentIndex);
-			this.commentTokenManager = new TokenManager(commentToken.getInternalStructure(), this.tokenManager);
+			this.commentTokenManager = (commentToken.getInternalStructure() != null)
+					? new TokenManager(commentToken.getInternalStructure(), this.tokenManager)
+					: null;
 			this.declaration = node.getParent();
 			this.firstTagElement = true;
 			this.hasText = false;
@@ -108,7 +110,7 @@ class JavadocLineBreakPreparator implements Preparator {
 
 		@Override
 		public boolean visit(TagElement node) {
-			if (isSquashRequired(node, this.declaration)) {
+			if (this.commentTokenManager != null && isSquashRequired(node, this.declaration)) {
 				int startIndex = this.commentTokenManager.findIndex(node.getStartPosition(), -1, false);
 				Token token = this.commentTokenManager.get(startIndex);
 				token.clearLineBreaksBefore();
