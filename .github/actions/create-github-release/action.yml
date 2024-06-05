@@ -1,0 +1,21 @@
+name: Create GitHub Release
+description: Create the release on GitHub with a changelog
+inputs:
+  milestone:
+    required: true
+  token:
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Generate Changelog
+      uses: spring-io/github-changelog-generator@v0.0.10
+      with:
+        milestone: ${{ inputs.milestone }}
+        token: ${{ inputs.token }}
+        config-file: .github/actions/create-github-release/changelog-generator.yml
+    - name: Create GitHub Release
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+      shell: bash
+      run: gh release create ${{ format('v{0}', inputs.milestone) }} --notes-file changelog.md

@@ -1,5 +1,4 @@
 name: 'Stage '
-description: 'Stage Code'
 inputs:
   current-version:
     required: true

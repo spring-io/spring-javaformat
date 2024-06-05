@@ -1,0 +1,22 @@
+name: 'Publish Eclipse Update Site '
+inputs:
+  version:
+    required: true
+  build-number:
+    required: true
+  artifactory-username:
+    required: true
+  artifactory-password:
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Stage
+      id: stage
+      shell: bash
+      run: . ${{ github.action_path }}/publish-eclipse-update-site.sh;
+      env:
+        VERSION: "${{ inputs.version }}"
+        BUILD_NUMBER: "${{ inputs.build-number }}"
+        ARTIFACTORY_USERNAME: "${{ inputs.artifactory-username }}"
+        ARTIFACTORY_PASSWORD: "${{ inputs.artifactory-password }}"

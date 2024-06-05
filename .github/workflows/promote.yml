@@ -33,5 +33,60 @@ jobs:
     name: Promote
     runs-on: ubuntu-latest
     steps:
-    - name: Promote
-      run: echo "Promote happens here"
+    - name: Check Out
+      uses: actions/checkout@v4
+    - name: Set Up JFrog CLI
+      uses: jfrog/setup-jfrog-cli@7c95feb32008765e1b4e626b078dfd897c4340ad # v4.1.2
+      env:
+        JF_ENV_SPRING: ${{ secrets.JF_ARTIFACTORY_SPRING }}
+    - name: Check Maven Central Sync Status
+      id: check-sync-status
+      run: |
+        url=${{ format('https://repo.maven.apache.org/maven2/io/spring/javaformat/spring-javaformat/{0}/spring-javaformat-{0}.pom', inputs.version) }}
+        status_code=$( curl --write-out '%{http_code}' --head --silent --output /dev/null ${url} )
+        if [ "${status_code}" != 200 ] && [ "${status_code}" != 404 ]; then
+          echo "Unexpected status code ${status_code}"
+          exit 1
+        fi
+        echo "status-code=${status_code}" >> $GITHUB_OUTPUT
+    - name: Download Release Artifacts
+      if: ${{ steps.check-sync-status.outputs.status-code == '404' }}
+      run: jf rt download --spec ./.github/artifacts.spec --spec-vars 'buildName=${{ format('spring-javaformat-{0}', inputs.version) }};buildNumber=${{ inputs.build-number }}'
+    - name: Sync to Maven Central
+      if: ${{ steps.check-sync-status.outputs.status-code == '404' }}
+      uses: spring-io/nexus-sync-action@v0.0.1
+      with:
+        username: ${{ secrets.OSSRH_S01_TOKEN_USERNAME }}
+        password: ${{ secrets.OSSRH_S01_TOKEN_PASSWORD }}
+        staging-profile-name: ${{ secrets.OSSRH_S01_STAGING_PROFILE }}
+        create: true
+        upload: true
+        close: true
+        release: true
+        generate-checksums: true
+    - name: Await Maven Central Sync
+      if: ${{ steps.check-sync-status.outputs.status-code == '404' }}
+      run: |
+        url=${{ format('https://repo.maven.apache.org/maven2/io/spring/javaformat/spring-javaformat/{0}/spring-javaformat-{0}.pom', inputs.version) }}
+        echo "Waiting for $url"
+        until curl --fail --head --silent $url > /dev/null
+        do
+          echo "."
+          sleep 60
+        done
+        echo "$url is available"
+    - name: Promote Build
+      if: ${{ steps.check-sync-status.outputs.status-code == '404' }}
+      run: jfrog rt build-promote ${{ format('spring-javaformat-{0}', inputs.version)}} ${{ inputs.build-number }} libs-release-local
+    - name: Publish Eclipse Update Site
+      uses: ./.github/actions/publish-eclipse-update-site
+      with:
+        version: ${{ inputs.version }}
+        build-number: ${{ inputs.build-number }}
+        artifactory-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+        artifactory-password: ${{ secrets.ARTIFACTORY_PASSWORD }}
+    - name: Create GitHub Release
+      uses: ./.github/actions/create-github-release
+      with:
+        milestone: ${{ inputs.version }}
+        token: ${{ secrets.GH_ACTIONS_REPO_TOKEN }}
