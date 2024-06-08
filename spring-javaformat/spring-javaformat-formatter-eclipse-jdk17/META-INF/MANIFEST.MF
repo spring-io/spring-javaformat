@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Spring Formatter Eclipse Runtime JDK17
 Bundle-SymbolicName: spring-javaformat-formatter-eclipse-jdk17
-Bundle-Version: 0.0.42.qualifier
+Bundle-Version: 0.0.43.qualifier
 Require-Bundle: org.eclipse.jdt.core;bundle-version="[1.0.0,10.0.0)",
  org.eclipse.jface;bundle-version="[1.0.0,10.0.0)",
  org.eclipse.jdt.core.source;bundle-version="[1.0.0,10.0.0)";resolution:=optional,

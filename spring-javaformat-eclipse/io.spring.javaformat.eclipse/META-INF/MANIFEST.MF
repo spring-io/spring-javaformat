@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Spring Java Format Plugin
 Bundle-SymbolicName: io.spring.javaformat.eclipse;singleton:=true
 Automatic-Module-Name: io.spring.javaformat.eclipse
-Bundle-Version: 0.0.42.qualifier
+Bundle-Version: 0.0.43.qualifier
 Bundle-Activator: io.spring.javaformat.eclipse.Activator
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.ui,
