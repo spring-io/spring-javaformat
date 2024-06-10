@@ -1,7 +1,0 @@
----
-platform: linux
-inputs:
-- name: git-repo
-- name: artifactory-repo
-run:
-  path: git-repo/ci/scripts/publish-eclipse-update-site.sh
