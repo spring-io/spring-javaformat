@@ -1,7 +1,11 @@
++Test class 'JUnit5BadModifier' should not be public
++Nested test class 'PublicNestedTests' should not be public
++Nested test class 'PrivateNestedTests' should not be private
 +Test method 'doSomethingWorks' should not be public
 +Test method 'doSomethingElseWorks' should not be private
 +Test method 'doSomethingWithTemplateWorks' should not be public
 +Test method 'doSomethingElseWithTemplateWorks' should not be private
++Test method 'nestedPublicTest' should not be public
 +Lifecycle method 'publicBeforeAll' should not be public
 +Lifecycle method 'publicBeforeEach' should not be public
 +Lifecycle method 'publicAfterAll' should not be public

@@ -88,4 +88,19 @@ public class JUnit5BadModifier {
 		// test here
 	}
 
+	@Nested
+	public static class PublicNestedTests {
+
+		@Test
+		public void nestedPublicTest() {
+
+		}
+
+	}
+
+	@Nested
+	private static class PrivateNestedTests {
+
+	}
+
 }

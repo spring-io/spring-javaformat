@@ -41,7 +41,7 @@ public class SpringTestFileNameCheck extends AbstractFileSetCheck {
 			visitCompilationUnit(JavaParser.parseFileText(fileText, Options.WITHOUT_COMMENTS));
 		}
 	}
-	
+
 	private void visitCompilationUnit(DetailAST ast) {
 		DetailAST child = ast.getFirstChild();
 		while (child != null) {
@@ -52,5 +52,5 @@ public class SpringTestFileNameCheck extends AbstractFileSetCheck {
 			child = child.getNextSibling();
 		}
 	}
-	
+
 }

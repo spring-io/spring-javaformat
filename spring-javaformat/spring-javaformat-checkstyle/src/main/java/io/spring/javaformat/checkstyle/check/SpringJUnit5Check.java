@@ -63,6 +63,8 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 		LIFECYCLE_ANNOTATIONS = Collections.unmodifiableList(new ArrayList<>(annotations));
 	}
 
+	private static final Annotation NESTED_ANNOTATION = new Annotation("org.junit.jupiter.api", "Nested");
+
 	private static final Set<String> BANNED_IMPORTS;
 	static {
 		Set<String> bannedImports = new LinkedHashSet<>();
@@ -84,9 +86,13 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 
 	private final List<DetailAST> lifecycleMethods = new ArrayList<>();
 
+	private final List<DetailAST> nestedTestClasses = new ArrayList<>();
+
+	private DetailAST testClass;
+
 	@Override
 	public int[] getAcceptableTokens() {
-		return new int[] { TokenTypes.METHOD_DEF, TokenTypes.IMPORT };
+		return new int[] { TokenTypes.METHOD_DEF, TokenTypes.IMPORT, TokenTypes.CLASS_DEF };
 	}
 
 	@Override
@@ -101,8 +107,12 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 		switch (ast.getType()) {
 			case TokenTypes.METHOD_DEF:
 				visitMethodDef(ast);
+				break;
 			case TokenTypes.IMPORT:
 				visitImport(ast);
+				break;
+			case TokenTypes.CLASS_DEF:
+				visitClassDefinition(ast);
 				break;
 		}
 	}
@@ -140,6 +150,17 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 		this.imports.put(ident.getText(), ident);
 	}
 
+	private void visitClassDefinition(DetailAST ast) {
+		if (ast.getParent().getType() == TokenTypes.COMPILATION_UNIT) {
+			this.testClass = ast;
+		}
+		else {
+			if (containsAnnotation(ast, Arrays.asList(NESTED_ANNOTATION))) {
+				this.nestedTestClasses.add(ast);
+			}
+		}
+	}
+
 	@Override
 	public void finishTree(DetailAST rootAST) {
 		if (shouldCheck()) {
@@ -148,7 +169,7 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 	}
 
 	private boolean shouldCheck() {
-		if (this.testMethods.isEmpty() && this.lifecycleMethods.isEmpty()) {
+		if (this.testMethods.isEmpty() && this.lifecycleMethods.isEmpty() && this.nestedTestClasses.isEmpty()) {
 			return false;
 		}
 		for (String unlessImport : this.unlessImports) {
@@ -160,6 +181,10 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 	}
 
 	private void check() {
+		if (this.testClass != null) {
+			checkVisibility(Arrays.asList(this.testClass), "junit5.publicClass", null);
+		}
+		checkVisibility(this.nestedTestClasses, "junit5.publicNestedClass", "junit5.privateNestedClass");
 		for (String bannedImport : BANNED_IMPORTS) {
 			FullIdent ident = this.imports.get(bannedImport);
 			if (ident != null) {
@@ -171,25 +196,25 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 				log(testMethod, "junit5.bannedTestAnnotation");
 			}
 		}
-		checkMethodVisibility(this.testMethods, "junit5.testPublicMethod", "junit5.testPrivateMethod");
-		checkMethodVisibility(this.lifecycleMethods, "junit5.lifecyclePublicMethod", "junit5.lifecyclePrivateMethod");
+		checkVisibility(this.testMethods, "junit5.testPublicMethod", "junit5.testPrivateMethod");
+		checkVisibility(this.lifecycleMethods, "junit5.lifecyclePublicMethod", "junit5.lifecyclePrivateMethod");
 	}
 
-	private void checkMethodVisibility(List<DetailAST> methods, String publicMessageKey, String privateMessageKey) {
-		for (DetailAST method : methods) {
-			DetailAST modifiers = method.findFirstToken(TokenTypes.MODIFIERS);
+	private void checkVisibility(List<DetailAST> asts, String publicMessageKey, String privateMessageKey) {
+		for (DetailAST ast : asts) {
+			DetailAST modifiers = ast.findFirstToken(TokenTypes.MODIFIERS);
 			if (modifiers.findFirstToken(TokenTypes.LITERAL_PUBLIC) != null) {
-				log(method, publicMessageKey);
+				log(ast, publicMessageKey);
 			}
-			if (modifiers.findFirstToken(TokenTypes.LITERAL_PRIVATE) != null) {
-				log(method, privateMessageKey);
+			if ((privateMessageKey != null) && (modifiers.findFirstToken(TokenTypes.LITERAL_PRIVATE) != null)) {
+				log(ast, privateMessageKey);
 			}
 		}
 	}
 
-	private void log(DetailAST method, String key) {
-		String name = method.findFirstToken(TokenTypes.IDENT).getText();
-		log(method.getLineNo(), method.getColumnNo(), key, name);
+	private void log(DetailAST ast, String key) {
+		String name = ast.findFirstToken(TokenTypes.IDENT).getText();
+		log(ast.getLineNo(), ast.getColumnNo(), key, name);
 	}
 
 	public void setUnlessImports(String unlessImports) {

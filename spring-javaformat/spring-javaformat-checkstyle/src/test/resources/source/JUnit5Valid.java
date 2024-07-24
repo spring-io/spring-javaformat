@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 the original author or authors.
+ * Copyright 2017-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author Phillip Webb
  */
-public class JUnit5Valid {
+class JUnit5Valid {
 
 	@Test
 	void doSomethingWorks() {
