@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2023 the original author or authors.
+ * Copyright 2017-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -123,8 +123,10 @@ public class SpringChecksTests {
 			.map(Parameter::new)
 			.collect(Collectors.toCollection(ArrayList::new));
 		parameters.add(new Parameter(new File(SOURCES_DIR, "nopackageinfo/NoPackageInfo.java")));
-		parameters.add(new Parameter(new File(SOURCES_DIR, "src/test/java/NamedTest.java")));
-		parameters.add(new Parameter(new File(SOURCES_DIR, "src/test/java/NamedTests.java")));
+		Arrays.stream(new File(SOURCES_DIR, "src/test/java").listFiles(SpringChecksTests::sourceFile))
+			.sorted()
+			.map(Parameter::new)
+			.forEach(parameters::add);
 		return parameters;
 	}
 
