@@ -16,8 +16,10 @@
 
 package io.spring.javaformat.checkstyle;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
@@ -49,17 +51,21 @@ public class SpringConfigurationLoaderTests {
 		TreeWalker treeWalker = (TreeWalker) checks.toArray()[4];
 		Set<?> ordinaryChecks = (Set<?>) Extractors.byName("ordinaryChecks").extract(treeWalker);
 		assertThat(ordinaryChecks).hasSize(61);
+		Set<?> commentChecks = (Set<?>) Extractors.byName("commentChecks").extract(treeWalker);
+		assertThat(commentChecks).hasSize(6);
 	}
 
 	@Test
 	public void loadWithExcludeShouldExcludeChecks() {
-		Set<String> excludes = Collections
-			.singleton("com.puppycrawl.tools.checkstyle.checks.whitespace.MethodParamPadCheck");
+		Set<String> excludes = new HashSet<String>(Arrays.asList("com.puppycrawl.tools.checkstyle.checks.whitespace.MethodParamPadCheck",
+				"com.puppycrawl.tools.checkstyle.checks.annotation.MissingDeprecatedCheck"));
 		Collection<FileSetCheck> checks = load(excludes);
 		assertThat(checks).hasSize(5);
 		TreeWalker treeWalker = (TreeWalker) checks.toArray()[4];
 		Set<?> ordinaryChecks = (Set<?>) Extractors.byName("ordinaryChecks").extract(treeWalker);
 		assertThat(ordinaryChecks).hasSize(60);
+		Set<?> commentChecks = (Set<?>) Extractors.byName("commentChecks").extract(treeWalker);
+		assertThat(commentChecks).hasSize(5);
 	}
 
 	@Test

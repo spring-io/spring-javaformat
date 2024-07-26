@@ -22,6 +22,7 @@
 			<property name="elementStyle" value="compact" />
 		</module>
 		<module name="com.puppycrawl.tools.checkstyle.checks.annotation.MissingOverrideCheck" />
+		<module name="com.puppycrawl.tools.checkstyle.checks.annotation.MissingDeprecatedCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.annotation.PackageAnnotationCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.annotation.AnnotationLocationCheck">
 			<property name="allowSamelineSingleParameterlessAnnotation"
