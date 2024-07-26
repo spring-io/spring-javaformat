@@ -97,9 +97,11 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 
 	@Override
 	public void beginTree(DetailAST rootAST) {
+		this.testClass = null;
 		this.imports.clear();
 		this.testMethods.clear();
 		this.lifecycleMethods.clear();
+		this.nestedTestClasses.clear();
 	}
 
 	@Override
@@ -181,7 +183,7 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 	}
 
 	private void check() {
-		if (this.testClass != null) {
+		if (this.testClass != null && !isAbstract(this.testClass)) {
 			checkVisibility(Arrays.asList(this.testClass), "junit5.publicClass", null);
 		}
 		checkVisibility(this.nestedTestClasses, "junit5.publicNestedClass", "junit5.privateNestedClass");
@@ -198,6 +200,11 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 		}
 		checkVisibility(this.testMethods, "junit5.testPublicMethod", "junit5.testPrivateMethod");
 		checkVisibility(this.lifecycleMethods, "junit5.lifecyclePublicMethod", "junit5.lifecyclePrivateMethod");
+	}
+
+	private boolean isAbstract(DetailAST ast) {
+		DetailAST modifiers = ast.findFirstToken(TokenTypes.MODIFIERS);
+		return modifiers.findFirstToken(TokenTypes.ABSTRACT) != null;
 	}
 
 	private void checkVisibility(List<DetailAST> asts, String publicMessageKey, String privateMessageKey) {
