@@ -3,7 +3,7 @@
    <description>
       Maven Integration for Eclipse (maven-eclipse-plugin support)
    </description>
-   <feature url="features/io.spring.javaformat.eclipse.feature_0.0.43.qualifier.jar" id="io.spring.javaformat.eclipse.feature" version="0.0.43.qualifier">
+   <feature url="features/io.spring.javaformat.eclipse.feature_0.0.44.qualifier.jar" id="io.spring.javaformat.eclipse.feature" version="0.0.44.qualifier">
       <category name="spring-java-format"/>
    </feature>
    <category-def name="spring-java-format" label="Spring Java Format"/>

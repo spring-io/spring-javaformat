@@ -8,7 +8,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring-javaformat.version>0.0.43-SNAPSHOT</spring-javaformat.version>
+		<spring-javaformat.version>0.0.44-SNAPSHOT</spring-javaformat.version>
 	</properties>
 	<build>
 		<plugins>

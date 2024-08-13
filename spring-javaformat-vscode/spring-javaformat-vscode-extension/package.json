@@ -2,7 +2,7 @@
   "name": "spring-javaformat-vscode-extension",
   "description": "Spring JavaFormat Visual Studio Code Extension",
   "displayName": "Spring JavaFormat",
-  "version": "0.0.43-SNAPSHOT",
+  "version": "0.0.44-SNAPSHOT",
   "publisher": "io.spring.javaformat",
   "engines": {
     "vscode": "^1.75.0"

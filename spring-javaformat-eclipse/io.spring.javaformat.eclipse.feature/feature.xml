@@ -2,7 +2,7 @@
 <feature
       id="io.spring.javaformat.eclipse.feature"
       label="%featureName"
-      version="0.0.43.qualifier"
+      version="0.0.44.qualifier"
       provider-name="%vendorName"
       plugin="io.spring.javaformat.eclipse">
 
@@ -22,7 +22,7 @@
          id="io.spring.javaformat.eclipse"
          download-size="0"
          install-size="0"
-         version="0.0.43.qualifier"
+         version="0.0.44.qualifier"
          unpack="false"/>
 
 </feature>
