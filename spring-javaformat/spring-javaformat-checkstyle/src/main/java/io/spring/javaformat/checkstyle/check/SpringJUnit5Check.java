@@ -129,8 +129,9 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 	}
 
 	private boolean containsAnnotation(DetailAST ast, List<Annotation> annotations) {
-		List<String> annotationNames = annotations.stream().flatMap((annotation) ->
-				Stream.of(annotation.simpleName, annotation.fullyQualifiedName())).collect(Collectors.toList());
+		List<String> annotationNames = annotations.stream()
+			.flatMap((annotation) -> Stream.of(annotation.simpleName, annotation.fullyQualifiedName()))
+			.collect(Collectors.toList());
 		try {
 			return AnnotationUtil.containsAnnotation(ast, annotationNames);
 		}
@@ -138,8 +139,8 @@ public class SpringJUnit5Check extends AbstractSpringCheck {
 			// Checkstyle >= 10.3 (https://github.com/checkstyle/checkstyle/issues/14134)
 			Set<String> annotationNamesSet = new HashSet<>(annotationNames);
 			try {
-				return (boolean) AnnotationUtil.class.getMethod("containsAnnotation",  DetailAST.class, Set.class)
-						.invoke(null, ast, annotationNamesSet);
+				return (boolean) AnnotationUtil.class.getMethod("containsAnnotation", DetailAST.class, Set.class)
+					.invoke(null, ast, annotationNamesSet);
 			}
 			catch (Exception ex2) {
 				throw new RuntimeException("containsAnnotation failed", ex2);

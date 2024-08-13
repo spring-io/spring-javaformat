@@ -27,7 +27,8 @@ import com.puppycrawl.tools.checkstyle.api.FileText;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 /**
- * Checks that test class filenames end {@literal Tests.java} and not {@literal Test.java}.
+ * Checks that test class filenames end {@literal Tests.java} and not
+ * {@literal Test.java}.
  *
  * @author Phillip Webb
  * @author Andy Wilkinson

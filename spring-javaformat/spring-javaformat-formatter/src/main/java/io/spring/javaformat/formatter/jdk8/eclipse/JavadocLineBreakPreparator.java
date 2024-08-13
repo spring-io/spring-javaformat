@@ -94,8 +94,7 @@ class JavadocLineBreakPreparator implements Preparator {
 			int commentIndex = this.tokenManager.firstIndexIn(node, TerminalTokens.TokenNameCOMMENT_JAVADOC);
 			Token commentToken = this.tokenManager.get(commentIndex);
 			this.commentTokenManager = (commentToken.getInternalStructure() != null)
-					? new TokenManager(commentToken.getInternalStructure(), this.tokenManager)
-					: null;
+					? new TokenManager(commentToken.getInternalStructure(), this.tokenManager) : null;
 			this.declaration = node.getParent();
 			this.firstTagElement = true;
 			this.hasText = false;

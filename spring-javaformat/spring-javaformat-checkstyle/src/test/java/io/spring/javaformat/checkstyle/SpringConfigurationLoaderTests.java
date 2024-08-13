@@ -57,8 +57,9 @@ public class SpringConfigurationLoaderTests {
 
 	@Test
 	public void loadWithExcludeShouldExcludeChecks() {
-		Set<String> excludes = new HashSet<String>(Arrays.asList("com.puppycrawl.tools.checkstyle.checks.whitespace.MethodParamPadCheck",
-				"com.puppycrawl.tools.checkstyle.checks.annotation.MissingDeprecatedCheck"));
+		Set<String> excludes = new HashSet<String>(
+				Arrays.asList("com.puppycrawl.tools.checkstyle.checks.whitespace.MethodParamPadCheck",
+						"com.puppycrawl.tools.checkstyle.checks.annotation.MissingDeprecatedCheck"));
 		Collection<FileSetCheck> checks = load(excludes);
 		assertThat(checks).hasSize(5);
 		TreeWalker treeWalker = (TreeWalker) checks.toArray()[4];
