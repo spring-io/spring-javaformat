@@ -17,7 +17,9 @@
 package io.spring.javaformat.checkstyle.check;
 
 import java.io.File;
+import java.util.ArrayDeque;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -26,6 +28,7 @@ import java.util.regex.Pattern;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.FileContents;
 import com.puppycrawl.tools.checkstyle.api.FileText;
+import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 import io.spring.javaformat.config.IndentationStyle;
 import io.spring.javaformat.config.JavaFormatConfig;
@@ -49,14 +52,32 @@ public class SpringLeadingWhitespaceCheck extends AbstractSpringCheck {
 
 	private IndentationStyle indentationStyle;
 
+	private final Deque<TextBlockPair> textBlockPairs = new ArrayDeque<>();
+
 	@Override
 	public int[] getAcceptableTokens() {
-		return NO_REQUIRED_TOKENS;
+		return new int[] { TokenTypes.TEXT_BLOCK_LITERAL_BEGIN, TokenTypes.TEXT_BLOCK_LITERAL_END };
+	}
+
+	@Override
+	public void visitToken(DetailAST ast) {
+		super.visitToken(ast);
+		if (ast.getType() == TokenTypes.TEXT_BLOCK_LITERAL_BEGIN) {
+			this.textBlockPairs.add(new TextBlockPair(ast));
+		}
+		else if (ast.getType() == TokenTypes.TEXT_BLOCK_LITERAL_END) {
+			this.textBlockPairs.getLast().end(ast);
+		}
 	}
 
 	@Override
 	public void beginTree(DetailAST rootAST) {
 		super.beginTree(rootAST);
+		this.textBlockPairs.clear();
+	}
+
+	@Override
+	public void finishTree(DetailAST rootAST) {
 		FileContents fileContents = getFileContents();
 		FileText fileText = fileContents.getText();
 		File file = fileText.getFile();
@@ -66,8 +87,11 @@ public class SpringLeadingWhitespaceCheck extends AbstractSpringCheck {
 		IndentationStyle indentationStyle = (this.indentationStyle != null) ? this.indentationStyle
 				: JavaFormatConfig.findFrom(file.getParentFile()).getIndentationStyle();
 		for (int i = 0; i < fileText.size(); i++) {
-			String line = fileText.get(i);
 			int lineNo = i + 1;
+			if (isInTextBlock(lineNo)) {
+				continue;
+			}
+			String line = fileText.get(i);
 			Matcher matcher = PATTERN.matcher(line);
 			boolean found = matcher.find(0);
 			while (found
@@ -78,11 +102,36 @@ public class SpringLeadingWhitespaceCheck extends AbstractSpringCheck {
 				log(lineNo, "leadingwhitespace.incorrect", indentationStyle.toString().toLowerCase());
 			}
 		}
+		super.finishTree(rootAST);
+	}
+
+	private boolean isInTextBlock(int lineNo) {
+		return this.textBlockPairs.stream().anyMatch((textBlockPair) -> textBlockPair.contains(lineNo));
 	}
 
 	public void setIndentationStyle(String indentationStyle) {
 		this.indentationStyle = (indentationStyle != null && !"".equals(indentationStyle))
 				? IndentationStyle.valueOf(indentationStyle.toUpperCase()) : null;
+	}
+
+	private static class TextBlockPair {
+
+		private final DetailAST begin;
+
+		private DetailAST end;
+
+		TextBlockPair(DetailAST begin) {
+			this.begin = begin;
+		}
+
+		public boolean contains(int lineNo) {
+			return (lineNo > this.begin.getLineNo()) && (lineNo <= this.end.getLineNo());
+		}
+
+		void end(DetailAST end) {
+			this.end = end;
+		}
+
 	}
 
 }
