@@ -391,7 +391,7 @@ For example:
 
 [source,java,indent=0,subs="normal"]
 ----
-class Name {
+public class Name {
 
 	private final String first;
 
