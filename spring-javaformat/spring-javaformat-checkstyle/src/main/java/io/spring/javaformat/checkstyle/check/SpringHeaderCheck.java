@@ -242,7 +242,7 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 	/**
 	 * {@link HeaderCheck} to enforce that there is no header.
 	 */
-	private class NoHeaderCheck implements HeaderCheck {
+	private final class NoHeaderCheck implements HeaderCheck {
 
 		@Override
 		public boolean run(FileText fileText, boolean blankLineAfter) {

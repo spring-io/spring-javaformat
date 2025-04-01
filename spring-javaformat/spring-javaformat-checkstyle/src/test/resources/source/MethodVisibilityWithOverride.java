@@ -21,7 +21,7 @@
  */
 public class MethodVisibilityWithOverride {
 
-	private static class PrivateInnerClass {
+	private static final class PrivateInnerClass {
 
 		@Override
 		public void okPrivateInner() {

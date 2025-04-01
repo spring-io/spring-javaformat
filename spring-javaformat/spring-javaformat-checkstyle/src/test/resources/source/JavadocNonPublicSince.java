@@ -27,7 +27,7 @@ class JavadocNonPublicSince {
 	 *
 	 * @since 1.2.3
 	 */
-	private static class Inner {
+	private static final class Inner {
 
 	}
 

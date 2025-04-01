@@ -21,7 +21,7 @@
  */
 public class MethodVisibilityInnerClassesWithPublicMethod {
 
-	private static class PrivateInnerClass {
+	private static final class PrivateInnerClass {
 
 		public void badPrivateInner() {
 		}

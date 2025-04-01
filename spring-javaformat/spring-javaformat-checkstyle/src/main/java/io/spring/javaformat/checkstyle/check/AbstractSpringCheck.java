@@ -25,6 +25,9 @@ import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
  */
 abstract class AbstractSpringCheck extends AbstractCheck {
 
+	/**
+	 * no required tokens.
+	 */
 	public static final int[] NO_REQUIRED_TOKENS = {};
 
 	@Override

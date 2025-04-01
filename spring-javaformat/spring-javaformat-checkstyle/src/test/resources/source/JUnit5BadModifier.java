@@ -99,7 +99,7 @@ public class JUnit5BadModifier {
 	}
 
 	@Nested
-	private static class PrivateNestedTests {
+	private static final class PrivateNestedTests {
 
 	}
 

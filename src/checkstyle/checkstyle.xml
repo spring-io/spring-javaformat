@@ -93,7 +93,7 @@
 		</module>
 		<module name="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck">
-			<property name="scope" value="public"/>
+			<property name="accessModifiers" value="public"/>
 		</module>
 		<module name="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck">
 			<property name="checkEmptyJavadoc" value="true"/>

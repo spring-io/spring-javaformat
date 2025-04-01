@@ -254,7 +254,15 @@ public final class EclipseRewriter {
 
 	enum JdkVersion {
 
-		V8, V11
+		/**
+		 * JDK version 8.
+		 */
+		V8,
+
+		/**
+		 * JDK version 11.
+		 */
+		V11
 
 	}
 

@@ -134,7 +134,7 @@ public class SpringChecksTests {
 		return file.isFile() && !file.getName().startsWith(".") && !file.getName().equals("package-info.java");
 	}
 
-	private static class Parameter {
+	private static final class Parameter {
 
 		private final String name;
 

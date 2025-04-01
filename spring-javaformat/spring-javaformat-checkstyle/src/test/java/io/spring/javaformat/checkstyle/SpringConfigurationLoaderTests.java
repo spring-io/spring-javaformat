@@ -50,9 +50,9 @@ public class SpringConfigurationLoaderTests {
 		assertThat(checks).hasSize(5);
 		TreeWalker treeWalker = (TreeWalker) checks.toArray()[4];
 		Set<?> ordinaryChecks = (Set<?>) Extractors.byName("ordinaryChecks").extract(treeWalker);
-		assertThat(ordinaryChecks).hasSize(61);
+		assertThat(ordinaryChecks).hasSize(60);
 		Set<?> commentChecks = (Set<?>) Extractors.byName("commentChecks").extract(treeWalker);
-		assertThat(commentChecks).hasSize(6);
+		assertThat(commentChecks).hasSize(7);
 	}
 
 	@Test
@@ -64,9 +64,9 @@ public class SpringConfigurationLoaderTests {
 		assertThat(checks).hasSize(5);
 		TreeWalker treeWalker = (TreeWalker) checks.toArray()[4];
 		Set<?> ordinaryChecks = (Set<?>) Extractors.byName("ordinaryChecks").extract(treeWalker);
-		assertThat(ordinaryChecks).hasSize(60);
+		assertThat(ordinaryChecks).hasSize(59);
 		Set<?> commentChecks = (Set<?>) Extractors.byName("commentChecks").extract(treeWalker);
-		assertThat(commentChecks).hasSize(5);
+		assertThat(commentChecks).hasSize(6);
 	}
 
 	@Test

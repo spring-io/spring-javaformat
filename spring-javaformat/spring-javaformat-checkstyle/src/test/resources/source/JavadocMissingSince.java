@@ -24,7 +24,7 @@ public class JavadocMissingSince {
 	/**
 	 * Inner class.
 	 */
-	private static class Inner {
+	private static final class Inner {
 
 	}
 

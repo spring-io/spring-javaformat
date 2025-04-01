@@ -71,7 +71,7 @@ public class FileMonitor extends Monitor {
 	/**
 	 * Lister used to check for trigger file updates.
 	 */
-	private class Listener implements VirtualFileListener {
+	private final class Listener implements VirtualFileListener {
 
 		@Override
 		public void fileCreated(VirtualFileEvent event) {
