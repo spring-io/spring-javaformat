@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2023 the original author or authors.
+ * Copyright 2017-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,11 @@
 
 package io.spring.javaformat.checkstyle;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -30,6 +34,8 @@ import com.puppycrawl.tools.checkstyle.api.Configuration;
 import com.puppycrawl.tools.checkstyle.api.Context;
 import com.puppycrawl.tools.checkstyle.api.Contextualizable;
 import com.puppycrawl.tools.checkstyle.api.FileSetCheck;
+import com.puppycrawl.tools.checkstyle.api.Scope;
+import com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck;
 import org.xml.sax.InputSource;
 
 /**
@@ -50,17 +56,45 @@ class SpringConfigurationLoader {
 	}
 
 	public Collection<FileSetCheck> load(PropertyResolver propertyResolver) {
-		Configuration config = loadConfiguration(getClass().getResourceAsStream("spring-checkstyle.xml"),
-				propertyResolver);
+		Configuration config = loadConfiguration(loadConfigurationSource(), propertyResolver);
 		return Arrays.stream(config.getChildren())
 			.filter(this.moduleFactory::nonFiltered)
 			.map(this::load)
 			.collect(Collectors.toList());
 	}
 
-	private Configuration loadConfiguration(InputStream inputStream, PropertyResolver propertyResolver) {
+	private String loadConfigurationSource() {
+		try (InputStream stream = getClass().getResourceAsStream("spring-checkstyle.xml")) {
+			StringBuilder builder = new StringBuilder();
+			byte[] buffer = new byte[4096];
+			int read;
+			while ((read = stream.read(buffer)) > 0) {
+				builder.append(new String(buffer, 0, read, StandardCharsets.UTF_8));
+			}
+			return preprocessConfigurationSource(builder.toString());
+		}
+		catch (IOException ex) {
+			throw new UncheckedIOException(ex);
+		}
+	}
+
+	private String preprocessConfigurationSource(String source) {
+		return source.replace("{{javadocVariableCheckScopeProperty}}", javadocVariableCheckScopeProperty());
+	}
+
+	private String javadocVariableCheckScopeProperty() {
 		try {
-			InputSource inputSource = new InputSource(inputStream);
+			JavadocVariableCheck.class.getMethod("setScope", Scope.class);
+			return "scope";
+		}
+		catch (NoSuchMethodException ex) {
+			return "accessModifiers";
+		}
+	}
+
+	private Configuration loadConfiguration(String source, PropertyResolver propertyResolver) {
+		try {
+			InputSource inputSource = new InputSource(new StringReader(source));
 			return ConfigurationLoader.loadConfiguration(inputSource, propertyResolver, IgnoredModulesOptions.EXECUTE);
 		}
 		catch (CheckstyleException ex) {
