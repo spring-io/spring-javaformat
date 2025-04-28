@@ -6,7 +6,7 @@ jobs:
   build:
     name: Build Pull Request
     runs-on: ubuntu-latest
-    if: ${{ github.repository == 'spring-projects/spring-boot' }}
+    if: ${{ github.repository == 'spring-io/spring-javaformat' }}
     steps:
     - name: Check Out
       uses: actions/checkout@v4
