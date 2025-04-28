@@ -24,10 +24,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.gradle.api.GradleException;
 import org.gradle.api.tasks.CacheableTask;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
+import org.gradle.api.tasks.VerificationException;
 
 import io.spring.javaformat.formatter.FileEdit;
 
@@ -63,7 +63,7 @@ public class CheckFormat extends FormatterTask {
 			message.append("\nRun `format` to fix.");
 			Files.write(this.reportLocation.toPath(), Collections.singletonList(message.toString()),
 					StandardOpenOption.CREATE);
-			throw new GradleException(message.toString());
+			throw new VerificationException(message.toString());
 		}
 		else {
 			this.reportLocation.createNewFile();
