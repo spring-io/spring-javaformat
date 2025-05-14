@@ -36,7 +36,7 @@ jobs:
     - name: Check Out
       uses: actions/checkout@v4
     - name: Set Up JFrog CLI
-      uses: jfrog/setup-jfrog-cli@7c95feb32008765e1b4e626b078dfd897c4340ad # v4.1.2
+      uses: jfrog/setup-jfrog-cli@ff5cb544114ffc152db9cea1cd3d5978d5074946 # v4.5.11
       env:
         JF_ENV_SPRING: ${{ secrets.JF_ARTIFACTORY_SPRING }}
     - name: Check Maven Central Sync Status
