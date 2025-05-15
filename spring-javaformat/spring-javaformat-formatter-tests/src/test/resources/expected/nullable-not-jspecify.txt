@@ -1,6 +1,6 @@
 package example;
 
-import org.jspecify.annotations.Nullable;
+import com.example.Nullable;
 
 /**
  * Nullable.
@@ -11,12 +11,13 @@ import org.jspecify.annotations.Nullable;
 public interface ExampleNullables {
 
 	@Override
-	@Nullable String myMethod(String param);
+	@Nullable
+	String myMethod(String param);
 
 	@Override
 	public @Nullable String myPublicMethod(String param);
 
 	Object myArrayMethod(@Nullable String string, @Nullable String @Nullable [] array,
-			@Nullable String @Nullable ... varargs);
+			@Nullable String @Nullable... varargs);
 
 }

@@ -17,14 +17,20 @@
 package io.spring.javaformat.formatter.jdk8.eclipse;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import io.spring.javaformat.eclipse.jdt.jdk8.core.dom.ASTNode;
 import io.spring.javaformat.eclipse.jdt.jdk8.core.dom.ASTVisitor;
 import io.spring.javaformat.eclipse.jdt.jdk8.core.dom.Annotation;
+import io.spring.javaformat.eclipse.jdt.jdk8.core.dom.CompilationUnit;
 import io.spring.javaformat.eclipse.jdt.jdk8.core.dom.IExtendedModifier;
+import io.spring.javaformat.eclipse.jdt.jdk8.core.dom.ImportDeclaration;
 import io.spring.javaformat.eclipse.jdt.jdk8.core.dom.MethodDeclaration;
 import io.spring.javaformat.eclipse.jdt.jdk8.core.dom.SingleVariableDeclaration;
 import io.spring.javaformat.eclipse.jdt.jdk8.core.formatter.CodeFormatter;
@@ -33,8 +39,14 @@ import io.spring.javaformat.eclipse.jdt.jdk8.internal.formatter.TokenManager;
 
 public class JSpecifyPreparator implements Preparator {
 
+	private static final String PACKAGE_NAME = "org.jspecify.annotations";
+
 	private static final Set<String> ANNOTATION_NAMES = new HashSet<>(
 			Arrays.asList("NonNull", "Nullable", "NullMarked", "NullUnmarked"));
+
+	private static final Set<String> FULLY_QUALIFIED_ANNOTATION_NAMES = ANNOTATION_NAMES.stream()
+		.map((annotationName) -> PACKAGE_NAME + "." + annotationName)
+		.collect(Collectors.toSet());
 
 	@Override
 	public void apply(int kind, TokenManager tokenManager, ASTNode astRoot) {
@@ -48,8 +60,29 @@ public class JSpecifyPreparator implements Preparator {
 
 		private final TokenManager tokenManager;
 
+		private final Map<String, String> fullyQualified = new HashMap<>();
+
 		Vistor(TokenManager tokenManager) {
 			this.tokenManager = tokenManager;
+		}
+
+		@Override
+		public boolean visit(CompilationUnit node) {
+			this.fullyQualified.clear();
+			return super.visit(node);
+		}
+
+		@Override
+		public boolean visit(ImportDeclaration node) {
+			String name = node.getName().toString();
+			if (name.equals(PACKAGE_NAME) || name.startsWith(PACKAGE_NAME)) {
+				Set<String> annotationNames = (node.isOnDemand()) ? ANNOTATION_NAMES
+						: Collections.singleton(name.substring(name.lastIndexOf(".") + 1));
+				for (String annotationName : annotationNames) {
+					this.fullyQualified.put(annotationName, PACKAGE_NAME + "." + annotationName);
+				}
+			}
+			return super.visit(node);
 		}
 
 		@Override
@@ -86,7 +119,9 @@ public class JSpecifyPreparator implements Preparator {
 		}
 
 		private boolean isJSpecifyAnnotation(Annotation annotation) {
-			return (annotation != null) && ANNOTATION_NAMES.contains(annotation.getTypeName().toString());
+			String fullyQualifiedName = (annotation != null)
+					? this.fullyQualified.get(annotation.getTypeName().toString()) : null;
+			return (fullyQualifiedName != null) && FULLY_QUALIFIED_ANNOTATION_NAMES.contains(fullyQualifiedName);
 		}
 
 	}

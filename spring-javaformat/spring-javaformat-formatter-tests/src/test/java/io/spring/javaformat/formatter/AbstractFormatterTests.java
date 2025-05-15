@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import io.spring.javaformat.config.JavaBaseline;
@@ -60,6 +61,7 @@ public abstract class AbstractFormatterTests {
 				addItem(items, javaBaseline, source, expected, config);
 			}
 		}
+		items.sort(Comparator.comparing(Item::getName));
 		return items.toArray(new Item[0]);
 	}
 
@@ -137,6 +139,10 @@ public abstract class AbstractFormatterTests {
 			JavaFormatConfig config = (!configFile.exists()) ? JavaFormatConfig.DEFAULT
 					: JavaFormatConfig.load(configFile);
 			return JavaFormatConfig.of(javaBaseline, config.getIndentationStyle());
+		}
+
+		String getName() {
+			return this.source.getName();
 		}
 
 		public File getSource() {

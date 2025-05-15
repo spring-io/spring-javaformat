@@ -1,6 +1,6 @@
 package example;
 
-import org.jspecify.annotations.Nullable;
+import com.example.Nullable;
 
 /**
  * Nullable.
