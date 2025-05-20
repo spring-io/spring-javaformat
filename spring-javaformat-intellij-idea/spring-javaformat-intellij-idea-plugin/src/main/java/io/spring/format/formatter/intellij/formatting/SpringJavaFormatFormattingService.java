@@ -78,7 +78,7 @@ public class SpringJavaFormatFormattingService extends AbstractDocumentFormattin
 	public void formatDocument(@NotNull Document document, @NotNull List<TextRange> formattingRanges,
 			@NotNull FormattingContext formattingContext, boolean canChangeWhiteSpaceOnly, boolean quickFormat) {
 		VirtualFile file = formattingContext.getVirtualFile();
-		Path path = (file != null) ? file.toNioPath() : null;
+		Path path = (file != null) ? file.getFileSystem().getNioPath(file) : null;
 		JavaFormatConfig config = JavaFormatConfig.findFrom(path);
 		Formatter formatter = new Formatter(config);
 		String source = document.getText();
