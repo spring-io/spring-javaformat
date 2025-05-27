@@ -33,6 +33,7 @@ import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.IExtendedModifier;
 import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.ImportDeclaration;
 import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.MethodDeclaration;
 import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.SingleVariableDeclaration;
+import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.VariableDeclarationStatement;
 import io.spring.javaformat.eclipse.jdt.jdk17.core.formatter.CodeFormatter;
 import io.spring.javaformat.eclipse.jdt.jdk17.internal.formatter.Preparator;
 import io.spring.javaformat.eclipse.jdt.jdk17.internal.formatter.TokenManager;
@@ -86,12 +87,14 @@ public class JSpecifyPreparator implements Preparator {
 		}
 
 		@Override
-		@SuppressWarnings("unchecked")
 		public boolean visit(MethodDeclaration node) {
-			Annotation lastAnnotation = getLastAnnotation((List<IExtendedModifier>) node.modifiers());
-			if (isJSpecifyAnnotation(lastAnnotation)) {
-				this.tokenManager.lastTokenIn(lastAnnotation, -1).clearLineBreaksAfter();
-			}
+			clearLineBreaksIfHasJSpecifyAnnotation(node.modifiers());
+			return true;
+		}
+
+		@Override
+		public boolean visit(VariableDeclarationStatement node) {
+			clearLineBreaksIfHasJSpecifyAnnotation(node.modifiers());
 			return true;
 		}
 
@@ -104,6 +107,14 @@ public class JSpecifyPreparator implements Preparator {
 				if (isJSpecifyAnnotation(lastAnnotation)) {
 					this.tokenManager.lastTokenIn(lastAnnotation, -1).spaceAfter();
 				}
+			}
+		}
+
+		@SuppressWarnings("unchecked")
+		private void clearLineBreaksIfHasJSpecifyAnnotation(List<?> modifiers) {
+			Annotation lastAnnotation = getLastAnnotation((List<IExtendedModifier>) modifiers);
+			if (isJSpecifyAnnotation(lastAnnotation)) {
+				this.tokenManager.lastTokenIn(lastAnnotation, -1).clearLineBreaksAfter();
 			}
 		}
 

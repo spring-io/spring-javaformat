@@ -17,4 +17,11 @@ public interface ExampleNullables {
 	Object myArrayMethod(@Nullable String string, @Nullable String @Nullable [] array, @Nullable
 			String @Nullable ... 	varargs);
 
+	default Object inBody() {
+		@Nullable Object[] args = new Object[length];
+		@Nullable List<@Nullable Object> list = new Object[length];
+		Object @Nullable [] moreArgs = new Object[length];
+		return args;
+	}
+
 }
