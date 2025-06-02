@@ -48,6 +48,7 @@ jobs:
       run: git push origin HEAD --tags
     outputs:
       release-version: ${{ steps.deduce-versions.outputs.release-version }}
+      release-build-number: ${{ github.run_number }}
   promote:
     name: Promote
     needs: stage
@@ -55,4 +56,4 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       version: ${{needs.stage.outputs.release-version}}
-      build-number: ${{ github.run_number }}
+      build-number: ${{ needs.stage.outputs.release-build-number }}
