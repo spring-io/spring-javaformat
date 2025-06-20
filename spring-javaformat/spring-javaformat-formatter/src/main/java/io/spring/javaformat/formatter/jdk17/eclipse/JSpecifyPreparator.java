@@ -29,6 +29,7 @@ import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.ASTNode;
 import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.ASTVisitor;
 import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.Annotation;
 import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.CompilationUnit;
+import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.FieldDeclaration;
 import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.IExtendedModifier;
 import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.ImportDeclaration;
 import io.spring.javaformat.eclipse.jdt.jdk17.core.dom.MethodDeclaration;
@@ -82,6 +83,12 @@ public class JSpecifyPreparator implements Preparator {
 					this.fullyQualified.put(annotationName, PACKAGE_NAME + "." + annotationName);
 				}
 			}
+			return super.visit(node);
+		}
+
+		@Override
+		public boolean visit(FieldDeclaration node) {
+			clearLineBreaksIfHasJSpecifyAnnotation(node.modifiers());
 			return super.visit(node);
 		}
 

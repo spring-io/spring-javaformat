@@ -1,5 +1,6 @@
 package example;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.NullUnmarked;
@@ -31,5 +32,17 @@ public interface ExampleNullables {
 
 	@NullUnmarked
 	void withNullUnmarked(String str);
+
+	static class Fields {
+
+		@Nullable Object one;
+
+		@NonNull Object two;
+
+		private @Nullable Object three;
+
+		private @NonNull Object four;
+
+	}
 
 }
