@@ -1,6 +1,8 @@
 package example;
 
 import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.NullUnmarked;
 
 /**
  * Nullable.
@@ -23,5 +25,11 @@ public interface ExampleNullables {
 		Object @Nullable [] moreArgs = new Object[length];
 		return args;
 	}
+
+	@NullMarked
+	void withNullMarked(String str);
+
+	@NullUnmarked
+	void withNullUnmarked(String str);
 
 }

@@ -42,8 +42,7 @@ public class JSpecifyPreparator implements Preparator {
 
 	private static final String PACKAGE_NAME = "org.jspecify.annotations";
 
-	private static final Set<String> ANNOTATION_NAMES = new HashSet<>(
-			Arrays.asList("NonNull", "Nullable", "NullMarked", "NullUnmarked"));
+	private static final Set<String> ANNOTATION_NAMES = new HashSet<>(Arrays.asList("NonNull", "Nullable"));
 
 	private static final Set<String> FULLY_QUALIFIED_ANNOTATION_NAMES = ANNOTATION_NAMES.stream()
 		.map((annotationName) -> PACKAGE_NAME + "." + annotationName)
