@@ -61,7 +61,7 @@ public class SpringHeaderCheck extends AbstractFileSetCheck {
 	/**
 	 * The default header copyright pattern.
 	 */
-	public static final String DEFAULT_HEADER_COPYRIGHT_PATTERN = "20\\d\\d(-20\\d\\d)?";
+	public static final String DEFAULT_HEADER_COPYRIGHT_PATTERN = "20\\d\\d(-20\\d\\d|-present)?";
 
 	private static final String DEFAULT_CHARSET = System.getProperty("file.encoding", StandardCharsets.UTF_8.name());
 
