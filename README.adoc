@@ -81,8 +81,8 @@ If you want to skip both, you can use `-Dspring-javaformat.skip=true`.
 
 
 
-=== Checkstyle
-To enforce checksyle conventions add the checkstyle plugin and include a dependency on `spring-javaformat-checkstyle`:
+==== Checkstyle
+To enforce checkstyle conventions, add the checkstyle plugin and include a dependency on `spring-javaformat-checkstyle`:
 
 [source,xml,indent=0,subs="normal"]
 ----
@@ -149,7 +149,7 @@ For source formatting, add the `spring-javaformat-gradle-plugin` to your `build`
 The plugin adds `format` and `checkFormat` tasks to your project.
 The `checkFormat` task is automatically applied when running the standard Gradle `check` task.
 
-In case you want to exclude a package from being checked, for example if you generate sources, you can do this by adding following configuration:
+In case you want to exclude a package from being checked, for example if you generate sources, you can do this by adding the following configuration:
 
 [source,groovy,indent=0,subs="normal"]
 ----
@@ -161,7 +161,7 @@ tasks.withType(io.spring.javaformat.gradle.tasks.CheckFormat) {
 
 
 ==== Checkstyle
-To enforce checksyle conventions add the checkstyle plugin and include a dependency on `spring-javaformat-checkstyle`:
+To enforce checkstyle conventions, add the checkstyle plugin and include a dependency on `spring-javaformat-checkstyle`:
 
 [source,groovy,indent=0,subs="normal"]
 ----
@@ -208,9 +208,9 @@ java-baseline=8
 The Eclipse plugin provides a custom formatter implementation and automatically applies project specific settings.
 The plugin is automatically activated whenever the Maven or Gradle plugins are discovered in a project build script.
 
-If you need to customize the project specific settings that the plugin applies you should add a `.eclipse` folder in the root of your project.
+If you need to customize the project specific settings that the plugin applies, you should add a `.eclipse` folder in the root of your project.
 All `.prefs` files from this folder will be copied to the project `.settings` folders.
-Usually you'll provide your own `org.eclipse.jdt.core.prefs` and `org.eclipse.jdt.ui.prefs` files.
+Usually, you'll provide your own `org.eclipse.jdt.core.prefs` and `org.eclipse.jdt.ui.prefs` files.
 
 You can also add a `.eclipse/eclipse.properties` file to customize the following items:
 
@@ -232,7 +232,7 @@ The plugin is automatically activated whenever the Maven or Gradle plugins are d
 A Spring Java Format icon (image:spring-javaformat-intellij-idea/spring-javaformat-intellij-idea-plugin/src/main/resources/spring-javaformat/formatOn.png[title="Icon"]) will also be displayed in the status bar to indicate the formatter is active.
 You can use the standard `code` -> `reformat code` action to format the code.
 
-To install the plugin use the `spring-javaformat-intellij-idea-plugin` jar file.
+To install the plugin, use the `spring-javaformat-intellij-idea-plugin` jar file.
 You can download the latest version from https://repo1.maven.org/maven2/io/spring/javaformat/spring-javaformat-intellij-idea-plugin/{release-version}[Maven Central].
 
 
@@ -275,24 +275,24 @@ Once the configuration file is created, configure your IDE to use it:
 
 === Visual Studio Code
 The Visual Studio Code extension provides custom formatter support for Microsoft Visual Studio Code.
-The extension using the https://code.visualstudio.com/api/references/vscode-api#DocumentFormattingEditProvider[`DocumentFormattingEditProvider`] API.
+The extension uses the https://code.visualstudio.com/api/references/vscode-api#DocumentFormattingEditProvider[`DocumentFormattingEditProvider`] API.
 Once installed it may be activated by using the "`Format Document`" action available in the editor context menu or from the Command Palette.
 
-To install the extension select "`Install from VSIX`" in the extensions panel and choose the `spring-javaformat-vscode-extension` vsix file.
+To install the extension, select "`Install from VSIX`" in the extensions panel and choose the `spring-javaformat-vscode-extension` vsix file.
 You can download the latest version from https://repo1.maven.org/maven2/io/spring/javaformat/spring-javaformat-vscode-extension/{release-version}[Maven Central].
 
 
 
 === About the Conventions
-Most of the coding conventions and style comes from the Spring Framework and Spring Boot projects.
-Spring Framework manually formats code, where as Spring Boot uses automatic formatting.
+Most of the coding conventions and style come from the Spring Framework and Spring Boot projects.
+Spring Framework manually formats code, whereas Spring Boot uses automatic formatting.
 
 
 
 === Indenting With Spaces
-By default tabs are used for indenting formatted code.
+By default, tabs are used for indenting formatted code.
 We strongly recommend that this default is not changed, especially for official Spring projects.
-If, however, you feel that you can't live with tabs then switching to spaces is the one configuration option that we do support.
+If, however, you feel that you can't live with tabs, switching to spaces is the one configuration option that we do support.
 
 To use spaces rather than tabs, add a file called `.springjavaformatconfig` to the root of your project with the following content:
 
@@ -331,7 +331,7 @@ If you want most `SpringChecks` but need to exclude one or two, you can do somet
 Some code isn't particularly amenable to automatic formatting.
 For example, Spring Security configurations often work better when manually formatted.
 
-If you need to disable formatting for a specific block of code you can enclose it in a `@formatter:off` / `@formatter:on` set:
+If you need to disable formatting for a specific block of code, you can enclose it in a `@formatter:off` / `@formatter:on` set:
 
 [source,java]
 ----
@@ -350,8 +350,8 @@ making use of available horizontal space in your IDE and avoiding unwanted addit
 wrapping when viewing code on GitHub and the like.
 
 If you're used to longer lines, 120 chars can take some getting used to. Specifically, if
-you have many nesting levels things can start to look quite bad. Generally, if you see
-code bunched up to the right of your screen you should take that as a signal to use the
+you have many nesting levels, things can start to look quite bad. Generally, if you see
+code bunched up to the right of your screen, you should take that as a signal to use the
 "`extract method`" refactor. Extracting small private methods will improve formatting and
 it helps when reading the code and debugging.
 
@@ -359,8 +359,8 @@ it helps when reading the code and debugging.
 
 ==== Whitespace
 Keeping whitespace lines out of method bodies can help make the code easier to scan.
-If blank lines are only included between methods it becomes easier to see the overall structure of the class.
-If you find you need whitespace inside your method, consider if extracting a private method might give a better result.
+If blank lines are only included between methods, it becomes easier to see the overall structure of the class.
+If you find you need whitespace inside your method, consider whether extracting a private method might give a better result.
 
 
 
@@ -375,18 +375,18 @@ They will also ensure that `@author` tags are well formed.
 
 ==== Final
 Private members should be `final` whenever possible.
-Local variable and parameters should generally not be explicitly declared as final since it adds so much noise.
+Local variables and parameters should generally not be explicitly declared as final since it adds so much noise.
 
 
 
 ==== Read-down Methods, Fields and Parameters
 Methods don't need to be organized by scope.
 There's no need to group all `private`, `protected` and `public` methods together.
-Instead try to make your code easy to read when scanning the file from top to bottom.
-In other words, try to have methods only reference method further down in the file.
+Instead, try to make your code easy to read when scanning the file from top to bottom.
+In other words, try to have methods only reference methods further down in the file.
 Keep private methods as close to the thing that calls them as possible.
 
-It's also recommend that you try to keep consistent ordering with fields and constructor parameters.
+It's also recommended that you try to keep consistent ordering with fields and constructor parameters.
 For example:
 
 [source,java,indent=0,subs="normal"]
