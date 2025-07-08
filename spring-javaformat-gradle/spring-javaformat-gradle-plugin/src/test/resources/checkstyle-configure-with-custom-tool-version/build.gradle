@@ -1,0 +1,25 @@
+buildscript {
+	dependencies {
+		classpath files(pluginClasspath.split(','))
+	}
+}
+
+apply plugin: 'checkstyle'
+apply plugin: 'java'
+apply plugin: 'io.spring.javaformat'
+
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+checkstyle {
+	toolVersion = "10.26.1"
+}
+
+tasks.register("checkstyleDependencies") {
+	doFirst {
+		configurations.checkstyle.dependencies.each { println "${it.group}:${it.name}:${it.version}" }
+	}
+}

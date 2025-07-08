@@ -1,0 +1,27 @@
+buildscript {
+	dependencies {
+		classpath files(pluginClasspath.split(','))
+	}
+}
+
+apply plugin: 'checkstyle'
+apply plugin: 'java'
+apply plugin: 'io.spring.javaformat'
+
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+springJavaFormat {
+	checkstyle {
+		applyDefaultConfig()
+	}
+}
+
+tasks.register("checkstyleConfig") {
+	doFirst {
+		println checkstyle.config.asString()
+	}
+}

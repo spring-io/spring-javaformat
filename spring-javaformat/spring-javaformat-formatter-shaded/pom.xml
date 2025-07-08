@@ -80,6 +80,11 @@
 					</relocations>
 					<transformers>
 						<transformer implementation="io.spring.javaformat.formatter.shader.PrefsResourceTransformer" />
+						<transformer implementation = "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+							<manifestEntries>
+								<Implementation-Version>${project.version}</Implementation-Version>
+							</manifestEntries>
+						</transformer>
 					</transformers>
 				</configuration>
 				<executions>

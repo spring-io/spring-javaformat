@@ -162,34 +162,48 @@ tasks.withType(io.spring.javaformat.gradle.tasks.CheckFormat) {
 
 
 ==== Checkstyle
-To enforce Checkstyle conventions, add the `checkstyle` plugin and include a dependency on `spring-javaformat-checkstyle`:
+To enforce Checkstyle conventions, apply the Checkstyle plugin in addition to the `io.spring.javaformat` plugin:
 
 [source,groovy,indent=0,subs="normal"]
 ----
 plugins {
+	id "io.spring.javaformat" version "{release-version}"
 	id "checkstyle"
 }
 
+The Spring Java Format plugin will react to the Checkstyle plugin being applied and configure the necessary dependencies in the `checkstyle` configuration.
+
+You should also configure Checkstyle's tool version:
+
+[source,groovy,indent=0,subs="normal"]
+----
 checkstyle {
 	toolVersion = "{checkstyle-version}"
 }
+----
 
-dependencies {
-	checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:{release-version}")
+To configure Checkstyle to use the default Spring checks, add the following configuration:
+
+[source,groovy,indent=0,subs="normal"]
+----
+springJavaFormat {
+	checkstyle {
+		applyDefaultConfig()
+	}
 }
 ----
 
-To use the Spring checks, your `checkstyle.xml` file should look like this:
+Alternatively, provide your own `checkstyle.xml` that configures the `io.spring.javaformat.checkstyle.SpringChecks` module.
 
-[source,xml,indent=0]
+If you want to use both Spring Java Format and Checkstyle but you do not want to use Spring Java Format's checks, disable the aforementioned dependency configuration:
+
+[source,groovy,indent=0,subs="normal"]
 ----
-	<?xml version="1.0"?>
-	<!DOCTYPE module PUBLIC
-			"-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
-			"https://checkstyle.org/dtds/configuration_1_3.dtd">
-	<module name="com.puppycrawl.tools.checkstyle.Checker">
-		<module name="io.spring.javaformat.checkstyle.SpringChecks" />
-	</module>
+springJavaFormat {
+	checkstyle {
+		configureDependencies = false
+	}
+}
 ----
 
 

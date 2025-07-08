@@ -17,17 +17,24 @@
 package io.spring.javaformat.gradle;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.artifacts.Dependency;
+import org.gradle.api.artifacts.DependencySet;
 import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.plugins.JavaPluginExtension;
+import org.gradle.api.plugins.quality.CheckstyleExtension;
+import org.gradle.api.plugins.quality.CheckstylePlugin;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.TaskProvider;
 
 import io.spring.javaformat.config.JavaFormatConfig;
+import io.spring.javaformat.formatter.Formatter;
 import io.spring.javaformat.gradle.tasks.CheckFormat;
 import io.spring.javaformat.gradle.tasks.Format;
 import io.spring.javaformat.gradle.tasks.FormatterTask;
@@ -46,6 +53,13 @@ public class SpringJavaFormatPlugin implements Plugin<Project> {
 	public void apply(Project project) {
 		this.project = project;
 		addSourceTasks();
+		SpringJavaFormatExtension extension = registerExtension();
+		new CheckstyleConfigurer(project, extension).apply();
+	}
+
+	private SpringJavaFormatExtension registerExtension() {
+		SpringJavaFormatExtension extension = this.project.getExtensions().create("springJavaFormat", SpringJavaFormatExtension.class);
+		return extension;
 	}
 
 	private void addSourceTasks() {
@@ -88,6 +102,41 @@ public class SpringJavaFormatPlugin implements Plugin<Project> {
 			task.getJavaBaseline().convention(config.getJavaBaseline());
 		});
 		return provider;
+	}
+
+	private static final class CheckstyleConfigurer {
+
+		private final Project project;
+
+		private final SpringJavaFormatExtension extension;
+
+		private CheckstyleConfigurer(Project project, SpringJavaFormatExtension extension) {
+			this.project = project;
+			this.extension = extension;
+		}
+
+		private void apply() {
+			this.project.getPlugins().withType(CheckstylePlugin.class).configureEach((checkstylePlugin) -> {
+				CheckstyleExtension checkstyle = this.project.getExtensions().getByType(CheckstyleExtension.class);
+				DependencySet checkstyleDependencies = this.project.getConfigurations().getByName("checkstyle").getDependencies();
+				checkstyleDependencies.addAllLater(this.project.provider(() -> checkstyleDependencies(checkstyle)));
+			});
+		}
+
+		private List<Dependency> checkstyleDependencies(CheckstyleExtension checkstyle) {
+			List<Dependency> dependencies = new ArrayList<>();
+			if (configuringCheckstyleDependencies()) {
+				dependencies.add(this.project.getDependencies().create("com.puppycrawl.tools:checkstyle:" + checkstyle.getToolVersion()));
+				dependencies.add(this.project.getDependencies().create("io.spring.javaformat:spring-javaformat-checkstyle:"
+						+ Formatter.class.getPackage().getImplementationVersion()));
+			}
+			return dependencies;
+		}
+
+		private boolean configuringCheckstyleDependencies() {
+			return Boolean.TRUE.equals(this.extension.getCheckstyle().getConfigureDependencies().get());
+		}
+
 	}
 
 }
