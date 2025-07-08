@@ -1,0 +1,2 @@
++AnnotationNamedAttributeWithValueThatHasVerboseReferenceToContainedEnumValue.java:17:91: Value of 'type' attribute is overly verbose. Import 'ConditionalOnWebApplicationType.WebApplicationType' and use 'WebApplicationType.SERVLET' instead. [SpringAnnotationAttributeConciseValue]
++1 error

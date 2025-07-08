@@ -25,6 +25,7 @@
 		<module name="com.puppycrawl.tools.checkstyle.checks.annotation.MissingDeprecatedCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.annotation.PackageAnnotationCheck" />
 		<module name="io.spring.javaformat.checkstyle.check.SpringAnnotationLocationCheck" />
+		<module name="io.spring.javaformat.checkstyle.check.SpringAnnotationAttributeConciseValueCheck" />
 
 		<!-- Block Checks -->
 		<module name="com.puppycrawl.tools.checkstyle.checks.blocks.EmptyBlockCheck">
