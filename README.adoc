@@ -9,7 +9,7 @@ A set of plugins that can be applied to any Java project to provide a consistent
 The set currently consists of:
 
 * A source formatter that applies wrapping and whitespace conventions
-* A checkstyle plugin that enforces consistency across a codebase
+* A Checkstyle plugin that enforces consistency across a codebase
 
 Since the aim of this project is to provide consistency, each plugin is not generally configurable.
 You need to change your code to match the required conventions.
@@ -82,7 +82,7 @@ If you want to skip both, you can use `-Dspring-javaformat.skip=true`.
 
 
 ==== Checkstyle
-To enforce checkstyle conventions, add the checkstyle plugin and include a dependency on `spring-javaformat-checkstyle`:
+To enforce Checkstyle conventions, add the Checkstyle plugin and include a dependency on `spring-javaformat-checkstyle`:
 
 [source,xml,indent=0,subs="normal"]
 ----
@@ -126,46 +126,49 @@ To enforce checkstyle conventions, add the checkstyle plugin and include a depen
 
 
 === Gradle
+A plugin is provided.
+To use it, first update `settings.gradle` to add Maven Central as a plugin repository:
 
+[source,groovy,indent=0,subs="normal"]
+pluginManagement {
+	repositories {
+		gradlePluginPortal()
+		mavenCentral()
+	}
+}
 
-
-==== Source Formatting
-For source formatting, add the `spring-javaformat-gradle-plugin` to your `build` plugins as follows:
+The plugin can then be added in the usual way in `build.gradle`:
 
 [source,groovy,indent=0,subs="normal"]
 ----
-	buildscript {
-		repositories {
-			mavenCentral()
-		}
-		dependencies {
-			classpath("io.spring.javaformat:spring-javaformat-gradle-plugin:{release-version}")
-		}
-	}
-
-	apply plugin: 'io.spring.javaformat'
+plugins {
+	id "io.spring.javaformat" version "{release-version}""
+}
 ----
 
+==== Source Formatting
 The plugin adds `format` and `checkFormat` tasks to your project.
-The `checkFormat` task is automatically applied when running the standard Gradle `check` task.
+The `checkFormat` task is automatically executed when running the standard Gradle `check` task.
 
-In case you want to exclude a package from being checked, for example if you generate sources, you can do this by adding the following configuration:
+In case you want to exclude a package from being checked, for example if you generate sources, add configuration similar to the following:
 
 [source,groovy,indent=0,subs="normal"]
 ----
 tasks.withType(io.spring.javaformat.gradle.tasks.CheckFormat) {
-    exclude "package/to/exclude"
+	exclude "package/to/exclude"
 }
 ----
 
 
 
 ==== Checkstyle
-To enforce checkstyle conventions, add the checkstyle plugin and include a dependency on `spring-javaformat-checkstyle`:
+To enforce Checkstyle conventions, add the `checkstyle` plugin and include a dependency on `spring-javaformat-checkstyle`:
 
 [source,groovy,indent=0,subs="normal"]
 ----
-apply plugin: 'checkstyle'
+plugins {
+	id "checkstyle"
+}
 
 checkstyle {
 	toolVersion = "{checkstyle-version}"
@@ -176,7 +179,7 @@ dependencies {
 }
 ----
 
-Your `checkstyle.xml` file should look then like this:
+To use the Spring checks, your `checkstyle.xml` file should look like this:
 
 [source,xml,indent=0]
 ----
@@ -368,7 +371,7 @@ If you find you need whitespace inside your method, consider whether extracting 
 Try to add javadoc for each public method and constant.
 Private methods shouldn't generally need javadoc, unless it provides a natural place to document unusual behavior.
 
-The checkstyle rules will enforce that all public classes have javadoc.
+The Checkstyle rules will enforce that all public classes have javadoc.
 They will also ensure that `@author` tags are well formed.
 
 
