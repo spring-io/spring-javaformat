@@ -130,19 +130,21 @@ A plugin is provided.
 To use it, first update `settings.gradle` to add Maven Central as a plugin repository:
 
 [source,groovy,indent=0,subs="normal"]
+----
 pluginManagement {
 	repositories {
 		gradlePluginPortal()
 		mavenCentral()
 	}
 }
+----
 
 The plugin can then be added in the usual way in `build.gradle`:
 
 [source,groovy,indent=0,subs="normal"]
 ----
 plugins {
-	id "io.spring.javaformat" version "{release-version}""
+	id "io.spring.javaformat" version "{release-version}"
 }
 ----
 
@@ -170,6 +172,7 @@ plugins {
 	id "io.spring.javaformat" version "{release-version}"
 	id "checkstyle"
 }
+----
 
 The Spring Java Format plugin will react to the Checkstyle plugin being applied and configure the necessary dependencies in the `checkstyle` configuration.
 
