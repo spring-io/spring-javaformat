@@ -145,7 +145,7 @@
 		<module name="com.puppycrawl.tools.checkstyle.checks.whitespace.NoWhitespaceAfterCheck" >
 			<property name="tokens" value="BNOT, DEC, DOT, INC, LNOT, UNARY_MINUS, UNARY_PLUS, ARRAY_DECLARATOR"/>
 		</module>
-		<module name="com.puppycrawl.tools.checkstyle.checks.whitespace.NoWhitespaceBeforeCheck" />
+		<module name="io.spring.javaformat.checkstyle.check.SpringNoWhitespaceBeforeCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.whitespace.TypecastParenPadCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck" />

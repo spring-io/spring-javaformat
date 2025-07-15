@@ -1,0 +1,2 @@
++WhitespaceVarargs.java:24:24: '...' is preceded with whitespace. [SpringNoWhitespaceBefore]
++1 error
