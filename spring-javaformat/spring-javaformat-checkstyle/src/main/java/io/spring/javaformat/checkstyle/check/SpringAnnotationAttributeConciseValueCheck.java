@@ -95,20 +95,26 @@ public class SpringAnnotationAttributeConciseValueCheck extends AbstractCheck {
 	}
 
 	private void visitValueExpression(DetailAST valueExpression, DetailAST annotation, String attributeName) {
-		if (valueExpression != null && valueExpression.getChildCount() == 1) {
-			List<String> expressionComponents = dotSeparatedComponents(valueExpression.getFirstChild());
-			if (expressionComponents != null && expressionComponents.size() > 2) {
-				String outerTypeName = expressionComponents.get(0);
-				String annotationName = annotation.findFirstToken(TokenTypes.IDENT).getText();
-				if (outerTypeName.equals(annotationName)) {
-					String innerTypeName = expressionComponents.get(1);
-					if (!existingClashingImport(outerTypeName, innerTypeName)) {
-						String toImport = outerTypeName + "." + innerTypeName;
-						String replacement = String.join(".", expressionComponents.subList(1, expressionComponents.size()));
-						log(valueExpression.getLineNo(), valueExpression.getColumnNo(),
-								"annotation.attribute.overlyVerboseValue", attributeName, toImport, replacement);
-					}
-				}
+		if (valueExpression == null || valueExpression.getChildCount() != 1) {
+			return;
+		}
+		List<String> expressionComponents = dotSeparatedComponents(valueExpression.getFirstChild());
+		if (expressionComponents == null || expressionComponents.size() <= 2) {
+			return;
+		}
+		String outerTypeName = expressionComponents.get(0);
+		DetailAST annotationIdent = annotation.findFirstToken(TokenTypes.IDENT);
+		if (annotationIdent == null) {
+			return;
+		}
+		String annotationName = annotationIdent.getText();
+		if (outerTypeName.equals(annotationName)) {
+			String innerTypeName = expressionComponents.get(1);
+			if (!existingClashingImport(outerTypeName, innerTypeName)) {
+				String toImport = outerTypeName + "." + innerTypeName;
+				String replacement = String.join(".", expressionComponents.subList(1, expressionComponents.size()));
+				log(valueExpression.getLineNo(), valueExpression.getColumnNo(),
+						"annotation.attribute.overlyVerboseValue", attributeName, toImport, replacement);
 			}
 		}
 	}
