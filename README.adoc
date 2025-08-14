@@ -242,7 +242,7 @@ You can also add a `.eclipse/eclipse.properties` file to customize the following
 To install the plugin use the `io.spring.javaformat.eclipse.site` zip file.
 You can download the latest version from
 https://repo1.maven.org/maven2/io/spring/javaformat/io.spring.javaformat.eclipse.site/{release-version}[Maven Central]
-or use the https://repo.spring.io/javaformat-eclipse-update-site/[update site].
+or use the `https://repo.spring.io/javaformat-eclipse-update-site/` as an Eclipse update site (do not use the `/ui/native/` links that you are redirected to when using a web browser).
 
 
 
