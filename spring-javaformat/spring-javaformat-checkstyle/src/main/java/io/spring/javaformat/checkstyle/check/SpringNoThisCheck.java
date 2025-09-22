@@ -33,7 +33,7 @@ public class SpringNoThisCheck extends AbstractSpringCheck {
 
 	private Set<String> names = Collections.emptySet();
 
-	private boolean allowAssignement = true;
+	private boolean allowAssignment = true;
 
 	@Override
 	public int[] getAcceptableTokens() {
@@ -53,7 +53,7 @@ public class SpringNoThisCheck extends AbstractSpringCheck {
 			DetailAST sibling = ast.getPreviousSibling();
 			if (sibling != null && sibling.getType() == TokenTypes.LITERAL_THIS) {
 				DetailAST parent = getFirstNonDotParent(ast);
-				if (!(this.allowAssignement && parent != null && parent.getType() == TokenTypes.ASSIGN)) {
+				if (!(this.allowAssignment && parent != null && parent.getType() == TokenTypes.ASSIGN)) {
 					log(ast.getLineNo(), ast.getColumnNo(), "nothis.unexpected", name);
 				}
 			}
@@ -72,8 +72,8 @@ public class SpringNoThisCheck extends AbstractSpringCheck {
 		this.names = new HashSet<>(Arrays.asList(names));
 	}
 
-	public void setAllowAssignement(boolean allowAssignement) {
-		this.allowAssignement = allowAssignement;
+	public void setAllowAssignment(boolean allowAssignment) {
+		this.allowAssignment = allowAssignment;
 	}
 
 }
