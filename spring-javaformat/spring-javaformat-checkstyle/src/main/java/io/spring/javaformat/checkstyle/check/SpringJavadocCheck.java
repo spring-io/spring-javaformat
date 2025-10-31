@@ -81,7 +81,7 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 	@Override
 	public int[] getDefaultTokens() {
 		return new int[] { TokenTypes.INTERFACE_DEF, TokenTypes.CLASS_DEF, TokenTypes.ENUM_DEF,
-				TokenTypes.ANNOTATION_DEF, TokenTypes.METHOD_DEF, TokenTypes.CTOR_DEF };
+				TokenTypes.ANNOTATION_DEF, TokenTypes.METHOD_DEF, TokenTypes.CTOR_DEF, TokenTypes.ANNOTATION_FIELD_DEF };
 	}
 
 	@Override
@@ -130,6 +130,7 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 		checkTagCase(ast, javadoc);
 		checkSinceTag(ast, javadoc);
 		checkMethodJavaDoc(ast, javadoc);
+		checkAnnotationFieldJavaDoc(ast, javadoc);
 	}
 
 	private void checkBannedTags(DetailAST ast, TextBlock javadoc) {
@@ -164,25 +165,54 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 		if (!TOP_LEVEL_TYPES.contains(ast.getType())) {
 			return;
 		}
-		String[] text = javadoc.getText();
 		DetailAST interfaceOrAnnotationDef = getInterfaceOrAnnotationDef(ast);
 		boolean privateType = !isPublicOrProtected(ast)
 				&& (interfaceOrAnnotationDef == null || !isPublicOrProtected(interfaceOrAnnotationDef));
-		boolean innerType = ast.getParent() != null && ast.getParent().getType() != TokenTypes.COMPILATION_UNIT;
-		boolean found = false;
-		for (int i = 0; i < text.length; i++) {
-			Matcher matcher = SINCE_TAG_PATTERN.matcher(text[i]);
-			if (matcher.find()) {
-				found = true;
-				String description = matcher.group(1).trim();
-				if (this.publicOnlySinceTags && privateType) {
-					log(javadoc.getStartLineNo() + i, text[i].length() - description.length(), "javadoc.publicSince");
-				}
+		SinceTag sinceTag = SinceTag.find(ast, javadoc);
+		if (sinceTag != null) {
+			if (this.publicOnlySinceTags && privateType) {
+				log(sinceTag.lineNumber, sinceTag.columnNumber, "javadoc.publicSince");
+			}
+			else {
+				checkContainingSince(ast, sinceTag);
 			}
 		}
-		if (this.requireSinceTag && !innerType && !found && !(this.publicOnlySinceTags && privateType)) {
-			log(javadoc.getStartLineNo(), 0, "javadoc.missingSince");
+		else {
+			boolean innerType = ast.getParent() != null && ast.getParent().getType() != TokenTypes.COMPILATION_UNIT;
+			if (this.requireSinceTag && !innerType && sinceTag == null && !(this.publicOnlySinceTags && privateType)) {
+				log(javadoc.getStartLineNo(), 0, "javadoc.missingSince");
+			}
 		}
+	}
+
+	private void checkContainingSince(DetailAST ast, SinceTag currentTag) {
+		SinceTag containingSince = findContainingSince(ast);
+		if (containingSince != null) {
+			SinceVersion current = currentTag.version;
+			SinceVersion container = containingSince.version;
+			int comparison = current.compareTo(container);
+			if (comparison < 0) {
+				log(currentTag.lineNumber, currentTag.columnNumber, "javadoc.earlierSince", current, container, containingSince.lineNumber, containingSince.columnNumber);
+			}
+			else if (comparison == 0) {
+				log(currentTag.lineNumber, currentTag.columnNumber, "javadoc.sameSince", current, containingSince.lineNumber, containingSince.columnNumber);
+			}
+		}
+	}
+
+	private SinceTag findContainingSince(DetailAST ast) {
+		DetailAST parent = ast.getParent();
+		while (parent != null && parent.getType() != TokenTypes.COMPILATION_UNIT) {
+			TextBlock javadoc = getFileContents().getJavadocBefore(parent.getLineNo());
+			if (javadoc != null) {
+				SinceTag sinceTag = SinceTag.find(ast, javadoc);
+				if (sinceTag != null) {
+					return sinceTag;
+				}
+			}
+			parent = parent.getParent();
+		}
+		return null;
 	}
 
 	private void checkMethodJavaDoc(DetailAST ast, TextBlock javadoc) {
@@ -195,6 +225,20 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 			if (matcher.find() && i > 0 && text[i - 1].trim().equals("*")) {
 				log(javadoc.getStartLineNo() + i - 1, 0, "javadoc.emptyLineBeforeTag");
 			}
+		}
+		SinceTag sinceTag = SinceTag.find(ast, javadoc);
+		if (sinceTag != null) {
+			checkContainingSince(ast, sinceTag);
+		}
+	}
+
+	private void checkAnnotationFieldJavaDoc(DetailAST ast, TextBlock javadoc) {
+		if (TokenTypes.ANNOTATION_FIELD_DEF != ast.getType()) {
+			return;
+		}
+		SinceTag sinceTag = SinceTag.find(ast, javadoc);
+		if (sinceTag != null) {
+			checkContainingSince(ast, sinceTag);
 		}
 	}
 
@@ -249,6 +293,76 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 		}
 		return modifiers.findFirstToken(TokenTypes.LITERAL_PUBLIC) != null
 				|| modifiers.findFirstToken(TokenTypes.LITERAL_PROTECTED) != null;
+	}
+
+	private static final class SinceTag {
+
+		private final int lineNumber;
+
+		private final int columnNumber;
+
+		private final SinceVersion version;
+
+		private SinceTag(int lineNumber, int columnNumber, SinceVersion version) {
+			this.lineNumber = lineNumber;
+			this.columnNumber = columnNumber;
+			this.version = version;
+		}
+
+		private static SinceTag find(DetailAST ast, TextBlock javadoc) {
+			String[] text = javadoc.getText();
+			for (int i = 0; i < text.length; i++) {
+				Matcher matcher = SINCE_TAG_PATTERN.matcher(text[i]);
+				if (matcher.find()) {
+					String description = matcher.group(1).trim();
+					return new SinceTag(javadoc.getStartLineNo() + i, text[i].length() - description.length(), SinceVersion.of(description));
+				}
+			}
+			return null;
+		}
+	}
+
+	private static final class SinceVersion implements Comparable<SinceVersion> {
+
+		private final int major;
+
+		private final int minor;
+
+		private final int patch;
+
+		private final String text;
+
+		private SinceVersion(int major, int minor, int patch, String text) {
+			this.major = major;
+			this.minor = minor;
+			this.patch = patch;
+			this.text = text;
+		}
+
+		private static SinceVersion of(String text) {
+			String[] components = text.split("\\.");
+			int major = (components.length > 0) ? Integer.parseInt(components[0]) : 0;
+			int minor = (components.length > 1) ? Integer.parseInt(components[1]) : 0;
+			int patch = (components.length > 2) ? Integer.parseInt(components[2]) : 0;
+			return new SinceVersion(major, minor, patch, text);
+		}
+
+		public String toString() {
+			return this.text;
+		}
+
+		@Override
+		public int compareTo(SinceVersion other) {
+			int diff = this.major - other.major;
+			if (diff == 0) {
+				diff = this.minor - other.minor;
+				if (diff == 0) {
+					diff = this.patch - other.patch;
+				}
+			}
+			return diff;
+		}
+
 	}
 
 }

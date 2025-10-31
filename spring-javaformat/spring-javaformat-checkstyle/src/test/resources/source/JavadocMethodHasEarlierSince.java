@@ -15,19 +15,18 @@
  */
 
 /**
- * Javadoc with a bad since tag.
+ * Javadoc with an earlier since tag on a method.
  *
- * @author Phillip Webb
- * @since 1.2.3
+ * @author Andy Wilkinson
+ * @since 2.0.0
  */
-class JavadocNonPublicSince {
+public class JavadocMethodHasEarlierSince {
 
 	/**
-	 * Inner class.
-	 *
-	 * @since 1.2.4
+	 * Some method.
+	 * @since 1.2.3
 	 */
-	private static class Inner {
+	public void someMethod() {
 
 	}
 

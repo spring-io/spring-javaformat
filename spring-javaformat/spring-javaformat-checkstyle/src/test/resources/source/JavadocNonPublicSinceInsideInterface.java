@@ -25,7 +25,7 @@ public interface JavadocNonPublicSinceInsideInterface {
 	/**
 	 * Inner enum.
 	 *
-	 * @since 1.2.3
+	 * @since 1.2.4
 	 */
 	enum Inner {
 

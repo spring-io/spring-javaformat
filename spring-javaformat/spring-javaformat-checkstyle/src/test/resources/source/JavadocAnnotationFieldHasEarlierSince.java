@@ -15,20 +15,18 @@
  */
 
 /**
- * Javadoc with a bad since tag.
+ * Javadoc with a good since tag.
  *
- * @author Phillip Webb
- * @since 1.2.3
+ * @author Andy Wilkinson
+ * @since 1.2.0
  */
-class JavadocNonPublicSince {
+public @interface JavadocAnnotationFieldHasEarlierSince {
 
 	/**
-	 * Inner class.
-	 *
-	 * @since 1.2.4
+	 * An attribute.
+	 * @return the value
+	 * @since 1.1.0
 	 */
-	private static class Inner {
-
-	}
+	boolean attribute() default true;
 
 }
