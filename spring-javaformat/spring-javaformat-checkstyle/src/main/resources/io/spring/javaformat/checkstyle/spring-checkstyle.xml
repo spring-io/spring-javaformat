@@ -161,6 +161,7 @@
 		<module name="io.spring.javaformat.checkstyle.check.SpringLeadingWhitespaceCheck" />
 		<module name="io.spring.javaformat.checkstyle.check.SpringMethodOrderCheck" />
 		<module name="io.spring.javaformat.checkstyle.check.SpringMethodVisibilityCheck" />
+		<module name="io.spring.javaformat.checkstyle.check.SpringNullabilityCheck" />
 		<module name="io.spring.javaformat.checkstyle.check.SpringParenPadCheck" />
 	</module>
 </module>

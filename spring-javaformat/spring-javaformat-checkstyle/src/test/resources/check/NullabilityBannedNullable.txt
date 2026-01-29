@@ -1,0 +1,1 @@
++Nullability should be expressed using JSpecify. Replace 'javax.annotation.Nullable' with 'org.jspecify.annotations.Nullable'. [SpringNullability]

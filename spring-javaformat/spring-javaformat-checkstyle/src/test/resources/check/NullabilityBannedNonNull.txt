@@ -1,0 +1,3 @@
++NullabilityBannedNonNull.java:17:8: Nullability should be expressed using JSpecify. Replace 'javax.annotation.Nonnull' with 'org.jspecify.annotations.NonNull'. [SpringNullability]
++NullabilityBannedNonNull.java:19:8: Nullability should be expressed using JSpecify. Replace 'org.checkerframework.checker.nullness.qual.NonNull' with 'org.jspecify.annotations.NonNull'. [SpringNullability]
++2 errors

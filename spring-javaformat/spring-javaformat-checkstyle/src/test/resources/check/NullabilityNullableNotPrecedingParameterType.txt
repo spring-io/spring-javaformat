@@ -1,0 +1,1 @@
+NullabilityNullableNotPrecedingParameterType.java:26:30: 'Nullable' should only be used immediately before a type. [SpringNullability]

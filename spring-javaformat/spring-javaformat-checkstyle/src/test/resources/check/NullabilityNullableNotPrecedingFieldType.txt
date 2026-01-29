@@ -1,0 +1,1 @@
++NullabilityNullableNotPrecedingFieldType.java:26:17: 'Nullable' should only be used immediately before a type. [SpringNullability]
