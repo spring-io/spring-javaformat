@@ -46,4 +46,34 @@ public class JavadocValid<T> {
 	public String test3(String something) throws RuntimeException {
 	}
 
+	/**
+	 * Class with a numeric date since.
+	 * @since 28.12.2003
+	 */
+	public class NumericDateSince {
+
+		/**
+		 * Method with version-based since.
+		 * @since 1.3.0
+		 */
+		public void versionSince() {
+		}
+
+	}
+
+	/**
+	 * Class with an alphanumeric date since.
+	 * @since 16 April 2001
+	 */
+	public class AlphanumericDateSince {
+
+		/**
+		 * Method with version-based since.
+		 * @since 1.3.0
+		 */
+		public void versionSince() {
+		}
+
+	}
+
 }

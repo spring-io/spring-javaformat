@@ -190,12 +190,14 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 		if (containingSince != null) {
 			SinceVersion current = currentTag.version;
 			SinceVersion container = containingSince.version;
-			int comparison = current.compareTo(container);
-			if (comparison < 0) {
-				log(currentTag.lineNumber, currentTag.columnNumber, "javadoc.earlierSince", current, container, containingSince.lineNumber, containingSince.columnNumber);
-			}
-			else if (comparison == 0) {
-				log(currentTag.lineNumber, currentTag.columnNumber, "javadoc.sameSince", current, containingSince.lineNumber, containingSince.columnNumber);
+			if (current != SinceVersion.UNKNOWN && container != SinceVersion.UNKNOWN) {
+				int comparison = current.compareTo(container);
+				if (comparison < 0) {
+					log(currentTag.lineNumber, currentTag.columnNumber, "javadoc.earlierSince", current, container, containingSince.lineNumber, containingSince.columnNumber);
+				}
+				else if (comparison == 0) {
+					log(currentTag.lineNumber, currentTag.columnNumber, "javadoc.sameSince", current, containingSince.lineNumber, containingSince.columnNumber);
+				}
 			}
 		}
 	}
@@ -324,6 +326,10 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 
 	private static final class SinceVersion implements Comparable<SinceVersion> {
 
+		private static final SinceVersion UNKNOWN = new SinceVersion(-1, -1, -1, "unknown");
+
+		private static final Pattern DATE_PATTERN = Pattern.compile("[0-3][0-9]\\.[0-1][0-9]\\.20[0-2][0-9]");
+
 		private final int major;
 
 		private final int minor;
@@ -340,11 +346,19 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 		}
 
 		private static SinceVersion of(String text) {
-			String[] components = text.split("\\.");
-			int major = (components.length > 0) ? Integer.parseInt(components[0]) : 0;
-			int minor = (components.length > 1) ? Integer.parseInt(components[1]) : 0;
-			int patch = (components.length > 2) ? Integer.parseInt(components[2]) : 0;
-			return new SinceVersion(major, minor, patch, text);
+			if (DATE_PATTERN.matcher(text).matches()) {
+				return UNKNOWN;
+			}
+			try {
+				String[] components = text.split("\\.");
+				int major = (components.length > 0) ? Integer.parseInt(components[0]) : 0;
+				int minor = (components.length > 1) ? Integer.parseInt(components[1]) : 0;
+				int patch = (components.length > 2) ? Integer.parseInt(components[2]) : 0;
+				return new SinceVersion(major, minor, patch, text);
+			}
+			catch (NumberFormatException ex) {
+				return UNKNOWN;
+			}
 		}
 
 		public String toString() {
