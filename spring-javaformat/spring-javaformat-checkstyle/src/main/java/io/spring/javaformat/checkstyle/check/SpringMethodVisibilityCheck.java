@@ -20,10 +20,17 @@ import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 /**
- * Checks that protected, package-private and private classes to not have public methods
- * unless they are also annotated with {@link Override @Override}.
+ * Check for compliance with Spring-style method visibility. Checks that:
+ *
+ * <ul>
+ * <li>package-private and private classes do not have public methods
+ * unless they are also annotated with {@link Override @Override}
+ * <li>final classes do not have protected methods unless that are also
+ * annotated with {@link Override @Override}
+ * </ul>
  *
  * @author Phillip Webb
+ * @author Andy Wilkinson
  */
 public class SpringMethodVisibilityCheck extends AbstractSpringCheck {
 
@@ -37,6 +44,9 @@ public class SpringMethodVisibilityCheck extends AbstractSpringCheck {
 		DetailAST modifiers = ast.findFirstToken(TokenTypes.MODIFIERS);
 		if (modifiers.findFirstToken(TokenTypes.LITERAL_PUBLIC) != null) {
 			visitPublicMethod(modifiers, ast);
+		}
+		else if (modifiers.findFirstToken(TokenTypes.LITERAL_PROTECTED) != null) {
+			visitProtectedMethod(modifiers, ast);
 		}
 	}
 
@@ -54,6 +64,18 @@ public class SpringMethodVisibilityCheck extends AbstractSpringCheck {
 		}
 		DetailAST ident = method.findFirstToken(TokenTypes.IDENT);
 		log(ident.getLineNo(), ident.getColumnNo(), "methodvisibility.publicMethod", ident.getText());
+	}
+
+	private void visitProtectedMethod(DetailAST modifiers, DetailAST method) {
+		if (hasOverrideAnnotation(modifiers)) {
+			return;
+		}
+		DetailAST classDef = getClassDef(method.getParent());
+		if (classDef == null || !isFinal(classDef)) {
+			return;
+		}
+		DetailAST ident = method.findFirstToken(TokenTypes.IDENT);
+		log(ident.getLineNo(), ident.getColumnNo(), "methodvisibility.protectedMethodInFinalClass", ident.getText());
 	}
 
 	private boolean hasOverrideAnnotation(DetailAST modifiers) {
@@ -96,6 +118,14 @@ public class SpringMethodVisibilityCheck extends AbstractSpringCheck {
 		}
 		return modifiers.findFirstToken(TokenTypes.LITERAL_PUBLIC) != null
 				|| modifiers.findFirstToken(TokenTypes.LITERAL_PROTECTED) != null;
+	}
+
+	private boolean isFinal(DetailAST ast) {
+		DetailAST modifiers = ast.findFirstToken(TokenTypes.MODIFIERS);
+		if (modifiers == null) {
+			return false;
+		}
+		return modifiers.findFirstToken(TokenTypes.FINAL) != null;
 	}
 
 }

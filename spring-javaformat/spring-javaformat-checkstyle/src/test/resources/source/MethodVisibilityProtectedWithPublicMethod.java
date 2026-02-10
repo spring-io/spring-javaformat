@@ -15,34 +15,19 @@
  */
 
 /**
- * Good visibility because of {@code @Override} annotation.
+ * Good visibility because class is protected.
  *
  * @author Phillip Webb
  */
-public class MethodVisibilityWithOverride {
+protected class MethodVisibilityProtectedWithPublicMethod {
 
-	private static class PrivateInnerClass {
-
-		@Override
-		public void okPrivateInner() {
-		}
-
+	MethodVisibilityPackagePrivateWithPublicMethod() {
 	}
 
-	protected static class ProtectedInnerClass {
-
-		@Override
-		public void okProtectedInner() {
-		}
-
+	public void bad() {
 	}
 
-	static class DefaultInnerClass {
-
-		@Override
-		public void okDefaultInner() {
-		}
-
+	public static void badStatic() {
 	}
 
 }

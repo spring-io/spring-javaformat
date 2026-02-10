@@ -1,0 +1,2 @@
++Method 'bad' in final class should be package-private rather than protected.
++Method 'badStatic' in final class should be package-private rather than protected.

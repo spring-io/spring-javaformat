@@ -15,34 +15,16 @@
  */
 
 /**
- * Good visibility because of {@code @Override} annotation.
+ * Bad visibility because class is final.
  *
- * @author Phillip Webb
+ * @author Andy Wilkinson
  */
-public class MethodVisibilityWithOverride {
+public final class MethodVisibilityFinalClassWithProtectedMethod {
 
-	private static class PrivateInnerClass {
-
-		@Override
-		public void okPrivateInner() {
-		}
-
+	protected void bad() {
 	}
 
-	protected static class ProtectedInnerClass {
-
-		@Override
-		public void okProtectedInner() {
-		}
-
-	}
-
-	static class DefaultInnerClass {
-
-		@Override
-		public void okDefaultInner() {
-		}
-
+	protected static void badStatic() {
 	}
 
 }
