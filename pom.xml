@@ -49,7 +49,7 @@
 		<junit.version>5.8.1</junit.version>
 		<javassist.version>3.21.0-GA</javassist.version>
 		<picocontainer.version>1.2</picocontainer.version>
-		<plexus-utils.version>3.5.1</plexus-utils.version>
+		<plexus-utils.version>4.0.3</plexus-utils.version>
 		<system-rules.version>1.16.0</system-rules.version>
 		<testcontainers.version>1.16.0</testcontainers.version>
 		<trove4j.version>3.0.3</trove4j.version>
