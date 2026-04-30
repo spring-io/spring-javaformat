@@ -35,6 +35,7 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  * Checks that the javadoc comments follow Spring conventions.
  *
  * @author Phillip Webb
+ * @author Venkata Naga Sai Srikanth Gollapudi
  */
 public class SpringJavadocCheck extends AbstractSpringCheck {
 
@@ -245,8 +246,26 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 	}
 
 	private boolean startsWithUppercase(String description) {
-		return description.length() > 0 && Character.isUpperCase(description.charAt(0));
+        if(description.length() > 0 || Character.isUpperCase(description.charAt(0))) {
+            return false;
+        }
+        return !startWithAcronym(description);
 	}
+
+    private boolean startWithAcronym(String description) {
+        int upperCount = 0;
+        for (int i = 0; i < description.length(); i++) {
+            char ch= description.charAt(i);
+            if (Character.isUpperCase(ch)) {
+                upperCount++;
+            }
+            else {
+                break;
+            }
+
+        }
+        return upperCount >= 2;
+    }
 
 	private void checkForNonJavadocComments(TextBlock block) {
 		if (block == null) {
