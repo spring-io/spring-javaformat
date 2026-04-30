@@ -19,6 +19,7 @@
  *
  * @param <T> this is a valid param
  * @author Phillip Webb
+ * @author Venkata Naga Sai Srikanth Gollapudi
  */
 public class JavadocValid<T> {
 
@@ -44,6 +45,15 @@ public class JavadocValid<T> {
 	 * @throws RuntimeException on the error
 	 */
 	public String test3(String something) throws RuntimeException {
+	}
+
+	/**
+	 * Do something with acronyms.
+	 * @param something JNI hints for the thing
+	 * @return the thing
+	 * @throws RuntimeException on the error
+	 */
+	public String test4(String something) throws RuntimeException {
 	}
 
 	/**
