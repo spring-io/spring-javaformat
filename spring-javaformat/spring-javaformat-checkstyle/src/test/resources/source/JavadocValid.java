@@ -47,14 +47,14 @@ public class JavadocValid<T> {
 	public String test3(String something) throws RuntimeException {
 	}
 
-    /**
-     * Do something with acronyms.
-     * @param something JNI hints for the thing
-     * @return the thing
-     * @throws RuntimeException on the error
-     */
-    public String test4(String something) throws RuntimeException {
-    }
+	/**
+	 * Do something with acronyms.
+	 * @param something JNI hints for the thing
+	 * @return the thing
+	 * @throws RuntimeException on the error
+	 */
+	public String test4(String something) throws RuntimeException {
+	}
 
 	/**
 	 * Class with a numeric date since.

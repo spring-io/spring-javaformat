@@ -154,7 +154,7 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 				Matcher matcher = pattern.matcher(text[i]);
 				if (matcher.find()) {
 					String description = matcher.group(1).trim();
-					if (startsWithUppercase(description)) {
+					if (!hasCorrectCase(description)) {
 						log(javadoc.getStartLineNo() + i, text[i].length() - description.length(), "javadoc.badCase");
 					}
 				}
@@ -245,27 +245,24 @@ public class SpringJavadocCheck extends AbstractSpringCheck {
 		}
 	}
 
-	private boolean startsWithUppercase(String description) {
-        if(description.length() > 0 || Character.isUpperCase(description.charAt(0))) {
-            return false;
-        }
-        return !startWithAcronym(description);
+	private boolean hasCorrectCase(String description) {
+		return startsWithAcronym(description) || !startsWithUppercase(description);
 	}
 
-    private boolean startWithAcronym(String description) {
-        int upperCount = 0;
-        for (int i = 0; i < description.length(); i++) {
-            char ch= description.charAt(i);
-            if (Character.isUpperCase(ch)) {
-                upperCount++;
-            }
-            else {
-                break;
-            }
+	private boolean startsWithUppercase(String description) {
+		return !description.isEmpty() && Character.isUpperCase(description.charAt(0));
+	}
 
-        }
-        return upperCount >= 2;
-    }
+	private boolean startsWithAcronym(String description) {
+		int i = 0;
+		while (i < description.length() && Character.isLetter(description.charAt(i))) {
+			if (!Character.isUpperCase(description.charAt(i))) {
+				return false;
+			}
+			i++;
+		}
+		return i >= 2;
+	}
 
 	private void checkForNonJavadocComments(TextBlock block) {
 		if (block == null) {
