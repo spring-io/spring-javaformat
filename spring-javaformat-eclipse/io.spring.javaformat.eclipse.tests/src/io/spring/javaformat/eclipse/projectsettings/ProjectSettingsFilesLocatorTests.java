@@ -16,7 +16,6 @@
 
 package io.spring.javaformat.eclipse.projectsettings;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Tests for {@link ProjectSettingsFilesLocator}.
  *
  * @author Phillip Webb
+ * @author Venkata Naga Sai Srikanth Gollapudi
  */
 public class ProjectSettingsFilesLocatorTests {
 
@@ -63,17 +63,42 @@ public class ProjectSettingsFilesLocatorTests {
 	@Test
 	void locateSettingsFilesWhenMultipleFoldersFindsInEarliest() throws Exception {
 		File folder1 = new File(this.temp, "1");
-		writeFile(folder1, "foo.prefs", "foo1");
+		writeFile(folder1, "foo.prefs", "foo=1");
 		File folder2 = new File(this.temp, "2");
-		writeFile(folder2, "foo.prefs", "foo2");
+		writeFile(folder2, "foo.prefs", "foo=2");
 		writeFile(folder2, "org.eclipse.jdt.core.prefs", "core2");
 		ProjectSettingsFiles files = new ProjectSettingsFilesLocator(folder1, folder2).locateSettingsFiles();
 		Map<String, ProjectSettingsFile> found = new LinkedHashMap<>();
 		files.iterator().forEachRemaining((f) -> found.put(f.getName(), f));
-		assertThat(found.get("foo.prefs").getContent(JavaFormatConfig.DEFAULT))
-			.hasSameContentAs(new ByteArrayInputStream("foo1".getBytes()));
-		assertThat(found.get("org.eclipse.jdt.core.prefs").getContent(JavaFormatConfig.DEFAULT))
-			.hasSameContentAs(new ByteArrayInputStream("core2".getBytes()));
+		try (InputStream content = found.get("foo.prefs").getContent(JavaFormatConfig.DEFAULT)) {
+			Properties properties = new Properties();
+			properties.load(content);
+			assertThat(properties.get("foo")).isEqualTo("1");
+		}
+	}
+
+	@Test
+	void locateSettingsFilesMergesUserFileWithDefault() throws Exception {
+		writeFile(this.temp, "org.eclipse.jdt.ui.prefs", "custome.settings=value");
+		ProjectSettingsFiles files = new ProjectSettingsFilesLocator(this.temp).locateSettingsFiles();
+		ProjectSettingsFile file = get(files, "org.eclipse.jdt.ui.prefs");
+		try (InputStream content = file.getContent(JavaFormatConfig.DEFAULT)) {
+			Properties properties = new Properties();
+			properties.load(content);
+			assertThat(properties.get("custome.settings")).isEqualTo("value");
+		}
+	}
+
+	@Test
+	void locateSettingsFilesMergesUserOverrideOnTopOfDefault() throws Exception {
+		writeFile(this.temp, "org.eclipse.jdt.ui.prefs", "org.eclipse.jdt.ui.importorder=com.example");
+		ProjectSettingsFiles files = new ProjectSettingsFilesLocator(this.temp).locateSettingsFiles();
+		ProjectSettingsFile file = get(files, "org.eclipse.jdt.ui.prefs");
+		try (InputStream content = file.getContent(JavaFormatConfig.DEFAULT)) {
+			Properties properties = new Properties();
+			properties.load(content);
+			assertThat(properties.get("org.eclipse.jdt.ui.importorder")).isEqualTo("com.example");
+		}
 	}
 
 	@Test

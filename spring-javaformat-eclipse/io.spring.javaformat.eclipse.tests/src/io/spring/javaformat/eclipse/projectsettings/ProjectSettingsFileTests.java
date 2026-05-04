@@ -19,7 +19,9 @@ package io.spring.javaformat.eclipse.projectsettings;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.Properties;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -32,6 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Tests for {@link ProjectSettingsFile}.
  *
  * @author Phillip Webb
+ * @author Venkata Naga Sai Srikanth Gollapudi
  */
 public class ProjectSettingsFileTests {
 
@@ -54,6 +57,25 @@ public class ProjectSettingsFileTests {
 		assertThat(projectSettingsFile.getName()).isEqualTo("test.txt");
 		assertThat(projectSettingsFile.getContent(JavaFormatConfig.DEFAULT))
 			.hasSameContentAs(new ByteArrayInputStream("test".getBytes()));
+	}
+
+	@Test
+	void mergedWithOverlaysProperties() throws Exception {
+		File baseFile = new File(this.temp, "base.prefs");
+		writeText(baseFile, "a=1\nb=2\n");
+		File overlayFile = new File(this.temp, "overlay.prefs");
+		writeText(overlayFile, "b=3\nc=4\n");
+		ProjectSettingsFile base = ProjectSettingsFile.fromFile(baseFile);
+		ProjectSettingsFile overlay = ProjectSettingsFile.fromFile(overlayFile);
+		ProjectSettingsFile merged = base.mergedWith(overlay);
+		assertThat(merged.getName()).isEqualTo("base.prefs");
+		try (InputStream content = merged.getContent(JavaFormatConfig.DEFAULT)) {
+			Properties properties = new Properties();
+			properties.load(content);
+			assertThat(properties.getProperty("a")).isEqualTo("1");
+			assertThat(properties.getProperty("b")).isEqualTo("3");
+			assertThat(properties.getProperty("c")).isEqualTo("4");
+		}
 	}
 
 	private void writeText(File file, String s) throws FileNotFoundException {

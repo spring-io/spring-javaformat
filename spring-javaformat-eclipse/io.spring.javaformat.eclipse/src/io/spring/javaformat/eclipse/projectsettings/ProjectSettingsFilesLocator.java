@@ -28,6 +28,7 @@ import io.spring.javaformat.config.JavaFormatConfig;
  * Locates project settings files to be applied to projects.
  *
  * @author Phillip Webb
+ * @author Venkata Naga Sai Srikanth Gollapudi
  */
 public class ProjectSettingsFilesLocator {
 
@@ -49,15 +50,24 @@ public class ProjectSettingsFilesLocator {
 
 	public ProjectSettingsFiles locateSettingsFiles() throws IOException {
 		ProjectProperties projectProperties = new ProjectProperties();
-		Map<String, ProjectSettingsFile> files = new LinkedHashMap<>();
+		Map<String, ProjectSettingsFile> userFiles = new LinkedHashMap<>();
 		for (File searchFolder : this.searchFolders) {
 			for (String sourceFolder : SOURCE_FOLDERS) {
-				add(projectProperties, files, new File(searchFolder, sourceFolder));
+				add(projectProperties, userFiles, new File(searchFolder, sourceFolder));
 			}
 		}
+		Map<String, ProjectSettingsFile> files = new LinkedHashMap<>();
 		for (String file : DEFAULT_FILES) {
-			putIfAbsent(files, getDefaultSettingsFile(file));
+			ProjectSettingsFile defaultFile = getDefaultSettingsFile(file);
+			ProjectSettingsFile userFile = userFiles.remove(defaultFile.getName());
+			if (userFile != null) {
+				files.put(defaultFile.getName(), defaultFile.mergedWith(userFile));
+			}
+			else {
+				files.put(defaultFile.getName(), defaultFile);
+			}
 		}
+		files.putAll(userFiles);
 		return new ProjectSettingsFiles(files.values(), projectProperties);
 	}
 

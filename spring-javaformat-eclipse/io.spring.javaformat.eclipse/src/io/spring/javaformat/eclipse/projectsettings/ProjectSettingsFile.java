@@ -18,6 +18,7 @@ package io.spring.javaformat.eclipse.projectsettings;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 import java.util.function.BiFunction;
 
 import io.spring.javaformat.config.JavaFormatConfig;
@@ -33,6 +35,7 @@ import io.spring.javaformat.config.JavaFormatConfig;
  * A project settings file that can be copied to the project {@code .settings} folder.
  *
  * @author Phillip Webb
+ * @author Venkata Naga Sai Srikanth Gollapudi
  */
 final class ProjectSettingsFile {
 
@@ -83,6 +86,31 @@ final class ProjectSettingsFile {
 				String content = operation.apply(javaFormatConfig, writer.toString());
 				return new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
 			}
+		});
+	}
+
+	/**
+	 * Create a new {@link ProjectSettingsFile} where the content of the given overlay is
+	 * merged on top of this files's content. Properties from the overlay will override
+	 * those in this file.
+	 * @param overlay the overlay settings file to merge on top of this file
+	 * @return a new {@link ProjectSettingsFile} instance with merged content
+	 */
+	public ProjectSettingsFile mergedWith(ProjectSettingsFile overlay) {
+		return new ProjectSettingsFile(this.name, (javaFormatConfig) -> {
+			Properties properties = new Properties();
+			try (InputStream base = this.contentSupplier.getContent(javaFormatConfig)) {
+				properties.load(base);
+			}
+			try (InputStream overlayContent = overlay.getContent(javaFormatConfig)) {
+				properties.load(overlayContent);
+			}
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			properties.store(out, null);
+			String result = out.toString(StandardCharsets.UTF_8);
+			String separator = System.getProperty("line.separator");
+			result = result.substring(result.indexOf(separator) + separator.length());
+			return new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
 		});
 	}
 
