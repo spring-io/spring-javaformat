@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.spring.javaformat</groupId>
+		<artifactId>spring-javaformat</artifactId>
+		<version>0.0.48-SNAPSHOT</version>
+	</parent>
+	<artifactId>spring-javaformat-doclet</artifactId>
+	<name>Spring JavaFormat Doclet</name>
+	<properties>
+		<main.basedir>${basedir}/../..</main.basedir>
+		<java.version>17</java.version>
+	</properties>
+	<dependencies>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<source>17</source>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

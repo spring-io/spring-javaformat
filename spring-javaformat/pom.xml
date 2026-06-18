@@ -33,6 +33,7 @@
 	<modules>
 		<module>spring-javaformat-config</module>
 		<module>spring-javaformat-checkstyle</module>
+		<module>spring-javaformat-doclet</module>
 		<module>spring-javaformat-formatter</module>
 		<module>spring-javaformat-formatter-test-support</module>
 		<module>spring-javaformat-formatter-tests</module>

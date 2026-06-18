@@ -211,6 +211,17 @@ springJavaFormat {
 
 
 
+=== Javadoc Offline Link Checking
+The `io.spring.javaformat:spring-javaformat-doclet` module can used if you generate javadoc using `-linkoffline` and want to check that `{@link ...}` references are valid.
+By default, javadoc silently converts links that it can't find into non-clickable text.
+
+To ensure all links are actually covered, you can use the `io.spring.javaformat.doclet.LinkCheckDoclet`.
+Any link not covered by a `-linkoffline` reference will emit a warning.
+
+You can use `-linkcheck-exclude` if you have a package that you want to exclude from the checks.
+
+
+
 === Java 8 Support
 By default, the formatter requires Java 17.
 If you are working on an older project, you can use a variation of the formatter based off Eclipse 2021-03 (the latest Eclipse JDT version built with Java 8).
