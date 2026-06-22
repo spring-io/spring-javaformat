@@ -17,20 +17,20 @@
 package io.spring.javaformat.doclet;
 
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 
 import jdk.javadoc.doclet.Doclet;
 
 /**
- * Wraps an existing Doclet option and listen for calls to {@link #process(String, List)}.
+ * Wraps an existing Doclet option to allow custom processing.
  *
  * @param option the option being watched.
- * @param onProcess {@link BiConsumer} called when {@link #process(String, List)} is
- * called
+ * @param processor called to handle {@link #process(String, List)}. Processor that return
+ * {@code false} will delegate to the wrapped option process method
  * @author Phillip Webb
  */
-record WatchedDocletOption(Doclet.Option option,
-		BiConsumer<String, List<String>> onProcess) implements Doclet.Option, Comparable<Doclet.Option> {
+record DockletOptionWrapper(Doclet.Option option,
+		BiPredicate<DockletOptionWrapper, List<String>> processor) implements Doclet.Option, Comparable<Doclet.Option> {
 
 	@Override
 	public int getArgumentCount() {
@@ -58,9 +58,8 @@ record WatchedDocletOption(Doclet.Option option,
 	}
 
 	@Override
-	public boolean process(String option, List<String> arguments) {
-		onProcess().accept(option, arguments);
-		return option().process(option, arguments);
+	public boolean process(String name, List<String> arguments) {
+		return processor().test(this, arguments) || option().process(name, arguments);
 	}
 
 	@Override

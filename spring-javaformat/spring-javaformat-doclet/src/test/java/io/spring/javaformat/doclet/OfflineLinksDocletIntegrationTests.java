@@ -16,9 +16,9 @@
 
 package io.spring.javaformat.doclet;
 
-import java.io.File;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,14 +38,14 @@ import org.junit.jupiter.api.io.TempDir;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for {@link LinkCheckDoclet}.
+ * Tests for {@link OfflineLinksDoclet}.
  *
  * @author Phillip Webb
  */
-class LinkCheckDocletIntegrationTests {
+class OfflineLinksDocletIntegrationTests {
 
 	@TempDir
-	private File temp;
+	private Path temp;
 
 	@Test
 	void whenHasImportLinkWithNoOfflineLinkPrintsWarning() {
@@ -85,15 +85,39 @@ class LinkCheckDocletIntegrationTests {
 	@Test
 	void whenHasLinkWithNoOfflineLinkAndLinkCheckExcludePrintsNoWarnings() {
 		List<Diagnostic<?>> diagnostics = javadoc("io.spring.javaformat.doclet.example.importlink",
-				"-linkcheck-exclude", "org.junit.jupiter.api");
+				"-offlinelinks-ignore-packages", "org.junit.jupiter.api");
 		assertThat(diagnostics).isEmpty();
 	}
 
 	@Test
 	void whenHasNonCheckedLinksPrintsNoWarnings() {
 		List<Diagnostic<?>> diagnostics = javadoc("io.spring.javaformat.doclet.example.nonchecked",
-				"-linkcheck-exclude", "org.junit.jupiter.api");
+				"-offlinelinks-ignore-packages", "org.junit.jupiter.api");
 		assertThat(diagnostics).isEmpty();
+	}
+
+	@Test
+	void whenHasMulitplePackagesAndMultipleSourceLocationsAtSameUrl() {
+		List<Diagnostic<?>> diagnostics = javadoc("io.spring.javaformat.doclet.example.multisource",
+				"-offlinelinks-source", "./src/test/resources/multisource/the@name@jar", "-linkoffline",
+				"https://example.com", "first,second");
+		assertThat(diagnostics).isEmpty();
+		assertThat(this.temp.resolve("io/spring/javaformat/doclet/example/multisource/Example.html"))
+			.content(StandardCharsets.UTF_8)
+			.contains("https://example.com/org/junit/jupiter/api/Test.html")
+			.contains("https://example.com/org/junit/jupiter/api/extension/AfterAllCallback.html");
+	}
+
+	@Test
+	void whenHasMulitplePackagesAndMultipleSources() {
+		List<Diagnostic<?>> diagnostics = javadoc("io.spring.javaformat.doclet.example.multisource",
+				"-offlinelinks-source", "./src/test/resources/multisource/the@name@jar", "-linkoffline",
+				"https://example.com/a", "first", "-linkoffline", "https://example.com/b", "second");
+		assertThat(diagnostics).isEmpty();
+		assertThat(this.temp.resolve("io/spring/javaformat/doclet/example/multisource/Example.html"))
+			.content(StandardCharsets.UTF_8)
+			.contains("https://example.com/a/org/junit/jupiter/api/Test.html")
+			.contains("https://example.com/b/org/junit/jupiter/api/extension/AfterAllCallback.html");
 	}
 
 	List<Diagnostic<?>> javadoc(String subpackage, String... args) {
@@ -104,10 +128,11 @@ class LinkCheckDocletIntegrationTests {
 				StandardCharsets.UTF_8);
 		StringWriter out = new StringWriter();
 		List<String> options = new ArrayList<>();
-		options.addAll(Arrays.asList("-d", this.temp.getAbsolutePath(), "-sourcepath", "./src/test/java",
+		options.addAll(Arrays.asList("-d", this.temp.toAbsolutePath().toString(), "-sourcepath", "./src/test/java",
 				"-subpackages", subpackage));
 		options.addAll(Arrays.asList(args));
-		DocumentationTask task = tool.getTask(out, fileManager, diagnostics::add, LinkCheckDoclet.class, options, null);
+		DocumentationTask task = tool.getTask(out, fileManager, diagnostics::add, OfflineLinksDoclet.class, options,
+				null);
 		task.call();
 		return diagnostics;
 	}

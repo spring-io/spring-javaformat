@@ -16,11 +16,16 @@
 
 package io.spring.javaformat.doclet;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
@@ -36,50 +41,90 @@ import jdk.javadoc.doclet.DocletEnvironment;
 import jdk.javadoc.doclet.StandardDoclet;
 
 /**
- * {@link StandardDoclet} to check that packages from link tags are found. Currenlt only
- * offline links are checked.
+ * {@link StandardDoclet} designed to improve the process of working with offline links.
+ * Allows {@code -linkoffline} locations to be templated against source directories, and
+ * verifies that links actually point to known packages.
+ *
+ * to check that packages from link tags are found. Currenlt only offline links are
+ * checked.
  *
  * @author Phillip Webb
  */
-public class LinkCheckDoclet extends StandardDoclet {
+public class OfflineLinksDoclet extends StandardDoclet {
 
-	private final Set<OfflineLink> offlineLinks = new HashSet<>();
+	private final Set<String> sources = new HashSet<>();
 
-	private final Set<String> excludedPackages = new HashSet<>();
+	private final Set<String> ignoredPackages = new HashSet<>();
+
+	private final Set<OfflineLinkOption> offlineLinkOptions = new LinkedHashSet<>();
 
 	private boolean debug;
 
 	@Override
 	public Set<? extends Option> getSupportedOptions() {
 		TreeSet<Option> options = new TreeSet<>();
-		super.getSupportedOptions().stream()
-			.map((option) -> new WatchedDocletOption(option, this::onProcessOption))
-			.forEach(options::add);
-		options.add(new DocletOption("-linkcheck-exclude", 1, "excludes specific packages from link checking",
-				"<comma separated list of packages>", this::processExclude));
-		options.add(new DocletOption("-linkcheck-debug", 0, "debugs logging for link checking", "",
+		options.add(new DocletOption("-offlinelinks-source", 1, "a source directory used to build offline links",
+				"<the source directory with '@name@' replaced by the location name>", this::source));
+		options.add(new DocletOption("-offlinelinks-ignore-packages", 1, "ignores specific packages from link checking",
+				"<comma separated list of packages>", this::ingorePackages));
+		options.add(new DocletOption("-offlinelinks-debug", 0, "output debug logging when processing offline links", "",
 				(name, arguments) -> this.debug = true));
+		super.getSupportedOptions().stream()
+			.map((option) -> new DockletOptionWrapper(option, this::processOption))
+			.forEach(options::add);
 		return options;
 	}
 
-	private void onProcessOption(String name, List<String> arguments) {
-		if ("-linkoffline".equals(name)) {
-			this.offlineLinks.add(OfflineLink.fromArguments(arguments));
-		}
+	private void source(String name, List<String> arguments) {
+		this.sources.addAll(commaDelimitedListToSet(arguments.get(0)));
 	}
 
-	private void processExclude(String name, List<String> arguments) {
-		this.excludedPackages.addAll(Arrays.asList(arguments.get(0).split(",")));
+	private void ingorePackages(String name, List<String> arguments) {
+		this.ignoredPackages.addAll(commaDelimitedListToSet(arguments.get(0)));
+	}
+
+	private boolean processOption(DockletOptionWrapper wrapper, List<String> arguments) {
+		if ("-linkoffline".equals(wrapper.getNames().get(0))) {
+			this.offlineLinkOptions.add(new OfflineLinkOption(wrapper.option(), OfflineLink.fromArguments(arguments)));
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public boolean run(DocletEnvironment environment) {
-		check(environment);
+		Set<OfflineLink> offlineLinks = setupOfflineLinks();
+		check(environment, offlineLinks);
 		return super.run(environment);
 	}
 
-	private void check(DocletEnvironment environment) {
-		ExternalLinks externalLinks = new ExternalLinks(environment, this.offlineLinks);
+	private Set<OfflineLink> setupOfflineLinks() {
+		Set<OfflineLink> offlineLinks = new LinkedHashSet<>();
+		for (OfflineLinkOption offlineLinkOption : this.offlineLinkOptions) {
+			for (OfflineLink offlineLink : expand(offlineLinkOption.offlineLink())) {
+				offlineLinks.add(offlineLink);
+				offlineLinkOption.option().process("-linkoffline", List.of(offlineLink.url(), offlineLink.location()));
+			}
+		}
+		return offlineLinks;
+	}
+
+	private Set<OfflineLink> expand(OfflineLink offlineLink) {
+		Path workingDirectory = Path.of(".");
+		Set<OfflineLink> expanded = new LinkedHashSet<>();
+		for (String name : commaDelimitedListToSet(offlineLink.location())) {
+			this.sources.stream().flatMap((source) -> commaDelimitedListToSet(source).stream()).forEach((source) -> {
+				String location = source.replace("@name@", name);
+				if (Files.isDirectory(workingDirectory.resolve(location))) {
+					expanded.add(new OfflineLink(offlineLink.url(), location));
+				}
+			});
+		}
+		return (!expanded.isEmpty()) ? expanded : Set.of(offlineLink);
+	}
+
+	private void check(DocletEnvironment environment, Set<OfflineLink> offlineLinks) {
+		ExternalLinks externalLinks = new ExternalLinks(environment, offlineLinks);
 		for (Element element : environment.getIncludedElements()) {
 			DocTrees trees = environment.getDocTrees();
 			DocCommentTree commentTree = trees.getDocCommentTree(element);
@@ -127,7 +172,7 @@ public class LinkCheckDoclet extends StandardDoclet {
 			messages.note(link, "Not checking java package link '%s'".formatted(qualifiedReference));
 			return;
 		}
-		if (this.excludedPackages.contains(packageName)) {
+		if (this.ignoredPackages.contains(packageName)) {
 			messages.note(link, "Not checking excluded package link '%s'".formatted(qualifiedReference));
 			return;
 		}
@@ -136,6 +181,13 @@ public class LinkCheckDoclet extends StandardDoclet {
 			messages.warn(link, "No external link found for '%s'".formatted(qualifiedReference));
 		}
 	};
+
+	Set<String> commaDelimitedListToSet(String string) {
+		return Arrays.stream(string.split(","))
+			.map(String::trim)
+			.filter(Predicate.not(String::isEmpty))
+			.collect(Collectors.toCollection(HashSet::new));
+	}
 
 	/**
 	 * Interface used to provide messages.
@@ -161,6 +213,10 @@ public class LinkCheckDoclet extends StandardDoclet {
 				}
 			};
 		}
+
+	}
+
+	private record OfflineLinkOption(Option option, OfflineLink offlineLink) {
 
 	}
 

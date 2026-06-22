@@ -60,8 +60,8 @@ record DocletOption(String name, int argumentCount, String description, String p
 	}
 
 	@Override
-	public boolean process(String option, List<String> arguments) {
-		processor().accept(option, arguments);
+	public boolean process(String name, List<String> arguments) {
+		processor().accept(name, arguments);
 		return true;
 	}
 

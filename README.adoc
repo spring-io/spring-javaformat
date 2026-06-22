@@ -211,14 +211,80 @@ springJavaFormat {
 
 
 
-=== Javadoc Offline Link Checking
-The `io.spring.javaformat:spring-javaformat-doclet` module can used if you generate javadoc using `-linkoffline` and want to check that `{@link ...}` references are valid.
-By default, javadoc silently converts links that it can't find into non-clickable text.
+=== Javadoc Offline Links Doclet
+The `io.spring.javaformat:spring-javaformat-doclet` module can used if you generate javadoc using `-linkoffline`.
+It allows `-linkoffline` locations to be expanded against source directories, allowing you to quickly configure links against `*-javadoc.jar` files.
 
-To ensure all links are actually covered, you can use the `io.spring.javaformat.doclet.LinkCheckDoclet`.
-Any link not covered by a `-linkoffline` reference will emit a warning.
+To use the doclet, you'd first extract `package-list` and `element-list` files from javadoc jars.
+For example, using Maven:
 
-You can use `-linkcheck-exclude` if you have a package that you want to exclude from the checks.
+[source,xml]
+----
+<plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-dependency-plugin</artifactId>
+	<executions>
+		<execution>
+			<id>unpack-javadocs</id>
+			<phase>generate-sources</phase>
+			<goals>
+				<goal>unpack-dependencies</goal>
+			</goals>
+			<configuration>
+				<classifier>javadoc</classifier>
+				<outputDirectory>${project.build.directory}/javadoc-dependencies</outputDirectory>
+				<stripVersion>true</stripVersion>
+				<useSubDirectoryPerArtifact>true</useSubDirectoryPerArtifact>
+				<includes>package-list,element-list</includes>
+			</configuration>
+		</execution>
+	</executions>
+</plugin>
+----
+
+You can then use the `io.spring.javaformat.doclet.OfflineLinksDoclet` configured with `-offlinelinks-source` directories and `-linkoffline` elements.
+Each `-linkoffline` location can be a comma-separated list of names that will be expanded into complete file locations.
+
+For example:
+
+[source,xml]
+----
+<plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-javadoc-plugin</artifactId>
+	<configuration>
+		<quiet>true</quiet>
+		<doclint>all,-missing</doclint>
+		<failOnWarnings>true</failOnWarnings>
+		<offline>true</offline>
+		<detectOfflineLinks>false</detectOfflineLinks>
+		<links>
+			<link>https://docs.oracle.com/en/java/javase/17/docs/api/</link>
+		</links>
+		<doclet>io.spring.javaformat.doclet.OfflineLinksDoclet</doclet>
+		<docletArtifact>
+			<groupId>io.spring.javaformat</groupId>
+			<artifactId>spring-javaformat-doclet</artifactId>
+			<version>{release-version}</version>
+		</docletArtifact>
+		<additionalOptions>
+			<additionalOption>-offlinelinks-source ${project.build.directory}/javadoc-dependencies/@name@-javadoc-jar</additionalOption> -->
+			<additionalOption>-linkoffline https://docs.spring.io/spring/docs/${spring.version}/javadoc-api/ spring-beans,spring-core,spring-context,spring-test,spring-web,spring-webflux,spring-webmvc</additionalOption>
+			<additionalOption>-linkoffline https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-databind/${jackson.version} jackson-databind</additionalOption>
+		</additionalOptions>
+	</configuration>
+</plugin>
+----
+
+NOTE: You can't use the `<offlineLinks>` element because the location is not a direction.
+You must use `<additionalOption>` with `linkoffline`.
+
+Expansion works by replacing the `@name@` element in the `-offlinelinks-source` with each location name.
+
+Unlike the standard Javadoc doclet, this doclet also checks that `{@link ...}` references are valid.
+By default, the standard doclet silently converts links that it can't find into non-clickable text.
+
+If you have packages that you don't have links for, you can use the `-offlinelinks-ignore-packages` option to ignore them.
 
 
 
