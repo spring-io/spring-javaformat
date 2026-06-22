@@ -47,7 +47,7 @@ public class ProjectSettingsFilesLocatorTests {
 	@Test
 	void locateSettingsFilesWhenNoFoldersReturnsDefault() throws IOException {
 		ProjectSettingsFiles files = new ProjectSettingsFilesLocator().locateSettingsFiles();
-		assertThat(files.iterator()).extracting(ProjectSettingsFile::getName)
+		assertThat(files).extracting(ProjectSettingsFile::getName)
 			.containsOnly("org.eclipse.jdt.core.prefs", "org.eclipse.jdt.ui.prefs");
 	}
 
@@ -56,7 +56,7 @@ public class ProjectSettingsFilesLocatorTests {
 		writeFile(this.temp, "foo.prefs");
 		writeFile(this.temp, "bar.notprefs");
 		ProjectSettingsFiles files = new ProjectSettingsFilesLocator(this.temp).locateSettingsFiles();
-		assertThat(files.iterator()).extracting(ProjectSettingsFile::getName)
+		assertThat(files).extracting(ProjectSettingsFile::getName)
 			.containsOnly("org.eclipse.jdt.core.prefs", "org.eclipse.jdt.ui.prefs", "foo.prefs");
 	}
 
