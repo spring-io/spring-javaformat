@@ -99,7 +99,7 @@ public class SpringAnnotationAttributeConciseValueCheck extends AbstractCheck {
 			return;
 		}
 		List<String> expressionComponents = dotSeparatedComponents(valueExpression.getFirstChild());
-		if (expressionComponents == null || expressionComponents.size() <= 2) {
+		if (expressionComponents == null || expressionComponents.size() <= 2 || fullyQualifiedTypeName(expressionComponents)) {
 			return;
 		}
 		String outerTypeName = expressionComponents.get(0);
@@ -134,6 +134,10 @@ public class SpringAnnotationAttributeConciseValueCheck extends AbstractCheck {
 			}
 		}
 		return null;
+	}
+
+	private boolean fullyQualifiedTypeName(List<String> expressionComponents) {
+		return Character.isLowerCase(expressionComponents.get(0).charAt(0));
 	}
 
 	private boolean existingClashingImport(String outer, String inner) {
