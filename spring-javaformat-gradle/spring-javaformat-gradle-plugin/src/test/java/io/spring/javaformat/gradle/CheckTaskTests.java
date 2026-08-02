@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -125,6 +126,26 @@ public class CheckTaskTests {
 		BuildResult result = gradleBuild.buildAndFail("check");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.FAILED);
 		result = gradleBuild.buildAndFail("check");
+		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.FAILED);
+	}
+
+	@Test
+	void whenUsingConfigurationCacheThenFormattingViolationsAreReported() throws IOException {
+		GradleBuild gradleBuild = this.gradleBuild.source("src/test/resources/check-bad")
+			.gradleVersion("9.1.0")
+			.debug(false);
+		BuildResult result = gradleBuild.buildAndFail("check", "--configuration-cache");
+		assertFormattingViolationWithoutConfigurationCacheProblems(result);
+		result = gradleBuild.buildAndFail("check", "--configuration-cache");
+		assertFormattingViolationWithoutConfigurationCacheProblems(result);
+		assertThat(result.getOutput()).contains("Reusing configuration cache.");
+	}
+
+	private void assertFormattingViolationWithoutConfigurationCacheProblems(BuildResult result) {
+		String sourcePath = Paths.get("src", "main", "java", "simple", "Simple.java").toString();
+		assertThat(result.getOutput()).contains("Formatting violations found in the following files:")
+			.contains(" * " + sourcePath)
+			.doesNotContain("Task.project");
 		assertThat(result.task(":checkFormatMain").getOutcome()).isEqualTo(TaskOutcome.FAILED);
 	}
 
