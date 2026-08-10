@@ -90,9 +90,9 @@
 		<module name="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck">
 			<property name="{{javadocVariableCheckScopeProperty}}" value="public"/>
 		</module>
-		<module name="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck">
-			<property name="checkEmptyJavadoc" value="true"/>
-		</module>
+		<module name="com.puppycrawl.tools.checkstyle.checks.javadoc.SummaryJavadocCheck" />
+		<module name="com.puppycrawl.tools.checkstyle.checks.javadoc.MissingJavadocPackageCheck" />
+
 		<module name="com.puppycrawl.tools.checkstyle.checks.javadoc.NonEmptyAtclauseDescriptionCheck" />
 		<module name="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTagContinuationIndentationCheck">
 			<property name="offset" value="0"/>
