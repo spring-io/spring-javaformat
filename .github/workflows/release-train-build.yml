@@ -25,7 +25,7 @@ concurrency:
 jobs:
   build-release:
     name: "Build Release"
-    runs-on: "ubuntu22-2-8"
+    runs-on: "ubuntu-latest"
     steps:
     - name: "Prevent Re-runs"
       id: "prevent-re-runs"

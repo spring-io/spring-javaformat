@@ -1,5 +1,11 @@
 workflow:
   generator:
+    workflows:
+      release-train:
+        build:
+          runs-on: ubuntu-latest
+        test:
+          runs-on: ubuntu-latest
     project:
       java:
         versions:
