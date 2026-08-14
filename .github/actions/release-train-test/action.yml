@@ -1,7 +1,0 @@
-name: Test Release
-runs:
-  using: composite
-  steps:
-    - name: Test Release
-      shell: bash
-      run: ./mvnw --settings .mvn/release-settings.xml --activate-profiles releaseTrain --no-transfer-progress --batch-mode -Dgpg.skip=true clean verify

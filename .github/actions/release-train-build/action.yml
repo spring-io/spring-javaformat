@@ -1,7 +1,0 @@
-name: Build Release
-runs:
-  using: composite
-  steps:
-    - name: Build Release
-      shell: bash
-      run: ./mvnw -DaltDeploymentRepository=local::file:deployment-repository --settings .mvn/release-settings.xml --activate-profiles releaseTrain --no-transfer-progress --batch-mode -DskipTests -Dgpg.skip=true clean deploy
