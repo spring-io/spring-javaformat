@@ -10,7 +10,7 @@ git config user.name "Spring Builds" > /dev/null
 git config user.email "spring-builds@users.noreply.github.com" > /dev/null
 git add pom.xml > /dev/null
 git commit -m"Release v${RELEASE_VERSION}" > /dev/null
-git tag -a "v${RELEASE_VERSION}" -m"Release v${RELEASE_VERSION}" > /dev/null
+# git tag -a "v${RELEASE_VERSION}" -m"Release v${RELEASE_VERSION}" > /dev/null
 
 ./mvnw clean deploy --batch-mode --no-transfer-progress -U -Dfull -DaltDeploymentRepository=distribution::file://${repository}
 
