@@ -57,6 +57,8 @@ public class GradleBuild {
 
 	private String gradleVersion;
 
+	private boolean debug = true;
+
 	private GradleVersion expectDeprecationWarnings;
 
 	void before() throws IOException {
@@ -109,7 +111,7 @@ public class GradleBuild {
 		String scriptContent = new String(Files.readAllBytes(buildFile.toPath())).replace("{version}",
 				getSpringFormatVersion());
 		Files.write(buildFile.toPath(), scriptContent.getBytes(StandardCharsets.UTF_8));
-		GradleRunner gradleRunner = GradleRunner.create().withProjectDir(this.projectDir).withDebug(true);
+		GradleRunner gradleRunner = GradleRunner.create().withProjectDir(this.projectDir).withDebug(this.debug);
 		if (this.gradleVersion != null) {
 			gradleRunner.withGradleVersion(this.gradleVersion);
 		}
@@ -166,6 +168,11 @@ public class GradleBuild {
 
 	public String getGradleVersion() {
 		return this.gradleVersion;
+	}
+
+	public GradleBuild debug(boolean debug) {
+		this.debug = debug;
+		return this;
 	}
 
 	private String getSpringFormatVersion() {

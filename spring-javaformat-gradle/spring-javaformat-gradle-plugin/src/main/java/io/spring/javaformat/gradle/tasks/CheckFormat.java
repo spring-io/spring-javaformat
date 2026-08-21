@@ -24,6 +24,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
+import org.gradle.api.file.ProjectLayout;
 import org.gradle.api.tasks.CacheableTask;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
@@ -49,7 +52,14 @@ public class CheckFormat extends FormatterTask {
 	 */
 	public static final String DESCRIPTION = "Run Spring Java formatting checks";
 
+	private final ProjectLayout projectLayout;
+
 	private File reportLocation;
+
+	@Inject
+	public CheckFormat(ProjectLayout projectLayout) {
+		this.projectLayout = projectLayout;
+	}
 
 	@TaskAction
 	public void checkFormatting() throws IOException, InterruptedException {
@@ -59,7 +69,9 @@ public class CheckFormat extends FormatterTask {
 		this.reportLocation.getParentFile().mkdirs();
 		if (!problems.isEmpty()) {
 			StringBuilder message = new StringBuilder("Formatting violations found in the following files:\n");
-			problems.stream().forEach((f) -> message.append(" * " + getProject().relativePath(f) + "\n"));
+			File projectDirectory = this.projectLayout.getProjectDirectory().getAsFile();
+			problems.stream()
+				.forEach((f) -> message.append(" * " + projectDirectory.toPath().relativize(f.toPath()) + "\n"));
 			message.append("\nRun `format` to fix.");
 			Files.write(this.reportLocation.toPath(), Collections.singletonList(message.toString()),
 					StandardOpenOption.CREATE);
